@@ -107,16 +107,16 @@ Phase 7: Fumadocs docs + polish + monitoring
 **Description:** Write canonical TypeScript interfaces for all 14 entities in `packages/types`. These are the single source of truth consumed by Faker.js generators, the GraphQL schema, and eventually the frontend API client. All other tasks import from here — do not define entity shapes anywhere else.
 
 **Acceptance criteria:**
-- [ ] All 14 entity interfaces exported: `User`, `Product`, `Post`, `Comment`, `Todo`, `Cart`, `Message`, `Notification`, `Quote`, `Recipe`, `Country`, `Company`, `Stock`, `Event`
-- [ ] Shared pagination envelope: `ApiResponse<T>` with `data`, `total`, `limit`, `skip`, `meta`
-- [ ] Shared error envelope: `ApiError` with `code`, `message`, `details?`
-- [ ] Custom schema types: `SchemaField`, `SchemaDefinition`, `SavedSchema`
-- [ ] `packages/types` importable in both `apps/web` and `apps/api` as `@mockforge/types`
-- [ ] Zero TypeScript errors
+- [x] All 14 entity interfaces exported: `User`, `Product`, `Post`, `Comment`, `Todo`, `Cart`, `Message`, `Notification`, `Quote`, `Recipe`, `Country`, `Company`, `Stock`, `Event`
+- [x] Shared pagination envelope: `ApiResponse<T>` with `data`, `total`, `limit`, `skip`, `meta`
+- [x] Shared error envelope: `ApiError` with `code`, `message`, `details?`
+- [x] Custom schema types: `SchemaField`, `SchemaDefinition`, `SavedSchema`
+- [x] `packages/types` importable in both `apps/web` and `apps/api` as `@mockforge/types`
+- [x] Zero TypeScript errors
 
 **Verification:**
-- [ ] `bun run build` in `packages/types` exits 0
-- [ ] `import type { Product } from '@mockforge/types'` resolves in both apps without error
+- [x] `bun run build` in `packages/types` exits 0
+- [x] `import type { Product } from '@mockforge/types'` resolves in both apps without error
 
 **Dependencies:** Task 1
 
