@@ -50,9 +50,9 @@ Phase 7: Fumadocs docs + polish + monitoring
 **Description:** Create the full Turborepo monorepo from scratch with two apps and the shared types package. Install every dependency for frontend and backend in a single task so subsequent tasks start from a fully wired, runnable project. This is the only task that touches `package.json` files globally — all other tasks only add to already-installed packages.
 
 **Acceptance criteria:**
-- [ ] Root `package.json` configures Bun workspaces: `apps/*`, `packages/*`
-- [ ] `turbo.json` defines `dev`, `build`, `test`, `test:integration`, `test:e2e`, `lint` pipeline tasks
-- [ ] `apps/web` — Next.js 16.1 scaffolded with all deps installed:
+- [x] Root `package.json` configures Bun workspaces: `apps/*`, `packages/*`
+- [x] `turbo.json` defines `dev`, `build`, `test`, `test:integration`, `test:e2e`, `lint` pipeline tasks
+- [x] `apps/web` — Next.js 16.1 scaffolded with all deps installed:
   - `next`, `react`, `react-dom` (React 19.2 ships with Next.js 16.1)
   - `tailwindcss` v4, `@tailwindcss/postcss`
   - `@radix-ui/react-dialog`, `@radix-ui/react-dropdown-menu`, `@radix-ui/react-tooltip`, `@radix-ui/react-switch`, `@radix-ui/react-select`
@@ -63,7 +63,7 @@ Phase 7: Fumadocs docs + polish + monitoring
   - `nanoid`
   - `typescript`, `@types/react`, `@types/react-dom`, `@types/node`
   - `vitest`, `@vitest/coverage-v8`, `@testing-library/react`, `@testing-library/user-event`, `@testing-library/jest-dom`, `jsdom`
-- [ ] `apps/api` — Hono + Bun scaffolded with all deps installed:
+- [x] `apps/api` — Hono + Bun scaffolded with all deps installed:
   - `hono`, `@hono/zod-validator`
   - `@faker-js/faker`
   - `@upstash/redis`
@@ -72,18 +72,18 @@ Phase 7: Fumadocs docs + polish + monitoring
   - `zod`, `nanoid`
   - `vitest`, `@vitest/coverage-v8`, `supertest`, `@types/supertest`
   - `typescript`
-- [ ] Playwright installed at root level: `@playwright/test`, browsers installed via `playwright install --with-deps`
-- [ ] `packages/types` — bare TypeScript package scaffolded
-- [ ] `bun run dev` from root starts both dev servers without errors
-- [ ] `bun run build` from root builds both apps without errors
-- [ ] TypeScript strict mode enabled in all workspaces via shared `tsconfig.base.json`
-- [ ] `.gitignore`, `.env.example` created at root
+- [x] Playwright installed at root level: `@playwright/test`, browsers installed via `playwright install --with-deps`
+- [x] `packages/types` — bare TypeScript package scaffolded
+- [x] `bun run dev` from root starts both dev servers without errors
+- [x] `bun run build` from root builds both apps without errors
+- [x] TypeScript strict mode enabled in all workspaces via shared `tsconfig.base.json`
+- [x] `.gitignore`, `.env.example` created at root
 
 **Verification:**
-- [ ] `bun run dev` → `apps/web` runs on `:3000` (Next.js + Turbopack), `apps/api` on `:4000`
-- [ ] `bun run build` exits 0 with no TypeScript errors across all packages
-- [ ] `curl http://localhost:4000/health` returns `{ "status": "ok" }` (stub endpoint)
-- [ ] `http://localhost:3000` renders the Next.js default page without errors
+- [x] `bun run dev` → `apps/web` runs on `:3000` (Next.js + Turbopack), `apps/api` on `:4000`
+- [x] `bun run build` exits 0 with no TypeScript errors across all packages
+- [x] `curl http://localhost:4000/health` returns `{ "status": "ok" }` (stub endpoint)
+- [x] `http://localhost:3000` renders the Next.js default page without errors
 
 **Dependencies:** None
 
