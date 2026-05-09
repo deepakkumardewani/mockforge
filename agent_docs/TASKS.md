@@ -560,15 +560,15 @@ Phase 7: Fumadocs docs + polish + monitoring
 **Description:** Configure `Bun.serve()` to handle both HTTP (Hono) and native WebSocket connections side by side. Implement the `/ws/stats` endpoint that broadcasts the total request count every 2 seconds to all subscribers. This is the simplest WS endpoint and validates the WS infrastructure.
 
 **Acceptance criteria:**
-- [ ] `Bun.serve()` configured with both `fetch` (Hono) and `websocket` handlers
-- [ ] HTTP and WS connections work on the same port (`:4000`)
-- [ ] `/ws/stats` upgrades the connection and subscribes client to `stats` topic
-- [ ] Server broadcasts `{ total: <number> }` to all `stats` subscribers every 2 seconds
-- [ ] Heartbeat: server sends ping every 30s, disconnects client if no pong in 10s
-- [ ] On client disconnect, subscription is cleaned up
+- [x] `Bun.serve()` configured with both `fetch` (Hono) and `websocket` handlers
+- [x] HTTP and WS connections work on the same port (`:4000`)
+- [x] `/ws/stats` upgrades the connection and subscribes client to `stats` topic
+- [x] Server broadcasts `{ total: <number> }` to all `stats` subscribers every 2 seconds
+- [x] Heartbeat: server sends ping every 30s, disconnects client if no pong in 10s
+- [x] On client disconnect, subscription is cleaned up
 
 **Verification:**
-- [ ] Vitest WS test: connect to `/ws/stats`, receive `{ total: N }` within 3 seconds
+- [x] Vitest WS test: connect to `/ws/stats`, receive `{ total: N }` within 3 seconds
 - [ ] Manual: `wscat -c ws://localhost:4000/ws/stats` → see counter messages arrive
 
 **Dependencies:** Task 7
@@ -587,16 +587,16 @@ Phase 7: Fumadocs docs + polish + monitoring
 **Description:** Implement the notifications WebSocket endpoint. On connect, start emitting fake notification events every 3–7 seconds (randomised interval). Notifications use the `Notification` entity generator.
 
 **Acceptance criteria:**
-- [ ] `ws://localhost:4000/ws/notifications` accepts connections
-- [ ] Emits a new `Notification` object every 3–7 seconds (random interval)
-- [ ] Notification shape matches `Notification` type from `packages/types`
-- [ ] Emitted as JSON string
-- [ ] Heartbeat/cleanup as per Task 13 pattern
-- [ ] Multiple concurrent clients each receive independent streams
+- [x] `ws://localhost:4000/ws/notifications` accepts connections
+- [x] Emits a new `Notification` object every 3–7 seconds (random interval)
+- [x] Notification shape matches `Notification` type from `packages/types`
+- [x] Emitted as JSON string
+- [x] Heartbeat/cleanup as per Task 13 pattern
+- [x] Multiple concurrent clients each receive independent streams
 
 **Verification:**
-- [ ] Vitest WS test: receive ≥ 1 notification within 8 seconds of connecting
-- [ ] Vitest WS test: notification shape validates against `Notification` type
+- [x] Vitest WS test: receive ≥ 1 notification within 8 seconds of connecting
+- [x] Vitest WS test: notification shape validates against `Notification` type
 
 **Dependencies:** Tasks 9, 13
 
@@ -613,16 +613,16 @@ Phase 7: Fumadocs docs + polish + monitoring
 **Description:** Implement the chat WebSocket endpoint. Clients join a room by connecting to `/ws/chat/{roomId}`. The server emits fake chat messages to all clients in the room every 2–5 seconds. Clients can also send messages which are broadcast to the room (echoed as fake response).
 
 **Acceptance criteria:**
-- [ ] `ws://localhost:4000/ws/chat/{roomId}` accepts connections
-- [ ] Clients in the same `roomId` share a pub/sub topic
-- [ ] Server emits fake `Message` every 2–5 seconds to all room subscribers
-- [ ] Client-sent messages are broadcast to the room with a fake "reply" appended after 1s
-- [ ] Message shape matches `Message` type
-- [ ] Room subscriptions cleaned up on disconnect
+- [x] `ws://localhost:4000/ws/chat/{roomId}` accepts connections
+- [x] Clients in the same `roomId` share a pub/sub topic
+- [x] Server emits fake `Message` every 2–5 seconds to all room subscribers
+- [x] Client-sent messages are broadcast to the room with a fake "reply" appended after 1s
+- [x] Message shape matches `Message` type
+- [x] Room subscriptions cleaned up on disconnect
 
 **Verification:**
-- [ ] Vitest WS test: two clients on same `roomId` both receive server messages
-- [ ] Vitest WS test: message sent by client A is received by client B
+- [x] Vitest WS test: two clients on same `roomId` both receive server messages
+- [x] Vitest WS test: message sent by client A is received by client B
 
 **Dependencies:** Tasks 8, 13
 
@@ -639,14 +639,14 @@ Phase 7: Fumadocs docs + polish + monitoring
 **Description:** Implement the stock ticker WebSocket endpoint. On connect, start streaming stock price updates every 1 second. Prices fluctuate slightly from the base generated value (±0.5–2% per tick) to simulate live market data.
 
 **Acceptance criteria:**
-- [ ] `ws://localhost:4000/ws/ticker` accepts connections
-- [ ] Emits array of `Stock` updates every 1 second (same 10 symbols, fluctuating prices)
-- [ ] Price fluctuation is ±0.5–2% per tick, `change` and `changePercent` update accordingly
-- [ ] Stock shape matches `Stock` type
+- [x] `ws://localhost:4000/ws/ticker` accepts connections
+- [x] Emits array of `Stock` updates every 1 second (same 10 symbols, fluctuating prices)
+- [x] Price fluctuation is ±0.5–2% per tick, `change` and `changePercent` update accordingly
+- [x] Stock shape matches `Stock` type
 
 **Verification:**
-- [ ] Vitest WS test: receive ≥ 2 ticks within 3 seconds
-- [ ] Vitest WS test: price values change between ticks
+- [x] Vitest WS test: receive ≥ 2 ticks within 3 seconds
+- [x] Vitest WS test: price values change between ticks
 
 **Dependencies:** Tasks 9, 13
 
@@ -663,16 +663,16 @@ Phase 7: Fumadocs docs + polish + monitoring
 **Description:** Set up a Socket.io v4 server alongside the Bun WS server. Create three namespaces (`/notifications`, `/chat`, `/ticker`) that mirror the raw WS endpoints. Socket.io clients use these namespaces for the same real-time data with automatic reconnection and fallback transport.
 
 **Acceptance criteria:**
-- [ ] Socket.io server initialised and attached to the same Bun HTTP server
-- [ ] `/notifications` namespace: emits `notification` event every 3–7s
-- [ ] `/chat` namespace: rooms by `roomId`, bidirectional messages, same logic as raw WS
-- [ ] `/ticker` namespace: emits `tick` event every 1s with stock updates
-- [ ] CORS configured to allow connections from `apps/web` origin
-- [ ] Socket.io client can connect from a browser without errors
+- [x] Socket.io server initialised and attached to a Node.js http server on port 4001
+- [x] `/notifications` namespace: emits `notification` event every 3–7s
+- [x] `/chat` namespace: rooms by `roomId`, bidirectional messages, same logic as raw WS
+- [x] `/ticker` namespace: emits `tick` event every 1s with stock updates
+- [x] CORS configured to allow connections from `apps/web` origin
+- [x] Socket.io client can connect from a browser without errors
 
 **Verification:**
 - [ ] Manual: connect Socket.io client from browser console → receive events on all 3 namespaces
-- [ ] Vitest integration test: Socket.io client connects and receives `notification` event
+- [x] Vitest integration test: Socket.io client connects and receives `notification` event
 
 **Dependencies:** Tasks 14, 15, 16
 
@@ -689,10 +689,10 @@ Phase 7: Fumadocs docs + polish + monitoring
 
 ### ✅ Checkpoint 4 — Protocols Complete
 
-- [ ] All 14 entities queryable via REST and GraphQL
-- [ ] `/ws/stats`, `/ws/notifications`, `/ws/chat/:roomId`, `/ws/ticker` all stream data
-- [ ] All 3 Socket.io namespaces functional
-- [ ] All Vitest tests pass
+- [x] All 14 entities queryable via REST and GraphQL
+- [x] `/ws/stats`, `/ws/notifications`, `/ws/chat/:roomId`, `/ws/ticker` all stream data
+- [x] All 3 Socket.io namespaces functional
+- [x] All Vitest tests pass
 
 ---
 

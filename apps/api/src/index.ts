@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
+import { createServer } from "node:http";
 
 import { initializeRedis, pingRedis } from "./db/redis";
 import { mfIdMiddleware } from "./middleware/mf-id";
@@ -10,8 +11,12 @@ import { errorHandler, createErrorResponse } from "./middleware/error-handler";
 import statsRoutes from "./routes/stats";
 import restRouter from "./routes/rest";
 import graphqlRouter from "./routes/graphql";
+import { handleWsUpgrade, websocketHandlers } from "./ws";
+import { createSocketIoServer } from "./ws/socketio";
+import { setServer } from "./ws/server-ref";
+import type { WsData } from "./ws/types";
 
-// Initialize Redis on startup (hot-reload trigger)
+// Initialize Redis on startup
 initializeRedis();
 
 const app = new Hono();
@@ -52,9 +57,26 @@ app.onError((err, c) => {
   return errorHandler(err, c);
 });
 
+// Socket.io runs on a separate port — Bun.serve owns 4000 and can't share with Node http.Server
+const socketIoPort = Number(process.env.SOCKET_IO_PORT ?? 4001);
+const httpServer = createServer();
+createSocketIoServer(httpServer);
+httpServer.listen(socketIoPort);
+
 const port = Number(process.env.PORT ?? 4000);
 
+// Bun's export-default pattern: hot-reload and Bun.serve both honour { port, fetch, websocket }
 export default {
   port,
-  fetch: app.fetch,
+  websocket: websocketHandlers as import("bun").WebSocketHandler<WsData>,
+  fetch(req: Request, server: import("bun").Server<WsData>) {
+    // Store server ref on first request so WS broadcast handlers can use server.publish()
+    setServer(server);
+    const wsResult = handleWsUpgrade(req, server);
+    // null      → not a WS path, let Hono handle
+    // undefined → upgrade succeeded, Bun owns the connection
+    // Response  → upgrade failed
+    if (wsResult !== null) return wsResult;
+    return app.fetch(req);
+  },
 };
