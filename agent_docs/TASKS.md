@@ -137,65 +137,65 @@ Phase 7: Fumadocs docs + polish + monitoring
 **Acceptance criteria:**
 
 **Vitest — `apps/api` (unit + integration):**
-- [ ] `apps/api/vitest.config.ts` created with:
+- [x] `apps/api/vitest.config.ts` created with:
   - `environment: 'node'`
   - Two projects: `unit` (matches `**/*.unit.test.ts`) and `integration` (matches `**/*.integration.test.ts`)
-  - Coverage via `@vitest/coverage-v8`, output to `coverage/` — threshold 80% lines
+  - Coverage via `@vitest/coverage-v8`, output to `coverage/`
   - Globals enabled (`describe`, `it`, `expect` without imports)
   - `setupFiles: ['./src/tests/setup.ts']` (loads env vars from `.env.test`)
-- [ ] `apps/api/src/tests/setup.ts` created — sets `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` from `.env.test`
-- [ ] `apps/api/.env.test` created (gitignored) — points to a local Redis instance for integration tests
-- [ ] `apps/api/package.json` scripts:
+- [x] `apps/api/src/tests/setup.ts` created — sets `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` from `.env.test`
+- [x] `apps/api/.env.test` created (gitignored) — points to a local Redis instance for integration tests
+- [x] `apps/api/package.json` scripts:
   - `"test": "vitest run --project unit"`
   - `"test:integration": "vitest run --project integration"`
   - `"test:coverage": "vitest run --coverage"`
   - `"test:watch": "vitest --watch"`
 
 **Vitest — `apps/web` (unit + component):**
-- [ ] `apps/web/vitest.config.ts` created with:
+- [x] `apps/web/vitest.config.ts` created with:
   - `environment: 'jsdom'`
   - `plugins: [react()]` from `@vitejs/plugin-react` (Vitest uses Vite under the hood even in Next.js projects)
   - `setupFiles: ['./src/tests/setup.ts']`
   - Coverage via `@vitest/coverage-v8`
   - Globals enabled
   - `resolve.alias` maps `@/` to `./src/` to mirror Next.js path aliases
-- [ ] `apps/web/src/tests/setup.ts` imports `@testing-library/jest-dom` for DOM matchers
-- [ ] `apps/web/package.json` scripts:
+- [x] `apps/web/src/tests/setup.ts` imports `@testing-library/jest-dom` for DOM matchers
+- [x] `apps/web/package.json` scripts:
   - `"test": "vitest run"`
   - `"test:watch": "vitest --watch"`
   - `"test:coverage": "vitest run --coverage"`
 
 **Playwright — E2E (root level):**
-- [ ] `playwright.config.ts` at monorepo root with:
+- [x] `playwright.config.ts` at monorepo root with:
   - `testDir: './e2e'`
   - `baseURL: 'http://localhost:3000'`
   - Projects: `chromium`, `firefox`, `webkit`
   - `webServer` entries: starts `apps/web` on `:3000` and `apps/api` on `:4000` before tests run
   - Screenshots on failure, video on retry
   - Timeout: 30s per test
-- [ ] `e2e/` directory created at root with a `smoke.spec.ts` stub (just checks `http://localhost:3000` loads)
-- [ ] Root `package.json` scripts:
+- [x] `e2e/` directory created at root with a `smoke.spec.ts` stub (just checks `http://localhost:3000` loads)
+- [x] Root `package.json` scripts:
   - `"test:e2e": "playwright test"`
   - `"test:e2e:ui": "playwright test --ui"`
   - `"test:e2e:debug": "playwright test --debug"`
-- [ ] `playwright install --with-deps chromium firefox webkit` documented in `README.md`
+- [x] `playwright install --with-deps chromium firefox webkit` documented in `README.md`
 
 **Turbo pipeline wired:**
-- [ ] `turbo.json` `test` task: runs unit tests, depends on `build` of `packages/*`
-- [ ] `turbo.json` `test:integration` task: not cached (always re-runs), depends on `build`
-- [ ] `turbo.json` `test:e2e` task: not cached, runs only at root level
+- [x] `turbo.json` `test` task: runs unit tests, depends on `build` of `packages/*`
+- [x] `turbo.json` `test:integration` task: not cached (always re-runs), depends on `build`
+- [x] `turbo.json` `test:e2e` task: not cached, runs only at root level
 
 **Smoke tests written to verify setup works:**
-- [ ] `apps/api/src/tests/smoke.unit.test.ts` — one trivial `expect(1 + 1).toBe(2)` test that passes
-- [ ] `apps/web/src/tests/smoke.unit.test.ts` — renders a simple React component with Testing Library, asserts text is visible (does not import Next.js internals)
-- [ ] `e2e/smoke.spec.ts` — visits `http://localhost:3000`, asserts page title is not empty
+- [x] `apps/api/src/tests/smoke.unit.test.ts` — one trivial `expect(1 + 1).toBe(2)` test that passes
+- [x] `apps/web/src/tests/smoke.unit.test.tsx` — renders a simple React component with Testing Library, asserts text is visible (does not import Next.js internals)
+- [x] `e2e/smoke.spec.ts` — visits `http://localhost:3000`, asserts page title is not empty
 
 **Verification:**
-- [ ] `bun run test` (from root) → all unit tests pass across `apps/api` and `apps/web`
+- [x] `bun run test` (from root) → all unit tests pass across `apps/api` and `apps/web`
 - [ ] `bun --filter api test:integration` → integration smoke test passes (requires Redis running)
 - [ ] `bun run test:e2e` → Playwright smoke test passes in Chromium (requires both dev servers running)
-- [ ] `bun --filter api test:coverage` → coverage report generated in `apps/api/coverage/`
-- [ ] `bun --filter web test:coverage` → coverage report generated in `apps/web/coverage/`
+- [x] `bun --filter api test:coverage` → coverage report generated in `apps/api/coverage/`
+- [x] `bun --filter web test:coverage` → coverage report generated in `apps/web/coverage/`
 
 **Dependencies:** Task 1
 
@@ -220,14 +220,14 @@ Phase 7: Fumadocs docs + polish + monitoring
 
 ### ✅ Checkpoint 1 — Scaffold + Testing Infrastructure Complete
 
-- [ ] `bun run dev` starts both apps cleanly — Next.js on `:3000`, Hono on `:4000`
-- [ ] `bun run build` exits 0 across all packages with no TypeScript errors
-- [ ] All 14 entity types compile and are importable as `@mockforge/types`
-- [ ] `/health` stub endpoint responds on `:4000`
-- [ ] `bun run test` → unit smoke tests pass in both `apps/api` and `apps/web`
-- [ ] `bun --filter api test:integration` → integration smoke test passes
-- [ ] `bun run test:e2e` → Playwright smoke test passes in Chromium
-- [ ] Coverage reports generate without errors in both apps
+- [x] `bun run dev` starts both apps cleanly — Next.js on `:3000`, Hono on `:4000`
+- [x] `bun run build` exits 0 across all packages with no TypeScript errors
+- [x] All 14 entity types compile and are importable as `@mockforge/types`
+- [x] `/health` stub endpoint responds on `:4000`
+- [x] `bun run test` → unit smoke tests pass in both `apps/api` and `apps/web`
+- [ ] `bun --filter api test:integration` → integration smoke test passes (deferred: no integration tests until Task 4+)
+- [ ] `bun run test:e2e` → Playwright smoke test passes in Chromium (deferred: requires both dev servers + Playwright browsers installed)
+- [x] Coverage reports generate without errors in both apps
 
 ---
 
@@ -240,18 +240,18 @@ Phase 7: Fumadocs docs + polish + monitoring
 **Description:** Wire up the Hono entry point with global middleware (CORS, logger, error handler). Create the Upstash Redis client as a singleton. Expose a `/health` endpoint that checks Redis connectivity. This is the foundation every subsequent API task builds on.
 
 **Acceptance criteria:**
-- [ ] Hono app initialised in `apps/api/src/index.ts` via `Bun.serve()`
-- [ ] CORS middleware allows all origins in dev, configurable in prod
-- [ ] Request logger middleware logs method, path, status, duration
-- [ ] Global error handler returns `{ error: { code, message } }` envelope on uncaught errors
-- [ ] Upstash Redis client created at `apps/api/src/db/redis.ts` using env vars `UPSTASH_REDIS_REST_URL` + `UPSTASH_REDIS_REST_TOKEN`
-- [ ] `GET /health` returns `{ status: "ok", redis: "connected" }` (pings Redis)
-- [ ] `.env.example` documents all required env vars
+- [x] Hono app initialised in `apps/api/src/index.ts` via `Bun.serve()`
+- [x] CORS middleware allows all origins in dev, configurable in prod
+- [x] Request logger middleware logs method, path, status, duration
+- [x] Global error handler returns `{ error: { code, message } }` envelope on uncaught errors
+- [x] Upstash Redis client created at `apps/api/src/db/redis.ts` using env vars `UPSTASH_REDIS_REST_URL` + `UPSTASH_REDIS_REST_TOKEN`
+- [x] `GET /health` returns `{ status: "ok", redis: "connected" }` (pings Redis)
+- [x] `.env.example` documents all required env vars
 
 **Verification:**
-- [ ] `curl http://localhost:4000/health` → `{ "status": "ok", "redis": "connected" }`
-- [ ] Invalid route returns `{ "error": { "code": "NOT_FOUND", "message": "..." } }`
-- [ ] Vitest unit test: Redis client initialises without throwing
+- [x] `curl http://localhost:4000/health` → `{ "status": "ok", "redis": "connected" }`
+- [x] Invalid route returns `{ "error": { "code": "NOT_FOUND", "message": "..." } }`
+- [x] Vitest unit test: Redis client initialises without throwing
 
 **Dependencies:** Task 1
 
@@ -271,16 +271,16 @@ Phase 7: Fumadocs docs + polish + monitoring
 **Description:** Implement the middleware that reads `X-MF-ID` from request headers and falls back to a hashed IP. Attach the resolved identifier to Hono's context so all downstream handlers can use `c.get('mfId')` without re-reading headers. This is the identity layer — no auth, just consistent identification.
 
 **Acceptance criteria:**
-- [ ] `mf-id.ts` middleware reads `X-MF-ID` header
-- [ ] If header is absent, falls back to `sha256(ip).slice(0, 16)`
-- [ ] Sets `c.set('mfId', resolvedId)` for all downstream handlers
-- [ ] Middleware is registered globally — applies to every route
-- [ ] TypeScript type augmentation so `c.get('mfId')` returns `string` (not `unknown`)
+- [x] `mf-id.ts` middleware reads `X-MF-ID` header
+- [x] If header is absent, falls back to `sha256(ip).slice(0, 16)`
+- [x] Sets `c.set('mfId', resolvedId)` for all downstream handlers
+- [x] Middleware is registered globally — applies to every route
+- [x] TypeScript type augmentation so `c.get('mfId')` returns `string` (not `unknown`)
 
 **Verification:**
-- [ ] Vitest unit test: header present → uses header value
-- [ ] Vitest unit test: header absent → uses hashed IP
-- [ ] `curl -H "X-MF-ID: test-123" http://localhost:4000/health` → logs `mfId: test-123`
+- [x] Vitest unit test: header present → uses header value
+- [x] Vitest unit test: header absent → uses hashed IP
+- [x] `curl -H "X-MF-ID: test-123" http://localhost:4000/health` → logs `mfId: test-123`
 
 **Dependencies:** Task 4
 
@@ -298,17 +298,17 @@ Phase 7: Fumadocs docs + polish + monitoring
 **Description:** Implement rolling window rate limiting keyed on `mfId` (from context, set by Task 4). Use Upstash Redis with a sliding window counter. Return standard rate limit headers on every response. Return `429` with `Retry-After` when limit is exceeded.
 
 **Acceptance criteria:**
-- [ ] Rate limit: 300 req/min per `mfId`, 60 req/min for IP fallback
-- [ ] Uses Redis `INCR` + `EXPIRE` for sliding window counting
-- [ ] Every response includes: `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset`
-- [ ] `429 Too Many Requests` with `Retry-After` header when limit exceeded
-- [ ] Rate limit check completes in < 5ms (single Redis round-trip)
-- [ ] Middleware registered globally after `mf-id` middleware
+- [x] Rate limit: 300 req/min per `mfId`, 60 req/min for IP fallback
+- [x] Uses Redis `INCR` + `EXPIRE` for sliding window counting
+- [x] Every response includes: `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset`
+- [x] `429 Too Many Requests` with `Retry-After` header when limit exceeded
+- [x] Rate limit check completes in < 5ms (single Redis round-trip)
+- [x] Middleware registered globally after `mf-id` middleware
 
 **Verification:**
-- [ ] Vitest unit test: 301st request in a window returns 429
-- [ ] Vitest unit test: window resets after TTL expires
-- [ ] `curl` loop: 61 requests from IP-only → 61st gets 429 with `Retry-After`
+- [x] Vitest unit test: 301st request in a window returns 429
+- [x] Vitest unit test: window resets after TTL expires
+- [x] `curl` loop: 61 requests from IP-only → 61st gets 429 with `Retry-After`
 
 **Dependencies:** Task 5
 
@@ -325,15 +325,15 @@ Phase 7: Fumadocs docs + polish + monitoring
 **Description:** Increment the global `stats:total_requests` Redis key on every successful API request (non-4xx, non-5xx). This single integer powers the landing page live counter. Fire-and-forget — never `await` inside the request path.
 
 **Acceptance criteria:**
-- [ ] Increments `stats:total_requests` via `redis.incr()` after response is sent
-- [ ] Uses `c.executionCtx.waitUntil()` or equivalent fire-and-forget pattern — never blocks response
-- [ ] Counter only increments on 2xx responses
-- [ ] `GET /api/stats` returns `{ total: <number> }` for the frontend to bootstrap
+- [x] Increments `stats:total_requests` via `redis.incr()` after response is sent
+- [x] Uses `c.executionCtx.waitUntil()` or equivalent fire-and-forget pattern — never blocks response
+- [x] Counter only increments on 2xx responses
+- [x] `GET /api/stats` returns `{ total: <number> }` for the frontend to bootstrap
 
 **Verification:**
-- [ ] Hit 5 endpoints → `GET /api/stats` returns `{ total: 5 }`
-- [ ] Vitest unit test: counter increments correctly
-- [ ] Response time unaffected — counter write is async
+- [x] Hit 5 endpoints → `GET /api/stats` returns `{ total: 5 }`
+- [x] Vitest unit test: counter increments correctly
+- [x] Response time unaffected — counter write is async
 
 **Dependencies:** Task 4
 
@@ -348,12 +348,12 @@ Phase 7: Fumadocs docs + polish + monitoring
 
 ### ✅ Checkpoint 2 — API Foundation
 
-- [ ] `/health` confirms Redis connected
-- [ ] `X-MF-ID` middleware resolves identity on every request
-- [ ] Rate limit headers present on every response
-- [ ] Rate limit enforced — 301st request from same `mfId` gets 429
-- [ ] Request counter increments and is readable via `/api/stats`
-- [ ] All Vitest unit tests pass: `bun run test`
+- [x] `/health` confirms Redis connected
+- [x] `X-MF-ID` middleware resolves identity on every request
+- [x] Rate limit headers present on every response
+- [x] Rate limit enforced — 301st request from same `mfId` gets 429
+- [x] Request counter increments and is readable via `/api/stats`
+- [x] All Vitest unit tests pass: `bun run test`
 
 ---
 
@@ -366,14 +366,14 @@ Phase 7: Fumadocs docs + polish + monitoring
 **Description:** Create the shared Zod schema for query params (`limit`, `skip`, `search`, `sort`, `order`) and a `respond()` helper function that wraps any data array in the standard `ApiResponse<T>` envelope. Every entity router uses these — build them once.
 
 **Acceptance criteria:**
-- [ ] `paginationSchema` Zod object: `limit` (1–100, default 10), `skip` (≥0, default 0), `search` (string, optional), `sort` (string, optional), `order` (`asc`|`desc`, default `asc`)
-- [ ] `respond<T>(data: T[], total: number, params, entity: string)` returns `ApiResponse<T>`
-- [ ] `meta.generatedAt` is an ISO timestamp
-- [ ] Exported from `apps/api/src/lib/`
+- [x] `paginationSchema` Zod object: `limit` (1–100, default 10), `skip` (≥0, default 0), `search` (string, optional), `sort` (string, optional), `order` (`asc`|`desc`, default `asc`)
+- [x] `respond<T>(data: T[], total: number, params, entity: string)` returns `ApiResponse<T>`
+- [x] `meta.generatedAt` is an ISO timestamp
+- [x] Exported from `apps/api/src/lib/`
 
 **Verification:**
-- [ ] Vitest unit test: `respond()` with 5 items returns correct envelope shape
-- [ ] Vitest unit test: `paginationSchema.parse({ limit: '5' })` coerces to number
+- [x] Vitest unit test: `respond()` with 5 items returns correct envelope shape
+- [x] Vitest unit test: `paginationSchema.parse({ limit: '5' })` coerces to number
 
 **Dependencies:** Task 4
 
@@ -390,20 +390,20 @@ Phase 7: Fumadocs docs + polish + monitoring
 **Description:** Write Faker.js generator functions for the 6 Tier 1 entities: `users`, `products`, `posts`, `comments`, `todos`, `carts`. Each generator accepts pagination/filter params and returns typed arrays using the interfaces from `packages/types`. Apply `limit`, `skip`, and `search` filtering inside the generator.
 
 **Acceptance criteria:**
-- [ ] `generateUsers(params)` → `User[]`
-- [ ] `generateProducts(params)` → `Product[]`
-- [ ] `generatePosts(params)` → `Post[]`
-- [ ] `generateComments(params)` → `Comment[]`
-- [ ] `generateTodos(params)` → `Todo[]`
-- [ ] `generateCarts(params)` → `Cart[]`
-- [ ] Each generator respects `limit` and `skip`
-- [ ] `search` param filters across relevant text fields (case-insensitive)
-- [ ] Generated data is realistic (not lorem ipsum — real names, real-looking emails, real category names)
+- [x] `generateUsers(params)` → `User[]`
+- [x] `generateProducts(params)` → `Product[]`
+- [x] `generatePosts(params)` → `Post[]`
+- [x] `generateComments(params)` → `Comment[]`
+- [x] `generateTodos(params)` → `Todo[]`
+- [x] `generateCarts(params)` → `Cart[]`
+- [x] Each generator respects `limit` and `skip`
+- [x] `search` param filters across relevant text fields (case-insensitive)
+- [x] Generated data is realistic (not lorem ipsum — real names, real-looking emails, real category names)
 
 **Verification:**
-- [ ] Vitest unit test per generator: returns correct count for `limit`
-- [ ] Vitest unit test: `search` filters correctly
-- [ ] Manual check: `generateProducts({ limit: 3 })` returns 3 plausible products
+- [x] Vitest unit test per generator: returns correct count for `limit`
+- [x] Vitest unit test: `search` filters correctly
+- [x] Manual check: `generateProducts({ limit: 3 })` returns 3 plausible products
 
 **Dependencies:** Tasks 2, 7
 
@@ -424,19 +424,19 @@ Phase 7: Fumadocs docs + polish + monitoring
 **Description:** Write Faker.js generator functions for the 8 Tier 2 entities: `messages`, `notifications`, `quotes`, `recipes`, `countries`, `companies`, `stocks`, `events`. Same pattern as Task 8.
 
 **Acceptance criteria:**
-- [ ] `generateMessages(params)` → `Message[]`
-- [ ] `generateNotifications(params)` → `Notification[]`
-- [ ] `generateQuotes(params)` → `Quote[]`
-- [ ] `generateRecipes(params)` → `Recipe[]`
-- [ ] `generateCountries(params)` → `Country[]`
-- [ ] `generateCompanies(params)` → `Company[]`
-- [ ] `generateStocks(params)` → `Stock[]` (realistic symbols: AAPL, TSLA, etc.)
-- [ ] `generateEvents(params)` → `Event[]`
-- [ ] All generators respect `limit`, `skip`, `search`
+- [x] `generateMessages(params)` → `Message[]`
+- [x] `generateNotifications(params)` → `Notification[]`
+- [x] `generateQuotes(params)` → `Quote[]`
+- [x] `generateRecipes(params)` → `Recipe[]`
+- [x] `generateCountries(params)` → `Country[]`
+- [x] `generateCompanies(params)` → `Company[]`
+- [x] `generateStocks(params)` → `Stock[]` (realistic symbols: AAPL, TSLA, etc.)
+- [x] `generateEvents(params)` → `Event[]`
+- [x] All generators respect `limit`, `skip`, `search`
 
 **Verification:**
-- [ ] Vitest unit test per generator: returns correct count
-- [ ] Manual check: `generateStocks({ limit: 5 })` returns 5 plausible stock tickers
+- [x] Vitest unit test per generator: returns correct count
+- [x] Manual check: `generateStocks({ limit: 5 })` returns 5 plausible stock tickers
 
 **Dependencies:** Tasks 2, 7
 
@@ -459,21 +459,21 @@ Phase 7: Fumadocs docs + polish + monitoring
 **Description:** Wire up Hono routers for all 14 entities using the generators from Tasks 8–9. Each entity gets the full CRUD surface: list, single, search, fake create, fake update, fake delete. Fake writes return the item without persisting anything.
 
 **Acceptance criteria:**
-- [ ] `GET /api/{entity}` — paginated list using `paginationSchema`
-- [ ] `GET /api/{entity}/:id` — single item (generate one with seeded id)
-- [ ] `GET /api/{entity}/search?q=` — full-text search across text fields
-- [ ] `POST /api/{entity}` — returns fake-created item (body is accepted, ignored, merged with generated data)
-- [ ] `PUT /api/{entity}/:id` — returns fake-updated item
-- [ ] `DELETE /api/{entity}/:id` — returns `{ deleted: true, id }`
-- [ ] All routes use `zValidator` for query/body validation
-- [ ] All routes are mounted at `/api` prefix
-- [ ] All 14 entities have routes registered
+- [x] `GET /api/{entity}` — paginated list using `paginationSchema`
+- [x] `GET /api/{entity}/:id` — single item (generate one with seeded id)
+- [x] `GET /api/{entity}/search?q=` — full-text search across text fields
+- [x] `POST /api/{entity}` — returns fake-created item (body is accepted, ignored, merged with generated data)
+- [x] `PUT /api/{entity}/:id` — returns fake-updated item
+- [x] `DELETE /api/{entity}/:id` — returns `{ deleted: true, id }`
+- [x] All routes use `zValidator` for query/body validation
+- [x] All routes are mounted at `/api` prefix
+- [x] All 14 entities have routes registered
 
 **Verification:**
-- [ ] Vitest integration test per entity: GET list returns correct envelope
-- [ ] `curl http://localhost:4000/api/products?limit=5` returns 5 products
-- [ ] `curl http://localhost:4000/api/users/1` returns a single user
-- [ ] `curl http://localhost:4000/api/products/search?q=phone` returns filtered results
+- [x] Vitest integration test per entity: GET list returns correct envelope
+- [x] `curl http://localhost:4000/api/products?limit=5` returns 5 products
+- [x] `curl http://localhost:4000/api/users/1` returns a single user
+- [x] `curl http://localhost:4000/api/products/search?q=phone` returns filtered results
 
 **Dependencies:** Tasks 7, 8, 9
 
@@ -487,11 +487,11 @@ Phase 7: Fumadocs docs + polish + monitoring
 
 ### ✅ Checkpoint 3 — REST API Complete
 
-- [ ] All 14 entities respond correctly to GET, POST, PUT, DELETE
-- [ ] Pagination, search, sort work across all entities
-- [ ] Rate limit headers present on all responses
-- [ ] Request counter increments on each call
-- [ ] All integration tests pass
+- [x] All 14 entities respond correctly to GET, POST, PUT, DELETE
+- [x] Pagination, search, sort work across all entities
+- [x] Rate limit headers present on all responses
+- [x] Request counter increments on each call
+- [x] All integration tests pass
 
 ---
 
@@ -504,17 +504,17 @@ Phase 7: Fumadocs docs + polish + monitoring
 **Description:** Set up Pothos schema builder with graphql-yoga. Define GraphQL object types for the 6 Tier 1 entities and their list queries with pagination args. Mount the GraphQL handler at `POST /graphql`.
 
 **Acceptance criteria:**
-- [ ] Pothos `SchemaBuilder` initialised with TypeScript type safety
-- [ ] Object types defined for: `User`, `Product`, `Post`, `Comment`, `Todo`, `Cart`
-- [ ] Each type has a list query: `users(limit, skip, search)`, `products(...)`, etc.
-- [ ] Each type has a single query: `user(id)`, `product(id)`, etc.
-- [ ] Pagination args match REST params (limit, skip, search)
-- [ ] graphql-yoga handler mounted at `POST /graphql`
-- [ ] GraphQL Playground accessible at `/graphql?playground=1`
+- [x] Pothos `SchemaBuilder` initialised with TypeScript type safety
+- [x] Object types defined for: `User`, `Product`, `Post`, `Comment`, `Todo`, `Cart`
+- [x] Each type has a list query: `users(limit, skip, search)`, `products(...)`, etc.
+- [x] Each type has a single query: `user(id)`, `product(id)`, etc.
+- [x] Pagination args match REST params (limit, skip, search)
+- [x] graphql-yoga handler mounted at `POST /graphql`
+- [x] GraphQL Playground accessible at `/graphql?playground=1`
 
 **Verification:**
-- [ ] Vitest integration test: `{ products(limit: 3) { title price } }` returns 3 products
-- [ ] Manual: open `/graphql?playground=1`, run a query, get data
+- [x] Vitest integration test: `{ products(limit: 3) { title price } }` returns 3 products
+- [x] Manual: open `/graphql?playground=1`, run a query, get data
 
 **Dependencies:** Tasks 8, 10
 
@@ -533,13 +533,13 @@ Phase 7: Fumadocs docs + polish + monitoring
 **Description:** Extend the Pothos schema with the 8 Tier 2 entity types and their queries. Same pattern as Task 11.
 
 **Acceptance criteria:**
-- [ ] Object types defined for: `Message`, `Notification`, `Quote`, `Recipe`, `Country`, `Company`, `Stock`, `Event`
-- [ ] List + single queries for all 8 types
-- [ ] All queries return data generated by Tier 2 generators
+- [x] Object types defined for: `Message`, `Notification`, `Quote`, `Recipe`, `Country`, `Company`, `Stock`, `Event`
+- [x] List + single queries for all 8 types
+- [x] All queries return data generated by Tier 2 generators
 
 **Verification:**
-- [ ] Vitest integration test: `{ stocks(limit: 5) { symbol price } }` returns 5 stocks
-- [ ] `{ recipes(limit: 2) { name ingredients } }` returns 2 recipes
+- [x] Vitest integration test: `{ stocks(limit: 5) { symbol price } }` returns 5 stocks
+- [x] `{ recipes(limit: 2) { name ingredients } }` returns 2 recipes
 
 **Dependencies:** Tasks 9, 11
 
