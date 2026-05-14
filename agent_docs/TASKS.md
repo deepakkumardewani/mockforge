@@ -1001,20 +1001,20 @@ Phase 7: Fumadocs docs + polish + monitoring
 **Description:** Configure Fumadocs inside the existing Next.js app. Fumadocs lives at `app/docs/` as a route group, with MDX source files in `content/docs/`. Set up the sidebar structure, theme customisation to match MockForge design tokens, and stub pages for every section.
 
 **Acceptance criteria:**
-- [ ] `fumadocs-core`, `fumadocs-ui`, `fumadocs-mdx` wired into Next.js via `next.config.ts` using `withFumadocs()`
-- [ ] `source.config.ts` at root of `apps/web` defines the MDX source directory (`content/docs/`)
-- [ ] `app/docs/layout.tsx` renders the Fumadocs sidebar layout with custom theme matching MockForge tokens (accent color, dark mode)
-- [ ] `app/docs/[[...slug]]/page.tsx` handles all doc routes dynamically
-- [ ] Sidebar sections configured: Getting Started, REST API, GraphQL, WebSockets, Socket.io, Custom Schemas, Rate Limits, Identity
-- [ ] Each section has at least a stub MDX page in `content/docs/`
-- [ ] Built-in Fumadocs search works (default local search)
-- [ ] `http://localhost:3000/docs` renders docs with sidebar, no 404
+- [x] `fumadocs-core`, `fumadocs-ui`, `fumadocs-mdx` wired into Next.js via `next.config.mjs` using `createMDX()`
+- [x] `source.config.ts` at root of `apps/web` defines the MDX source directory (`content/docs/`)
+- [x] `app/docs/layout.tsx` renders the Fumadocs sidebar layout with custom theme matching MockForge tokens (accent color, dark mode)
+- [x] `app/docs/[[...slug]]/page.tsx` handles all doc routes dynamically
+- [x] Sidebar sections configured: Getting Started, REST API, GraphQL, WebSockets, Socket.io, Custom Schemas, Rate Limits, Identity
+- [x] Each section has at least a stub MDX page in `content/docs/`
+- [x] Built-in Fumadocs search works (default local search)
+- [x] `http://localhost:3000/docs` renders docs with sidebar, no 404
 
 **Verification:**
-- [ ] `http://localhost:3000/docs` renders sidebar with all sections
-- [ ] Clicking any sidebar link loads the stub page without error
-- [ ] Dark mode matches the rest of `apps/web`
-- [ ] `bun run build` compiles docs pages without errors
+- [x] `http://localhost:3000/docs` renders sidebar with all sections
+- [x] Clicking any sidebar link loads the stub page without error
+- [x] Dark mode matches the rest of `apps/web`
+- [x] `bun run build` compiles docs pages without errors
 
 **Dependencies:** Task 1
 
@@ -1034,15 +1034,15 @@ Phase 7: Fumadocs docs + polish + monitoring
 **Description:** Write the REST API reference documentation. Cover every endpoint for every entity with request/response examples, query param tables, and error codes.
 
 **Acceptance criteria:**
-- [ ] One MDX page per entity (or grouped by tier)
-- [ ] Each endpoint documented: method, path, params table, example request (cURL), example response (JSON)
-- [ ] Pagination params documented once, referenced from all entity pages
-- [ ] Rate limiting docs: limits, headers, 429 response example
-- [ ] Response envelope documented with field descriptions
+- [x] One MDX page per entity (or grouped by tier)
+- [x] Each endpoint documented: method, path, params table, example request (cURL), example response (JSON)
+- [x] Pagination params documented once, referenced from all entity pages
+- [x] Rate limiting docs: limits, headers, 429 response example
+- [x] Response envelope documented with field descriptions
 
 **Verification:**
-- [ ] Manual: every REST endpoint in the spec has a corresponding docs entry
-- [ ] Manual: copy-paste any cURL example → it works against local API
+- [x] Manual: every REST endpoint in the spec has a corresponding docs entry
+- [x] Manual: copy-paste any cURL example → it works against local API
 
 **Dependencies:** Tasks 11, 28
 
@@ -1058,15 +1058,15 @@ Phase 7: Fumadocs docs + polish + monitoring
 **Description:** Write documentation for the non-REST protocols and the custom schema builder. Include connection examples, event schemas, and a full schema builder walkthrough.
 
 **Acceptance criteria:**
-- [ ] GraphQL: endpoint, playground URL, example queries for 3 entities, pagination args
-- [ ] WebSockets: connection examples for all 4 WS endpoints, message shape per endpoint
-- [ ] Socket.io: namespace list, event names, client connection code (JS)
-- [ ] Custom Schemas: step-by-step walkthrough (define → preview → save → use endpoint), field type reference table
-- [ ] Identity: explanation of `mf_id`, `X-MF-ID` header, rate limiting behaviour
+- [x] GraphQL: endpoint, playground URL, example queries for 3 entities, pagination args
+- [x] WebSockets: connection examples for all 4 WS endpoints, message shape per endpoint
+- [x] Socket.io: namespace list, event names, client connection code (JS)
+- [x] Custom Schemas: step-by-step walkthrough (define → preview → save → use endpoint), field type reference table
+- [x] Identity: explanation of `mf_id`, `X-MF-ID` header, rate limiting behaviour
 
 **Verification:**
-- [ ] Manual: follow Custom Schemas walkthrough from scratch → working endpoint at the end
-- [ ] Manual: copy Socket.io connection snippet → works in browser console
+- [x] Manual: follow Custom Schemas walkthrough from scratch → working endpoint at the end
+- [x] Manual: copy Socket.io connection snippet → works in browser console
 
 **Dependencies:** Tasks 13, 18, 21, 28
 
