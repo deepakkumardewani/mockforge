@@ -1,17 +1,38 @@
 @import "tailwindcss";
 
+@variant dark (&:where(.dark, .dark *));
+
 :root {
   --color-accent: #6366f1;
+  --color-accent-glow: rgba(99, 102, 241, 0.3);
   --color-surface: #ffffff;
+  --color-surface-raised: #f8fafc;
+  --color-surface-hover: #f1f5f9;
   --color-border: #e5e7eb;
   --color-text-primary: #111827;
   --color-text-muted: #6b7280;
+  --color-code-bg: #1e293b;
+  --color-code-text: #e2e8f0;
 }
 
 .dark {
   --color-accent: #818cf8;
+  --color-accent-glow: rgba(129, 140, 248, 0.3);
   --color-surface: #0f172a;
+  --color-surface-raised: #1e293b;
+  --color-surface-hover: #334155;
   --color-border: #1e293b;
   --color-text-primary: #f1f5f9;
   --color-text-muted: #94a3b8;
+  --color-code-bg: #020617;
+  --color-code-text: #e2e8f0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
 }
