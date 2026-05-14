@@ -2,8 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-const WS_URL =
-  process.env.NEXT_PUBLIC_WS_URL ?? "ws://localhost:4000/ws/stats";
+const WS_URL = process.env.NEXT_PUBLIC_WS_URL ?? "ws://localhost:4000/ws/stats";
 
 export function useWsStats() {
   const [total, setTotal] = useState<number | null>(null);

@@ -90,18 +90,14 @@ export function DXHighlights() {
   }
 
   return (
-    <section
-      ref={sectionRef}
-      className="px-4 py-24 sm:px-6 lg:px-8"
-    >
+    <section ref={sectionRef} className="px-4 py-24 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl">
         <div className="dx-animate mb-16 text-center">
           <h2 className="text-3xl font-bold text-[var(--color-text-primary)] sm:text-4xl">
             Copy, Paste, Build
           </h2>
           <p className="mt-4 text-lg text-[var(--color-text-muted)]">
-            No SDKs to install. No tokens to manage. Just a URL and your
-            favorite HTTP client.
+            No SDKs to install. No tokens to manage. Just a URL and your favorite HTTP client.
           </p>
         </div>
 
@@ -154,11 +150,8 @@ export function DXHighlights() {
             <polyline points="22 4 12 14.01 9 11.01" />
           </svg>
           <p className="text-sm text-[var(--color-text-muted)]">
-            <span className="font-semibold text-[var(--color-text-primary)]">
-              Zero signup.
-            </span>{" "}
-            No API keys, no rate-limit tiers, no login walls. Just open the URL
-            and go.
+            <span className="font-semibold text-[var(--color-text-primary)]">Zero signup.</span> No
+            API keys, no rate-limit tiers, no login walls. Just open the URL and go.
           </p>
         </div>
       </div>

@@ -12,7 +12,10 @@ import type { BuilderFormValues } from "@/components/builder/types";
 vi.mock("@/lib/api-client", () => ({
   apiClient: vi.fn(),
   ApiError: class extends Error {
-    constructor(_s: number, m: string) { super(m); this.name = "ApiError"; }
+    constructor(_s: number, m: string) {
+      super(m);
+      this.name = "ApiError";
+    }
   },
   API_BASE: "http://localhost:4000",
 }));
@@ -32,11 +35,7 @@ function createQueryClient() {
 }
 
 function Wrapper({ children }: { children: React.ReactNode }) {
-  return (
-    <QueryClientProvider client={createQueryClient()}>
-      {children}
-    </QueryClientProvider>
-  );
+  return <QueryClientProvider client={createQueryClient()}>{children}</QueryClientProvider>;
 }
 
 // ---- FieldEditor tests ----
@@ -67,7 +66,9 @@ describe("FieldEditor", () => {
             register={form.register}
             fields={fields}
             onAddField={() => append({ name: "", type: "string" })}
-            onRemoveField={(i) => { if (fields.length > 1) remove(i); }}
+            onRemoveField={(i) => {
+              if (fields.length > 1) remove(i);
+            }}
             errors={form.formState.errors as unknown as Record<string, { message?: string }>}
           />
         </form>
@@ -145,9 +146,7 @@ describe("JsonEditor", () => {
   };
 
   it("renders textarea with JSON representation of form values", () => {
-    render(
-      <JsonEditor formValues={baseFormValues} onApply={vi.fn()} />,
-    );
+    render(<JsonEditor formValues={baseFormValues} onApply={vi.fn()} />);
     const textarea = screen.getByRole("textbox");
     expect(textarea).toBeInTheDocument();
     const value = JSON.parse((textarea as HTMLTextAreaElement).value);
@@ -155,17 +154,13 @@ describe("JsonEditor", () => {
   });
 
   it("renders Apply JSON button", () => {
-    render(
-      <JsonEditor formValues={baseFormValues} onApply={vi.fn()} />,
-    );
+    render(<JsonEditor formValues={baseFormValues} onApply={vi.fn()} />);
     expect(screen.getByText("Apply JSON")).toBeInTheDocument();
   });
 
   it("shows error for invalid JSON", async () => {
     const onApply = vi.fn();
-    render(
-      <JsonEditor formValues={baseFormValues} onApply={onApply} />,
-    );
+    render(<JsonEditor formValues={baseFormValues} onApply={onApply} />);
     const textarea = screen.getByRole("textbox") as HTMLTextAreaElement;
     await userEvent.clear(textarea);
     // Use fireEvent to set value directly for special characters
@@ -179,14 +174,10 @@ describe("JsonEditor", () => {
 
   it("calls onApply with valid JSON", async () => {
     const onApply = vi.fn();
-    render(
-      <JsonEditor formValues={baseFormValues} onApply={onApply} />,
-    );
+    render(<JsonEditor formValues={baseFormValues} onApply={onApply} />);
     await userEvent.click(screen.getByText("Apply JSON"));
     await waitFor(() => {
-      expect(onApply).toHaveBeenCalledWith(
-        expect.objectContaining({ name: "Flight" }),
-      );
+      expect(onApply).toHaveBeenCalledWith(expect.objectContaining({ name: "Flight" }));
     });
   });
 });
@@ -208,9 +199,7 @@ describe("Preview", () => {
       fields: [{ name: "", type: "string" }],
     };
     render(<Preview formValues={emptyValues} />);
-    expect(
-      screen.getByText("Add at least one field to see a live preview"),
-    ).toBeInTheDocument();
+    expect(screen.getByText("Add at least one field to see a live preview")).toBeInTheDocument();
   });
 
   it("shows live preview heading when fields are present", () => {
@@ -236,16 +225,12 @@ describe("EndpointDisplay", () => {
 
   it("renders endpoint URL with API_BASE prefix", () => {
     render(<EndpointDisplay endpoint="/api/custom/test-slug" />);
-    expect(
-      screen.getByText("http://localhost:4000/api/custom/test-slug"),
-    ).toBeInTheDocument();
+    expect(screen.getByText("http://localhost:4000/api/custom/test-slug")).toBeInTheDocument();
   });
 
   it("renders success message", () => {
     render(<EndpointDisplay endpoint="/api/custom/test-slug" />);
-    expect(
-      screen.getByText("Schema saved! Your endpoint is ready:"),
-    ).toBeInTheDocument();
+    expect(screen.getByText("Schema saved! Your endpoint is ready:")).toBeInTheDocument();
   });
 
   it("has a copy button", () => {
@@ -265,16 +250,12 @@ describe("MfIdPrompt", () => {
   });
 
   it("displays the mfId", () => {
-    render(
-      <MfIdPrompt mfId="abc-123-def" onDismiss={vi.fn()} />,
-    );
+    render(<MfIdPrompt mfId="abc-123-def" onDismiss={vi.fn()} />);
     expect(screen.getByText("abc-123-def")).toBeInTheDocument();
   });
 
   it("displays instructional text", () => {
-    render(
-      <MfIdPrompt mfId="abc-123-def" onDismiss={vi.fn()} />,
-    );
+    render(<MfIdPrompt mfId="abc-123-def" onDismiss={vi.fn()} />);
     expect(screen.getByText("Your browser ID")).toBeInTheDocument();
     expect(
       screen.getByText("Save this ID to restore your schemas on another device."),
@@ -283,9 +264,7 @@ describe("MfIdPrompt", () => {
 
   it("calls onDismiss when dismiss button is clicked", async () => {
     const onDismiss = vi.fn();
-    render(
-      <MfIdPrompt mfId="abc-123-def" onDismiss={onDismiss} />,
-    );
+    render(<MfIdPrompt mfId="abc-123-def" onDismiss={onDismiss} />);
     await userEvent.click(screen.getByLabelText("Dismiss"));
     expect(onDismiss).toHaveBeenCalledTimes(1);
   });
@@ -372,9 +351,7 @@ describe("SavedSchemas", () => {
     });
 
     await userEvent.click(screen.getByText("Flight"));
-    expect(onLoad).toHaveBeenCalledWith(
-      expect.objectContaining({ slug: "test-1" }),
-    );
+    expect(onLoad).toHaveBeenCalledWith(expect.objectContaining({ slug: "test-1" }));
   });
 });
 

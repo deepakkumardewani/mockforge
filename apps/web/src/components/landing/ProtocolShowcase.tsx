@@ -151,18 +151,14 @@ export function ProtocolShowcase() {
   }, []);
 
   return (
-    <section
-      ref={sectionRef}
-      className="px-4 py-24 sm:px-6 lg:px-8"
-    >
+    <section ref={sectionRef} className="px-4 py-24 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl">
         <div className="section-heading mb-16 text-center">
           <h2 className="text-3xl font-bold text-[var(--color-text-primary)] sm:text-4xl">
             Four Protocols, One API
           </h2>
           <p className="mt-4 text-lg text-[var(--color-text-muted)]">
-            Same data, your choice of transport. Mix and match as your app
-            demands.
+            Same data, your choice of transport. Mix and match as your app demands.
           </p>
         </div>
 

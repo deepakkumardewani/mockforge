@@ -50,9 +50,7 @@ export function LiveCounter() {
           ease: "power2.out",
           snap: { textContent: 1 },
           onUpdate() {
-            const val = Math.round(
-              gsap.getProperty(counterRef.current, "textContent") as number,
-            );
+            const val = Math.round(gsap.getProperty(counterRef.current, "textContent") as number);
             if (counterRef.current) {
               counterRef.current.textContent = formatNumber(val);
             }
@@ -64,10 +62,7 @@ export function LiveCounter() {
   }, [total]);
 
   return (
-    <section
-      ref={sectionRef}
-      className="relative overflow-hidden px-4 py-24 sm:px-6 lg:px-8"
-    >
+    <section ref={sectionRef} className="relative overflow-hidden px-4 py-24 sm:px-6 lg:px-8">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,var(--color-accent-glow),transparent_70%)]" />
 
       <div className="relative mx-auto max-w-2xl text-center">

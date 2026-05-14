@@ -15,7 +15,10 @@ function formValuesToApiJson(values: BuilderFormValues): object {
     fields: values.fields.map((f) => {
       const field: SchemaFieldForApi = { name: f.name, type: f.type };
       if (f.type === "enum" && f.values) {
-        field.values = f.values.split(",").map((s) => s.trim()).filter(Boolean);
+        field.values = f.values
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean);
       }
       if (f.type === "array" && f.items) {
         field.items = f.items;
@@ -40,9 +43,17 @@ function coerceToFormValues(raw: unknown): BuilderFormValues | null {
     const field = f as Record<string, unknown>;
     return {
       name: typeof field.name === "string" ? field.name : "",
-      type: (typeof field.type === "string" ? field.type : "string") as BuilderFormValues["fields"][0]["type"],
-      values: Array.isArray(field.values) ? field.values.join(", ") : (typeof field.values === "string" ? field.values : undefined),
-      items: (typeof field.items === "string" ? field.items : undefined) as BuilderFormValues["fields"][0]["items"],
+      type: (typeof field.type === "string"
+        ? field.type
+        : "string") as BuilderFormValues["fields"][0]["type"],
+      values: Array.isArray(field.values)
+        ? field.values.join(", ")
+        : typeof field.values === "string"
+          ? field.values
+          : undefined,
+      items: (typeof field.items === "string"
+        ? field.items
+        : undefined) as BuilderFormValues["fields"][0]["items"],
       min: typeof field.min === "number" ? field.min : undefined,
       max: typeof field.max === "number" ? field.max : undefined,
     };
@@ -83,7 +94,11 @@ export function JsonEditor({ formValues, onApply }: Props) {
     const parsed = jsonToFormValues(text);
     if (!parsed) {
       let parsedJson: unknown;
-      try { parsedJson = JSON.parse(text); } catch { parsedJson = null; }
+      try {
+        parsedJson = JSON.parse(text);
+      } catch {
+        parsedJson = null;
+      }
       const coerced = parsedJson ? coerceToFormValues(parsedJson) : null;
       if (coerced) {
         const result = builderFormValuesSchema.safeParse(coerced);
@@ -93,7 +108,9 @@ export function JsonEditor({ formValues, onApply }: Props) {
           setError("Invalid JSON input");
         }
       } else {
-        setError("Invalid JSON: must have 'name' (string) and 'fields' (array with at least one field)");
+        setError(
+          "Invalid JSON: must have 'name' (string) and 'fields' (array with at least one field)",
+        );
       }
       return;
     }
@@ -112,9 +129,7 @@ export function JsonEditor({ formValues, onApply }: Props) {
         className="w-full h-64 rounded-lg border border-[var(--color-border)] bg-[var(--color-code-bg)] px-4 py-3 font-mono text-sm text-[var(--color-code-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)] resize-y"
         spellCheck={false}
       />
-      {error && (
-        <p className="text-sm text-red-500">{error}</p>
-      )}
+      {error && <p className="text-sm text-red-500">{error}</p>}
       <button
         type="button"
         onClick={handleApply}

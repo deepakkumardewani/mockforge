@@ -19,13 +19,9 @@ vi.mock("gsap/ScrollTrigger", () => ({
 }));
 
 vi.mock("next/link", () => ({
-  default: ({
-    children,
-    href,
-  }: {
-    children: React.ReactNode;
-    href: string;
-  }) => <a href={href}>{children}</a>,
+  default: ({ children, href }: { children: React.ReactNode; href: string }) => (
+    <a href={href}>{children}</a>
+  ),
 }));
 
 beforeEach(() => {
@@ -45,9 +41,7 @@ describe("Hero", () => {
 
 describe("ProtocolShowcase", () => {
   it("renders all four protocol cards", async () => {
-    const { ProtocolShowcase } = await import(
-      "@/components/landing/ProtocolShowcase"
-    );
+    const { ProtocolShowcase } = await import("@/components/landing/ProtocolShowcase");
     render(<ProtocolShowcase />);
     expect(screen.getByText("REST")).toBeInTheDocument();
     expect(screen.getByText("GraphQL")).toBeInTheDocument();
@@ -58,9 +52,7 @@ describe("ProtocolShowcase", () => {
 
 describe("EntityBrowser", () => {
   it("renders all 14 entity cards", async () => {
-    const { EntityBrowser } = await import(
-      "@/components/landing/EntityBrowser"
-    );
+    const { EntityBrowser } = await import("@/components/landing/EntityBrowser");
     render(<EntityBrowser />);
     expect(screen.getByText("User")).toBeInTheDocument();
     expect(screen.getByText("Product")).toBeInTheDocument();
@@ -81,22 +73,16 @@ describe("EntityBrowser", () => {
 
 describe("LiveCounter", () => {
   it("renders counter text", async () => {
-    const { LiveCounter } = await import(
-      "@/components/landing/LiveCounter"
-    );
+    const { LiveCounter } = await import("@/components/landing/LiveCounter");
     render(<LiveCounter />);
-    expect(
-      screen.getByText("API requests served and counting"),
-    ).toBeInTheDocument();
+    expect(screen.getByText("API requests served and counting")).toBeInTheDocument();
     expect(screen.getByText("Live via WebSocket")).toBeInTheDocument();
   });
 });
 
 describe("DXHighlights", () => {
   it("renders all three tabs", async () => {
-    const { DXHighlights } = await import(
-      "@/components/landing/DXHighlights"
-    );
+    const { DXHighlights } = await import("@/components/landing/DXHighlights");
     render(<DXHighlights />);
     expect(screen.getByText("JavaScript")).toBeInTheDocument();
     expect(screen.getByText("Python")).toBeInTheDocument();

@@ -96,10 +96,13 @@ export function Hero() {
 
     if (!isDeleting) {
       if (charIndex < fullText.length) {
-        timeout = setTimeout(() => {
-          setDisplayedCode(fullText.slice(0, charIndex + 1));
-          setCharIndex(charIndex + 1);
-        }, 20 + Math.random() * 15);
+        timeout = setTimeout(
+          () => {
+            setDisplayedCode(fullText.slice(0, charIndex + 1));
+            setCharIndex(charIndex + 1);
+          },
+          20 + Math.random() * 15,
+        );
       } else {
         timeout = setTimeout(() => setIsDeleting(true), 2500);
       }
@@ -125,7 +128,6 @@ export function Hero() {
       ref={sectionRef}
       className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-4 pt-20 pb-16"
     >
-
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,var(--color-accent-glow),transparent_70%)]" />
 
       <div className="relative z-10 mx-auto max-w-4xl text-center">
@@ -138,8 +140,8 @@ export function Hero() {
           Fake Data, Real Power
         </p>
         <p className="hero-subheadline mt-6 text-lg text-[var(--color-text-muted)] sm:text-xl">
-          Instant REST, GraphQL, WebSocket, and Socket.io APIs for prototyping
-          and testing. No signup, no tokens — just data.
+          Instant REST, GraphQL, WebSocket, and Socket.io APIs for prototyping and testing. No
+          signup, no tokens — just data.
         </p>
 
         <div className="hero-ctas mt-10 flex flex-wrap items-center justify-center gap-4">

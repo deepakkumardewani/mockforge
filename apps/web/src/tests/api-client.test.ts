@@ -43,8 +43,7 @@ describe("apiClient", () => {
       ok: false,
       status: 429,
       statusText: "Too Many Requests",
-      json: () =>
-        Promise.resolve({ error: { message: "Rate limit exceeded" } }),
+      json: () => Promise.resolve({ error: { message: "Rate limit exceeded" } }),
     } as Response);
 
     const { apiClient, ApiError } = await import("@/lib/api-client");
@@ -57,8 +56,7 @@ describe("apiClient", () => {
       ok: false,
       status: 429,
       statusText: "Too Many Requests",
-      json: () =>
-        Promise.resolve({ error: { message: "Rate limit exceeded" } }),
+      json: () => Promise.resolve({ error: { message: "Rate limit exceeded" } }),
     } as Response);
 
     const { apiClient } = await import("@/lib/api-client");

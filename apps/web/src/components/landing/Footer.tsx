@@ -12,10 +12,7 @@ export function Footer() {
         </div>
 
         <nav className="flex items-center gap-6 text-sm text-[var(--color-text-muted)]">
-          <Link
-            href="/docs"
-            className="transition-colors hover:text-[var(--color-text-primary)]"
-          >
+          <Link href="/docs" className="transition-colors hover:text-[var(--color-text-primary)]">
             Docs
           </Link>
           <a

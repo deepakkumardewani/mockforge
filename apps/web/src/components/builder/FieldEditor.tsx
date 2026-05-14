@@ -1,10 +1,6 @@
 "use client";
 
-import type {
-  Control,
-  UseFormRegister,
-  FieldArrayWithId,
-} from "react-hook-form";
+import type { Control, UseFormRegister, FieldArrayWithId } from "react-hook-form";
 import { SCHEMA_FIELD_TYPES } from "./types";
 import type { BuilderFormValues } from "./types";
 
@@ -143,13 +139,11 @@ export function FieldEditor({
                       {...register(`fields.${index}.items`)}
                       className="rounded-md border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-1.5 text-sm text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]"
                     >
-                      {FIELD_TYPES.filter((ft) => ft.value !== "array").map(
-                        (ft) => (
-                          <option key={ft.value} value={ft.value}>
-                            {ft.label}
-                          </option>
-                        ),
-                      )}
+                      {FIELD_TYPES.filter((ft) => ft.value !== "array").map((ft) => (
+                        <option key={ft.value} value={ft.value}>
+                          {ft.label}
+                        </option>
+                      ))}
                     </select>
                   </div>
                 )}

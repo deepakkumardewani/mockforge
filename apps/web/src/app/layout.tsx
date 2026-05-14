@@ -8,11 +8,7 @@ export const metadata: Metadata = {
     "REST, GraphQL, WebSocket, and Socket.io fake data APIs for prototyping and testing.",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>

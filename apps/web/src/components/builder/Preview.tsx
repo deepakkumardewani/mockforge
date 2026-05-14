@@ -26,7 +26,10 @@ function buildApiBody(values: BuilderFormValues): object {
           type: f.type,
         };
         if (f.type === "enum" && f.values) {
-          field.values = f.values.split(",").map((s) => s.trim()).filter(Boolean);
+          field.values = f.values
+            .split(",")
+            .map((s) => s.trim())
+            .filter(Boolean);
         }
         if (f.type === "array" && f.items) {
           field.items = f.items;
@@ -79,8 +82,7 @@ export function Preview({ formValues }: Props) {
       );
       setResult({ loading: false, error: null, records: data.data });
     } catch (err) {
-      const message =
-        err instanceof ApiError ? err.message : "Preview generation failed";
+      const message = err instanceof ApiError ? err.message : "Preview generation failed";
       setResult({ loading: false, error: message, records: [] });
     }
   }, [formValues, mfId]);
@@ -111,9 +113,7 @@ export function Preview({ formValues }: Props) {
 
   return (
     <div className="space-y-3">
-      <h3 className="text-sm font-medium text-[var(--color-text-muted)]">
-        Live Preview
-      </h3>
+      <h3 className="text-sm font-medium text-[var(--color-text-muted)]">Live Preview</h3>
 
       {result.loading && (
         <div className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-raised)] p-4">
@@ -126,9 +126,7 @@ export function Preview({ formValues }: Props) {
 
       {result.error && (
         <div className="rounded-lg border border-red-200 bg-red-50 p-4 dark:border-red-900 dark:bg-red-950">
-          <p className="text-sm text-red-600 dark:text-red-400">
-            {result.error}
-          </p>
+          <p className="text-sm text-red-600 dark:text-red-400">{result.error}</p>
         </div>
       )}
 
@@ -147,9 +145,7 @@ export function Preview({ formValues }: Props) {
 
       {!result.loading && !result.error && result.records.length === 0 && (
         <div className="rounded-lg border border-dashed border-[var(--color-border)] p-4 text-center">
-          <p className="text-sm text-[var(--color-text-muted)]">
-            No preview data available
-          </p>
+          <p className="text-sm text-[var(--color-text-muted)]">No preview data available</p>
         </div>
       )}
     </div>

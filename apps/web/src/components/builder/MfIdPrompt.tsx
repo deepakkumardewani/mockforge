@@ -14,9 +14,7 @@ export function MfIdPrompt({ mfId, onDismiss }: Props) {
     <div className="rounded-lg border border-[var(--color-accent)] bg-[var(--color-accent)]/5 p-4">
       <div className="flex items-start justify-between gap-3">
         <div className="space-y-1">
-          <p className="text-sm font-medium text-[var(--color-text-primary)]">
-            Your browser ID
-          </p>
+          <p className="text-sm font-medium text-[var(--color-text-primary)]">Your browser ID</p>
           <p className="text-xs text-[var(--color-text-muted)]">
             Save this ID to restore your schemas on another device.
           </p>
@@ -43,7 +41,20 @@ export function MfIdPrompt({ mfId, onDismiss }: Props) {
           className="rounded-md p-1 text-[var(--color-text-muted)] hover:bg-[var(--color-surface-hover)]"
           aria-label="Dismiss"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M18 6 6 18" />
+            <path d="m6 6 12 12" />
+          </svg>
         </button>
       </div>
     </div>

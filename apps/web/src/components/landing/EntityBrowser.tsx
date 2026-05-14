@@ -213,18 +213,15 @@ export function EntityBrowser() {
   }, []);
 
   return (
-    <section
-      ref={sectionRef}
-      className="px-4 py-24 sm:px-6 lg:px-8"
-    >
+    <section ref={sectionRef} className="px-4 py-24 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl">
         <div className="section-heading mb-16 text-center">
           <h2 className="text-3xl font-bold text-[var(--color-text-primary)] sm:text-4xl">
             14 Entities, Zero Setup
           </h2>
           <p className="mt-4 text-lg text-[var(--color-text-muted)]">
-            Every entity is available instantly via REST, GraphQL, and
-            WebSocket. Hover to preview sample data.
+            Every entity is available instantly via REST, GraphQL, and WebSocket. Hover to preview
+            sample data.
           </p>
         </div>
 
@@ -245,10 +242,7 @@ export function EntityBrowser() {
               </h3>
               <ul className="mt-1 space-y-0.5">
                 {entity.fields.map((field) => (
-                  <li
-                    key={field}
-                    className="font-mono text-xs text-[var(--color-text-muted)]"
-                  >
+                  <li key={field} className="font-mono text-xs text-[var(--color-text-muted)]">
                     {field}
                   </li>
                 ))}

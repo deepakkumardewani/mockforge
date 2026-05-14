@@ -43,7 +43,10 @@ function buildApiBody(values: BuilderFormValues, persistent: boolean) {
           type: f.type,
         };
         if (f.type === "enum" && f.values) {
-          field.values = f.values.split(",").map((s) => s.trim()).filter(Boolean);
+          field.values = f.values
+            .split(",")
+            .map((s) => s.trim())
+            .filter(Boolean);
         }
         if (f.type === "array" && f.items) {
           field.items = f.items;
@@ -156,9 +159,7 @@ export default function BuilderPage() {
     <main className="min-h-screen px-4 py-8">
       <div className="mx-auto max-w-7xl">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-[var(--color-text-primary)]">
-            Schema Builder
-          </h1>
+          <h1 className="text-3xl font-bold text-[var(--color-text-primary)]">Schema Builder</h1>
           <p className="mt-2 text-[var(--color-text-muted)]">
             Define custom data schemas and generate fake records.
           </p>
@@ -206,15 +207,10 @@ export default function BuilderPage() {
                 fields={fields}
                 onAddField={handleAddField}
                 onRemoveField={handleRemoveField}
-                errors={
-                  errors as unknown as Record<string, { message?: string }>
-                }
+                errors={errors as unknown as Record<string, { message?: string }>}
               />
             ) : (
-              <JsonEditor
-                formValues={formValues}
-                onApply={handleJsonApply}
-              />
+              <JsonEditor formValues={formValues} onApply={handleJsonApply} />
             )}
 
             {/* Save button */}
@@ -228,23 +224,16 @@ export default function BuilderPage() {
                 {saveMutation.isPending ? "Saving..." : "Save Schema"}
               </button>
               {saveMutation.isError && (
-                <p className="text-sm text-red-500">
-                  {(saveMutation.error as Error).message}
-                </p>
+                <p className="text-sm text-red-500">{(saveMutation.error as Error).message}</p>
               )}
             </div>
 
             {/* Endpoint display */}
-            {savedEndpoint && (
-              <EndpointDisplay endpoint={savedEndpoint} />
-            )}
+            {savedEndpoint && <EndpointDisplay endpoint={savedEndpoint} />}
 
             {/* MfId prompt */}
             {showMfIdPrompt && mfId && (
-              <MfIdPrompt
-                mfId={mfId}
-                onDismiss={() => setShowMfIdPrompt(false)}
-              />
+              <MfIdPrompt mfId={mfId} onDismiss={() => setShowMfIdPrompt(false)} />
             )}
 
             {/* Live preview */}
