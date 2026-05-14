@@ -10,7 +10,7 @@ export async function requestCounterMiddleware(c: Context, next: Next) {
   const status = c.res.status;
   if (status >= 200 && status < 300) {
     // Fire and forget - don't await
-    (async () => {
+    void (async () => {
       try {
         const redis = getRedis();
         await redis.incr(STATS_KEY);

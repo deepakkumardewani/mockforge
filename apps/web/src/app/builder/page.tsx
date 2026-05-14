@@ -110,7 +110,7 @@ export default function BuilderPage() {
     onSuccess: (data) => {
       setSavedEndpoint(data.endpoint);
       setActiveSlug(data.slug);
-      queryClient.invalidateQueries({ queryKey: ["saved-schemas", mfId] });
+      void queryClient.invalidateQueries({ queryKey: ["saved-schemas", mfId] });
       if (!localStorage.getItem(SHOWN_MF_ID_KEY)) {
         localStorage.setItem(SHOWN_MF_ID_KEY, "true");
         setShowMfIdPrompt(true);
@@ -119,7 +119,7 @@ export default function BuilderPage() {
   });
 
   const handleSave = useCallback(() => {
-    handleSubmit((values) => {
+    void handleSubmit((values) => {
       saveMutation.mutate(values);
     })();
   }, [handleSubmit, saveMutation]);

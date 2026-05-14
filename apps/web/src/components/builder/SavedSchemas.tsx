@@ -25,7 +25,7 @@ export function SavedSchemas({ onLoad, activeSlug }: Props) {
     mutationFn: (slug: string) =>
       apiClient<{ deleted: boolean }>(`/api/schemas/${slug}`, { method: "DELETE" }, mfId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["saved-schemas", mfId] });
+      void queryClient.invalidateQueries({ queryKey: ["saved-schemas", mfId] });
     },
   });
 

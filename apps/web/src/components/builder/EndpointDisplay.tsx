@@ -24,7 +24,7 @@ export function EndpointDisplay({ endpoint }: Props) {
         <button
           type="button"
           onClick={() => {
-            navigator.clipboard.writeText(fullUrl);
+            void navigator.clipboard.writeText(fullUrl);
             setCopied(true);
             setTimeout(() => setCopied(false), 2000);
           }}

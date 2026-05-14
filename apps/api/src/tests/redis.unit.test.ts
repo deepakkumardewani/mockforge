@@ -1,8 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 
-// Store Redis instance separately for testing
-let mockRedisInstance: any = null;
-
 // Mock Upstash Redis before importing module
 vi.mock("@upstash/redis", () => {
   return {
@@ -11,15 +8,15 @@ vi.mock("@upstash/redis", () => {
         return Promise.resolve("PONG");
       }
 
-      incr(key: string) {
+      incr(_key: string) {
         return Promise.resolve(1);
       }
 
-      get(key: string) {
+      get(_key: string) {
         return Promise.resolve(null);
       }
 
-      expire(key: string, seconds: number) {
+      expire(_key: string, _seconds: number) {
         return Promise.resolve(1);
       }
     },

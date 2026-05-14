@@ -10,3 +10,4 @@ apps/api/.env.test
 .env
 .claude/
 *.tsbuildinfo
+apps/web/.source

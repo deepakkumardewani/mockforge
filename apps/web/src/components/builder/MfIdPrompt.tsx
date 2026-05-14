@@ -25,7 +25,7 @@ export function MfIdPrompt({ mfId, onDismiss }: Props) {
             <button
               type="button"
               onClick={() => {
-                navigator.clipboard.writeText(mfId);
+                void navigator.clipboard.writeText(mfId);
                 setCopied(true);
                 setTimeout(() => setCopied(false), 2000);
               }}

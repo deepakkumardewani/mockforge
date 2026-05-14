@@ -10,7 +10,7 @@ vi.mock("../db/redis", () => ({
       requestCounts[key] = (requestCounts[key] || 0) + 1;
       return requestCounts[key];
     },
-    expire: async (key: string, seconds: number) => 1,
+    expire: async (_key: string, _seconds: number) => 1,
   }),
 }));
 
@@ -141,5 +141,8 @@ describe("Rate Limit Middleware", () => {
         expect(testCtx.getResponseStatus()).toBe(429);
       }
     }
+
+    // Verify next was called 300 times
+    expect(callCount).toBe(300);
   });
 });

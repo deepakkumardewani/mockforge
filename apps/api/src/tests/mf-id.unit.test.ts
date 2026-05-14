@@ -1,6 +1,5 @@
-import { describe, it, expect, vi, beforeAll } from "vitest";
+import { describe, it, expect, beforeAll } from "vitest";
 import { mfIdMiddleware } from "../middleware/mf-id";
-import { Context } from "hono";
 
 // Mock Bun.CryptoHasher before importing middleware
 beforeAll(() => {
@@ -8,7 +7,7 @@ beforeAll(() => {
     CryptoHasher: class MockCryptoHasher {
       private data = "";
 
-      constructor(algo: string) {
+      constructor(_algo: string) {
         // algo unused in mock
       }
 
@@ -17,7 +16,7 @@ beforeAll(() => {
         return this;
       }
 
-      digest(format: string): string {
+      digest(_format: string): string {
         // Simple deterministic hash for testing
         let hash = 0;
         for (let i = 0; i < this.data.length; i++) {

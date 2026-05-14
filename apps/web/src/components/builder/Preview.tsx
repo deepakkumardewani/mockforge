@@ -93,7 +93,7 @@ export function Preview({ formValues }: Props) {
     }
 
     timerRef.current = setTimeout(() => {
-      fetchPreview();
+      void fetchPreview();
     }, 500);
 
     return () => {

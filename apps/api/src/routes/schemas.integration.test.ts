@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeAll } from "vitest";
 import { Hono } from "hono";
-import { initializeRedis, getRedis } from "../db/redis";
+import { initializeRedis } from "../db/redis";
 import { mfIdMiddleware } from "../middleware/mf-id";
 import schemasRouter from "./schemas";
 import customRouter from "./rest/custom";

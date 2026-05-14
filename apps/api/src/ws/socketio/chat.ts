@@ -9,7 +9,7 @@ const REPLY_DELAY_MS = 1000;
 export function registerChatNamespace(ns: Namespace): void {
   ns.on("connection", (socket) => {
     const roomId: string = (socket.handshake.query.roomId as string) ?? "default";
-    socket.join(roomId);
+    void socket.join(roomId);
     console.log(`[sio/chat] connected ${socket.id} → room "${roomId}"`);
 
     let timer: ReturnType<typeof setTimeout> | null = null;
