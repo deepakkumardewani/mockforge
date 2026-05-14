@@ -1,0 +1,114 @@
+---
+title: Stocks
+description: Stock market data and price information.
+---
+
+# Stocks
+
+Access stock market data with current prices, historical data, and trading information.
+
+## List stocks
+
+**Endpoint:** `GET /api/stocks`
+
+**Query parameters:**
+
+| Parameter | Type   | Example |
+| --------- | ------ | ------- |
+| `limit`   | number | 10      |
+| `skip`    | number | 0       |
+| `search`  | string | AAPL    |
+| `sort`    | string | price   |
+| `order`   | string | desc    |
+
+**Example request:**
+
+```bash
+curl "https://api.mockforge.dev/api/stocks?limit=5&order=desc"
+```
+
+**Example response:**
+
+```json
+{
+  "data": [
+    {
+      "id": 1,
+      "symbol": "AAPL",
+      "name": "Apple Inc.",
+      "price": 175.43,
+      "change": 2.5,
+      "changePercent": 1.45,
+      "marketCap": 2800000000000,
+      "volume": 52847392,
+      "high": 177.8,
+      "low": 173.2,
+      "open": 173.1,
+      "previousClose": 172.93
+    }
+  ],
+  "pagination": {
+    "limit": 5,
+    "skip": 0,
+    "total": 5000,
+    "hasMore": true
+  }
+}
+```
+
+## Get single stock
+
+**Endpoint:** `GET /api/stocks/:id`
+
+**Example request:**
+
+```bash
+curl https://api.mockforge.dev/api/stocks/1
+```
+
+**Example response:**
+
+```json
+{
+  "id": 1,
+  "symbol": "AAPL",
+  "name": "Apple Inc.",
+  "price": 175.43,
+  "change": 2.5,
+  "changePercent": 1.45,
+  "marketCap": 2800000000000,
+  "volume": 52847392,
+  "high": 177.8,
+  "low": 173.2,
+  "open": 173.1,
+  "previousClose": 172.93
+}
+```
+
+## Search stocks
+
+**Example request:**
+
+```bash
+curl "https://api.mockforge.dev/api/stocks?search=AAPL&limit=3"
+```
+
+Searches across `symbol` and `name` fields.
+
+## Create stock
+
+**Endpoint:** `POST /api/stocks`
+
+Creates a mock stock. Does not persist.
+
+## Update stock
+
+**Endpoint:** `PUT /api/stocks/:id`
+
+Updates a mock stock. Does not persist.
+
+## Delete stock
+
+**Endpoint:** `DELETE /api/stocks/:id`
+
+Deletes a mock stock. Does not persist.

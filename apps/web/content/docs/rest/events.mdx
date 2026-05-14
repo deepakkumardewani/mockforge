@@ -1,0 +1,118 @@
+---
+title: Events
+description: Event listings and calendar information.
+---
+
+# Events
+
+Access event listings with dates, locations, and attendee information.
+
+## List events
+
+**Endpoint:** `GET /api/events`
+
+**Query parameters:**
+
+| Parameter | Type   | Example    |
+| --------- | ------ | ---------- |
+| `limit`   | number | 10         |
+| `skip`    | number | 0          |
+| `search`  | string | conference |
+| `sort`    | string | date       |
+| `order`   | string | asc        |
+
+**Example request:**
+
+```bash
+curl "https://api.mockforge.dev/api/events?limit=5&sort=date"
+```
+
+**Example response:**
+
+```json
+{
+  "data": [
+    {
+      "id": 1,
+      "title": "Tech Conference 2024",
+      "description": "Annual tech industry conference",
+      "date": "2024-06-15T09:00:00Z",
+      "endDate": "2024-06-17T17:00:00Z",
+      "location": {
+        "city": "San Francisco",
+        "state": "CA",
+        "country": "USA",
+        "venue": "Moscone Center"
+      },
+      "attendees": 5000,
+      "category": "Technology",
+      "price": 499
+    }
+  ],
+  "pagination": {
+    "limit": 5,
+    "skip": 0,
+    "total": 250,
+    "hasMore": true
+  }
+}
+```
+
+## Get single event
+
+**Endpoint:** `GET /api/events/:id`
+
+**Example request:**
+
+```bash
+curl https://api.mockforge.dev/api/events/1
+```
+
+**Example response:**
+
+```json
+{
+  "id": 1,
+  "title": "Tech Conference 2024",
+  "description": "Annual tech industry conference",
+  "date": "2024-06-15T09:00:00Z",
+  "endDate": "2024-06-17T17:00:00Z",
+  "location": {
+    "city": "San Francisco",
+    "state": "CA",
+    "country": "USA",
+    "venue": "Moscone Center"
+  },
+  "attendees": 5000,
+  "category": "Technology",
+  "price": 499
+}
+```
+
+## Search events
+
+**Example request:**
+
+```bash
+curl "https://api.mockforge.dev/api/events?search=conference&limit=3"
+```
+
+Searches across `title`, `description`, `category`, and `venue` fields.
+
+## Create event
+
+**Endpoint:** `POST /api/events`
+
+Creates a mock event. Does not persist.
+
+## Update event
+
+**Endpoint:** `PUT /api/events/:id`
+
+Updates a mock event. Does not persist.
+
+## Delete event
+
+**Endpoint:** `DELETE /api/events/:id`
+
+Deletes a mock event. Does not persist.

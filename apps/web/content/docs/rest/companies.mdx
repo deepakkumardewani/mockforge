@@ -1,0 +1,122 @@
+---
+title: Companies
+description: Company data and business information.
+---
+
+# Companies
+
+Access company information including contact details, industry, and financials.
+
+## List companies
+
+**Endpoint:** `GET /api/companies`
+
+**Query parameters:**
+
+| Parameter | Type   | Example |
+| --------- | ------ | ------- |
+| `limit`   | number | 10      |
+| `skip`    | number | 0       |
+| `search`  | string | tech    |
+| `sort`    | string | revenue |
+| `order`   | string | desc    |
+
+**Example request:**
+
+```bash
+curl "https://api.mockforge.dev/api/companies?limit=5&sort=revenue"
+```
+
+**Example response:**
+
+```json
+{
+  "data": [
+    {
+      "id": 1,
+      "name": "TechCorp International",
+      "industry": "Technology",
+      "founded": 2010,
+      "employees": 5000,
+      "revenue": 1500000000,
+      "website": "https://techcorp.example.com",
+      "phone": "+1-555-0100",
+      "address": {
+        "street": "123 Tech Drive",
+        "city": "San Francisco",
+        "state": "CA",
+        "country": "USA",
+        "zipCode": "94105"
+      },
+      "ceo": "John Smith"
+    }
+  ],
+  "pagination": {
+    "limit": 5,
+    "skip": 0,
+    "total": 100,
+    "hasMore": true
+  }
+}
+```
+
+## Get single company
+
+**Endpoint:** `GET /api/companies/:id`
+
+**Example request:**
+
+```bash
+curl https://api.mockforge.dev/api/companies/1
+```
+
+**Example response:**
+
+```json
+{
+  "id": 1,
+  "name": "TechCorp International",
+  "industry": "Technology",
+  "founded": 2010,
+  "employees": 5000,
+  "revenue": 1500000000,
+  "website": "https://techcorp.example.com",
+  "phone": "+1-555-0100",
+  "address": {
+    "street": "123 Tech Drive",
+    "city": "San Francisco",
+    "state": "CA",
+    "country": "USA",
+    "zipCode": "94105"
+  },
+  "ceo": "John Smith"
+}
+```
+
+## Search companies
+
+**Example request:**
+
+```bash
+curl "https://api.mockforge.dev/api/companies?search=tech&limit=3"
+```
+
+Searches across `name`, `industry`, and `website` fields.
+
+## Create company
+
+**Endpoint:** `POST /api/companies`
+
+Creates a mock company. Does not persist.
+
+## Update company
+
+**Endpoint:** `PUT /api/companies/:id`
+
+Updates a mock company. Does not persist.
+
+## Delete company
+
+**Endpoint:** `DELETE /api/companies/:id`
+
+Deletes a mock company. Does not persist.

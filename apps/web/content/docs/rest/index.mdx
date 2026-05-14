@@ -1,0 +1,116 @@
+---
+title: REST API
+description: MockForge REST API with 14 entities, pagination, search, and CRUD operations.
+---
+
+# REST API
+
+MockForge provides a comprehensive REST API for 14 different entities. All endpoints are available at `https://api.mockforge.dev/api/{entity}`.
+
+## Base URL
+
+```
+https://api.mockforge.dev
+```
+
+## Pagination
+
+All list endpoints support pagination with the following query parameters:
+
+| Parameter | Type        | Description                            | Default   |
+| --------- | ----------- | -------------------------------------- | --------- |
+| `limit`   | number      | Number of items per page               | 10        |
+| `skip`    | number      | Number of items to skip (offset)       | 0         |
+| `search`  | string      | Search query (searches indexed fields) | undefined |
+| `sort`    | string      | Field name to sort by                  | id        |
+| `order`   | asc \| desc | Sort order                             | asc       |
+
+## Response envelope
+
+All list responses use the following envelope format:
+
+```json
+{
+  "data": [
+    { "id": 1, "name": "Item 1", ... },
+    { "id": 2, "name": "Item 2", ... }
+  ],
+  "pagination": {
+    "limit": 10,
+    "skip": 0,
+    "total": 100,
+    "hasMore": true
+  }
+}
+```
+
+### Response fields
+
+| Field                | Type    | Description                                          |
+| -------------------- | ------- | ---------------------------------------------------- |
+| `data`               | array   | Array of entities matching the request               |
+| `pagination.limit`   | number  | The limit used in the request                        |
+| `pagination.skip`    | number  | The skip offset used in the request                  |
+| `pagination.total`   | number  | Total count of all items (respecting search filters) |
+| `pagination.hasMore` | boolean | Whether there are more items to fetch                |
+
+## Single item response
+
+When fetching a single item, the response is the entity object directly:
+
+```json
+{
+  "id": 1,
+  "name": "Item 1",
+  ...
+}
+```
+
+## Error response
+
+All errors use a consistent envelope:
+
+```json
+{
+  "error": {
+    "code": "ERROR_CODE",
+    "message": "Human-readable error message"
+  }
+}
+```
+
+Common error codes:
+
+| Code          | HTTP Status | Description              |
+| ------------- | ----------- | ------------------------ |
+| NOT_FOUND     | 404         | Resource not found       |
+| INVALID_QUERY | 400         | Invalid query parameters |
+| RATE_LIMITED  | 429         | Rate limit exceeded      |
+| SERVER_ERROR  | 500         | Internal server error    |
+
+## Write operations
+
+Write operations (POST, PUT, DELETE) return mock data without persisting:
+
+- `POST /api/{entity}` creates a mock entity with a generated ID
+- `PUT /api/{entity}/:id` returns the updated entity
+- `DELETE /api/{entity}/:id` returns a success response
+
+All writes are stateless—refreshing the page or calling list endpoints will not include created/modified data.
+
+## Available entities
+
+- [Users](/docs/rest/users) — User profiles with contact info
+- [Products](/docs/rest/products) — Product catalog with pricing
+- [Posts](/docs/rest/posts) — Blog posts and content
+- [Comments](/docs/rest/comments) — Comments on posts
+- [Todos](/docs/rest/todos) — Task items
+- [Carts](/docs/rest/carts) — Shopping cart data
+- [Messages](/docs/rest/messages) — Direct messages
+- [Notifications](/docs/rest/notifications) — User notifications
+- [Quotes](/docs/rest/quotes) — Inspirational quotes
+- [Recipes](/docs/rest/recipes) — Recipe data with ingredients
+- [Countries](/docs/rest/countries) — Country information
+- [Companies](/docs/rest/companies) — Company data
+- [Stocks](/docs/rest/stocks) — Stock market data
+- [Events](/docs/rest/events) — Event listings

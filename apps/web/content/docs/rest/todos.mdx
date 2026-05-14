@@ -1,0 +1,106 @@
+---
+title: Todos
+description: Task management and todo items.
+---
+
+# Todos
+
+Access task items with completion status and priority.
+
+## List todos
+
+**Endpoint:** `GET /api/todos`
+
+**Query parameters:**
+
+| Parameter | Type   | Example  |
+| --------- | ------ | -------- |
+| `limit`   | number | 10       |
+| `skip`    | number | 0        |
+| `search`  | string | grocery  |
+| `sort`    | string | priority |
+| `order`   | string | asc      |
+
+**Example request:**
+
+```bash
+curl "https://api.mockforge.dev/api/todos?limit=5&search=grocery"
+```
+
+**Example response:**
+
+```json
+{
+  "data": [
+    {
+      "id": 1,
+      "title": "Buy groceries",
+      "completed": false,
+      "userId": 1,
+      "dueDate": "2024-05-15T23:59:59Z",
+      "priority": "high",
+      "category": "shopping",
+      "createdAt": "2024-05-10T08:00:00Z"
+    }
+  ],
+  "pagination": {
+    "limit": 5,
+    "skip": 0,
+    "total": 200,
+    "hasMore": true
+  }
+}
+```
+
+## Get single todo
+
+**Endpoint:** `GET /api/todos/:id`
+
+**Example request:**
+
+```bash
+curl https://api.mockforge.dev/api/todos/1
+```
+
+**Example response:**
+
+```json
+{
+  "id": 1,
+  "title": "Buy groceries",
+  "completed": false,
+  "userId": 1,
+  "dueDate": "2024-05-15T23:59:59Z",
+  "priority": "high",
+  "category": "shopping",
+  "createdAt": "2024-05-10T08:00:00Z"
+}
+```
+
+## Search todos
+
+**Example request:**
+
+```bash
+curl "https://api.mockforge.dev/api/todos?search=grocery&limit=3"
+```
+
+Searches across `title` and `category` fields.
+
+## Create todo
+
+**Endpoint:** `POST /api/todos`
+
+Creates a mock todo. Does not persist.
+
+## Update todo
+
+**Endpoint:** `PUT /api/todos/:id`
+
+Updates a mock todo. Does not persist.
+
+## Delete todo
+
+**Endpoint:** `DELETE /api/todos/:id`
+
+Deletes a mock todo. Does not persist.

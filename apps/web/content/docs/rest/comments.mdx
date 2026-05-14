@@ -1,0 +1,112 @@
+---
+title: Comments
+description: Comments on posts and content.
+---
+
+# Comments
+
+Access comments on posts with user information and timestamps.
+
+## List comments
+
+**Endpoint:** `GET /api/comments`
+
+**Query parameters:**
+
+| Parameter | Type   | Example |
+| --------- | ------ | ------- |
+| `limit`   | number | 10      |
+| `skip`    | number | 0       |
+| `search`  | string | great   |
+| `sort`    | string | date    |
+| `order`   | string | desc    |
+
+**Example request:**
+
+```bash
+curl "https://api.mockforge.dev/api/comments?limit=5"
+```
+
+**Example response:**
+
+```json
+{
+  "data": [
+    {
+      "id": 1,
+      "body": "Great article! Very helpful.",
+      "postId": 1,
+      "userId": 2,
+      "user": {
+        "id": 2,
+        "firstName": "Jane",
+        "lastName": "Smith"
+      },
+      "likes": 12,
+      "createdAt": "2024-05-11T09:30:00Z"
+    }
+  ],
+  "pagination": {
+    "limit": 5,
+    "skip": 0,
+    "total": 50,
+    "hasMore": true
+  }
+}
+```
+
+## Get single comment
+
+**Endpoint:** `GET /api/comments/:id`
+
+**Example request:**
+
+```bash
+curl https://api.mockforge.dev/api/comments/1
+```
+
+**Example response:**
+
+```json
+{
+  "id": 1,
+  "body": "Great article! Very helpful.",
+  "postId": 1,
+  "userId": 2,
+  "user": {
+    "id": 2,
+    "firstName": "Jane",
+    "lastName": "Smith"
+  },
+  "likes": 12,
+  "createdAt": "2024-05-11T09:30:00Z"
+}
+```
+
+## Search comments
+
+**Example request:**
+
+```bash
+curl "https://api.mockforge.dev/api/comments?search=great&limit=3"
+```
+
+Searches across the `body` field.
+
+## Create comment
+
+**Endpoint:** `POST /api/comments`
+
+Creates a mock comment. Does not persist.
+
+## Update comment
+
+**Endpoint:** `PUT /api/comments/:id`
+
+Updates a mock comment. Does not persist.
+
+## Delete comment
+
+**Endpoint:** `DELETE /api/comments/:id`
+
+Deletes a mock comment. Does not persist.

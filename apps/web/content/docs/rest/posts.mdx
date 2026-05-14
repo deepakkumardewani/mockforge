@@ -1,0 +1,108 @@
+---
+title: Posts
+description: Blog posts and content articles.
+---
+
+# Posts
+
+Access blog posts and articles with metadata and content.
+
+## List posts
+
+**Endpoint:** `GET /api/posts`
+
+**Query parameters:**
+
+| Parameter | Type   | Example    |
+| --------- | ------ | ---------- |
+| `limit`   | number | 10         |
+| `skip`    | number | 0          |
+| `search`  | string | technology |
+| `sort`    | string | date       |
+| `order`   | string | desc       |
+
+**Example request:**
+
+```bash
+curl "https://api.mockforge.dev/api/posts?limit=5&order=desc"
+```
+
+**Example response:**
+
+```json
+{
+  "data": [
+    {
+      "id": 1,
+      "title": "Getting Started with React",
+      "body": "React is a JavaScript library for building user interfaces...",
+      "userId": 1,
+      "tags": ["react", "javascript", "web"],
+      "views": 1250,
+      "likes": 45,
+      "createdAt": "2024-05-10T08:00:00Z",
+      "updatedAt": "2024-05-11T10:30:00Z"
+    }
+  ],
+  "pagination": {
+    "limit": 5,
+    "skip": 0,
+    "total": 100,
+    "hasMore": true
+  }
+}
+```
+
+## Get single post
+
+**Endpoint:** `GET /api/posts/:id`
+
+**Example request:**
+
+```bash
+curl https://api.mockforge.dev/api/posts/1
+```
+
+**Example response:**
+
+```json
+{
+  "id": 1,
+  "title": "Getting Started with React",
+  "body": "React is a JavaScript library for building user interfaces...",
+  "userId": 1,
+  "tags": ["react", "javascript", "web"],
+  "views": 1250,
+  "likes": 45,
+  "createdAt": "2024-05-10T08:00:00Z",
+  "updatedAt": "2024-05-11T10:30:00Z"
+}
+```
+
+## Search posts
+
+**Example request:**
+
+```bash
+curl "https://api.mockforge.dev/api/posts?search=react&limit=3"
+```
+
+Searches across `title`, `body`, and `tags` fields.
+
+## Create post
+
+**Endpoint:** `POST /api/posts`
+
+Creates a mock post. Does not persist.
+
+## Update post
+
+**Endpoint:** `PUT /api/posts/:id`
+
+Updates a mock post. Does not persist.
+
+## Delete post
+
+**Endpoint:** `DELETE /api/posts/:id`
+
+Deletes a mock post. Does not persist.

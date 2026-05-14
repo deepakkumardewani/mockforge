@@ -1,0 +1,108 @@
+---
+title: Countries
+description: Country information and geographical data.
+---
+
+# Countries
+
+Access country information including geographical data, capitals, and population.
+
+## List countries
+
+**Endpoint:** `GET /api/countries`
+
+**Query parameters:**
+
+| Parameter | Type   | Example |
+| --------- | ------ | ------- |
+| `limit`   | number | 10      |
+| `skip`    | number | 0       |
+| `search`  | string | united  |
+| `sort`    | string | name    |
+| `order`   | string | asc     |
+
+**Example request:**
+
+```bash
+curl "https://api.mockforge.dev/api/countries?limit=5"
+```
+
+**Example response:**
+
+```json
+{
+  "data": [
+    {
+      "id": 1,
+      "name": "United States",
+      "code": "US",
+      "capital": "Washington, D.C.",
+      "continent": "North America",
+      "population": 331000000,
+      "area": 9833000,
+      "currency": "USD",
+      "languages": ["English"]
+    }
+  ],
+  "pagination": {
+    "limit": 5,
+    "skip": 0,
+    "total": 195,
+    "hasMore": true
+  }
+}
+```
+
+## Get single country
+
+**Endpoint:** `GET /api/countries/:id`
+
+**Example request:**
+
+```bash
+curl https://api.mockforge.dev/api/countries/1
+```
+
+**Example response:**
+
+```json
+{
+  "id": 1,
+  "name": "United States",
+  "code": "US",
+  "capital": "Washington, D.C.",
+  "continent": "North America",
+  "population": 331000000,
+  "area": 9833000,
+  "currency": "USD",
+  "languages": ["English"]
+}
+```
+
+## Search countries
+
+**Example request:**
+
+```bash
+curl "https://api.mockforge.dev/api/countries?search=united&limit=3"
+```
+
+Searches across `name`, `capital`, and `continent` fields.
+
+## Create country
+
+**Endpoint:** `POST /api/countries`
+
+Creates a mock country. Does not persist.
+
+## Update country
+
+**Endpoint:** `PUT /api/countries/:id`
+
+Updates a mock country. Does not persist.
+
+## Delete country
+
+**Endpoint:** `DELETE /api/countries/:id`
+
+Deletes a mock country. Does not persist.

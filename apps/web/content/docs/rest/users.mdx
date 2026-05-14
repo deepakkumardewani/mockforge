@@ -1,0 +1,126 @@
+---
+title: Users
+description: User profiles with contact information and personal details.
+---
+
+# Users
+
+Access user profile data with contact information, addresses, and personal details.
+
+## List users
+
+**Endpoint:** `GET /api/users`
+
+**Query parameters:**
+
+| Parameter | Type   | Example |
+| --------- | ------ | ------- |
+| `limit`   | number | 10      |
+| `skip`    | number | 0       |
+| `search`  | string | john    |
+| `sort`    | string | id      |
+| `order`   | string | asc     |
+
+**Example request:**
+
+```bash
+curl "https://api.mockforge.dev/api/users?limit=5&skip=0"
+```
+
+**Example response:**
+
+```json
+{
+  "data": [
+    {
+      "id": 1,
+      "firstName": "John",
+      "lastName": "Doe",
+      "email": "john.doe@example.com",
+      "phone": "+1-970-123-4567",
+      "username": "johndoe",
+      "image": "https://i.pravatar.cc/150?img=1",
+      "address": {
+        "street": "123 Main St",
+        "city": "Springfield",
+        "state": "IL",
+        "country": "USA",
+        "zipCode": "62701"
+      },
+      "company": {
+        "name": "Acme Corp",
+        "title": "Software Engineer"
+      }
+    }
+  ],
+  "pagination": {
+    "limit": 5,
+    "skip": 0,
+    "total": 100,
+    "hasMore": true
+  }
+}
+```
+
+## Get single user
+
+**Endpoint:** `GET /api/users/:id`
+
+**Example request:**
+
+```bash
+curl https://api.mockforge.dev/api/users/1
+```
+
+**Example response:**
+
+```json
+{
+  "id": 1,
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "john.doe@example.com",
+  "phone": "+1-970-123-4567",
+  "username": "johndoe",
+  "image": "https://i.pravatar.cc/150?img=1",
+  "address": {
+    "street": "123 Main St",
+    "city": "Springfield",
+    "state": "IL",
+    "country": "USA",
+    "zipCode": "62701"
+  },
+  "company": {
+    "name": "Acme Corp",
+    "title": "Software Engineer"
+  }
+}
+```
+
+## Search users
+
+**Example request:**
+
+```bash
+curl "https://api.mockforge.dev/api/users?search=john&limit=3"
+```
+
+Searches across `firstName`, `lastName`, `email`, and `username` fields.
+
+## Create user
+
+**Endpoint:** `POST /api/users`
+
+Creates a mock user. Does not persist.
+
+## Update user
+
+**Endpoint:** `PUT /api/users/:id`
+
+Updates a mock user. Does not persist.
+
+## Delete user
+
+**Endpoint:** `DELETE /api/users/:id`
+
+Deletes a mock user. Does not persist.

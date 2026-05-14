@@ -1,0 +1,155 @@
+import { toRuntime, toRuntimeAsync } from "fumadocs-mdx";
+import * as docs_0 from "../content/docs/custom-schemas.mdx?collection=docs&hash=235be31d89150f42293454d0afd0ad5f5d373693478926bb859d709c165640d5";
+import * as docs_1 from "../content/docs/graphql.mdx?collection=docs&hash=235be31d89150f42293454d0afd0ad5f5d373693478926bb859d709c165640d5";
+import * as docs_2 from "../content/docs/identity.mdx?collection=docs&hash=235be31d89150f42293454d0afd0ad5f5d373693478926bb859d709c165640d5";
+import * as docs_3 from "../content/docs/index.mdx?collection=docs&hash=235be31d89150f42293454d0afd0ad5f5d373693478926bb859d709c165640d5";
+import * as docs_4 from "../content/docs/rate-limits.mdx?collection=docs&hash=235be31d89150f42293454d0afd0ad5f5d373693478926bb859d709c165640d5";
+import * as docs_5 from "../content/docs/socketio.mdx?collection=docs&hash=235be31d89150f42293454d0afd0ad5f5d373693478926bb859d709c165640d5";
+import * as docs_6 from "../content/docs/websockets.mdx?collection=docs&hash=235be31d89150f42293454d0afd0ad5f5d373693478926bb859d709c165640d5";
+import * as docs_7 from "../content/docs/getting-started/index.mdx?collection=docs&hash=235be31d89150f42293454d0afd0ad5f5d373693478926bb859d709c165640d5";
+import * as docs_8 from "../content/docs/getting-started/quickstart.mdx?collection=docs&hash=235be31d89150f42293454d0afd0ad5f5d373693478926bb859d709c165640d5";
+import * as docs_9 from "../content/docs/rest/carts.mdx?collection=docs&hash=235be31d89150f42293454d0afd0ad5f5d373693478926bb859d709c165640d5";
+import * as docs_10 from "../content/docs/rest/comments.mdx?collection=docs&hash=235be31d89150f42293454d0afd0ad5f5d373693478926bb859d709c165640d5";
+import * as docs_11 from "../content/docs/rest/companies.mdx?collection=docs&hash=235be31d89150f42293454d0afd0ad5f5d373693478926bb859d709c165640d5";
+import * as docs_12 from "../content/docs/rest/countries.mdx?collection=docs&hash=235be31d89150f42293454d0afd0ad5f5d373693478926bb859d709c165640d5";
+import * as docs_13 from "../content/docs/rest/events.mdx?collection=docs&hash=235be31d89150f42293454d0afd0ad5f5d373693478926bb859d709c165640d5";
+import * as docs_14 from "../content/docs/rest/index.mdx?collection=docs&hash=235be31d89150f42293454d0afd0ad5f5d373693478926bb859d709c165640d5";
+import * as docs_15 from "../content/docs/rest/messages.mdx?collection=docs&hash=235be31d89150f42293454d0afd0ad5f5d373693478926bb859d709c165640d5";
+import * as docs_16 from "../content/docs/rest/notifications.mdx?collection=docs&hash=235be31d89150f42293454d0afd0ad5f5d373693478926bb859d709c165640d5";
+import * as docs_17 from "../content/docs/rest/posts.mdx?collection=docs&hash=235be31d89150f42293454d0afd0ad5f5d373693478926bb859d709c165640d5";
+import * as docs_18 from "../content/docs/rest/products.mdx?collection=docs&hash=235be31d89150f42293454d0afd0ad5f5d373693478926bb859d709c165640d5";
+import * as docs_19 from "../content/docs/rest/quotes.mdx?collection=docs&hash=235be31d89150f42293454d0afd0ad5f5d373693478926bb859d709c165640d5";
+import * as docs_20 from "../content/docs/rest/recipes.mdx?collection=docs&hash=235be31d89150f42293454d0afd0ad5f5d373693478926bb859d709c165640d5";
+import * as docs_21 from "../content/docs/rest/stocks.mdx?collection=docs&hash=235be31d89150f42293454d0afd0ad5f5d373693478926bb859d709c165640d5";
+import * as docs_22 from "../content/docs/rest/todos.mdx?collection=docs&hash=235be31d89150f42293454d0afd0ad5f5d373693478926bb859d709c165640d5";
+import * as docs_23 from "../content/docs/rest/users.mdx?collection=docs&hash=235be31d89150f42293454d0afd0ad5f5d373693478926bb859d709c165640d5";
+import * as meta_0 from "../content/docs/meta.json?collection=meta&hash=235be31d89150f42293454d0afd0ad5f5d373693478926bb859d709c165640d5";
+export const docs = [
+  toRuntime("doc", docs_0, {
+    path: "custom-schemas.mdx",
+    absolutePath:
+      "/Users/deepakdewani1/Documents/Programs/react/mockforge/apps/web/content/docs/custom-schemas.mdx",
+  }),
+  toRuntime("doc", docs_1, {
+    path: "graphql.mdx",
+    absolutePath:
+      "/Users/deepakdewani1/Documents/Programs/react/mockforge/apps/web/content/docs/graphql.mdx",
+  }),
+  toRuntime("doc", docs_2, {
+    path: "identity.mdx",
+    absolutePath:
+      "/Users/deepakdewani1/Documents/Programs/react/mockforge/apps/web/content/docs/identity.mdx",
+  }),
+  toRuntime("doc", docs_3, {
+    path: "index.mdx",
+    absolutePath:
+      "/Users/deepakdewani1/Documents/Programs/react/mockforge/apps/web/content/docs/index.mdx",
+  }),
+  toRuntime("doc", docs_4, {
+    path: "rate-limits.mdx",
+    absolutePath:
+      "/Users/deepakdewani1/Documents/Programs/react/mockforge/apps/web/content/docs/rate-limits.mdx",
+  }),
+  toRuntime("doc", docs_5, {
+    path: "socketio.mdx",
+    absolutePath:
+      "/Users/deepakdewani1/Documents/Programs/react/mockforge/apps/web/content/docs/socketio.mdx",
+  }),
+  toRuntime("doc", docs_6, {
+    path: "websockets.mdx",
+    absolutePath:
+      "/Users/deepakdewani1/Documents/Programs/react/mockforge/apps/web/content/docs/websockets.mdx",
+  }),
+  toRuntime("doc", docs_7, {
+    path: "getting-started/index.mdx",
+    absolutePath:
+      "/Users/deepakdewani1/Documents/Programs/react/mockforge/apps/web/content/docs/getting-started/index.mdx",
+  }),
+  toRuntime("doc", docs_8, {
+    path: "getting-started/quickstart.mdx",
+    absolutePath:
+      "/Users/deepakdewani1/Documents/Programs/react/mockforge/apps/web/content/docs/getting-started/quickstart.mdx",
+  }),
+  toRuntime("doc", docs_9, {
+    path: "rest/carts.mdx",
+    absolutePath:
+      "/Users/deepakdewani1/Documents/Programs/react/mockforge/apps/web/content/docs/rest/carts.mdx",
+  }),
+  toRuntime("doc", docs_10, {
+    path: "rest/comments.mdx",
+    absolutePath:
+      "/Users/deepakdewani1/Documents/Programs/react/mockforge/apps/web/content/docs/rest/comments.mdx",
+  }),
+  toRuntime("doc", docs_11, {
+    path: "rest/companies.mdx",
+    absolutePath:
+      "/Users/deepakdewani1/Documents/Programs/react/mockforge/apps/web/content/docs/rest/companies.mdx",
+  }),
+  toRuntime("doc", docs_12, {
+    path: "rest/countries.mdx",
+    absolutePath:
+      "/Users/deepakdewani1/Documents/Programs/react/mockforge/apps/web/content/docs/rest/countries.mdx",
+  }),
+  toRuntime("doc", docs_13, {
+    path: "rest/events.mdx",
+    absolutePath:
+      "/Users/deepakdewani1/Documents/Programs/react/mockforge/apps/web/content/docs/rest/events.mdx",
+  }),
+  toRuntime("doc", docs_14, {
+    path: "rest/index.mdx",
+    absolutePath:
+      "/Users/deepakdewani1/Documents/Programs/react/mockforge/apps/web/content/docs/rest/index.mdx",
+  }),
+  toRuntime("doc", docs_15, {
+    path: "rest/messages.mdx",
+    absolutePath:
+      "/Users/deepakdewani1/Documents/Programs/react/mockforge/apps/web/content/docs/rest/messages.mdx",
+  }),
+  toRuntime("doc", docs_16, {
+    path: "rest/notifications.mdx",
+    absolutePath:
+      "/Users/deepakdewani1/Documents/Programs/react/mockforge/apps/web/content/docs/rest/notifications.mdx",
+  }),
+  toRuntime("doc", docs_17, {
+    path: "rest/posts.mdx",
+    absolutePath:
+      "/Users/deepakdewani1/Documents/Programs/react/mockforge/apps/web/content/docs/rest/posts.mdx",
+  }),
+  toRuntime("doc", docs_18, {
+    path: "rest/products.mdx",
+    absolutePath:
+      "/Users/deepakdewani1/Documents/Programs/react/mockforge/apps/web/content/docs/rest/products.mdx",
+  }),
+  toRuntime("doc", docs_19, {
+    path: "rest/quotes.mdx",
+    absolutePath:
+      "/Users/deepakdewani1/Documents/Programs/react/mockforge/apps/web/content/docs/rest/quotes.mdx",
+  }),
+  toRuntime("doc", docs_20, {
+    path: "rest/recipes.mdx",
+    absolutePath:
+      "/Users/deepakdewani1/Documents/Programs/react/mockforge/apps/web/content/docs/rest/recipes.mdx",
+  }),
+  toRuntime("doc", docs_21, {
+    path: "rest/stocks.mdx",
+    absolutePath:
+      "/Users/deepakdewani1/Documents/Programs/react/mockforge/apps/web/content/docs/rest/stocks.mdx",
+  }),
+  toRuntime("doc", docs_22, {
+    path: "rest/todos.mdx",
+    absolutePath:
+      "/Users/deepakdewani1/Documents/Programs/react/mockforge/apps/web/content/docs/rest/todos.mdx",
+  }),
+  toRuntime("doc", docs_23, {
+    path: "rest/users.mdx",
+    absolutePath:
+      "/Users/deepakdewani1/Documents/Programs/react/mockforge/apps/web/content/docs/rest/users.mdx",
+  }),
+];
+export const meta = [
+  toRuntime("meta", meta_0, {
+    path: "meta.json",
+    absolutePath:
+      "/Users/deepakdewani1/Documents/Programs/react/mockforge/apps/web/content/docs/meta.json",
+  }),
+];

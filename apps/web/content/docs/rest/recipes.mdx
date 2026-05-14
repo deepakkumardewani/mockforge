@@ -1,0 +1,126 @@
+---
+title: Recipes
+description: Recipe data with ingredients and instructions.
+---
+
+# Recipes
+
+Access recipe data with ingredients, instructions, and nutritional information.
+
+## List recipes
+
+**Endpoint:** `GET /api/recipes`
+
+**Query parameters:**
+
+| Parameter | Type   | Example    |
+| --------- | ------ | ---------- |
+| `limit`   | number | 10         |
+| `skip`    | number | 0          |
+| `search`  | string | pasta      |
+| `sort`    | string | difficulty |
+| `order`   | string | asc        |
+
+**Example request:**
+
+```bash
+curl "https://api.mockforge.dev/api/recipes?limit=5&search=pasta"
+```
+
+**Example response:**
+
+```json
+{
+  "data": [
+    {
+      "id": 1,
+      "name": "Classic Carbonara",
+      "description": "Traditional Italian pasta dish",
+      "cuisine": "Italian",
+      "difficulty": "medium",
+      "prepTime": 10,
+      "cookTime": 20,
+      "servings": 4,
+      "calories": 450,
+      "ingredients": [
+        {
+          "name": "Spaghetti",
+          "amount": 400,
+          "unit": "g"
+        }
+      ],
+      "instructions": ["Cook pasta...", "Prepare sauce..."],
+      "tags": ["pasta", "quick", "italian"]
+    }
+  ],
+  "pagination": {
+    "limit": 5,
+    "skip": 0,
+    "total": 300,
+    "hasMore": true
+  }
+}
+```
+
+## Get single recipe
+
+**Endpoint:** `GET /api/recipes/:id`
+
+**Example request:**
+
+```bash
+curl https://api.mockforge.dev/api/recipes/1
+```
+
+**Example response:**
+
+```json
+{
+  "id": 1,
+  "name": "Classic Carbonara",
+  "description": "Traditional Italian pasta dish",
+  "cuisine": "Italian",
+  "difficulty": "medium",
+  "prepTime": 10,
+  "cookTime": 20,
+  "servings": 4,
+  "calories": 450,
+  "ingredients": [
+    {
+      "name": "Spaghetti",
+      "amount": 400,
+      "unit": "g"
+    }
+  ],
+  "instructions": ["Cook pasta...", "Prepare sauce..."],
+  "tags": ["pasta", "quick", "italian"]
+}
+```
+
+## Search recipes
+
+**Example request:**
+
+```bash
+curl "https://api.mockforge.dev/api/recipes?search=pasta&limit=3"
+```
+
+Searches across `name`, `description`, `cuisine`, and `tags` fields.
+
+## Create recipe
+
+**Endpoint:** `POST /api/recipes`
+
+Creates a mock recipe. Does not persist.
+
+## Update recipe
+
+**Endpoint:** `PUT /api/recipes/:id`
+
+Updates a mock recipe. Does not persist.
+
+## Delete recipe
+
+**Endpoint:** `DELETE /api/recipes/:id`
+
+Deletes a mock recipe. Does not persist.

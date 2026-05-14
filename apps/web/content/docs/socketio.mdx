@@ -1,0 +1,185 @@
+---
+title: Socket.io
+description: Real-time communication with Socket.io namespaces.
+---
+
+# Socket.io
+
+MockForge provides Socket.io servers for real-time communication with automatic reconnection and event-based messaging.
+
+## Server
+
+```
+https://api.mockforge.dev:4001
+```
+
+## Namespaces
+
+| Namespace        | Purpose                      | Events                                                         |
+| ---------------- | ---------------------------- | -------------------------------------------------------------- |
+| `/notifications` | Real-time user notifications | `notification`, `connect`, `disconnect`                        |
+| `/chat`          | Multi-room chat              | `message`, `user-joined`, `user-left`, `connect`, `disconnect` |
+| `/ticker`        | Stock ticker updates         | `ticker`, `connect`, `disconnect`                              |
+
+## Connection example
+
+### JavaScript/Browser
+
+```javascript
+import io from "socket.io-client";
+
+// Connect to notifications namespace
+const notificationsSocket = io("https://api.mockforge.dev:4001/notifications", {
+  transports: ["websocket", "polling"],
+  reconnection: true,
+  reconnectionDelay: 1000,
+  reconnectionDelayMax: 5000,
+  reconnectionAttempts: Infinity,
+});
+
+notificationsSocket.on("connect", () => {
+  console.log("Connected to notifications");
+});
+
+notificationsSocket.on("notification", (data) => {
+  console.log("New notification:", data);
+});
+
+notificationsSocket.on("disconnect", () => {
+  console.log("Disconnected from notifications");
+});
+```
+
+### Node.js
+
+```javascript
+const io = require("socket.io-client");
+
+const socket = io("https://api.mockforge.dev:4001/notifications", {
+  transports: ["websocket"],
+  reconnection: true,
+});
+
+socket.on("connect", () => {
+  console.log("Connected");
+});
+
+socket.on("notification", (data) => {
+  console.log("Notification:", data);
+});
+```
+
+## Notifications namespace
+
+**Events emitted by server:**
+
+- `notification` — new notification object
+
+**Example message:**
+
+```json
+{
+  "id": 1,
+  "userId": 5,
+  "title": "Order Shipped",
+  "message": "Your order has been shipped",
+  "type": "order",
+  "createdAt": "2024-05-14T10:30:00Z"
+}
+```
+
+## Chat namespace
+
+**Events emitted by server:**
+
+- `message` — new message in room
+- `user-joined` — user joined room
+- `user-left` — user left room
+
+**Connect with room:**
+
+```javascript
+const chatSocket = io("https://api.mockforge.dev:4001/chat", {
+  query: { room: "room-1" },
+});
+
+chatSocket.on("message", (msg) => {
+  console.log(`${msg.senderName}: ${msg.body}`);
+});
+```
+
+**Send message:**
+
+```javascript
+chatSocket.emit("message", {
+  room: "room-1",
+  userId: 5,
+  body: "Hello everyone!",
+});
+```
+
+**Example message:**
+
+```json
+{
+  "id": 501,
+  "roomId": "room-1",
+  "senderId": 5,
+  "senderName": "Alice",
+  "body": "Hello!",
+  "createdAt": "2024-05-14T10:30:00Z"
+}
+```
+
+## Ticker namespace
+
+**Events emitted by server:**
+
+- `ticker` — stock price update (emitted every 2 seconds)
+
+**Example message:**
+
+```json
+{
+  "symbol": "AAPL",
+  "price": 175.5,
+  "change": 0.07,
+  "changePercent": 0.04,
+  "volume": 52847392,
+  "timestamp": "2024-05-14T10:30:00Z"
+}
+```
+
+## Automatic reconnection
+
+Socket.io handles reconnection automatically:
+
+```javascript
+const socket = io("https://api.mockforge.dev:4001/notifications", {
+  reconnection: true, // enabled by default
+  reconnectionDelay: 1000, // start with 1 second
+  reconnectionDelayMax: 5000, // max 5 seconds
+  reconnectionAttempts: 5, // try 5 times (Infinity = unlimited)
+});
+
+socket.on("disconnect", (reason) => {
+  // reason: 'io server disconnect', 'io client disconnect', 'ping timeout', etc.
+  if (reason === "io server disconnect") {
+    // server explicitly disconnected
+    socket.connect();
+  }
+  // Socket.io will auto-reconnect for other reasons
+});
+```
+
+## Identity header
+
+Include your `X-MF-ID` for rate limiting. With Socket.io, pass it in the query:
+
+```javascript
+const socket = io("https://api.mockforge.dev:4001/notifications", {
+  query: {
+    mfId: "your-custom-id",
+  },
+});
+```

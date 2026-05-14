@@ -1,0 +1,148 @@
+---
+title: GraphQL
+description: GraphQL API for querying MockForge data with typed schema.
+---
+
+# GraphQL
+
+MockForge provides a GraphQL API with the same 14 entities as the REST API. Access it via POST requests with full type safety.
+
+## Endpoint
+
+```
+POST https://api.mockforge.dev/graphql
+```
+
+## Playground
+
+Explore the schema interactively:
+
+```
+https://api.mockforge.dev/graphql?playground=1
+```
+
+## Query structure
+
+All queries support the same pagination parameters as the REST API:
+
+- `limit` — number of items to return (default: 10)
+- `skip` — offset for pagination (default: 0)
+- `search` — search query string
+- `sort` — field to sort by
+- `order` — `asc` or `desc`
+
+## Example queries
+
+### Users query
+
+```graphql
+query GetUsers {
+  users(limit: 5, skip: 0) {
+    data {
+      id
+      firstName
+      lastName
+      email
+      phone
+    }
+    pagination {
+      total
+      limit
+      skip
+      hasMore
+    }
+  }
+}
+```
+
+### Products query
+
+```graphql
+query GetProducts {
+  products(limit: 10, sort: "price", order: "asc") {
+    data {
+      id
+      title
+      description
+      price
+      discountPercentage
+      rating
+      stock
+      category
+    }
+    pagination {
+      total
+      hasMore
+    }
+  }
+}
+```
+
+### Stocks query with search
+
+```graphql
+query SearchStocks {
+  stocks(search: "AAPL", limit: 5) {
+    data {
+      id
+      symbol
+      name
+      price
+      change
+      changePercent
+      marketCap
+    }
+    pagination {
+      total
+      hasMore
+    }
+  }
+}
+```
+
+## Query root
+
+The root query object supports:
+
+- `users` — list users
+- `products` — list products
+- `posts` — list posts
+- `comments` — list comments
+- `todos` — list todos
+- `carts` — list carts
+- `messages` — list messages
+- `notifications` — list notifications
+- `quotes` — list quotes
+- `recipes` — list recipes
+- `countries` — list countries
+- `companies` — list companies
+- `stocks` — list stocks
+- `events` — list events
+
+All queries also have singular variants for fetching by ID:
+
+```graphql
+query GetSingleProduct {
+  product(id: 1) {
+    id
+    title
+    price
+  }
+}
+```
+
+## Mutations
+
+Basic mutations for create, update, delete operations are available but do not persist.
+
+## Headers
+
+Include the `X-MF-ID` header for rate limiting:
+
+```bash
+curl -X POST \
+  -H "Content-Type: application/json" \
+  -H "X-MF-ID: your-custom-id" \
+  -d '{"query":"{ users(limit: 5) { data { id firstName } } }"}' \
+  https://api.mockforge.dev/graphql
+```

@@ -1,0 +1,28 @@
+---
+title: Identity (mf_id)
+description: How MockForge identifies browsers without authentication.
+---
+
+# Identity
+
+MockForge uses a browser-generated UUID (`mf_id`) instead of accounts or API keys.
+
+## How it works
+
+1. On first visit to the schema builder, your browser generates a `crypto.randomUUID()`.
+2. The UUID is stored in `localStorage` as `mf_id`.
+3. Every API request from the UI sends this UUID as the `X-MF-ID` header.
+4. The server uses it for rate limiting and schema ownership.
+
+## Using mf_id directly
+
+You can use any UUID as your identity for direct API calls:
+
+```bash
+curl -H "X-MF-ID: 550e8400-e29b-41d4-a716-446655440000" \
+  https://api.mockforge.dev/api/products
+```
+
+## Schema ownership
+
+Saved schemas are tied to your `mf_id`. Only the owner can delete a schema. If you clear `localStorage` or switch browsers, copy your `mf_id` from the builder UI first.

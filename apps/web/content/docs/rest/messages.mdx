@@ -1,0 +1,104 @@
+---
+title: Messages
+description: Direct messages and conversations.
+---
+
+# Messages
+
+Access direct messages and conversation data.
+
+## List messages
+
+**Endpoint:** `GET /api/messages`
+
+**Query parameters:**
+
+| Parameter | Type   | Example |
+| --------- | ------ | ------- |
+| `limit`   | number | 10      |
+| `skip`    | number | 0       |
+| `search`  | string | meeting |
+| `sort`    | string | date    |
+| `order`   | string | desc    |
+
+**Example request:**
+
+```bash
+curl "https://api.mockforge.dev/api/messages?limit=5&order=desc"
+```
+
+**Example response:**
+
+```json
+{
+  "data": [
+    {
+      "id": 1,
+      "senderId": 1,
+      "recipientId": 2,
+      "body": "Hey! How are you?",
+      "read": false,
+      "createdAt": "2024-05-12T14:30:00Z",
+      "updatedAt": "2024-05-12T14:30:00Z"
+    }
+  ],
+  "pagination": {
+    "limit": 5,
+    "skip": 0,
+    "total": 150,
+    "hasMore": true
+  }
+}
+```
+
+## Get single message
+
+**Endpoint:** `GET /api/messages/:id`
+
+**Example request:**
+
+```bash
+curl https://api.mockforge.dev/api/messages/1
+```
+
+**Example response:**
+
+```json
+{
+  "id": 1,
+  "senderId": 1,
+  "recipientId": 2,
+  "body": "Hey! How are you?",
+  "read": false,
+  "createdAt": "2024-05-12T14:30:00Z",
+  "updatedAt": "2024-05-12T14:30:00Z"
+}
+```
+
+## Search messages
+
+**Example request:**
+
+```bash
+curl "https://api.mockforge.dev/api/messages?search=meeting&limit=3"
+```
+
+Searches across the `body` field.
+
+## Create message
+
+**Endpoint:** `POST /api/messages`
+
+Creates a mock message. Does not persist.
+
+## Update message
+
+**Endpoint:** `PUT /api/messages/:id`
+
+Updates a mock message. Does not persist.
+
+## Delete message
+
+**Endpoint:** `DELETE /api/messages/:id`
+
+Deletes a mock message. Does not persist.

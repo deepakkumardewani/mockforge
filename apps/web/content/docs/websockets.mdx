@@ -1,0 +1,160 @@
+---
+title: WebSockets
+description: Real-time data streaming via WebSocket connections.
+---
+
+# WebSockets
+
+MockForge provides WebSocket endpoints for real-time data streaming. Connect via native WebSocket or a library like ws (Node.js).
+
+## Endpoints
+
+| Endpoint                                   | Description                        | Update Interval |
+| ------------------------------------------ | ---------------------------------- | --------------- |
+| `wss://api.mockforge.dev/ws/stats`         | System statistics and metrics      | 5 seconds       |
+| `wss://api.mockforge.dev/ws/notifications` | Real-time notifications stream     | varies          |
+| `wss://ws/chat/{roomId}`                   | Chat room messages (collaborative) | real-time       |
+| `wss://api.mockforge.dev/ws/ticker`        | Stock price ticker                 | 2 seconds       |
+
+## Connection example
+
+### JavaScript/Browser
+
+```javascript
+const ws = new WebSocket("wss://api.mockforge.dev/ws/stats");
+
+ws.onopen = () => {
+  console.log("Connected");
+};
+
+ws.onmessage = (event) => {
+  const data = JSON.parse(event.data);
+  console.log("Stats update:", data);
+};
+
+ws.onerror = (error) => {
+  console.error("WebSocket error:", error);
+};
+
+ws.onclose = () => {
+  console.log("Disconnected");
+};
+```
+
+### Node.js
+
+```javascript
+const WebSocket = require("ws");
+
+const ws = new WebSocket("wss://api.mockforge.dev/ws/stats");
+
+ws.on("open", () => {
+  console.log("Connected");
+});
+
+ws.on("message", (data) => {
+  const message = JSON.parse(data);
+  console.log("Stats update:", message);
+});
+
+ws.on("error", (error) => {
+  console.error("WebSocket error:", error);
+});
+
+ws.on("close", () => {
+  console.log("Disconnected");
+});
+```
+
+## Message shapes
+
+### Stats stream
+
+```json
+{
+  "type": "stats",
+  "timestamp": "2024-05-14T10:30:00Z",
+  "data": {
+    "activeUsers": 1250,
+    "requestsPerMinute": 4500,
+    "avgResponseTime": 45,
+    "uptime": 99.99
+  }
+}
+```
+
+### Notifications stream
+
+```json
+{
+  "type": "notification",
+  "timestamp": "2024-05-14T10:30:15Z",
+  "data": {
+    "id": 125,
+    "userId": 42,
+    "title": "New message",
+    "message": "You have a new message from John",
+    "type": "message"
+  }
+}
+```
+
+### Chat room
+
+```json
+{
+  "type": "message",
+  "timestamp": "2024-05-14T10:30:30Z",
+  "data": {
+    "id": 501,
+    "roomId": "room-1",
+    "senderId": 5,
+    "senderName": "Alice",
+    "body": "Hello everyone!",
+    "createdAt": "2024-05-14T10:30:30Z"
+  }
+}
+```
+
+### Stock ticker
+
+```json
+{
+  "type": "ticker",
+  "timestamp": "2024-05-14T10:30:45Z",
+  "data": {
+    "symbol": "AAPL",
+    "price": 175.5,
+    "change": 0.07,
+    "changePercent": 0.04,
+    "volume": 52847392
+  }
+}
+```
+
+## Reconnection
+
+WebSocket connections may drop. Implement exponential backoff for reconnection:
+
+```javascript
+let reconnectAttempts = 0;
+const maxReconnectAttempts = 10;
+
+function connect() {
+  ws = new WebSocket("wss://api.mockforge.dev/ws/stats");
+
+  ws.onclose = () => {
+    if (reconnectAttempts < maxReconnectAttempts) {
+      const delay = Math.pow(2, reconnectAttempts) * 1000;
+      reconnectAttempts++;
+      setTimeout(connect, delay);
+    }
+  };
+
+  ws.onopen = () => {
+    reconnectAttempts = 0;
+  };
+}
+
+connect();
+```

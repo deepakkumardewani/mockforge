@@ -1,0 +1,176 @@
+---
+title: Custom Schemas
+description: Define custom data schemas and get dedicated API endpoints.
+---
+
+# Custom Schemas
+
+Create your own data schema in the MockForge schema builder, and get a dedicated API endpoint with full CRUD operations, search, and pagination.
+
+## Overview
+
+The custom schema builder lets you:
+
+1. **Define fields** — choose from 10 field types
+2. **Preview** — see mock data generated in real-time
+3. **Save** — get a unique endpoint URL
+4. **Use** — access full REST API with pagination and search
+
+All schemas are tied to your `mf_id` (browser UUID).
+
+## Field types
+
+| Type       | Description           | Example                    |
+| ---------- | --------------------- | -------------------------- |
+| `text`     | Short text string     | "John Doe"                 |
+| `textarea` | Long text             | "Lorem ipsum dolor sit..." |
+| `email`    | Email address         | "john@example.com"         |
+| `number`   | Integer or decimal    | 42, 3.14                   |
+| `date`     | ISO 8601 date         | "2024-05-14"               |
+| `datetime` | ISO 8601 timestamp    | "2024-05-14T10:30:00Z"     |
+| `boolean`  | True/false            | true                       |
+| `url`      | Web URL               | "https://example.com"      |
+| `select`   | Dropdown with options | "option1"                  |
+| `array`    | List of values        | ["item1", "item2"]         |
+
+## Step-by-step walkthrough
+
+### 1. Define your schema
+
+In the schema builder UI:
+
+1. Enter a name: "Blog Post"
+2. Add fields:
+   - `title` (text)
+   - `author` (text)
+   - `content` (textarea)
+   - `publishedAt` (datetime)
+   - `tags` (array with options: "tech", "design", "business")
+
+### 2. Preview
+
+The builder generates 10 sample items in real-time. Adjust field definitions until preview looks good.
+
+### 3. Save
+
+Click "Save Schema". You'll get:
+
+- A unique endpoint: `https://api.mockforge.dev/api/custom/{schemaId}`
+- A schema ID (tied to your `mf_id`)
+
+### 4. Use the endpoint
+
+Your schema endpoint works like any other MockForge entity:
+
+**List items:**
+
+```bash
+curl "https://api.mockforge.dev/api/custom/{schemaId}?limit=10"
+```
+
+**Get single item:**
+
+```bash
+curl https://api.mockforge.dev/api/custom/{schemaId}/1
+```
+
+**Search:**
+
+```bash
+curl "https://api.mockforge.dev/api/custom/{schemaId}?search=tech&limit=5"
+```
+
+**Create (doesn't persist):**
+
+```bash
+curl -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"title": "My Post", "author": "Jane"}' \
+  https://api.mockforge.dev/api/custom/{schemaId}
+```
+
+## Example schema: Contact
+
+```javascript
+{
+  "name": "Contact",
+  "fields": [
+    {
+      "name": "firstName",
+      "type": "text"
+    },
+    {
+      "name": "lastName",
+      "type": "text"
+    },
+    {
+      "name": "email",
+      "type": "email"
+    },
+    {
+      "name": "phone",
+      "type": "text"
+    },
+    {
+      "name": "company",
+      "type": "text"
+    }
+  ]
+}
+```
+
+**Response:**
+
+```json
+{
+  "data": [
+    {
+      "id": 1,
+      "firstName": "John",
+      "lastName": "Doe",
+      "email": "john@example.com",
+      "phone": "+1-555-0100",
+      "company": "Acme Corp"
+    }
+  ],
+  "pagination": {
+    "limit": 10,
+    "skip": 0,
+    "total": 50,
+    "hasMore": true
+  }
+}
+```
+
+## Schema ownership
+
+- Schemas are tied to your `mf_id` (stored in `localStorage` as `mf_id`)
+- Only you can edit or delete your schema
+- If you clear `localStorage`, copy your `mf_id` from the UI before switching browsers
+- Other users can view your schema's public endpoint but cannot modify it
+
+## API response structure
+
+All custom schema endpoints follow the same response envelope as the 14 built-in entities:
+
+```json
+{
+  "data": [
+    { "id": 1, "field1": "value1", "field2": "value2" },
+    { "id": 2, "field1": "value3", "field2": "value4" }
+  ],
+  "pagination": {
+    "limit": 10,
+    "skip": 0,
+    "total": 100,
+    "hasMore": true
+  }
+}
+```
+
+## Limitations
+
+- Data is not persisted; writes return mock data
+- Schemas reset when the server restarts
+- Maximum of 50 fields per schema
+- Maximum of 10 custom schemas per `mf_id`

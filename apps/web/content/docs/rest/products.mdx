@@ -1,0 +1,113 @@
+---
+title: Products
+description: Product catalog with pricing, inventory, and details.
+---
+
+# Products
+
+Access product catalog with pricing, inventory, categories, and ratings.
+
+## List products
+
+**Endpoint:** `GET /api/products`
+
+**Query parameters:**
+
+| Parameter | Type   | Example |
+| --------- | ------ | ------- |
+| `limit`   | number | 10      |
+| `skip`    | number | 0       |
+| `search`  | string | laptop  |
+| `sort`    | string | price   |
+| `order`   | string | asc     |
+
+**Example request:**
+
+```bash
+curl "https://api.mockforge.dev/api/products?limit=5&sort=price&order=asc"
+```
+
+**Example response:**
+
+```json
+{
+  "data": [
+    {
+      "id": 1,
+      "title": "Wireless Headphones",
+      "description": "High-quality Bluetooth headphones",
+      "price": 79.99,
+      "discountPercentage": 10,
+      "rating": 4.5,
+      "stock": 50,
+      "category": "Electronics",
+      "thumbnail": "https://cdn.example.com/product-1.jpg",
+      "images": [
+        "https://cdn.example.com/product-1-1.jpg",
+        "https://cdn.example.com/product-1-2.jpg"
+      ]
+    }
+  ],
+  "pagination": {
+    "limit": 5,
+    "skip": 0,
+    "total": 100,
+    "hasMore": true
+  }
+}
+```
+
+## Get single product
+
+**Endpoint:** `GET /api/products/:id`
+
+**Example request:**
+
+```bash
+curl https://api.mockforge.dev/api/products/1
+```
+
+**Example response:**
+
+```json
+{
+  "id": 1,
+  "title": "Wireless Headphones",
+  "description": "High-quality Bluetooth headphones",
+  "price": 79.99,
+  "discountPercentage": 10,
+  "rating": 4.5,
+  "stock": 50,
+  "category": "Electronics",
+  "thumbnail": "https://cdn.example.com/product-1.jpg",
+  "images": ["https://cdn.example.com/product-1-1.jpg", "https://cdn.example.com/product-1-2.jpg"]
+}
+```
+
+## Search products
+
+**Example request:**
+
+```bash
+curl "https://api.mockforge.dev/api/products?search=laptop&limit=3"
+```
+
+Searches across `title`, `description`, and `category` fields.
+
+## Create product
+
+**Endpoint:** `POST /api/products`
+
+Creates a mock product. Does not persist.
+
+## Update product
+
+**Endpoint:** `PUT /api/products/:id`
+
+Updates a mock product. Does not persist.
+
+## Delete product
+
+**Endpoint:** `DELETE /api/products/:id`
+
+Deletes a mock product. Does not persist.

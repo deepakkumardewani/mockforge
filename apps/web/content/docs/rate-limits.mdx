@@ -1,0 +1,36 @@
+---
+title: Rate Limits
+description: Request rate limits and headers.
+---
+
+# Rate Limits
+
+MockForge uses a sliding window rate limiter keyed on your `mf_id`.
+
+| Identity                 | Limit       |
+| ------------------------ | ----------- |
+| `X-MF-ID` header present | 300 req/min |
+| IP-based fallback        | 60 req/min  |
+
+## Response headers
+
+Every response includes:
+
+| Header                  | Description                              |
+| ----------------------- | ---------------------------------------- |
+| `X-RateLimit-Limit`     | Maximum requests per minute              |
+| `X-RateLimit-Remaining` | Requests remaining in the current window |
+| `X-RateLimit-Reset`     | Unix timestamp when the window resets    |
+
+## 429 response
+
+```json
+{
+  "error": {
+    "code": "RATE_LIMITED",
+    "message": "Too many requests. Retry after 42 seconds."
+  }
+}
+```
+
+The response also includes a `Retry-After` header with the number of seconds to wait.

@@ -1,0 +1,104 @@
+---
+title: Notifications
+description: User notifications and alerts.
+---
+
+# Notifications
+
+Access user notifications and alert data.
+
+## List notifications
+
+**Endpoint:** `GET /api/notifications`
+
+**Query parameters:**
+
+| Parameter | Type   | Example |
+| --------- | ------ | ------- |
+| `limit`   | number | 10      |
+| `skip`    | number | 0       |
+| `search`  | string | order   |
+| `sort`    | string | date    |
+| `order`   | string | desc    |
+
+**Example request:**
+
+```bash
+curl "https://api.mockforge.dev/api/notifications?limit=5"
+```
+
+**Example response:**
+
+```json
+{
+  "data": [
+    {
+      "id": 1,
+      "userId": 1,
+      "title": "Order Shipped",
+      "message": "Your order #12345 has been shipped",
+      "type": "order",
+      "read": false,
+      "createdAt": "2024-05-12T16:00:00Z"
+    }
+  ],
+  "pagination": {
+    "limit": 5,
+    "skip": 0,
+    "total": 200,
+    "hasMore": true
+  }
+}
+```
+
+## Get single notification
+
+**Endpoint:** `GET /api/notifications/:id`
+
+**Example request:**
+
+```bash
+curl https://api.mockforge.dev/api/notifications/1
+```
+
+**Example response:**
+
+```json
+{
+  "id": 1,
+  "userId": 1,
+  "title": "Order Shipped",
+  "message": "Your order #12345 has been shipped",
+  "type": "order",
+  "read": false,
+  "createdAt": "2024-05-12T16:00:00Z"
+}
+```
+
+## Search notifications
+
+**Example request:**
+
+```bash
+curl "https://api.mockforge.dev/api/notifications?search=order&limit=3"
+```
+
+Searches across `title` and `message` fields.
+
+## Create notification
+
+**Endpoint:** `POST /api/notifications`
+
+Creates a mock notification. Does not persist.
+
+## Update notification
+
+**Endpoint:** `PUT /api/notifications/:id`
+
+Updates a mock notification. Does not persist.
+
+## Delete notification
+
+**Endpoint:** `DELETE /api/notifications/:id`
+
+Deletes a mock notification. Does not persist.

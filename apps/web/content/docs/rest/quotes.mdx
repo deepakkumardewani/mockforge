@@ -1,0 +1,100 @@
+---
+title: Quotes
+description: Inspirational quotes and sayings.
+---
+
+# Quotes
+
+Access inspirational quotes from various authors.
+
+## List quotes
+
+**Endpoint:** `GET /api/quotes`
+
+**Query parameters:**
+
+| Parameter | Type   | Example |
+| --------- | ------ | ------- |
+| `limit`   | number | 10      |
+| `skip`    | number | 0       |
+| `search`  | string | success |
+| `sort`    | string | author  |
+| `order`   | string | asc     |
+
+**Example request:**
+
+```bash
+curl "https://api.mockforge.dev/api/quotes?limit=5"
+```
+
+**Example response:**
+
+```json
+{
+  "data": [
+    {
+      "id": 1,
+      "quote": "The only way to do great work is to love what you do.",
+      "author": "Steve Jobs",
+      "category": "inspiration",
+      "likes": 234
+    }
+  ],
+  "pagination": {
+    "limit": 5,
+    "skip": 0,
+    "total": 500,
+    "hasMore": true
+  }
+}
+```
+
+## Get single quote
+
+**Endpoint:** `GET /api/quotes/:id`
+
+**Example request:**
+
+```bash
+curl https://api.mockforge.dev/api/quotes/1
+```
+
+**Example response:**
+
+```json
+{
+  "id": 1,
+  "quote": "The only way to do great work is to love what you do.",
+  "author": "Steve Jobs",
+  "category": "inspiration",
+  "likes": 234
+}
+```
+
+## Search quotes
+
+**Example request:**
+
+```bash
+curl "https://api.mockforge.dev/api/quotes?search=success&limit=3"
+```
+
+Searches across `quote`, `author`, and `category` fields.
+
+## Create quote
+
+**Endpoint:** `POST /api/quotes`
+
+Creates a mock quote. Does not persist.
+
+## Update quote
+
+**Endpoint:** `PUT /api/quotes/:id`
+
+Updates a mock quote. Does not persist.
+
+## Delete quote
+
+**Endpoint:** `DELETE /api/quotes/:id`
+
+Deletes a mock quote. Does not persist.
