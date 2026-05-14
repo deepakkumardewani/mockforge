@@ -1,18 +1,18 @@
-import builder from '../builder'
-import { generateMessages } from '../../../data/generators/messages'
-import { generateNotifications } from '../../../data/generators/notifications'
-import { generateQuotes } from '../../../data/generators/quotes'
-import { generateRecipes } from '../../../data/generators/recipes'
-import { generateCountries } from '../../../data/generators/countries'
-import { generateCompanies } from '../../../data/generators/companies'
-import { generateStocks } from '../../../data/generators/stocks'
-import { generateEvents } from '../../../data/generators/events'
+import builder from "../builder";
+import { generateMessages } from "../../../data/generators/messages";
+import { generateNotifications } from "../../../data/generators/notifications";
+import { generateQuotes } from "../../../data/generators/quotes";
+import { generateRecipes } from "../../../data/generators/recipes";
+import { generateCountries } from "../../../data/generators/countries";
+import { generateCompanies } from "../../../data/generators/companies";
+import { generateStocks } from "../../../data/generators/stocks";
+import { generateEvents } from "../../../data/generators/events";
 
 // Extend the query type with Tier 2 fields
 builder.queryFields((t) => ({
   // Messages
   messages: t.field({
-    type: ['Message'],
+    type: ["Message"],
     args: {
       limit: t.arg.int({ defaultValue: 10 }),
       skip: t.arg.int({ defaultValue: 0 }),
@@ -23,24 +23,24 @@ builder.queryFields((t) => ({
         limit: Math.max(1, Math.min(100, args.limit ?? 10)),
         skip: Math.max(0, args.skip ?? 0),
         search: args.search ?? undefined,
-        order: 'asc',
-      })
+        order: "asc",
+      });
     },
   }),
   message: t.field({
-    type: 'Message',
+    type: "Message",
     args: {
       id: t.arg.string({ required: true }),
     },
     resolve: () => {
-      const message = generateMessages({ limit: 1, skip: 0, order: 'asc' })[0]
-      return message!
+      const message = generateMessages({ limit: 1, skip: 0, order: "asc" })[0];
+      return message!;
     },
   }),
 
   // Notifications
   notifications: t.field({
-    type: ['Notification'],
+    type: ["Notification"],
     args: {
       limit: t.arg.int({ defaultValue: 10 }),
       skip: t.arg.int({ defaultValue: 0 }),
@@ -51,24 +51,24 @@ builder.queryFields((t) => ({
         limit: Math.max(1, Math.min(100, args.limit ?? 10)),
         skip: Math.max(0, args.skip ?? 0),
         search: args.search ?? undefined,
-        order: 'asc',
-      })
+        order: "asc",
+      });
     },
   }),
   notification: t.field({
-    type: 'Notification',
+    type: "Notification",
     args: {
       id: t.arg.string({ required: true }),
     },
     resolve: () => {
-      const notification = generateNotifications({ limit: 1, skip: 0, order: 'asc' })[0]
-      return notification!
+      const notification = generateNotifications({ limit: 1, skip: 0, order: "asc" })[0];
+      return notification!;
     },
   }),
 
   // Quotes
   quotes: t.field({
-    type: ['Quote'],
+    type: ["Quote"],
     args: {
       limit: t.arg.int({ defaultValue: 10 }),
       skip: t.arg.int({ defaultValue: 0 }),
@@ -79,24 +79,24 @@ builder.queryFields((t) => ({
         limit: Math.max(1, Math.min(100, args.limit ?? 10)),
         skip: Math.max(0, args.skip ?? 0),
         search: args.search ?? undefined,
-        order: 'asc',
-      })
+        order: "asc",
+      });
     },
   }),
   quote: t.field({
-    type: 'Quote',
+    type: "Quote",
     args: {
       id: t.arg.string({ required: true }),
     },
     resolve: () => {
-      const quote = generateQuotes({ limit: 1, skip: 0, order: 'asc' })[0]
-      return quote!
+      const quote = generateQuotes({ limit: 1, skip: 0, order: "asc" })[0];
+      return quote!;
     },
   }),
 
   // Recipes
   recipes: t.field({
-    type: ['Recipe'],
+    type: ["Recipe"],
     args: {
       limit: t.arg.int({ defaultValue: 10 }),
       skip: t.arg.int({ defaultValue: 0 }),
@@ -107,24 +107,24 @@ builder.queryFields((t) => ({
         limit: Math.max(1, Math.min(100, args.limit ?? 10)),
         skip: Math.max(0, args.skip ?? 0),
         search: args.search ?? undefined,
-        order: 'asc',
-      })
+        order: "asc",
+      });
     },
   }),
   recipe: t.field({
-    type: 'Recipe',
+    type: "Recipe",
     args: {
       id: t.arg.string({ required: true }),
     },
     resolve: () => {
-      const recipe = generateRecipes({ limit: 1, skip: 0, order: 'asc' })[0]
-      return recipe!
+      const recipe = generateRecipes({ limit: 1, skip: 0, order: "asc" })[0];
+      return recipe!;
     },
   }),
 
   // Countries
   countries: t.field({
-    type: ['Country'],
+    type: ["Country"],
     args: {
       limit: t.arg.int({ defaultValue: 10 }),
       skip: t.arg.int({ defaultValue: 0 }),
@@ -135,24 +135,24 @@ builder.queryFields((t) => ({
         limit: Math.max(1, Math.min(100, args.limit ?? 10)),
         skip: Math.max(0, args.skip ?? 0),
         search: args.search ?? undefined,
-        order: 'asc',
-      })
+        order: "asc",
+      });
     },
   }),
   country: t.field({
-    type: 'Country',
+    type: "Country",
     args: {
       id: t.arg.string({ required: true }),
     },
     resolve: () => {
-      const country = generateCountries({ limit: 1, skip: 0, order: 'asc' })[0]
-      return country!
+      const country = generateCountries({ limit: 1, skip: 0, order: "asc" })[0];
+      return country!;
     },
   }),
 
   // Companies
   companies: t.field({
-    type: ['Company'],
+    type: ["Company"],
     args: {
       limit: t.arg.int({ defaultValue: 10 }),
       skip: t.arg.int({ defaultValue: 0 }),
@@ -163,24 +163,24 @@ builder.queryFields((t) => ({
         limit: Math.max(1, Math.min(100, args.limit ?? 10)),
         skip: Math.max(0, args.skip ?? 0),
         search: args.search ?? undefined,
-        order: 'asc',
-      })
+        order: "asc",
+      });
     },
   }),
   company: t.field({
-    type: 'Company',
+    type: "Company",
     args: {
       id: t.arg.string({ required: true }),
     },
     resolve: () => {
-      const company = generateCompanies({ limit: 1, skip: 0, order: 'asc' })[0]
-      return company!
+      const company = generateCompanies({ limit: 1, skip: 0, order: "asc" })[0];
+      return company!;
     },
   }),
 
   // Stocks
   stocks: t.field({
-    type: ['Stock'],
+    type: ["Stock"],
     args: {
       limit: t.arg.int({ defaultValue: 10 }),
       skip: t.arg.int({ defaultValue: 0 }),
@@ -191,24 +191,24 @@ builder.queryFields((t) => ({
         limit: Math.max(1, Math.min(100, args.limit ?? 10)),
         skip: Math.max(0, args.skip ?? 0),
         search: args.search ?? undefined,
-        order: 'asc',
-      })
+        order: "asc",
+      });
     },
   }),
   stock: t.field({
-    type: 'Stock',
+    type: "Stock",
     args: {
       id: t.arg.string({ required: true }),
     },
     resolve: () => {
-      const stock = generateStocks({ limit: 1, skip: 0, order: 'asc' })[0]
-      return stock!
+      const stock = generateStocks({ limit: 1, skip: 0, order: "asc" })[0];
+      return stock!;
     },
   }),
 
   // Events
   events: t.field({
-    type: ['Event'],
+    type: ["Event"],
     args: {
       limit: t.arg.int({ defaultValue: 10 }),
       skip: t.arg.int({ defaultValue: 0 }),
@@ -219,18 +219,18 @@ builder.queryFields((t) => ({
         limit: Math.max(1, Math.min(100, args.limit ?? 10)),
         skip: Math.max(0, args.skip ?? 0),
         search: args.search ?? undefined,
-        order: 'asc',
-      })
+        order: "asc",
+      });
     },
   }),
   event: t.field({
-    type: 'Event',
+    type: "Event",
     args: {
       id: t.arg.string({ required: true }),
     },
     resolve: () => {
-      const event = generateEvents({ limit: 1, skip: 0, order: 'asc' })[0]
-      return event!
+      const event = generateEvents({ limit: 1, skip: 0, order: "asc" })[0];
+      return event!;
     },
   }),
-}))
+}));

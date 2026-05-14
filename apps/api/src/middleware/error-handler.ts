@@ -1,10 +1,6 @@
 import { Context } from "hono";
 
-export type ErrorCode =
-  | "NOT_FOUND"
-  | "INTERNAL_SERVER_ERROR"
-  | "BAD_REQUEST"
-  | "UNAUTHORIZED";
+export type ErrorCode = "NOT_FOUND" | "INTERNAL_SERVER_ERROR" | "BAD_REQUEST" | "UNAUTHORIZED";
 
 export interface ErrorResponse {
   error: {
@@ -13,10 +9,7 @@ export interface ErrorResponse {
   };
 }
 
-export function createErrorResponse(
-  code: ErrorCode,
-  message: string
-): ErrorResponse {
+export function createErrorResponse(code: ErrorCode, message: string): ErrorResponse {
   return {
     error: {
       code,
@@ -26,14 +19,11 @@ export function createErrorResponse(
 }
 
 export function errorHandler(err: Error, c: Context) {
-  console.error(
-    `[Error] ${err.message}`,
-    err instanceof Error ? err.stack : ""
-  );
+  console.error(`[Error] ${err.message}`, err instanceof Error ? err.stack : "");
 
   const response = createErrorResponse(
     "INTERNAL_SERVER_ERROR",
-    err.message || "An unexpected error occurred"
+    err.message || "An unexpected error occurred",
   );
 
   return c.json(response, 500);

@@ -20,7 +20,7 @@ app.get("/api/stats", async (c) => {
           message: "Failed to fetch stats",
         },
       },
-      500
+      500,
     );
   }
 });

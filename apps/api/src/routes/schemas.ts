@@ -22,8 +22,14 @@ router.post("/", zValidator("json", createSchemaBody), async (c) => {
   } catch (err: unknown) {
     const zodErr = err as { issues?: unknown };
     return c.json(
-      { error: { code: "INVALID_SCHEMA", message: "Schema validation failed", details: zodErr.issues } },
-      400
+      {
+        error: {
+          code: "INVALID_SCHEMA",
+          message: "Schema validation failed",
+          details: zodErr.issues,
+        },
+      },
+      400,
     );
   }
 
@@ -46,7 +52,7 @@ router.delete("/:slug", async (c) => {
   if (!deleted) {
     return c.json(
       { error: { code: "NOT_FOUND", message: "Schema not found or not owned by you" } },
-      404
+      404,
     );
   }
 

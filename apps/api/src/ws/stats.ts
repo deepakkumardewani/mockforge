@@ -38,7 +38,11 @@ function scheduleHeartbeat(ws: BunWs): void {
   ws.data.pingTimeout = pongTimeout;
 
   setTimeout(() => {
-    try { ws.send("ping"); } catch { /* client gone */ }
+    try {
+      ws.send("ping");
+    } catch {
+      /* client gone */
+    }
   }, HEARTBEAT_INTERVAL_MS);
 }
 

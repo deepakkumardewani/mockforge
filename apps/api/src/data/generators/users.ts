@@ -1,10 +1,10 @@
-import { faker } from '@faker-js/faker'
-import type { User } from '@mockforge/types'
-import type { PaginationParams } from '../../lib/pagination'
+import { faker } from "@faker-js/faker";
+import type { User } from "@mockforge/types";
+import type { PaginationParams } from "../../lib/pagination";
 
 export function generateUsers(params: PaginationParams): User[] {
-  const items: User[] = []
-  const itemsToGenerate = params.search ? 200 : params.limit + params.skip
+  const items: User[] = [];
+  const itemsToGenerate = params.search ? 200 : params.limit + params.skip;
 
   for (let i = 0; i < itemsToGenerate; i++) {
     items.push({
@@ -15,7 +15,7 @@ export function generateUsers(params: PaginationParams): User[] {
       username: faker.internet.username(),
       phone: faker.phone.number(),
       avatar: faker.image.avatar(),
-      birthDate: faker.date.birthdate({ min: 18, max: 80, mode: 'age' }).toISOString(),
+      birthDate: faker.date.birthdate({ min: 18, max: 80, mode: "age" }).toISOString(),
       address: {
         street: faker.location.streetAddress(),
         city: faker.location.city(),
@@ -26,22 +26,22 @@ export function generateUsers(params: PaginationParams): User[] {
       company: faker.company.name(),
       jobTitle: faker.person.jobTitle(),
       createdAt: faker.date.recent().toISOString(),
-    })
+    });
   }
 
-  let filtered = items
+  let filtered = items;
   if (params.search) {
-    const searchLower = params.search.toLowerCase()
+    const searchLower = params.search.toLowerCase();
     filtered = items.filter(
       (u) =>
         u.firstName.toLowerCase().includes(searchLower) ||
         u.lastName.toLowerCase().includes(searchLower) ||
         u.email.toLowerCase().includes(searchLower) ||
-        u.username.toLowerCase().includes(searchLower)
-    )
+        u.username.toLowerCase().includes(searchLower),
+    );
   }
 
-  const start = params.skip
-  const end = start + params.limit
-  return filtered.slice(start, end)
+  const start = params.skip;
+  const end = start + params.limit;
+  return filtered.slice(start, end);
 }

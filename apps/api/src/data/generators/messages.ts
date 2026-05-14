@@ -1,10 +1,10 @@
-import { faker } from '@faker-js/faker'
-import type { Message } from '@mockforge/types'
-import type { PaginationParams } from '../../lib/pagination'
+import { faker } from "@faker-js/faker";
+import type { Message } from "@mockforge/types";
+import type { PaginationParams } from "../../lib/pagination";
 
 export function generateMessages(params: PaginationParams): Message[] {
-  const items: Message[] = []
-  const itemsToGenerate = params.search ? 200 : params.limit + params.skip
+  const items: Message[] = [];
+  const itemsToGenerate = params.search ? 200 : params.limit + params.skip;
 
   for (let i = 0; i < itemsToGenerate; i++) {
     items.push({
@@ -15,16 +15,16 @@ export function generateMessages(params: PaginationParams): Message[] {
       body: faker.lorem.paragraphs(1),
       read: faker.datatype.boolean(),
       createdAt: faker.date.recent().toISOString(),
-    })
+    });
   }
 
-  let filtered = items
+  let filtered = items;
   if (params.search) {
-    const searchLower = params.search.toLowerCase()
-    filtered = items.filter((m) => m.body.toLowerCase().includes(searchLower))
+    const searchLower = params.search.toLowerCase();
+    filtered = items.filter((m) => m.body.toLowerCase().includes(searchLower));
   }
 
-  const start = params.skip
-  const end = start + params.limit
-  return filtered.slice(start, end)
+  const start = params.skip;
+  const end = start + params.limit;
+  return filtered.slice(start, end);
 }

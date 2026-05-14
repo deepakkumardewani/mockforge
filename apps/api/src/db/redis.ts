@@ -122,9 +122,7 @@ let redisInstance: RedisClient | null = null;
 export function initializeRedis(): RedisClient {
   if (redisInstance) return redisInstance;
 
-  const isLocal =
-    process.env.REDIS_LOCAL === "true" ||
-    process.env.NODE_ENV === "development";
+  const isLocal = process.env.REDIS_LOCAL === "true" || process.env.NODE_ENV === "development";
 
   if (isLocal) {
     const url = process.env.REDIS_URL ?? "redis://localhost:6379";
@@ -135,7 +133,7 @@ export function initializeRedis(): RedisClient {
     const token = process.env.UPSTASH_REDIS_REST_TOKEN;
     if (!url || !token) {
       throw new Error(
-        "Production Redis config missing: set UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN"
+        "Production Redis config missing: set UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN",
       );
     }
     redisInstance = new UpstashAdapter(new UpstashRedis({ url, token }));

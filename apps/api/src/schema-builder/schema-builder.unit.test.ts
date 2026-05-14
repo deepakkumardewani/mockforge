@@ -33,9 +33,7 @@ describe("parseSchema", () => {
   });
 
   it("should throw on empty fields array", () => {
-    expect(() =>
-      parseSchema({ name: "Test", fields: [] })
-    ).toThrow();
+    expect(() => parseSchema({ name: "Test", fields: [] })).toThrow();
   });
 
   it("should throw on invalid field type", () => {
@@ -43,7 +41,7 @@ describe("parseSchema", () => {
       parseSchema({
         name: "Test",
         fields: [{ name: "bad", type: "unknown" }],
-      })
+      }),
     ).toThrow();
   });
 
@@ -52,7 +50,7 @@ describe("parseSchema", () => {
       parseSchema({
         name: "Test",
         fields: [{ name: "status", type: "enum" }],
-      })
+      }),
     ).toThrow();
   });
 
@@ -61,7 +59,7 @@ describe("parseSchema", () => {
       parseSchema({
         name: "Test",
         fields: [{ name: "list", type: "array" }],
-      })
+      }),
     ).toThrow();
   });
 
@@ -70,7 +68,7 @@ describe("parseSchema", () => {
       parseSchema({
         name: "Test",
         fields: [{ name: "list", type: "array", items: "array" }],
-      })
+      }),
     ).toThrow();
   });
 
@@ -79,7 +77,7 @@ describe("parseSchema", () => {
       parseSchema({
         name: "Test",
         fields: [{ name: "status", type: "enum", values: [] }],
-      })
+      }),
     ).toThrow();
   });
 

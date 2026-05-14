@@ -47,7 +47,9 @@ describe("handleWsUpgrade", () => {
       headers: { upgrade: "websocket" },
     });
     const res = handleWsUpgrade(req, server);
-    expect(server.upgrade).toHaveBeenCalledWith(req, { data: { route: "chat", roomId: "room-123" } });
+    expect(server.upgrade).toHaveBeenCalledWith(req, {
+      data: { route: "chat", roomId: "room-123" },
+    });
     expect(res).toBeUndefined();
   });
 

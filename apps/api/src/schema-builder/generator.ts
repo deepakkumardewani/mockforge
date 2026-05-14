@@ -32,16 +32,13 @@ function generateFieldValue(field: SchemaField): unknown {
       const itemCount = faker.number.int({ min: 2, max: 5 });
       const itemType = field.items as SchemaFieldType;
       return Array.from({ length: itemCount }, () =>
-        generateFieldValue({ name: field.name, type: itemType })
+        generateFieldValue({ name: field.name, type: itemType }),
       );
     }
   }
 }
 
-export function generateFromSchema(
-  schema: SchemaDefinition,
-  count: number
-): GeneratedRecord[] {
+export function generateFromSchema(schema: SchemaDefinition, count: number): GeneratedRecord[] {
   const records: GeneratedRecord[] = [];
   for (let i = 0; i < count; i++) {
     const record: GeneratedRecord = { id: faker.string.uuid() };

@@ -16,7 +16,7 @@ function mfIndexKey(mfId: string): string {
 export async function saveSchema(
   definition: SchemaDefinition,
   mfId: string,
-  persistent: boolean
+  persistent: boolean,
 ): Promise<string> {
   const slug = nanoid(SLUG_LENGTH);
   const redis = getRedis();
@@ -41,18 +41,14 @@ export async function saveSchema(
   return slug;
 }
 
-export async function getSchema(
-  slug: string
-): Promise<SavedSchema | null> {
+export async function getSchema(slug: string): Promise<SavedSchema | null> {
   const redis = getRedis();
   const raw = await redis.get(schemaKey(slug));
   if (!raw) return null;
   return JSON.parse(raw) as SavedSchema;
 }
 
-export async function listSchemas(
-  mfId: string
-): Promise<SavedSchema[]> {
+export async function listSchemas(mfId: string): Promise<SavedSchema[]> {
   const redis = getRedis();
   const slugs = await redis.smembers(mfIndexKey(mfId));
   if (slugs.length === 0) return [];
@@ -65,10 +61,7 @@ export async function listSchemas(
   return schemas;
 }
 
-export async function deleteSchema(
-  slug: string,
-  mfId: string
-): Promise<boolean> {
+export async function deleteSchema(slug: string, mfId: string): Promise<boolean> {
   const redis = getRedis();
   const schema = await getSchema(slug);
   if (!schema) return false;

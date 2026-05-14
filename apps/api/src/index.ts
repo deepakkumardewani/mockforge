@@ -49,7 +49,7 @@ app.route("/graphql", graphqlRouter);
 app.notFound((c) => {
   const response = createErrorResponse(
     "NOT_FOUND",
-    `Route ${c.req.method} ${c.req.path} not found`
+    `Route ${c.req.method} ${c.req.path} not found`,
   );
   return c.json(response, 404);
 });

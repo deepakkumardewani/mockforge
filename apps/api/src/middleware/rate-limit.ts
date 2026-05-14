@@ -51,13 +51,9 @@ export async function rateLimitMiddleware(c: Context, next: Next) {
 
     // Check if limit exceeded
     if (current > limit) {
-      return c.json(
-        { error: { code: "TOO_MANY_REQUESTS", message: "Rate limit exceeded" } },
-        429,
-        {
-          [RETRY_AFTER_HEADER]: String(WINDOW_SECONDS),
-        }
-      );
+      return c.json({ error: { code: "TOO_MANY_REQUESTS", message: "Rate limit exceeded" } }, 429, {
+        [RETRY_AFTER_HEADER]: String(WINDOW_SECONDS),
+      });
     }
 
     await next();

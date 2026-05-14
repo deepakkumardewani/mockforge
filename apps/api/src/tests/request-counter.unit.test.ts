@@ -101,7 +101,7 @@ describe("Request Counter Middleware", () => {
       () =>
         new Promise((resolve) => {
           setTimeout(() => resolve(1), 100);
-        })
+        }),
     );
 
     const next = async () => {};

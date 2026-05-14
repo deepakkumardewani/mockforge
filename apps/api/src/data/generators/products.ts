@@ -1,10 +1,10 @@
-import { faker } from '@faker-js/faker'
-import type { Product } from '@mockforge/types'
-import type { PaginationParams } from '../../lib/pagination'
+import { faker } from "@faker-js/faker";
+import type { Product } from "@mockforge/types";
+import type { PaginationParams } from "../../lib/pagination";
 
 export function generateProducts(params: PaginationParams): Product[] {
-  const items: Product[] = []
-  const itemsToGenerate = params.search ? 200 : params.limit + params.skip
+  const items: Product[] = [];
+  const itemsToGenerate = params.search ? 200 : params.limit + params.skip;
 
   for (let i = 0; i < itemsToGenerate; i++) {
     items.push({
@@ -22,22 +22,22 @@ export function generateProducts(params: PaginationParams): Product[] {
       sku: faker.string.alphanumeric(8).toUpperCase(),
       weight: parseFloat((Math.random() * 10).toFixed(2)),
       createdAt: faker.date.recent().toISOString(),
-    })
+    });
   }
 
-  let filtered = items
+  let filtered = items;
   if (params.search) {
-    const searchLower = params.search.toLowerCase()
+    const searchLower = params.search.toLowerCase();
     filtered = items.filter(
       (p) =>
         p.title.toLowerCase().includes(searchLower) ||
         p.description.toLowerCase().includes(searchLower) ||
         p.brand.toLowerCase().includes(searchLower) ||
-        p.category.toLowerCase().includes(searchLower)
-    )
+        p.category.toLowerCase().includes(searchLower),
+    );
   }
 
-  const start = params.skip
-  const end = start + params.limit
-  return filtered.slice(start, end)
+  const start = params.skip;
+  const end = start + params.limit;
+  return filtered.slice(start, end);
 }

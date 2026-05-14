@@ -33,7 +33,11 @@ export function registerChatNamespace(ns: Namespace): void {
       // Fake auto-reply after 1s
       setTimeout(() => {
         const [reply] = generateMessages(DEFAULT_WS_PARAMS);
-        ns.to(roomId).emit("message", { ...reply, roomId, replyTo: (data as Record<string, unknown>)?.id ?? null });
+        ns.to(roomId).emit("message", {
+          ...reply,
+          roomId,
+          replyTo: (data as Record<string, unknown>)?.id ?? null,
+        });
       }, REPLY_DELAY_MS);
     });
 

@@ -32,14 +32,10 @@ const schemaFieldSchema = z
         path: ["values"],
       });
     }
-    if (
-      field.type === "array" &&
-      (!field.items || field.items === "array")
-    ) {
+    if (field.type === "array" && (!field.items || field.items === "array")) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message:
-          'Field type "array" requires an "items" type (cannot be "array")',
+        message: 'Field type "array" requires an "items" type (cannot be "array")',
         path: ["items"],
       });
     }
@@ -47,9 +43,7 @@ const schemaFieldSchema = z
 
 const schemaDefinitionSchema = z.object({
   name: z.string().min(1, "Schema name is required"),
-  fields: z
-    .array(schemaFieldSchema)
-    .min(1, "At least one field is required"),
+  fields: z.array(schemaFieldSchema).min(1, "At least one field is required"),
 });
 
 export function parseSchema(input: unknown): SchemaDefinition {
