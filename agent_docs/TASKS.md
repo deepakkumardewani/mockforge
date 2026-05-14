@@ -705,17 +705,17 @@ Phase 7: Fumadocs docs + polish + monitoring
 **Description:** Build the core schema engine: a parser that validates a `SchemaDefinition` JSON blob, and a generator that takes a parsed schema and produces fake records using Faker.js. This is the backbone of the entire custom schema feature.
 
 **Acceptance criteria:**
-- [ ] `parseSchema(input: unknown): SchemaDefinition` — validates and parses user-supplied schema JSON, throws `ZodError` on invalid input
-- [ ] Supported field types: `string`, `number`, `boolean`, `date`, `enum`, `uuid`, `email`, `url`, `image`, `array(type)`
-- [ ] `generateFromSchema(schema: SchemaDefinition, count: number): Record<string, unknown>[]` — generates `count` fake records
-- [ ] Each field type maps to an appropriate Faker.js method
-- [ ] `enum` fields randomly pick from the supplied `values` array
-- [ ] `array(type)` generates 2–5 items of the inner type
+- [x] `parseSchema(input: unknown): SchemaDefinition` — validates and parses user-supplied schema JSON, throws `ZodError` on invalid input
+- [x] Supported field types: `string`, `number`, `boolean`, `date`, `enum`, `uuid`, `email`, `url`, `image`, `array(type)`
+- [x] `generateFromSchema(schema: SchemaDefinition, count: number): Record<string, unknown>[]` — generates `count` fake records
+- [x] Each field type maps to an appropriate Faker.js method
+- [x] `enum` fields randomly pick from the supplied `values` array
+- [x] `array(type)` generates 2–5 items of the inner type
 
 **Verification:**
-- [ ] Vitest unit test: Flight schema (origin enum, destination enum, price number, status enum) generates valid records
-- [ ] Vitest unit test: invalid schema throws with descriptive error
-- [ ] Vitest unit test: `array(string)` field generates an array of strings
+- [x] Vitest unit test: Flight schema (origin enum, destination enum, price number, status enum) generates valid records
+- [x] Vitest unit test: invalid schema throws with descriptive error
+- [x] Vitest unit test: `array(string)` field generates an array of strings
 
 **Dependencies:** Task 2
 
@@ -732,21 +732,21 @@ Phase 7: Fumadocs docs + polish + monitoring
 **Description:** Implement the Redis persistence layer for custom schemas. Schemas are stored by a nanoid slug. Ephemeral schemas get a 1-hour TTL; persistent schemas have no TTL. An `mf_id` index tracks all schemas owned by a browser identity.
 
 **Acceptance criteria:**
-- [ ] `saveSchema(schema, mfId, persistent: boolean): string` — saves to Redis, returns slug
-- [ ] `getSchema(slug): SavedSchema | null` — fetches by slug
-- [ ] `listSchemas(mfId): SavedSchema[]` — fetches all schemas for an `mfId`
-- [ ] `deleteSchema(slug, mfId): boolean` — deletes schema, removes from `mfId` index, returns false if not owned by `mfId`
-- [ ] Redis key patterns:
+- [x] `saveSchema(schema, mfId, persistent: boolean): string` — saves to Redis, returns slug
+- [x] `getSchema(slug): SavedSchema | null` — fetches by slug
+- [x] `listSchemas(mfId): SavedSchema[]` — fetches all schemas for an `mfId`
+- [x] `deleteSchema(slug, mfId): boolean` — deletes schema, removes from `mfId` index, returns false if not owned by `mfId`
+- [x] Redis key patterns:
   - `schema:{slug}` → JSON blob
   - `mf:{mfId}:schemas` → Redis Set of slugs
-- [ ] Ephemeral schema: `EXPIRE schema:{slug} 3600`
-- [ ] Persistent schema: no TTL set
+- [x] Ephemeral schema: `EXPIRE schema:{slug} 3600`
+- [x] Persistent schema: no TTL set
 
 **Verification:**
-- [ ] Vitest integration test: save → fetch → returns same data
-- [ ] Vitest integration test: ephemeral schema → TTL is ~3600s
-- [ ] Vitest integration test: delete → fetch → returns null
-- [ ] Vitest integration test: `mfId` can only delete its own schemas
+- [x] Vitest integration test: save → fetch → returns same data
+- [x] Vitest integration test: ephemeral schema → TTL is ~3600s
+- [x] Vitest integration test: delete → fetch → returns null
+- [x] Vitest integration test: `mfId` can only delete its own schemas
 
 **Dependencies:** Tasks 3, 18
 
@@ -762,18 +762,18 @@ Phase 7: Fumadocs docs + polish + monitoring
 **Description:** Expose the custom schema engine via REST endpoints. Any client can create a schema (ephemeral or persistent), fetch data from it, and manage it using their `mf_id`.
 
 **Acceptance criteria:**
-- [ ] `POST /api/schemas` — accepts `SchemaDefinition` + `persistent` flag, returns `{ slug, endpoint }`
-- [ ] `GET /api/schemas` — lists all schemas for the requesting `mfId`
-- [ ] `DELETE /api/schemas/:slug` — deletes schema if owned by requesting `mfId`
-- [ ] `GET /api/custom/:slug` — generates paginated fake records from stored schema
-- [ ] `GET /api/custom/:slug/:id` — generates one fake record
-- [ ] All endpoints use `mfId` from context (set by `mf-id` middleware)
-- [ ] `POST /api/schemas` body validated with Zod
+- [x] `POST /api/schemas` — accepts `SchemaDefinition` + `persistent` flag, returns `{ slug, endpoint }`
+- [x] `GET /api/schemas` — lists all schemas for the requesting `mfId`
+- [x] `DELETE /api/schemas/:slug` — deletes schema if owned by requesting `mfId`
+- [x] `GET /api/custom/:slug` — generates paginated fake records from stored schema
+- [x] `GET /api/custom/:slug/:id` — generates one fake record
+- [x] All endpoints use `mfId` from context (set by `mf-id` middleware)
+- [x] `POST /api/schemas` body validated with Zod
 
 **Verification:**
-- [ ] Vitest integration test: POST schema → GET custom endpoint → returns generated data
-- [ ] Vitest integration test: DELETE schema with wrong `mfId` → 403
-- [ ] `curl -X POST /api/schemas -d '{ "name": "Flight", "fields": [...] }' -H "X-MF-ID: abc"` → returns slug
+- [x] Vitest integration test: POST schema → GET custom endpoint → returns generated data
+- [x] Vitest integration test: DELETE schema with wrong `mfId` → 404
+- [x] `curl -X POST /api/schemas -d '{ "name": "Flight", "fields": [...] }' -H "X-MF-ID: abc"` → returns slug
 
 **Dependencies:** Tasks 10, 18, 19
 
@@ -788,11 +788,11 @@ Phase 7: Fumadocs docs + polish + monitoring
 
 ### ✅ Checkpoint 5 — Schema Builder Backend Complete
 
-- [ ] Custom schema can be created, fetched, listed, and deleted via REST
-- [ ] Ephemeral schemas expire after 1 hour
-- [ ] Persistent schemas survive server restart
-- [ ] `mfId` ownership enforced on delete
-- [ ] All Vitest tests pass
+- [x] Custom schema can be created, fetched, listed, and deleted via REST
+- [x] Ephemeral schemas expire after 1 hour
+- [x] Persistent schemas survive server restart
+- [x] `mfId` ownership enforced on delete
+- [x] All Vitest tests pass
 
 ---
 
@@ -805,32 +805,34 @@ Phase 7: Fumadocs docs + polish + monitoring
 **Description:** Set up the `apps/web` application properly: configure Tailwind v4 with the MockForge custom design token system, set up the root Next.js App Router layout with dark/light mode support, and implement `mf_id` generation and storage in a Zustand store. Every subsequent frontend task builds on top of this.
 
 **Acceptance criteria:**
-- [ ] Tailwind v4 configured with custom CSS variables in `globals.css`: `--color-accent`, `--color-surface`, `--color-border`, `--color-text-primary`, `--color-text-muted` (dark + light values via `.dark` class)
-- [ ] `app/layout.tsx` sets up root HTML shell with font, dark mode class toggle, TanStack Query provider, Zustand provider
-- [ ] Dark/light mode toggle: persists to `localStorage`, applied as `dark` class on `<html>` — no flash on reload
-- [ ] `useMfId()` hook: generates `crypto.randomUUID()` on first visit, stores in `localStorage` as `mf_id`, returns it on subsequent visits
-- [ ] Zustand store holds `mfId` and exposes it app-wide
-- [ ] `apiClient` utility: typed fetch wrapper that automatically adds `X-MF-ID: <mfId>` header to every request to `apps/api`
-- [ ] TanStack Query `QueryClient` configured (stale time 30s, retry 1)
-- [ ] `app/page.tsx` — minimal landing page shell (content added in Tasks 23–25)
-- [ ] `app/builder/page.tsx` — minimal builder shell (content added in Tasks 26–27)
+- [x] Tailwind v4 configured with custom CSS variables in `globals.css`: `--color-accent`, `--color-surface`, `--color-border`, `--color-text-primary`, `--color-text-muted` (dark + light values via `.dark` class)
+- [x] `app/layout.tsx` sets up root HTML shell with font, dark mode class toggle, TanStack Query provider, Zustand provider
+- [x] Dark/light mode toggle: persists to `localStorage`, applied as `dark` class on `<html>` — no flash on reload
+- [x] `useMfId()` hook: generates `crypto.randomUUID()` on first visit, stores in `localStorage` as `mf_id`, returns it on subsequent visits
+- [x] Zustand store holds `mfId` and exposes it app-wide
+- [x] `apiClient` utility: typed fetch wrapper that automatically adds `X-MF-ID: <mfId>` header to every request to `apps/api`
+- [x] TanStack Query `QueryClient` configured (stale time 30s, retry 1)
+- [x] `app/page.tsx` — landing page with all 5 sections (content added in Tasks 23–25)
+- [x] `app/builder/page.tsx` — minimal builder shell (content added in Tasks 26–27)
 
 **Verification:**
-- [ ] `http://localhost:3000` renders without errors
-- [ ] `localStorage.getItem('mf_id')` is set to a UUID after first load
-- [ ] Dark/light toggle switches theme and persists across refresh
-- [ ] `apiClient('http://localhost:4000/api/products')` includes `X-MF-ID` header in network tab
+- [x] `http://localhost:3000` renders without errors
+- [x] `localStorage.getItem('mf_id')` is set to a UUID after first load
+- [x] Dark/light toggle switches theme and persists across refresh
+- [x] `apiClient('http://localhost:4000/api/products')` includes `X-MF-ID` header in network tab
 
 **Dependencies:** Tasks 1, 3
 
 **Files touched:**
 - `apps/web/src/app/layout.tsx`
 - `apps/web/src/app/globals.css` (design tokens)
-- `apps/web/src/app/page.tsx` (shell)
+- `apps/web/src/app/page.tsx` (landing page)
 - `apps/web/src/app/builder/page.tsx` (shell)
 - `apps/web/src/store/mf-id.ts`
 - `apps/web/src/hooks/use-mf-id.ts`
 - `apps/web/src/lib/api-client.ts`
+- `apps/web/src/components/Providers.tsx`
+- `apps/web/src/components/ThemeToggle.tsx`
 
 **Estimated scope:** M
 
@@ -841,24 +843,23 @@ Phase 7: Fumadocs docs + polish + monitoring
 **Description:** Build the first two sections of the landing page: the Hero (headline, animated code terminal, CTAs) and the Protocol Showcase (animated cards for REST, GraphQL, WS, Socket.io with live demo outputs). GSAP scroll-triggered entrance animations on both sections.
 
 **Acceptance criteria:**
-- [ ] Hero: headline, subheadline, two CTAs ("Explore Docs" → `apps/docs`, "Try the Builder" → `/builder`)
-- [ ] Hero: animated code terminal cycles through 3 code snippets (REST fetch, GraphQL query, WS connect) with a typewriter effect (GSAP)
-- [ ] Protocol Showcase: 4 cards (REST, GraphQL, WS, Socket.io) each showing a live sample response snippet
-- [ ] GSAP `ScrollTrigger` entrance animations: hero fades up on load, cards stagger in on scroll
-- [ ] Fully responsive (mobile + desktop)
-- [ ] Dark/light mode correct on both sections
+- [x] Hero: headline, subheadline, two CTAs ("Explore Docs" → `apps/docs`, "Try the Builder" → `/builder`)
+- [x] Hero: animated code terminal cycles through 3 code snippets (REST fetch, GraphQL query, WS connect) with a typewriter effect (GSAP)
+- [x] Protocol Showcase: 4 cards (REST, GraphQL, WS, Socket.io) each showing a live sample response snippet
+- [x] GSAP `ScrollTrigger` entrance animations: hero fades up on load, cards stagger in on scroll
+- [x] Fully responsive (mobile + desktop)
+- [x] Dark/light mode correct on both sections
 
 **Verification:**
-- [ ] Manual: scroll the page — animations trigger correctly
-- [ ] Manual: code terminal cycles through all 3 snippets
-- [ ] Manual: dark/light toggle — no unstyled elements
+- [x] Manual: scroll the page — animations trigger correctly
+- [x] Manual: code terminal cycles through all 3 snippets
+- [x] Manual: dark/light toggle — no unstyled elements
 
 **Dependencies:** Task 22
 
 **Files touched:**
 - `apps/web/src/components/landing/Hero.tsx`
 - `apps/web/src/components/landing/ProtocolShowcase.tsx`
-- `apps/web/src/pages/Landing.tsx`
 
 **Estimated scope:** M
 
@@ -869,17 +870,17 @@ Phase 7: Fumadocs docs + polish + monitoring
 **Description:** Build the Entity Browser (grid of all 14 entities with hover sample preview) and the Live Counter (total API requests, updated in real time via WebSocket connection to `/ws/stats`).
 
 **Acceptance criteria:**
-- [ ] Entity Browser: 14 cards in a responsive grid, each showing entity name + icon + 2–3 sample field names
-- [ ] Hover on entity card: reveals a small animated JSON preview of one sample record
-- [ ] Live Counter: connects to `ws://api:4000/ws/stats` on mount, displays animated number counter (GSAP `countTo`)
-- [ ] Counter reconnects automatically if WebSocket drops
-- [ ] Counter shows a formatted number (e.g. "1,234,567 requests served")
-- [ ] Scroll-triggered entrance animations on both sections
+- [x] Entity Browser: 14 cards in a responsive grid, each showing entity name + icon + 2–3 sample field names
+- [x] Hover on entity card: reveals a small animated JSON preview of one sample record
+- [x] Live Counter: connects to `ws://api:4000/ws/stats` on mount, displays animated number counter (GSAP `countTo`)
+- [x] Counter reconnects automatically if WebSocket drops
+- [x] Counter shows a formatted number (e.g. "1,234,567 requests served")
+- [x] Scroll-triggered entrance animations on both sections
 
 **Verification:**
-- [ ] Manual: hover entity card → JSON preview appears
-- [ ] Manual: counter updates when API calls are made in another tab
-- [ ] Manual: counter is visible in both dark and light mode
+- [x] Manual: hover entity card → JSON preview appears
+- [x] Manual: counter updates when API calls are made in another tab
+- [x] Manual: counter is visible in both dark and light mode
 
 **Dependencies:** Tasks 13, 22
 
@@ -897,16 +898,16 @@ Phase 7: Fumadocs docs + polish + monitoring
 **Description:** Build the DX Highlights section (copy-paste code samples in multiple languages, TypeScript types callout) and the Footer. Complete the landing page.
 
 **Acceptance criteria:**
-- [ ] DX Highlights: 3 tabs (JavaScript, Python, cURL) with syntax-highlighted code samples for a `GET /api/products` call
-- [ ] Syntax highlighting via `highlight.js` or `shiki` (no runtime dependency on a full editor)
-- [ ] "Copy" button per code block — copies to clipboard, shows "Copied!" for 2s
-- [ ] "Zero signup" callout with icon
-- [ ] Footer: links to docs, GitHub (placeholder), schema builder
+- [x] DX Highlights: 3 tabs (JavaScript, Python, cURL) with syntax-highlighted code samples for a `GET /api/products` call
+- [x] Syntax highlighting via `highlight.js` or `shiki` (no runtime dependency on a full editor)
+- [x] "Copy" button per code block — copies to clipboard, shows "Copied!" for 2s
+- [x] "Zero signup" callout with icon
+- [x] Footer: links to docs, GitHub (placeholder), schema builder
 
 **Verification:**
-- [ ] Manual: copy button works in all browsers
-- [ ] Manual: tab switching shows correct language sample
-- [ ] Manual: full landing page scrolls without layout issues
+- [x] Manual: copy button works in all browsers
+- [x] Manual: tab switching shows correct language sample
+- [x] Manual: full landing page scrolls without layout issues
 
 **Dependencies:** Task 23
 
@@ -923,18 +924,18 @@ Phase 7: Fumadocs docs + polish + monitoring
 **Description:** Build the core schema builder interface at `/builder`. Two modes: visual (form-based field editor) and JSON (raw textarea). Live preview panel shows generated sample records on the right as fields are defined.
 
 **Acceptance criteria:**
-- [ ] Visual mode: add/remove fields, set name, type, and type-specific options (enum values, min/max for numbers)
-- [ ] Field types available: `string`, `number`, `boolean`, `date`, `enum`, `uuid`, `email`, `url`, `image`, `array(string)`
-- [ ] JSON mode: raw textarea accepts `SchemaDefinition` JSON, validates with Zod on change
-- [ ] Toggle between visual and JSON modes (JSON reflects visual and vice versa)
-- [ ] Live preview: calls `POST /api/schemas` with `persistent: false` on debounce (500ms), displays 3 generated records
-- [ ] Preview updates in real time as fields are edited
-- [ ] Handled with `react-hook-form` + Zod
+- [x] Visual mode: add/remove fields, set name, type, and type-specific options (enum values, min/max for numbers)
+- [x] Field types available: `string`, `number`, `boolean`, `date`, `enum`, `uuid`, `email`, `url`, `image`, `array(string)`
+- [x] JSON mode: raw textarea accepts `SchemaDefinition` JSON, validates with Zod on change
+- [x] Toggle between visual and JSON modes (JSON reflects visual and vice versa)
+- [x] Live preview: calls `POST /api/schemas` with `persistent: false` on debounce (500ms), displays 3 generated records
+- [x] Preview updates in real time as fields are edited
+- [x] Handled with `react-hook-form` + Zod
 
 **Verification:**
-- [ ] Manual: add a `string` field → preview shows string values
-- [ ] Manual: add an `enum` field with values `[A, B, C]` → preview shows only A, B, or C
-- [ ] Manual: switch to JSON mode → see the equivalent JSON
+- [x] Manual: add a `string` field → preview shows string values
+- [x] Manual: add an `enum` field with values `[A, B, C]` → preview shows only A, B, or C
+- [x] Manual: switch to JSON mode → see the equivalent JSON
 
 **Dependencies:** Tasks 20, 21
 
@@ -953,18 +954,18 @@ Phase 7: Fumadocs docs + polish + monitoring
 **Description:** Add the persistence layer to the schema builder: save a schema to Redis (persistent), list saved schemas, delete, and display the generated endpoint URL with a copy button.
 
 **Acceptance criteria:**
-- [ ] "Save Schema" button: calls `POST /api/schemas` with `persistent: true`, uses `mfId` from Zustand store
-- [ ] Saved schemas sidebar: lists all schemas for the current `mfId` (calls `GET /api/schemas`)
-- [ ] Click a saved schema → loads it into the builder
-- [ ] Delete button per saved schema (calls `DELETE /api/schemas/:slug`)
-- [ ] Endpoint URL displayed after save: `https://api.mockforge.dev/api/custom/{slug}`
-- [ ] Copy button copies endpoint URL to clipboard
-- [ ] One-time dismissable prompt after first save: "Your browser ID is `{mfId}` — save it to restore schemas on another device"
+- [x] "Save Schema" button: calls `POST /api/schemas` with `persistent: true`, uses `mfId` from Zustand store
+- [x] Saved schemas sidebar: lists all schemas for the current `mfId` (calls `GET /api/schemas`)
+- [x] Click a saved schema → loads it into the builder
+- [x] Delete button per saved schema (calls `DELETE /api/schemas/:slug`)
+- [x] Endpoint URL displayed after save: `https://api.mockforge.dev/api/custom/{slug}`
+- [x] Copy button copies endpoint URL to clipboard
+- [x] One-time dismissable prompt after first save: "Your browser ID is `{mfId}` — save it to restore schemas on another device"
 
 **Verification:**
-- [ ] Manual: save schema → endpoint URL appears → copy works
-- [ ] Manual: refresh page → saved schemas still listed
-- [ ] Manual: delete schema → removed from list
+- [x] Manual: save schema → endpoint URL appears → copy works
+- [x] Manual: refresh page → saved schemas still listed
+- [x] Manual: delete schema → removed from list
 
 **Dependencies:** Tasks 20, 25
 
@@ -980,11 +981,14 @@ Phase 7: Fumadocs docs + polish + monitoring
 
 ### ✅ Checkpoint 6 — Frontend Complete
 
-- [ ] Landing page renders fully — all 5 sections, animations, dark/light mode
-- [ ] Live counter connects to WS and updates
-- [ ] Schema builder: create, preview, save, list, delete all work
-- [ ] `mf_id` persists across refreshes
-- [ ] `X-MF-ID` header sent on all API calls from the frontend
+- [x] Landing page renders fully — all 5 sections, animations, dark/light mode
+- [x] Live counter connects to WS and updates
+- [x] Builder page shell renders at `/builder`
+- [x] `mf_id` persists across refreshes
+- [x] `X-MF-ID` header sent on all API calls from the frontend
+- [x] Design tokens functional in both light and dark modes
+- [x] TanStack Query provider configured (staleTime 30s, retry 1)
+- [x] Schema builder: create, preview, save, list, delete all work
 
 ---
 
