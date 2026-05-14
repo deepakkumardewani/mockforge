@@ -8,3 +8,4 @@ test-results
 apps/api/.env.test
 *.env.local
 .env
+.claude/
