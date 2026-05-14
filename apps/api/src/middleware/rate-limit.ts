@@ -20,8 +20,8 @@ function getRedisKey(mfId: string): string {
 }
 
 export async function rateLimitMiddleware(c: Context, next: Next) {
-  const mfId = c.get("mfId") as string;
-  const isIpFallback = c.get("isIpFallback") as boolean;
+  const mfId = c.get("mfId");
+  const isIpFallback = c.get("isIpFallback");
 
   if (!mfId) {
     return c.json({ error: "Missing mfId" }, 400);

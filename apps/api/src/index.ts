@@ -11,6 +11,7 @@ import { errorHandler, createErrorResponse } from "./middleware/error-handler";
 import statsRoutes from "./routes/stats";
 import restRouter from "./routes/rest";
 import graphqlRouter from "./routes/graphql";
+import schemasRouter from "./routes/schemas";
 import { handleWsUpgrade, websocketHandlers } from "./ws";
 import { createSocketIoServer } from "./ws/socketio";
 import { setServer } from "./ws/server-ref";
@@ -41,6 +42,7 @@ app.get("/health", async (c) => {
 
 app.route("/", statsRoutes);
 app.route("/api", restRouter);
+app.route("/api/schemas", schemasRouter);
 app.route("/graphql", graphqlRouter);
 
 // 404 handler

@@ -46,6 +46,8 @@ describe("Redis Client", () => {
   it("should throw error if Redis env vars missing", async () => {
     delete process.env.UPSTASH_REDIS_REST_URL;
     delete process.env.UPSTASH_REDIS_REST_TOKEN;
+    delete process.env.REDIS_LOCAL;
+    process.env.NODE_ENV = "production";
 
     // Re-import to get fresh module
     vi.resetModules();

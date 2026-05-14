@@ -13,12 +13,10 @@ declare module "hono" {
 }
 
 // Extend Hono Context to support our custom properties
-declare global {
-  namespace Hono {
-    interface ContextData {
-      mfId: string;
-      isIpFallback: boolean;
-    }
+declare module "hono" {
+  interface ContextVariableMap {
+    mfId: string;
+    isIpFallback: boolean;
   }
 }
 

@@ -13,6 +13,7 @@ import countriesRouter from './countries'
 import companiesRouter from './companies'
 import stocksRouter from './stocks'
 import eventsRouter from './events'
+import customRouter from './custom'
 
 const rest = new Hono()
 
@@ -30,5 +31,6 @@ rest.route('/countries', countriesRouter)
 rest.route('/companies', companiesRouter)
 rest.route('/stocks', stocksRouter)
 rest.route('/events', eventsRouter)
+rest.route('/custom', customRouter)
 
 export default rest
