@@ -2,30 +2,34 @@
 
 @variant dark (&:where(.dark, .dark *));
 
+/* Light mode (default) */
 :root {
-  --color-accent: #6366f1;
-  --color-accent-glow: rgba(99, 102, 241, 0.3);
-  --color-surface: #ffffff;
-  --color-surface-raised: #f8fafc;
-  --color-surface-hover: #f1f5f9;
-  --color-border: #e5e7eb;
-  --color-text-primary: #111827;
-  --color-text-muted: #6b7280;
-  --color-code-bg: #1e293b;
-  --color-code-text: #e2e8f0;
+  --color-accent: oklch(0.58 0.18 65);
+  --color-accent-glow: oklch(0.58 0.18 65 / 0.15);
+  --color-surface: oklch(0.98 0.004 65);
+  --color-surface-raised: oklch(0.94 0.006 65);
+  --color-surface-hover: oklch(0.9 0.008 65);
+  --color-border: oklch(0.86 0.01 65);
+  --color-text-primary: oklch(0.12 0.01 65);
+  --color-text-muted: oklch(0.45 0.02 65);
+  --color-code-bg: oklch(0.16 0.008 65);
+  --color-code-text: oklch(0.88 0.006 65);
+
+  --font-display: "Bricolage Grotesque", sans-serif;
 }
 
+/* Dark mode */
 .dark {
-  --color-accent: #818cf8;
-  --color-accent-glow: rgba(129, 140, 248, 0.3);
-  --color-surface: #0f172a;
-  --color-surface-raised: #1e293b;
-  --color-surface-hover: #334155;
-  --color-border: #1e293b;
-  --color-text-primary: #f1f5f9;
-  --color-text-muted: #94a3b8;
-  --color-code-bg: #020617;
-  --color-code-text: #e2e8f0;
+  --color-accent: oklch(0.78 0.16 65);
+  --color-accent-glow: oklch(0.78 0.16 65 / 0.18);
+  --color-surface: oklch(0.1 0.006 65);
+  --color-surface-raised: oklch(0.14 0.008 65);
+  --color-surface-hover: oklch(0.2 0.01 65);
+  --color-border: oklch(0.22 0.01 65);
+  --color-text-primary: oklch(0.95 0.005 65);
+  --color-text-muted: oklch(0.58 0.015 65);
+  --color-code-bg: oklch(0.08 0.004 65);
+  --color-code-text: oklch(0.88 0.008 65);
 }
 
 html {
@@ -35,4 +39,49 @@ html {
 body {
   background-color: var(--color-surface);
   color: var(--color-text-primary);
+}
+
+/* Display font utility */
+.font-display {
+  font-family: var(--font-display);
+}
+
+/* Ambient hero mesh — two blobs drifting at different speeds */
+@keyframes mesh-drift-a {
+  0%,
+  100% {
+    transform: translate(0%, 0%) scale(1);
+  }
+  33% {
+    transform: translate(8%, -12%) scale(1.08);
+  }
+  66% {
+    transform: translate(-6%, 10%) scale(0.95);
+  }
+}
+
+@keyframes mesh-drift-b {
+  0%,
+  100% {
+    transform: translate(0%, 0%) scale(1);
+  }
+  33% {
+    transform: translate(-10%, 8%) scale(0.92);
+  }
+  66% {
+    transform: translate(12%, -6%) scale(1.06);
+  }
+}
+
+.hero-mesh-a {
+  animation: mesh-drift-a 22s ease-in-out infinite;
+}
+
+.hero-mesh-b {
+  animation: mesh-drift-b 28s ease-in-out infinite;
+}
+
+/* Clip-path entrance animation — used by GSAP via inline styles */
+.clip-hidden {
+  clip-path: inset(0 100% 0 0);
 }

@@ -22,16 +22,14 @@ export function LiveCounter() {
       if (!sectionRef.current) return;
       gsap.fromTo(
         sectionRef.current.querySelectorAll(".counter-animate"),
-        { y: 30, opacity: 0 },
+        { y: 32, opacity: 0 },
         {
           y: 0,
           opacity: 1,
-          duration: 0.7,
-          stagger: 0.15,
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 85%",
-          },
+          duration: 0.75,
+          stagger: 0.12,
+          ease: "power3.out",
+          scrollTrigger: { trigger: sectionRef.current, start: "top 85%" },
         },
       );
     }, sectionRef);
@@ -62,29 +60,51 @@ export function LiveCounter() {
   }, [total]);
 
   return (
-    <section ref={sectionRef} className="relative overflow-hidden px-4 py-24 sm:px-6 lg:px-8">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,var(--color-accent-glow),transparent_70%)]" />
+    <section ref={sectionRef} className="relative overflow-hidden">
+      {/* Full-bleed accent rule */}
+      <div className="h-px w-full" style={{ background: "var(--color-accent)" }} />
 
-      <div className="relative mx-auto max-w-2xl text-center">
-        <p className="counter-animate text-lg text-[var(--color-text-muted)]">
-          Trusted by developers worldwide
-        </p>
-        <h2 className="counter-animate mt-2 text-5xl font-bold tabular-nums tracking-tight sm:text-7xl">
-          <span ref={counterRef} className="text-[var(--color-accent)]">
-            {total !== null ? formatNumber(total) : "—"}
-          </span>
-        </h2>
-        <p className="counter-animate mt-4 text-xl text-[var(--color-text-muted)]">
-          API requests served and counting
-        </p>
-        <p className="counter-animate mt-6 flex items-center justify-center gap-2 text-sm text-[var(--color-text-muted)]">
-          <span className="relative flex h-2.5 w-2.5">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
-            <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-green-500" />
-          </span>
-          Live via WebSocket
-        </p>
+      <div
+        className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-16"
+        style={{
+          paddingTop: "clamp(3.5rem, 8vw, 6rem)",
+          paddingBottom: "clamp(3.5rem, 8vw, 6rem)",
+        }}
+      >
+        <div className="flex flex-col gap-12 lg:flex-row lg:items-end lg:justify-between lg:gap-16">
+          {/* Counter — tight label→metric grouping, generous separation from meta */}
+          <div className="counter-animate min-w-0 flex-1">
+            <p className="mb-2 font-mono text-xs font-medium uppercase tracking-[0.2em] text-[var(--color-text-muted)]">
+              Requests served
+            </p>
+            <h2 className="font-display text-[clamp(3.5rem,12vw,9rem)] font-black leading-none tabular-nums tracking-tight text-[var(--color-text-primary)]">
+              <span ref={counterRef}>{total !== null ? formatNumber(total) : "—"}</span>
+            </h2>
+          </div>
+
+          {/* Meta — aligned with reading edge on mobile; end-aligned on large screens */}
+          <div className="counter-animate flex max-w-md flex-col gap-5 border-t border-[var(--color-border)] pt-10 lg:border-t-0 lg:pt-0 lg:text-right">
+            <p className="text-pretty text-base leading-relaxed text-[var(--color-text-muted)] lg:ml-auto">
+              Real data. Real developers. Growing every second.
+            </p>
+            <span className="inline-flex items-center gap-2 text-sm text-[var(--color-text-muted)] lg:ml-auto">
+              <span className="relative flex h-2.5 w-2.5 shrink-0">
+                <span
+                  className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-75"
+                  style={{ background: "var(--color-accent)" }}
+                />
+                <span
+                  className="relative inline-flex h-2.5 w-2.5 rounded-full"
+                  style={{ background: "var(--color-accent)" }}
+                />
+              </span>
+              Live via WebSocket
+            </span>
+          </div>
+        </div>
       </div>
+
+      <div className="h-px w-full" style={{ background: "var(--color-border)" }} />
     </section>
   );
 }
