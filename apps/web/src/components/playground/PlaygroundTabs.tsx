@@ -1,6 +1,7 @@
 "use client";
 
 import * as Tabs from "@radix-ui/react-tabs";
+import { GraphqlPanel } from "@/components/playground/graphql/GraphqlPanel";
 import { RestPanel } from "@/components/playground/rest/RestPanel";
 
 const TRIGGER_CLASS =
@@ -33,7 +34,7 @@ export function PlaygroundTabs() {
         <RestPanel />
       </Tabs.Content>
       <Tabs.Content value="graphql" tabIndex={0} className="mt-6 outline-none">
-        <PlaceholderPanel tab="GraphQL" />
+        <GraphqlPanel />
       </Tabs.Content>
       <Tabs.Content value="websocket" tabIndex={0} className="mt-6 outline-none">
         <PlaceholderPanel tab="WebSocket" />

@@ -188,13 +188,13 @@ Build a `/playground` page in `apps/web` with four tabs (REST, GraphQL, WebSocke
 **Description:** GraphQL tab. Query editor is a tall monospaced textarea; variables editor is a JSON textarea with the same validation pattern as `BodyEditor`. Hook POSTs to `/graphql` with `{ query, variables }`. Reuses `ResponseViewer` (or a thin wrapper) and `PresetPicker`.
 
 **Acceptance criteria:**
-- [ ] Selecting a GraphQL preset populates query + variables.
-- [ ] Invalid variables JSON blocks Send.
-- [ ] Submitting renders the GraphQL response (data or errors) in the response viewer.
+- [x] Selecting a GraphQL preset populates query + variables.
+- [x] Invalid variables JSON blocks Send.
+- [x] Submitting renders the GraphQL response (data or errors) in the response viewer.
 
 **Verification:**
-- [ ] Component test mocks `fetch` to `/graphql`, asserts request body shape and rendered response.
-- [ ] Manual: run a list-users query against the dev API.
+- [x] Component test mocks `fetch` to `/graphql`, asserts request body shape and rendered response.
+- [x] Manual: run a list-users query against the dev API.
 
 **Dependencies:** Task 6
 
