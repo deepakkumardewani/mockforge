@@ -33,7 +33,9 @@ describe("Hero", () => {
     const { Hero } = await import("@/components/landing/Hero");
     render(<Hero />);
     expect(screen.getByText("MockForge")).toBeInTheDocument();
-    expect(screen.getByText("Fake Data, Real Power")).toBeInTheDocument();
+    expect(screen.getByLabelText("Fake Data. Real Power.")).toBeInTheDocument();
+    expect(screen.getByText("Fake")).toBeInTheDocument();
+    expect(screen.getByText("Power.")).toBeInTheDocument();
     expect(screen.getByText("Explore Docs")).toBeInTheDocument();
     expect(screen.getByText("Try the Builder")).toBeInTheDocument();
   });
@@ -43,10 +45,10 @@ describe("ProtocolShowcase", () => {
   it("renders all four protocol cards", async () => {
     const { ProtocolShowcase } = await import("@/components/landing/ProtocolShowcase");
     render(<ProtocolShowcase />);
-    expect(screen.getByText("REST")).toBeInTheDocument();
-    expect(screen.getByText("GraphQL")).toBeInTheDocument();
-    expect(screen.getByText("WebSocket")).toBeInTheDocument();
-    expect(screen.getByText("Socket.io")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "REST", level: 3 })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "GraphQL", level: 3 })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "WebSocket", level: 3 })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Socket.io", level: 3 })).toBeInTheDocument();
   });
 });
 
@@ -75,7 +77,7 @@ describe("LiveCounter", () => {
   it("renders counter text", async () => {
     const { LiveCounter } = await import("@/components/landing/LiveCounter");
     render(<LiveCounter />);
-    expect(screen.getByText("API requests served and counting")).toBeInTheDocument();
+    expect(screen.getByText("Requests served")).toBeInTheDocument();
     expect(screen.getByText("Live via WebSocket")).toBeInTheDocument();
   });
 });
@@ -87,7 +89,7 @@ describe("DXHighlights", () => {
     expect(screen.getByText("JavaScript")).toBeInTheDocument();
     expect(screen.getByText("Python")).toBeInTheDocument();
     expect(screen.getByText("cURL")).toBeInTheDocument();
-    expect(screen.getByText("Copy, Paste, Build")).toBeInTheDocument();
+    expect(screen.getByText("Copy, paste, build")).toBeInTheDocument();
   });
 });
 
@@ -95,7 +97,7 @@ describe("Footer", () => {
   it("renders links", async () => {
     const { Footer } = await import("@/components/landing/Footer");
     render(<Footer />);
-    expect(screen.getByText("Docs")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Documentation" })).toBeInTheDocument();
     expect(screen.getByText("GitHub")).toBeInTheDocument();
     expect(screen.getByText("Schema Builder")).toBeInTheDocument();
   });
