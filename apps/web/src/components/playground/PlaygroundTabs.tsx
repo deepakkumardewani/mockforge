@@ -1,6 +1,7 @@
 "use client";
 
 import * as Tabs from "@radix-ui/react-tabs";
+import { RestPanel } from "@/components/playground/rest/RestPanel";
 
 const TRIGGER_CLASS =
   "rounded-lg px-4 py-2 text-sm font-medium text-[var(--color-text-muted)] outline-none transition-colors " +
@@ -29,7 +30,7 @@ export function PlaygroundTabs() {
       </Tabs.List>
 
       <Tabs.Content value="rest" tabIndex={0} className="mt-6 outline-none">
-        <PlaceholderPanel tab="REST" />
+        <RestPanel />
       </Tabs.Content>
       <Tabs.Content value="graphql" tabIndex={0} className="mt-6 outline-none">
         <PlaceholderPanel tab="GraphQL" />

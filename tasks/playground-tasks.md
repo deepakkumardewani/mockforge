@@ -108,14 +108,14 @@ Build a `/playground` page in `apps/web` with four tabs (REST, GraphQL, WebSocke
 **Description:** Build the three input controls for the REST tab.
 
 **Acceptance criteria:**
-- [ ] `MethodUrlBar` renders a method `<select>` (GET/POST/PUT/DELETE), URL `<input>`, Send button. Disables Send while loading.
-- [ ] `HeadersEditor` renders key/value rows with add/remove. Starts with one empty row.
-- [ ] `BodyEditor` is a JSON `<textarea>` with inline validation: if non-empty and not valid JSON, show an error line and block Send (parent reads `isValid`).
-- [ ] All three use design-system tokens; inputs are `rounded-lg`, panels `rounded-xl`.
+- [x] `MethodUrlBar` renders a method `<select>` (GET/POST/PUT/DELETE), URL `<input>`, Send button. Disables Send while loading.
+- [x] `HeadersEditor` renders key/value rows with add/remove. Starts with one empty row.
+- [x] `BodyEditor` is a JSON `<textarea>` with inline validation: if non-empty and not valid JSON, show an error line and block Send (parent reads `isValid`).
+- [x] All three use design-system tokens; inputs are `rounded-lg`, panels `rounded-xl`.
 
 **Verification:**
-- [ ] Typecheck + lint pass.
-- [ ] Component tests: invalid JSON in body produces `isValid=false`; adding header rows updates state.
+- [x] Typecheck + lint pass.
+- [x] Component tests: invalid JSON in body produces `isValid=false`; adding header rows updates state.
 
 **Dependencies:** Task 3
 
@@ -133,14 +133,14 @@ Build a `/playground` page in `apps/web` with four tabs (REST, GraphQL, WebSocke
 **Description:** TanStack Query mutation that sends the request via `apiClient` (or `fetch` directly to measure timing/status/headers — `apiClient` throws on non-2xx which we need to render, so a thin local `fetch` wrapper is acceptable). `ResponseViewer` shows status pill, response time (ms), pretty-printed body, and headers panel.
 
 **Acceptance criteria:**
-- [ ] Hook returns `{ send, isLoading, response, error }` where `response` contains `{ status, statusText, timeMs, body, headers }`.
-- [ ] Timing measured with `performance.now()` around the fetch.
-- [ ] Non-2xx responses still populate `response` (do not throw) so the viewer can render error bodies.
-- [ ] `ResponseViewer` renders empty state ("Send a request to see the response") when no response yet.
+- [x] Hook returns `{ send, isLoading, response, error }` where `response` contains `{ status, statusText, timeMs, body, headers }`.
+- [x] Timing measured with `performance.now()` around the fetch.
+- [x] Non-2xx responses still populate `response` (do not throw) so the viewer can render error bodies.
+- [x] `ResponseViewer` renders empty state ("Send a request to see the response") when no response yet.
 
 **Verification:**
-- [ ] Component test mocks `fetch` and asserts the viewer renders status 200 + body.
-- [ ] Component test asserts 404 renders the error body, not a blank state.
+- [x] Component test mocks `fetch` and asserts the viewer renders status 200 + body.
+- [x] Component test asserts 404 renders the error body, not a blank state.
 
 **Dependencies:** Task 4
 
@@ -157,13 +157,13 @@ Build a `/playground` page in `apps/web` with four tabs (REST, GraphQL, WebSocke
 **Description:** Compose `PresetPicker` + `MethodUrlBar` + `HeadersEditor` + `BodyEditor` + `ResponseViewer` into the REST tab. Picking a preset populates method, URL, and body (clears existing headers to one empty row).
 
 **Acceptance criteria:**
-- [ ] Selecting a REST preset populates the inputs but does not auto-send.
-- [ ] Clicking Send fires the request and the viewer updates.
-- [ ] Responsive: at < 768px the request / response panels stack vertically; at ≥ 1024px they sit side-by-side.
+- [x] Selecting a REST preset populates the inputs but does not auto-send.
+- [x] Clicking Send fires the request and the viewer updates.
+- [x] Responsive: at < 768px the request / response panels stack vertically; at ≥ 1024px they sit side-by-side.
 
 **Verification:**
-- [ ] Component test: select preset → click Send → mocked response renders.
-- [ ] Manual: in browser, run `GET /api/users` against local API and confirm a populated response.
+- [x] Component test: select preset → click Send → mocked response renders.
+- [x] Manual: in browser, run `GET /api/users` against local API and confirm a populated response.
 
 **Dependencies:** Task 5
 
@@ -176,8 +176,8 @@ Build a `/playground` page in `apps/web` with four tabs (REST, GraphQL, WebSocke
 ---
 
 ### Checkpoint: REST slice
-- [ ] User can fire a real REST request against the dev API and see the response.
-- [ ] Component tests for the REST slice pass.
+- [x] User can fire a real REST request against the dev API and see the response.
+- [x] Component tests for the REST slice pass.
 
 ---
 
