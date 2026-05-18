@@ -3,6 +3,7 @@
 import * as Tabs from "@radix-ui/react-tabs";
 import { GraphqlPanel } from "@/components/playground/graphql/GraphqlPanel";
 import { RestPanel } from "@/components/playground/rest/RestPanel";
+import { WsPanel } from "@/components/playground/ws/WsPanel";
 
 const TRIGGER_CLASS =
   "rounded-lg px-4 py-2 text-sm font-medium text-[var(--color-text-muted)] outline-none transition-colors " +
@@ -37,7 +38,7 @@ export function PlaygroundTabs() {
         <GraphqlPanel />
       </Tabs.Content>
       <Tabs.Content value="websocket" tabIndex={0} className="mt-6 outline-none">
-        <PlaceholderPanel tab="WebSocket" />
+        <WsPanel />
       </Tabs.Content>
       <Tabs.Content value="socketio" tabIndex={0} className="mt-6 outline-none">
         <PlaceholderPanel tab="Socket.IO" />
