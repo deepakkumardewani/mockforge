@@ -3,6 +3,7 @@
 import * as Tabs from "@radix-ui/react-tabs";
 import { GraphqlPanel } from "@/components/playground/graphql/GraphqlPanel";
 import { RestPanel } from "@/components/playground/rest/RestPanel";
+import { SocketIoPanel } from "@/components/playground/socketio/SocketIoPanel";
 import { WsPanel } from "@/components/playground/ws/WsPanel";
 
 const TRIGGER_CLASS =
@@ -41,18 +42,8 @@ export function PlaygroundTabs() {
         <WsPanel />
       </Tabs.Content>
       <Tabs.Content value="socketio" tabIndex={0} className="mt-6 outline-none">
-        <PlaceholderPanel tab="Socket.IO" />
+        <SocketIoPanel />
       </Tabs.Content>
     </Tabs.Root>
-  );
-}
-
-function PlaceholderPanel({ tab }: { tab: string }) {
-  return (
-    <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-raised)] p-6">
-      <p className="text-sm text-[var(--color-text-muted)]">
-        <span className="font-medium text-[var(--color-text-primary)]">{tab}</span> — panel coming soon.
-      </p>
-    </div>
   );
 }

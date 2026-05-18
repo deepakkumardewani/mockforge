@@ -269,14 +269,14 @@ Build a `/playground` page in `apps/web` with four tabs (REST, GraphQL, WebSocke
 **Description:** Hook that owns the Socket.IO lifecycle: connect to `{baseUrl}{namespace}`, subscribe to one event name, emit events, and feed the same `EventLog`-compatible event buffer. Mirrors `use-ws-console` shape.
 
 **Acceptance criteria:**
-- [ ] `useSocketIoConsole({ url, namespace, listenEvent })` returns `{ status, events, connect, disconnect, emit }`.
-- [ ] Connects via `io(\`${url}${namespace}\`)`, listens to `listenEvent`, captures both connect/disconnect lifecycle events into the log.
-- [ ] `emit(eventName, payload)` validates payload is parseable JSON (or empty), then emits.
-- [ ] Cleans up on unmount / disconnect.
+- [x] `useSocketIoConsole({ url, namespace, listenEvent })` returns `{ status, events, connect, disconnect, emit }`.
+- [x] Connects via `io(\`${url}${namespace}\`)`, listens to `listenEvent`, captures both connect/disconnect lifecycle events into the log.
+- [x] `emit(eventName, payload)` validates payload is parseable JSON (or empty), then emits.
+- [x] Cleans up on unmount / disconnect.
 
 **Verification:**
-- [ ] Unit test with a mocked `socket.io-client` `io()` factory.
-- [ ] Manual: connect to `http://localhost:4001/ticker`, listen to `tick`, see events.
+- [x] Unit test with a mocked `socket.io-client` `io()` factory.
+- [x] Manual: connect to `http://localhost:4001/ticker`, listen to `tick`, see events.
 
 **Dependencies:** Task 8
 
@@ -292,13 +292,13 @@ Build a `/playground` page in `apps/web` with four tabs (REST, GraphQL, WebSocke
 **Description:** Compose the Socket.IO tab. `NamespaceBar` has base URL + namespace + listen-event inputs + Connect/Disconnect + `StatusPill`. `EmitComposer` has event-name input + JSON payload textarea + Emit button. Reuses `EventLog`. Selecting a preset populates URL + namespace + event.
 
 **Acceptance criteria:**
-- [ ] Preset selection populates the three inputs.
-- [ ] Connect → status `connected`; emit appends `→ event(payload)` to the log; incoming events appear as `← event(payload)`.
-- [ ] Tab unmount disconnects.
+- [x] Preset selection populates the three inputs.
+- [x] Connect → status `connected`; emit appends `→ event(payload)` to the log; incoming events appear as `← event(payload)`.
+- [x] Tab unmount disconnects.
 
 **Verification:**
-- [ ] Component test (mocked `io`): Connect → status connected; Emit → mocked `socket.emit` called with `(eventName, parsedPayload)`.
-- [ ] Manual: connect to `/ticker`, see incoming events.
+- [x] Component test (mocked `io`): Connect → status connected; Emit → mocked `socket.emit` called with `(eventName, parsedPayload)`.
+- [x] Manual: connect to `/ticker`, see incoming events.
 
 **Dependencies:** Task 10, Task 9
 
@@ -313,9 +313,9 @@ Build a `/playground` page in `apps/web` with four tabs (REST, GraphQL, WebSocke
 ---
 
 ### Checkpoint: All four tabs functional
-- [ ] Each tab can complete its primary flow against the dev API.
-- [ ] Tab switch tears down any open socket.
-- [ ] All component tests pass.
+- [x] Each tab can complete its primary flow against the dev API.
+- [x] Tab switch tears down any open socket.
+- [x] All component tests pass.
 
 ---
 
