@@ -35,6 +35,19 @@ describe("Playground Socket.IO — SocketIoPanel", () => {
     vi.clearAllMocks();
   });
 
+  it("preset chips populate base URL, namespace, and listen event", async () => {
+    const user = userEvent.setup();
+    mockIo();
+
+    render(<SocketIoPanel />);
+
+    await user.click(screen.getByRole("button", { name: "Chat" }));
+
+    expect(screen.getByPlaceholderText("http://localhost:4001")).toHaveValue("http://localhost:4001");
+    expect(screen.getByPlaceholderText("/ticker")).toHaveValue("/chat");
+    expect(screen.getByPlaceholderText("tick")).toHaveValue("message");
+  });
+
   it("Connect reaches connected; Emit calls socket.emit with parsed payload; unmount disconnects", async () => {
     const user = userEvent.setup();
     const socket = mockIo();
