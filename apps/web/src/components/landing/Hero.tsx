@@ -213,6 +213,12 @@ export function Hero() {
             >
               Try the Builder
             </Link>
+            <Link
+              href="/playground"
+              className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-raised)] px-6 py-3 font-medium text-[var(--color-text-primary)] transition-all hover:bg-[var(--color-surface-hover)]"
+            >
+              Try the playground →
+            </Link>
           </div>
 
           {/* Social proof line */}
@@ -253,13 +259,16 @@ export function Hero() {
                 {CODE_SNIPPETS.map((s, i) => (
                   <button
                     key={s.label}
+                    type="button"
+                    aria-label={`Show ${s.label} code sample`}
+                    aria-pressed={snippetIndex === i}
                     onClick={() => {
                       setSnippetIndex(i);
                       setCharIndex(0);
                       setIsDeleting(false);
                       setDisplayedCode("");
                     }}
-                    className="rounded px-2 py-0.5 font-mono text-xs transition-colors"
+                    className="rounded px-2 py-0.5 font-mono text-xs outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface-raised)]"
                     style={
                       snippetIndex === i
                         ? { color: "var(--color-accent)", background: "var(--color-surface-hover)" }

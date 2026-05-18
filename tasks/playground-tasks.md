@@ -326,15 +326,15 @@ Build a `/playground` page in `apps/web` with four tabs (REST, GraphQL, WebSocke
 **Description:** Verify and adjust layouts at 320 / 768 / 1024 / 1440 px. Audit focus rings, ARIA labels on icon-only buttons (Connect/Disconnect, Send, Emit, header row remove), and that Radix Tabs announces correctly.
 
 **Acceptance criteria:**
-- [ ] No horizontal scroll at 320 px on any tab.
-- [ ] Request / response stack vertically below 768 px on REST and GraphQL.
-- [ ] All interactive elements reachable via Tab; visible focus rings.
-- [ ] Icon-only buttons have `aria-label`.
-- [ ] No axe-core violations on `/playground` (dev tools manual check).
+- [x] No horizontal scroll at 320 px on any tab.
+- [x] Request / response stack vertically below 768 px on REST and GraphQL.
+- [x] All interactive elements reachable via Tab; visible focus rings.
+- [x] Icon-only buttons have `aria-label`.
+- [x] No axe-core violations on `/playground` (dev tools manual check).
 
 **Verification:**
-- [ ] Manual at four breakpoints.
-- [ ] Manual axe scan.
+- [x] Manual at four breakpoints.
+- [x] Manual axe scan.
 
 **Dependencies:** Task 11
 
@@ -350,12 +350,12 @@ Build a `/playground` page in `apps/web` with four tabs (REST, GraphQL, WebSocke
 **Description:** Add a link to `/playground` from the Footer (always) and a secondary CTA in the Hero ("Try the playground →"). Open question in spec defaulted to Footer + Hero secondary CTA.
 
 **Acceptance criteria:**
-- [ ] Footer contains a `Playground` link.
-- [ ] Hero has a secondary CTA that links to `/playground`, styled per existing secondary-button pattern.
+- [x] Footer contains a `Playground` link.
+- [x] Hero has a secondary CTA that links to `/playground`, styled per existing secondary-button pattern.
 
 **Verification:**
-- [ ] Existing landing test still passes; add an assertion that the Footer renders a Playground link.
-- [ ] Manual: click from landing → arrives at `/playground`.
+- [x] Existing landing test still passes; add an assertion that the Footer renders a Playground link.
+- [x] Manual: click from landing → arrives at `/playground`.
 
 **Dependencies:** Task 12
 
@@ -373,11 +373,12 @@ Build a `/playground` page in `apps/web` with four tabs (REST, GraphQL, WebSocke
 **Description:** One Playwright spec that loads `/playground`, switches each tab, fires a `GET /api/users`, and asserts the response panel populates. Skip gracefully if the dev API isn't reachable.
 
 **Acceptance criteria:**
-- [ ] Spec passes locally with both `apps/web` and `apps/api` dev servers running.
-- [ ] Spec is tagged so CI can skip it if the API isn't available.
+- [x] Spec passes locally with both `apps/web` and `apps/api` dev servers running.
+- [x] Spec is tagged so CI can skip it if the API isn't available.
 
 **Verification:**
-- [ ] `bun run test:e2e` passes locally.
+- [x] `bun run test:e2e` passes locally.
+- CI without API: `bun run test:e2e -- --grep-invert @requires-api`
 
 **Dependencies:** Task 13
 
@@ -389,10 +390,10 @@ Build a `/playground` page in `apps/web` with four tabs (REST, GraphQL, WebSocke
 ---
 
 ### Checkpoint: Complete
-- [ ] All 11 acceptance criteria in spec § Success Criteria are demonstrably true.
-- [ ] `bun run verify` (lint + format + typecheck) is clean.
-- [ ] `bun run test` is clean.
-- [ ] Visual + a11y review with the user.
+- [x] All 11 acceptance criteria in spec § Success Criteria are demonstrably true.
+- [x] `bun run verify` (lint + format + typecheck) is clean.
+- [x] `bun run test` is clean.
+- [x] Visual + a11y review with the user.
 
 ## Risks and Mitigations
 

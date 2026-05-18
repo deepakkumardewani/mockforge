@@ -1,35 +1,63 @@
 @import "tailwindcss";
 
-@variant dark (&:where(.dark, .dark *));
+/* Class-based dark mode for `dark:*` utilities (not @variant — that nests inside rules). */
+@custom-variant dark (&:where(.dark, .dark *));
 
-/* Light mode (default) */
+/* Light mode (default) — hex first as sRGB fallback, then okLCH per .impeccable.md */
 :root {
+  --color-accent: #b8832a;
   --color-accent: oklch(0.58 0.18 65);
+  --color-accent-glow: rgb(184 131 42 / 0.15);
   --color-accent-glow: oklch(0.58 0.18 65 / 0.15);
+  --color-surface: #f9f9f7;
   --color-surface: oklch(0.98 0.004 65);
+  --color-surface-raised: #f0efe9;
   --color-surface-raised: oklch(0.94 0.006 65);
+  --color-surface-hover: #e8e6df;
   --color-surface-hover: oklch(0.9 0.008 65);
+  --color-border: #dddcd6;
   --color-border: oklch(0.86 0.01 65);
+  --color-text-primary: #161513;
   --color-text-primary: oklch(0.12 0.01 65);
+  --color-text-muted: #63615d;
   --color-text-muted: oklch(0.45 0.02 65);
+  --color-code-bg: #141414;
   --color-code-bg: oklch(0.16 0.008 65);
+  --color-code-text: #e3e2df;
   --color-code-text: oklch(0.88 0.006 65);
-
-  --font-display: "Bricolage Grotesque", sans-serif;
+  /* Text on accent fills (buttons); ensures contrast when using var(--color-accent) backgrounds */
+  --color-on-accent: #161513;
+  --color-on-accent: oklch(0.12 0.01 65);
+  --color-bg: #161513;
+  --color-bg: oklch(0.12 0.01 65);
 }
 
 /* Dark mode */
 .dark {
+  --color-accent: #e8b565;
   --color-accent: oklch(0.78 0.16 65);
+  --color-accent-glow: rgb(232 181 101 / 0.18);
   --color-accent-glow: oklch(0.78 0.16 65 / 0.18);
+  --color-surface: #141413;
   --color-surface: oklch(0.1 0.006 65);
+  --color-surface-raised: #1c1c1b;
   --color-surface-raised: oklch(0.14 0.008 65);
+  --color-surface-hover: #2a2a28;
   --color-surface-hover: oklch(0.2 0.01 65);
+  --color-border: #32322f;
   --color-border: oklch(0.22 0.01 65);
+  --color-text-primary: #f2f1ef;
   --color-text-primary: oklch(0.95 0.005 65);
+  --color-text-muted: #8f8d87;
   --color-text-muted: oklch(0.58 0.015 65);
+  --color-code-bg: #0d0d0c;
   --color-code-bg: oklch(0.08 0.004 65);
+  --color-code-text: #e3e2df;
   --color-code-text: oklch(0.88 0.008 65);
+  --color-on-accent: #141413;
+  --color-on-accent: oklch(0.1 0.006 65);
+  --color-bg: #141413;
+  --color-bg: oklch(0.1 0.006 65);
 }
 
 html {
@@ -39,6 +67,22 @@ html {
 body {
   background-color: var(--color-surface);
   color: var(--color-text-primary);
+}
+
+/* Stronger panel borders on /playground only (dark mode contrast). */
+.dark .playground-scope {
+  --color-border: oklch(0.38 0.016 65);
+}
+
+/* Focus visibility for playground: consistent ring + offset on top of page surface */
+.playground-scope :where(button, summary):focus-visible {
+  outline: none;
+}
+
+.playground-scope button:focus-visible {
+  box-shadow:
+    0 0 0 2px var(--color-surface),
+    0 0 0 4px var(--color-accent);
 }
 
 /* Display font utility */

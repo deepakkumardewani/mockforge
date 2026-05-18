@@ -11,7 +11,12 @@ export function PresetPicker<T extends { readonly id: string; readonly label: st
   ariaLabel = "Example presets",
 }: PresetPickerProps<T>) {
   return (
-    <div aria-label={ariaLabel} role="toolbar" className="flex flex-wrap gap-2">
+    <div
+      aria-label={ariaLabel}
+      role="toolbar"
+      aria-orientation="horizontal"
+      className="flex min-w-0 flex-wrap gap-2"
+    >
       {presets.map((preset) => (
         <button
           key={preset.id}

@@ -38,6 +38,10 @@ describe("Hero", () => {
     expect(screen.getByText("Power.")).toBeInTheDocument();
     expect(screen.getByText("Explore Docs")).toBeInTheDocument();
     expect(screen.getByText("Try the Builder")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Try the playground →" })).toHaveAttribute(
+      "href",
+      "/playground",
+    );
   });
 });
 
@@ -99,6 +103,7 @@ describe("Footer", () => {
     render(<Footer />);
     expect(screen.getByRole("link", { name: "Documentation" })).toBeInTheDocument();
     expect(screen.getByText("GitHub")).toBeInTheDocument();
-    expect(screen.getByText("Schema Builder")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Schema Builder" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Playground" })).toHaveAttribute("href", "/playground");
   });
 });

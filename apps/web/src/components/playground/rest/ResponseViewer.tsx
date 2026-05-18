@@ -13,7 +13,7 @@ export interface ResponseViewerProps {
 export function ResponseViewer({ response, transportError }: ResponseViewerProps) {
   return (
     <section
-      className="flex min-h-[12rem] flex-col gap-4 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-raised)] p-4"
+      className="flex min-h-[12rem] min-w-0 flex-col gap-4 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-raised)] p-4"
       aria-label="HTTP response"
     >
       {!response ? (

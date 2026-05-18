@@ -50,6 +50,12 @@ export function Footer() {
               >
                 Schema Builder
               </Link>
+              <Link
+                href="/playground"
+                className="text-sm text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-text-primary)]"
+              >
+                Playground
+              </Link>
             </nav>
           </div>
 

@@ -13,10 +13,10 @@ const TRIGGER_CLASS =
 
 export function PlaygroundTabs() {
   return (
-    <Tabs.Root defaultValue="rest">
+    <Tabs.Root defaultValue="rest" className="w-full min-w-0">
       <Tabs.List
         aria-label="Protocol"
-        className="flex flex-wrap gap-1 border-b border-[var(--color-border)] pb-px"
+        className="flex w-full min-w-0 flex-wrap gap-1 border-b border-[var(--color-border)] pb-px"
       >
         <Tabs.Trigger value="rest" className={TRIGGER_CLASS}>
           REST

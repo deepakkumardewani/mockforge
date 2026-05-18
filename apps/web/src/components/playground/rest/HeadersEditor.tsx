@@ -51,7 +51,7 @@ export function HeadersEditor({ rows, onChange }: HeadersEditorProps) {
       </div>
       <div className="flex flex-col gap-2">
         {rows.map((row) => (
-          <div key={row.id} className="flex flex-wrap gap-2">
+          <div key={row.id} className="flex min-w-0 flex-wrap gap-2">
             <input
               value={row.key}
               onChange={(e) => updateRow(row.id, { key: e.target.value })}

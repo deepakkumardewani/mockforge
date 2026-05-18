@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { HttpMethod } from "@/components/playground/shared/presets";
 import { REST_PRESETS } from "@/components/playground/shared/presets";
 import { PresetPicker } from "@/components/playground/shared/PresetPicker";
@@ -40,6 +40,13 @@ export function RestPanel() {
     setHeaderRows([createEmptyHeaderRow()]);
   }, []);
 
+  useEffect(() => {
+    const preset = REST_PRESETS.find((p) => p.url === url.trim());
+    if (preset && preset.method !== method) {
+      setMethod(preset.method);
+    }
+  }, [url, method]);
+
   async function handleSend() {
     if (!bodyValid) return;
 
@@ -57,14 +64,14 @@ export function RestPanel() {
   }
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex min-w-0 flex-col gap-6">
       <PresetPicker
         presets={REST_PRESETS}
         onSelect={onPresetSelect}
         ariaLabel="REST example presets"
       />
 
-      <div className="flex flex-col gap-6 lg:grid lg:grid-cols-2 lg:items-start">
+      <div className="flex flex-col gap-6 lg:grid lg:grid-cols-2 lg:items-start lg:gap-10">
         <div className="flex min-w-0 flex-col gap-4">
           <MethodUrlBar
             method={method}
@@ -79,7 +86,7 @@ export function RestPanel() {
           <BodyEditor value={body} onChange={setBody} onValidityChange={setBodyValid} />
         </div>
 
-        <div className="min-w-0">
+        <div className="min-w-0 lg:sticky lg:top-6 lg:self-start">
           <ResponseViewer response={response} transportError={error} />
         </div>
       </div>

@@ -45,7 +45,7 @@ export function MethodUrlBar({
         onChange={(e) => onUrlChange(e.target.value)}
         placeholder="/api/users"
         aria-label="Request URL"
-        className="min-w-[12rem] flex-1 rounded-lg bg-[var(--color-surface)] px-3 py-2 font-mono text-sm text-[var(--color-text-primary)] outline-none ring-[var(--color-accent)] placeholder:text-[var(--color-text-muted)] focus-visible:ring-2"
+        className="min-w-0 flex-1 rounded-lg bg-[var(--color-surface)] px-3 py-2 font-mono text-sm text-[var(--color-text-primary)] outline-none ring-[var(--color-accent)] placeholder:text-[var(--color-text-muted)] focus-visible:ring-2 sm:min-w-[12rem]"
       />
       <button
         type="button"
