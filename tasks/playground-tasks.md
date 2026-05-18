@@ -216,15 +216,15 @@ Build a `/playground` page in `apps/web` with four tabs (REST, GraphQL, WebSocke
 **Description:** Hook that owns the `WebSocket` lifecycle: connect, disconnect, send, and a bounded event buffer (cap at e.g. 500 events). `EventLog` renders the buffer with timestamps, message direction (in/out), and auto-scroll to bottom unless the user has scrolled up.
 
 **Acceptance criteria:**
-- [ ] `useWsConsole(url)` returns `{ status, events, connect, disconnect, send }`.
-- [ ] `status` cycles `idle → connecting → connected → idle` (or `error`).
-- [ ] Unmount or `disconnect()` closes the socket; no leaks.
-- [ ] Event buffer is bounded — overflow drops oldest.
-- [ ] `EventLog` shows monospace `[HH:MM:SS.mmm] ← message` / `→ message` rows.
+- [x] `useWsConsole(url)` returns `{ status, events, connect, disconnect, send }`.
+- [x] `status` cycles `idle → connecting → connected → idle` (or `error`).
+- [x] Unmount or `disconnect()` closes the socket; no leaks.
+- [x] Event buffer is bounded — overflow drops oldest.
+- [x] `EventLog` shows monospace `[HH:MM:SS.mmm] ← message` / `→ message` rows.
 
 **Verification:**
-- [ ] Unit test with a mocked `WebSocket` global: connect → onmessage → events array updates; disconnect → status `idle`.
-- [ ] Component test asserts auto-scroll behavior at minimum (`scrollTop` updates on new event).
+- [x] Unit test with a mocked `WebSocket` global: connect → onmessage → events array updates; disconnect → status `idle`.
+- [x] Component test asserts auto-scroll behavior at minimum (`scrollTop` updates on new event).
 
 **Dependencies:** Task 3
 
@@ -241,14 +241,14 @@ Build a `/playground` page in `apps/web` with four tabs (REST, GraphQL, WebSocke
 **Description:** Compose the WS tab UI. `ConnectionBar` has URL input + Connect/Disconnect button + `StatusPill`. `MessageComposer` is a textarea + Send button, disabled when not connected. Selecting a WS preset populates the URL.
 
 **Acceptance criteria:**
-- [ ] Connect button starts a real WS connection, status pill flips to "Connected".
-- [ ] Sending a message appends an outgoing `→` entry; incoming messages appear as `←` entries.
-- [ ] Switching away from the WS tab disconnects the socket (unmount cleanup).
-- [ ] Disconnect button cleanly closes the socket.
+- [x] Connect button starts a real WS connection, status pill flips to "Connected".
+- [x] Sending a message appends an outgoing `→` entry; incoming messages appear as `←` entries.
+- [x] Switching away from the WS tab disconnects the socket (unmount cleanup).
+- [x] Disconnect button cleanly closes the socket.
 
 **Verification:**
-- [ ] Component test (mocked `WebSocket`): click Connect → status `connected`; type + Send → outgoing event appears; unmount → mock `close()` called.
-- [ ] Manual: connect to `ws://localhost:4000/ws/ticker`, see streaming ticks in the log.
+- [x] Component test (mocked `WebSocket`): click Connect → status `connected`; type + Send → outgoing event appears; unmount → mock `close()` called.
+- [x] Manual: connect to `ws://localhost:4000/ws/ticker`, see streaming ticks in the log.
 
 **Dependencies:** Task 8, Task 6
 
