@@ -1,6 +1,7 @@
-function connectionTone(
-  state: "idle" | "connecting" | "connected" | "error",
-): { className: string; text: string } {
+function connectionTone(state: "idle" | "connecting" | "connected" | "error"): {
+  className: string;
+  text: string;
+} {
   switch (state) {
     case "idle":
       return {
@@ -37,19 +38,13 @@ function httpTone(code: number): string {
     );
   }
   if (code >= 400 && code < 500) {
-    return (
-      "border-[var(--color-accent)]/50 bg-[var(--color-accent-glow)] text-[var(--color-accent)]"
-    );
+    return "border-[var(--color-accent)]/50 bg-[var(--color-accent-glow)] text-[var(--color-accent)]";
   }
   if (code >= 500 || code === 0) {
-    return (
-      "border-red-600/40 bg-red-600/10 text-red-700 dark:border-red-500/35 dark:bg-red-500/12 dark:text-red-400"
-    );
+    return "border-red-600/40 bg-red-600/10 text-red-700 dark:border-red-500/35 dark:bg-red-500/12 dark:text-red-400";
   }
   /* 1xx, 3xx — neutral */
-  return (
-    "border-[var(--color-border)] bg-[var(--color-surface-raised)] text-[var(--color-text-primary)]"
-  );
+  return "border-[var(--color-border)] bg-[var(--color-surface-raised)] text-[var(--color-text-primary)]";
 }
 
 export interface StatusPillProps {
@@ -58,10 +53,7 @@ export interface StatusPillProps {
   connectionState?: "idle" | "connecting" | "connected" | "error";
 }
 
-export function StatusPill({
-  httpStatus,
-  connectionState = "idle",
-}: StatusPillProps) {
+export function StatusPill({ httpStatus, connectionState = "idle" }: StatusPillProps) {
   if (httpStatus !== undefined) {
     return (
       <span

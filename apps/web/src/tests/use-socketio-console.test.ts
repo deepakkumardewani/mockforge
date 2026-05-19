@@ -40,7 +40,11 @@ describe("useSocketIoConsole", () => {
   it("connects via io(url+namespace), logs lifecycle and listen payloads, emit forwards parsed JSON", () => {
     const { socket } = createListenersSocket("tick");
     const { result } = renderHook(() =>
-      useSocketIoConsole({ url: "http://localhost:4001", namespace: "/ticker", listenEvent: "tick" }),
+      useSocketIoConsole({
+        url: "http://localhost:4001",
+        namespace: "/ticker",
+        listenEvent: "tick",
+      }),
     );
 
     act(() => {
@@ -87,7 +91,11 @@ describe("useSocketIoConsole", () => {
   it("emit with empty payload calls emit(name) only", () => {
     const { socket } = createListenersSocket("tick");
     const { result } = renderHook(() =>
-      useSocketIoConsole({ url: "http://localhost:4001", namespace: "/ticker", listenEvent: "tick" }),
+      useSocketIoConsole({
+        url: "http://localhost:4001",
+        namespace: "/ticker",
+        listenEvent: "tick",
+      }),
     );
 
     act(() => {
@@ -107,7 +115,11 @@ describe("useSocketIoConsole", () => {
   it("emit returns false for invalid JSON and does not call socket.emit", () => {
     const { socket } = createListenersSocket("tick");
     const { result } = renderHook(() =>
-      useSocketIoConsole({ url: "http://localhost:4001", namespace: "/ticker", listenEvent: "tick" }),
+      useSocketIoConsole({
+        url: "http://localhost:4001",
+        namespace: "/ticker",
+        listenEvent: "tick",
+      }),
     );
 
     act(() => {
@@ -140,7 +152,11 @@ describe("useSocketIoConsole", () => {
   it("disconnects the socket on unmount", () => {
     const { socket } = createListenersSocket("tick");
     const { result, unmount } = renderHook(() =>
-      useSocketIoConsole({ url: "http://localhost:4001", namespace: "/ticker", listenEvent: "tick" }),
+      useSocketIoConsole({
+        url: "http://localhost:4001",
+        namespace: "/ticker",
+        listenEvent: "tick",
+      }),
     );
 
     act(() => {

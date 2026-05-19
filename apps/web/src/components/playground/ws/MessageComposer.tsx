@@ -10,7 +10,10 @@ export interface MessageComposerProps {
 export function MessageComposer({ value, onChange, onSend, canSend }: MessageComposerProps) {
   return (
     <div className="flex flex-col gap-2 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-raised)] p-3">
-      <label className="text-xs font-medium text-[var(--color-text-muted)]" htmlFor="ws-message-body">
+      <label
+        className="text-xs font-medium text-[var(--color-text-muted)]"
+        htmlFor="ws-message-body"
+      >
         Message
       </label>
       <textarea

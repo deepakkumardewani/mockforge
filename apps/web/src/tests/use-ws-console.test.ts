@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, vi, afterEach } from "vitest";
 import { act, renderHook } from "@testing-library/react";
 import { useWsConsole, WS_CONSOLE_MAX_EVENTS } from "@/hooks/use-ws-console";
 
@@ -56,7 +56,9 @@ describe("useWsConsole", () => {
     const { MockWebSocket, instances } = mockWebSocket();
     vi.stubGlobal("WebSocket", MockWebSocket as unknown as typeof WebSocket);
 
-    const { result } = renderHook(({ url }) => useWsConsole(url), { initialProps: { url: "ws://test/ws" } });
+    const { result } = renderHook(({ url }) => useWsConsole(url), {
+      initialProps: { url: "ws://test/ws" },
+    });
 
     act(() => {
       result.current.connect();
@@ -107,7 +109,9 @@ describe("useWsConsole", () => {
     });
 
     expect(instances[0]?.send).toHaveBeenCalledWith("ping");
-    expect(result.current.events.some((e) => e.direction === "out" && e.message === "ping")).toBe(true);
+    expect(result.current.events.some((e) => e.direction === "out" && e.message === "ping")).toBe(
+      true,
+    );
   });
 
   it("sets error when url is empty on connect", () => {

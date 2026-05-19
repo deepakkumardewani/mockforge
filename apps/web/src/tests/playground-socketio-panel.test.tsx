@@ -43,7 +43,9 @@ describe("Playground Socket.IO — SocketIoPanel", () => {
 
     await user.click(screen.getByRole("button", { name: "Chat" }));
 
-    expect(screen.getByPlaceholderText("http://localhost:4001")).toHaveValue("http://localhost:4001");
+    expect(screen.getByPlaceholderText("http://localhost:4001")).toHaveValue(
+      "http://localhost:4001",
+    );
     expect(screen.getByPlaceholderText("/ticker")).toHaveValue("/chat");
     expect(screen.getByPlaceholderText("tick")).toHaveValue("message");
   });

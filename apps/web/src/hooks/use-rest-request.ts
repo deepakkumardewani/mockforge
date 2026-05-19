@@ -46,8 +46,7 @@ export async function sendRestFetch(
   const start = performance.now();
   const resolved = resolveRestUrl(input.url);
   const trimmed = input.body?.trim() ?? "";
-  const bodyPayload =
-    input.method === "GET" || trimmed.length === 0 ? undefined : trimmed;
+  const bodyPayload = input.method === "GET" || trimmed.length === 0 ? undefined : trimmed;
 
   const headerMap = { ...input.headers };
   if (bodyPayload) {
@@ -93,6 +92,11 @@ export function useRestRequest(mfId: string | null) {
     send: mutation.mutateAsync,
     isLoading: mutation.isPending,
     response: mutation.data ?? null,
-    error: mutation.error instanceof Error ? mutation.error.message : mutation.error ? String(mutation.error) : null,
+    error:
+      mutation.error instanceof Error
+        ? mutation.error.message
+        : mutation.error
+          ? String(mutation.error)
+          : null,
   };
 }

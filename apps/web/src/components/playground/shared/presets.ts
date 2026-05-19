@@ -59,19 +59,62 @@ export const GRAPHQL_PRESETS: readonly GraphqlPreset[] = [
   {
     id: "gql-users",
     label: "Users (limit 5)",
-    query: "query { users(limit: 5) { id name email } }",
+    query: `query {
+  users(limit: 5) {
+    id
+    firstName
+    lastName
+    email
+  }
+}`,
   },
   {
     id: "gql-product",
     label: "Product by id",
-    query: "query Product($id: ID!) { product(id: $id) { id title price } }",
-    variables: JSON.stringify({ id: "1" }),
+    query: `query Product($id: String!) {
+  product(id: $id) {
+    id
+    title
+    price
+  }
+}`,
+    variables: JSON.stringify({ id: "1" }, null, 2),
+  },
+  {
+    id: "gql-posts",
+    label: "Recent posts",
+    query: `query {
+  posts(limit: 3) {
+    id
+    title
+    body
+  }
+}`,
   },
   {
     id: "gql-create-post",
     label: "Create post",
-    query:
-      'mutation { createPost(input: { title: "Hi" }) { id title } }',
+    query: `mutation CreatePost($title: String!, $body: String) {
+  createPost(title: $title, body: $body) {
+    id
+    title
+    body
+    userId
+  }
+}`,
+    variables: JSON.stringify({ title: "Hi", body: "From GraphQL playground" }, null, 2),
+  },
+  {
+    id: "gql-update-todo",
+    label: "Update todo",
+    query: `mutation UpdateTodo($id: String!, $completed: Boolean, $todo: String) {
+  updateTodo(id: $id, completed: $completed, todo: $todo) {
+    id
+    todo
+    completed
+  }
+}`,
+    variables: JSON.stringify({ id: "1", completed: true, todo: "Done via GraphQL" }, null, 2),
   },
 ];
 

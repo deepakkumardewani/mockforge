@@ -58,7 +58,9 @@ export function NamespaceBar({
           />
         </label>
         <label className="flex min-w-0 flex-col gap-1.5">
-          <span className="text-xs font-medium text-[var(--color-text-muted)]">Listen for event</span>
+          <span className="text-xs font-medium text-[var(--color-text-muted)]">
+            Listen for event
+          </span>
           <input
             type="text"
             value={listenEvent}

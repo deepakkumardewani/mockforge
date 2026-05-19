@@ -42,4 +42,26 @@ describe("Playground REST — RestPanel", () => {
     await waitFor(() => expect(vi.mocked(fetch)).toHaveBeenCalledTimes(1));
     expect(await screen.findByText("200")).toBeInTheDocument();
   });
+
+  it("snaps HTTP method back to the matching preset when the URL is a preset path", async () => {
+    const user = userEvent.setup();
+    vi.mocked(fetch).mockResolvedValue(
+      new Response(JSON.stringify({ id: 1 }), { status: 200, statusText: "OK" }),
+    );
+
+    render(
+      <QueryClientProvider
+        client={new QueryClient({ defaultOptions: { mutations: { retry: false } } })}
+      >
+        <RestPanel />
+      </QueryClientProvider>,
+    );
+
+    await user.click(screen.getByRole("button", { name: "Single user" }));
+    const method = screen.getByRole("combobox", { name: "HTTP method" });
+    expect(method).toHaveValue("GET");
+
+    await user.selectOptions(method, "POST");
+    await waitFor(() => expect(method).toHaveValue("GET"));
+  });
 });

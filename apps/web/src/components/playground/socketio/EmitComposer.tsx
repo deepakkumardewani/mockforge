@@ -24,7 +24,10 @@ export function EmitComposer({
 
   return (
     <div className="flex flex-col gap-2 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-raised)] p-3">
-      <label className="text-xs font-medium text-[var(--color-text-muted)]" htmlFor="sio-emit-event">
+      <label
+        className="text-xs font-medium text-[var(--color-text-muted)]"
+        htmlFor="sio-emit-event"
+      >
         Emit event name
       </label>
       <input
@@ -37,7 +40,10 @@ export function EmitComposer({
         className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2 font-mono text-sm text-[var(--color-text-primary)] outline-none ring-[var(--color-accent)] placeholder:text-[var(--color-text-muted)] focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-60"
         placeholder="e.g. subscribe"
       />
-      <label className="text-xs font-medium text-[var(--color-text-muted)]" htmlFor="sio-emit-payload">
+      <label
+        className="text-xs font-medium text-[var(--color-text-muted)]"
+        htmlFor="sio-emit-payload"
+      >
         Payload (JSON, optional)
       </label>
       <textarea

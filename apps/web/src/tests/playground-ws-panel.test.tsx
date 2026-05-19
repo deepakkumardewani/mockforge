@@ -2,6 +2,7 @@ import { describe, it, expect, vi, afterEach } from "vitest";
 import { render, screen, waitFor, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { WsPanel } from "@/components/playground/ws/WsPanel";
+import { PLAYGROUND_WS_URL } from "@/components/playground/ws/playground-ws-url";
 
 function mockWebSocket() {
   const instances: MockWebSocket[] = [];
@@ -52,16 +53,14 @@ describe("Playground WebSocket — WsPanel", () => {
 
     const { unmount } = render(<WsPanel />);
 
-    await user.click(screen.getByRole("button", { name: "Ticker" }));
-    expect(screen.getByRole("textbox", { name: "WebSocket URL" })).toHaveValue(
-      "ws://localhost:4000/ws/ticker",
-    );
+    expect(screen.getByTitle(PLAYGROUND_WS_URL)).toHaveTextContent(PLAYGROUND_WS_URL);
 
     await user.click(screen.getByRole("button", { name: "Connect" }));
 
     await waitFor(() => expect(instances.length).toBeGreaterThan(0));
     const ws = instances[0];
     expect(ws).toBeDefined();
+    expect(ws?.url).toBe(PLAYGROUND_WS_URL);
 
     act(() => {
       ws?.simulateOpen();
@@ -78,7 +77,7 @@ describe("Playground WebSocket — WsPanel", () => {
     await waitFor(() => {
       const log = screen.getByRole("log");
       expect(log.textContent).toContain("hello-panel");
-      expect(log.textContent).toContain("→");
+      expect(log.textContent).toContain("→ Out");
     });
 
     unmount();

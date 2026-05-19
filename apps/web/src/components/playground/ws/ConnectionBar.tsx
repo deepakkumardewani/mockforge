@@ -4,16 +4,14 @@ import type { WsConnectionStatus } from "@/hooks/use-ws-console";
 import { StatusPill } from "@/components/playground/shared/StatusPill";
 
 export interface ConnectionBarProps {
-  readonly url: string;
-  readonly onUrlChange: (url: string) => void;
+  readonly endpointUrl: string;
   readonly status: WsConnectionStatus;
   readonly onConnect: () => void;
   readonly onDisconnect: () => void;
 }
 
 export function ConnectionBar({
-  url,
-  onUrlChange,
+  endpointUrl,
   status,
   onConnect,
   onDisconnect,
@@ -22,21 +20,21 @@ export function ConnectionBar({
   const isConnecting = status === "connecting";
 
   return (
-    <div className="flex flex-wrap items-center gap-2 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-raised)] p-2">
-      <input
-        value={url}
-        onChange={(e) => onUrlChange(e.target.value)}
-        placeholder="ws://localhost:4000/ws/ticker"
-        aria-label="WebSocket URL"
-        disabled={isConnected || isConnecting}
-        className="min-w-[12rem] flex-1 rounded-lg bg-[var(--color-surface)] px-3 py-2 font-mono text-sm text-[var(--color-text-primary)] outline-none ring-[var(--color-accent)] placeholder:text-[var(--color-text-muted)] focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-60"
-      />
-      <div className="flex flex-wrap items-center gap-2">
+    <div className="flex flex-col gap-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-raised)] p-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="min-w-0 flex-1">
+        <p
+          className="truncate rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2 font-mono text-xs text-[var(--color-text-primary)]"
+          title={endpointUrl}
+        >
+          {endpointUrl}
+        </p>
+      </div>
+      <div className="flex flex-wrap items-center gap-2 sm:shrink-0">
         <StatusPill connectionState={status === "error" ? "error" : status} />
         <button
           type="button"
           onClick={onConnect}
-          disabled={isConnected || isConnecting || url.trim().length === 0}
+          disabled={isConnected || isConnecting}
           className="rounded-lg bg-[var(--color-accent)] px-3 py-2 text-sm font-medium text-[var(--color-on-accent)] outline-none transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
         >
           {isConnecting ? "Connecting…" : "Connect"}
