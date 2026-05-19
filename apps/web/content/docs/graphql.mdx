@@ -1,127 +1,108 @@
 ---
 title: GraphQL
-description: GraphQL API for querying MockForge data with typed schema.
+description: GraphQL API for querying and mutating MockForge data with a typed schema.
 ---
 
-MockForge provides a GraphQL API with the same 14 entities as the REST API. Access it via POST requests with full type safety.
+MockForge provides a GraphQL API with the same 14 entities as the REST API. Send `POST` requests with a JSON body `{ "query": "...", "variables": { ... } }`. Mutations use the same generator + shallow-merge semantics as REST `POST` / `PUT` and do not persist.
 
 ## Endpoint
 
-```
-POST https://api.mockforge.dev/graphql
-```
+| Environment | URL |
+| ----------- | --- |
+| Production | `POST https://api.mockforge.dev/graphql` |
+| Local dev | `POST http://localhost:4000/graphql` |
 
 ## Playground
 
-Explore the schema interactively:
-
-```
-https://api.mockforge.dev/graphql?playground=1
-```
+| Tool | URL |
+| ---- | --- |
+| **GraphiQL** (API server) | Open `http://localhost:4000/graphql` in a browser while the API is running — GraphiQL is enabled on `GET` / `POST` at that path. Production: `https://api.mockforge.dev/graphql`. |
+| **In-app playground** | [`/playground`](/playground) on the web app — GraphQL tab with presets for queries and mutations. |
 
 ## Query structure
 
-All queries support the same pagination parameters as the REST API:
+List fields return arrays directly (not wrapped in a `data` envelope). Pagination args:
 
-- `limit` — number of items to return (default: 10)
-- `skip` — offset for pagination (default: 0)
-- `search` — search query string
-- `sort` — field to sort by
-- `order` — `asc` or `desc`
+- `limit` — number of items (default: 10, max: 100)
+- `skip` — offset (default: 0)
+- `search` — filter string where supported
 
 ## Example queries
 
-### Users query
+### Users
 
 ```graphql
 query GetUsers {
   users(limit: 5, skip: 0) {
-    data {
-      id
-      firstName
-      lastName
-      email
-      phone
-    }
-    pagination {
-      total
-      limit
-      skip
-      hasMore
-    }
+    id
+    firstName
+    lastName
+    email
+    phone
   }
 }
 ```
 
-### Products query
+### Products
 
 ```graphql
 query GetProducts {
-  products(limit: 10, sort: "price", order: "asc") {
-    data {
-      id
-      title
-      description
-      price
-      discountPercentage
-      rating
-      stock
-      category
-    }
-    pagination {
-      total
-      hasMore
-    }
+  products(limit: 10) {
+    id
+    title
+    description
+    price
+    category
   }
 }
 ```
 
-### Stocks query with search
+### Stocks with search
 
 ```graphql
 query SearchStocks {
   stocks(search: "AAPL", limit: 5) {
-    data {
-      id
-      symbol
-      name
-      price
-      change
-      changePercent
-      marketCap
-    }
-    pagination {
-      total
-      hasMore
-    }
+    id
+    symbol
+    name
+    price
+    change
+    changePercent
   }
 }
 ```
 
 ## Query root
 
-The root query object supports:
+- `users`, `products`, `posts`, `comments`, `todos`, `carts`
+- `messages`, `notifications`, `quotes`, `recipes`, `countries`, `companies`, `stocks`, `events`
 
-- `users` — list users
-- `products` — list products
-- `posts` — list posts
-- `comments` — list comments
-- `todos` — list todos
-- `carts` — list carts
-- `messages` — list messages
-- `notifications` — list notifications
-- `quotes` — list quotes
-- `recipes` — list recipes
-- `countries` — list countries
-- `companies` — list companies
-- `stocks` — list stocks
-- `events` — list events
+Singular lookups: `user(id)`, `product(id)`, `post(id)`, … (same pattern for each entity).
 
-All queries also have singular variants for fetching by ID:
+## Mutations
+
+Naming: `create*`, `update*`, `delete*` in camelCase (e.g. `createUser`, `updateProduct`, `deleteTodo`).
+
+- **Create / update** — optional scalar args are shallow-merged onto one generated row (same as REST body merge). Nested objects (e.g. cart `products`, recipe `ingredients`) are not overridable via separate GraphQL input types in this version; only top-level scalar fields on the mutation args apply.
+- **Delete** — returns `DeleteResult { deleted, id }`, matching REST `{ "deleted": true, "id": "..." }`.
+
+Existing demo mutations remain available: `createPost`, `updateTodo`.
+
+### Examples
 
 ```graphql
-query GetSingleProduct {
-  product(id: 1) {
+mutation CreateUser {
+  createUser(firstName: "Ada", email: "ada@example.com") {
+    id
+    firstName
+    email
+  }
+}
+```
+
+```graphql
+mutation UpdateProduct {
+  updateProduct(id: "1", title: "Custom title") {
     id
     title
     price
@@ -129,18 +110,25 @@ query GetSingleProduct {
 }
 ```
 
-## Mutations
+```graphql
+mutation DeleteTodo {
+  deleteTodo(id: "todo-1") {
+    deleted
+    id
+  }
+}
+```
 
-Basic mutations for create, update, delete operations are available but do not persist.
+All 14 standard resources (excluding `/rest/custom`) expose create, update, and delete where REST does.
 
 ## Headers
 
-Include the `X-MF-ID` header for rate limiting:
+Include `X-MF-ID` for identity-scoped rate limiting:
 
 ```bash
 curl -X POST \
   -H "Content-Type: application/json" \
   -H "X-MF-ID: your-custom-id" \
-  -d '{"query":"{ users(limit: 5) { data { id firstName } } }"}' \
-  https://api.mockforge.dev/graphql
+  -d '{"query":"{ users(limit: 5) { id firstName } }"}' \
+  http://localhost:4000/graphql
 ```

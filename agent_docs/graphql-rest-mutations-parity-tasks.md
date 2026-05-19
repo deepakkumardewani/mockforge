@@ -6,6 +6,27 @@ Add typed Pothos mutations for each standard REST fake-data resource so `/graphq
 
 **Specification:** [`graphql-rest-mutations-parity-spec.md`](graphql-rest-mutations-parity-spec.md)
 
+## REST ↔ generator ↔ GraphQL inventory (Task 1)
+
+| Resource | REST router | Generator | GraphQL type |
+| -------- | ----------- | --------- | ------------ |
+| users | `rest/users.ts` | `generateUsers` | `User` |
+| products | `rest/products.ts` | `generateProducts` | `Product` |
+| posts | `rest/posts.ts` | `generatePosts` | `Post` |
+| comments | `rest/comments.ts` | `generateComments` | `Comment` |
+| todos | `rest/todos.ts` | `generateTodos` | `Todo` |
+| carts | `rest/carts.ts` | `generateCarts` | `Cart` |
+| messages | `rest/messages.ts` | `generateMessages` | `Message` |
+| notifications | `rest/notifications.ts` | `generateNotifications` | `Notification` |
+| quotes | `rest/quotes.ts` | `generateQuotes` | `Quote` |
+| recipes | `rest/recipes.ts` | `generateRecipes` | `Recipe` |
+| countries | `rest/countries.ts` | `generateCountries` | `Country` |
+| companies | `rest/companies.ts` | `generateCompanies` | `Company` |
+| stocks | `rest/stocks.ts` | `generateStocks` | `Stock` |
+| events | `rest/events.ts` | `generateEvents` | `Event` |
+
+Excluded: `rest/custom.ts` (dynamic schemas).
+
 ## Architecture Decisions
 
 | Decision | Rationale |
@@ -31,18 +52,18 @@ DeletePayload type (if needed)
 
 ### Phase 1: Foundation
 
-- [ ] **Task 1: Inventory REST ↔ generator ↔ GraphQL type**
+- [x] **Task 1: Inventory REST ↔ generator ↔ GraphQL type**
 
 **Description:** Confirm each REST router (excluding `custom`) maps to `generate*` and an existing Pothos object type; note any generator signature quirks (e.g. `order`).
 
 **Acceptance criteria:**
 
-- [ ] Table or bullet list in PR description (or inline commit message) enumerates 14 resources: users, products, posts, comments, todos, carts, messages, notifications, quotes, recipes, countries, companies, stocks, events.
-- [ ] Each resource names `generate*` module and GraphQL type string (e.g. `User`).
+- [x] Table or bullet list in PR description (or inline commit message) enumerates 14 resources: users, products, posts, comments, todos, carts, messages, notifications, quotes, recipes, countries, companies, stocks, events.
+- [x] Each resource names `generate*` module and GraphQL type string (e.g. `User`).
 
 **Verification:**
 
-- [ ] Manual: spot-check one router file and matching `types/tier1.ts` or `types/tier2.ts` entry.
+- [x] Manual: spot-check one router file and matching `types/tier1.ts` or `types/tier2.ts` entry.
 
 **Dependencies:** None
 
@@ -52,18 +73,18 @@ DeletePayload type (if needed)
 
 ---
 
-- [ ] **Task 2: Delete result type + naming convention**
+- [x] **Task 2: Delete result type + naming convention**
 
 **Description:** Introduce a small Pothos object (e.g. `DeleteResult`) with `deleted: Boolean!` and `id: String!` for delete mutations, unless an existing type is reused. Document mutation prefix pattern `create*` / `update*` / `delete*`.
 
 **Acceptance criteria:**
 
-- [ ] Schema exposes a single reusable delete payload type for all `delete*` mutations.
-- [ ] `createPost` / `updateTodo` behavior unchanged for existing callers.
+- [x] Schema exposes a single reusable delete payload type for all `delete*` mutations.
+- [x] `createPost` / `updateTodo` behavior unchanged for existing callers.
 
 **Verification:**
 
-- [ ] `cd apps/api && bun run build`
+- [x] `cd apps/api && bun run build`
 
 **Dependencies:** Task 1
 
@@ -77,19 +98,19 @@ DeletePayload type (if needed)
 
 ### Phase 2: Core — Tier 1 entities
 
-- [ ] **Task 3: Mutations for tier1-aligned REST resources**
+- [x] **Task 3: Mutations for tier1-aligned REST resources**
 
 **Description:** Implement create/update/delete for `users`, `products`, `comments`, `carts` (and extend posts/todos coverage: add missing verbs alongside existing `createPost` / `updateTodo` **without breaking** prior shapes). Use generator defaults matching REST (`limit: 1`, `skip: 0`, `order: "asc"`).
 
 **Acceptance criteria:**
 
-- [ ] Each listed resource has GraphQL mutations equivalent to REST POST/PUT/DELETE semantics.
-- [ ] Resolvers shallow-merge explicit args or input objects consistent with REST JSON body merge.
+- [x] Each listed resource has GraphQL mutations equivalent to REST POST/PUT/DELETE semantics.
+- [x] Resolvers shallow-merge explicit args or input objects consistent with REST JSON body merge.
 
 **Verification:**
 
-- [ ] `cd apps/api && bun run build`
-- [ ] `cd apps/api && bun run test`
+- [x] `cd apps/api && bun run build`
+- [x] `cd apps/api && bun run test`
 
 **Dependencies:** Task 2
 
@@ -104,18 +125,18 @@ DeletePayload type (if needed)
 
 ### Phase 3: Core — Tier 2 entities
 
-- [ ] **Task 4: Mutations for tier2 REST resources**
+- [x] **Task 4: Mutations for tier2 REST resources**
 
 **Description:** Implement create/update/delete for `messages`, `notifications`, `quotes`, `recipes`, `countries`, `companies`, `stocks`, `events` mirroring REST.
 
 **Acceptance criteria:**
 
-- [ ] All eight resources expose the three verbs where REST does.
-- [ ] Nested shapes (e.g. recipe ingredients) follow shallow-merge parity with REST POST/PUT only — document inline if GraphQL requires scalar/list inputs.
+- [x] All eight resources expose the three verbs where REST does.
+- [x] Nested shapes (e.g. recipe ingredients) follow shallow-merge parity with REST POST/PUT only — document inline if GraphQL requires scalar/list inputs.
 
 **Verification:**
 
-- [ ] `cd apps/api && bun run build`
+- [x] `cd apps/api && bun run build`
 
 **Dependencies:** Task 3
 
@@ -130,18 +151,18 @@ DeletePayload type (if needed)
 
 ### Phase 4: Verification & optional deduplication
 
-- [ ] **Task 5: Integration tests**
+- [x] **Task 5: Integration tests**
 
 **Description:** Extend [`apps/api/src/routes/graphql/graphql.integration.test.ts`](apps/api/src/routes/graphql/graphql.integration.test.ts) with mutation requests covering create/update/delete patterns across at least two entities (one tier1, one tier2) plus assertion on delete payload.
 
 **Acceptance criteria:**
 
-- [ ] Integration tests fail if mutations disappear from schema or delete payload loses `id`.
-- [ ] Merge override verified (e.g. string field differs from generator default when passed).
+- [x] Integration tests fail if mutations disappear from schema or delete payload loses `id`.
+- [x] Merge override verified (e.g. string field differs from generator default when passed).
 
 **Verification:**
 
-- [ ] `cd apps/api && bun run test:integration`
+- [x] `cd apps/api && bun run test:integration`
 
 **Dependencies:** Task 4
 
@@ -177,18 +198,20 @@ DeletePayload type (if needed)
 
 **Estimated scope:** Medium — **defer** unless copy-paste burden is confirmed.
 
+**Status:** Partial — `mock-merge.ts` + `pick-defined.ts` added for GraphQL only; REST routers not refactored (deferred per spec).
+
 ---
 
 ## Checkpoint: After Tasks 2–4
 
-- [ ] `cd apps/api && bun run build` succeeds
-- [ ] GraphiQL introspection shows new mutation fields
-- [ ] No accidental removal of `createPost` / `updateTodo`
+- [x] `cd apps/api && bun run build` succeeds
+- [x] GraphiQL introspection shows new mutation fields
+- [x] No accidental removal of `createPost` / `updateTodo`
 
 ## Checkpoint: After Task 5
 
-- [ ] `cd apps/api && bun run test:integration` passes
-- [ ] PR links [`graphql-rest-mutations-parity-spec.md`](graphql-rest-mutations-parity-spec.md) success criteria
+- [x] `cd apps/api && bun run test:integration` passes
+- [x] PR links [`graphql-rest-mutations-parity-spec.md`](graphql-rest-mutations-parity-spec.md) success criteria
 
 ## Risks and Mitigations
 

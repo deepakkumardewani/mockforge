@@ -5,12 +5,15 @@ import builder from "./builder";
 // Import type definitions to register them with builder
 import "./types/tier1";
 import "./types/tier2";
+import "./types/delete-result";
 
 // Import queries to register them with builder
 import "./queries/tier1";
 import "./queries/tier2";
 
 import "./mutations/tier1";
+import "./mutations/tier1-crud";
+import "./mutations/tier2-crud";
 
 // Build the schema
 const schema = builder.toSchema();

@@ -38,6 +38,7 @@ const builder = new SchemaBuilder<{
     Company: Company;
     Stock: Stock;
     Event: Event;
+    DeleteResult: { deleted: boolean; id: string };
   };
 }>({});
 

@@ -5,12 +5,15 @@ import builder from "./builder";
 // Import type definitions to register them with builder
 import "./types/tier1";
 import "./types/tier2";
+import "./types/delete-result";
 
 // Import queries to register them with builder
 import "./queries/tier1";
 import "./queries/tier2";
 
 import "./mutations/tier1";
+import "./mutations/tier1-crud";
+import "./mutations/tier2-crud";
 
 // Build the schema
 const schema = builder.toSchema();
@@ -584,6 +587,101 @@ describe("GraphQL Integration Tests", () => {
       expect(data.data?.updateTodo?.id).toBe("todo-1");
       expect(data.data?.updateTodo?.todo).toBe("Ship feature");
       expect(data.data?.updateTodo?.completed).toBe(true);
+    });
+
+    it("createUser merges caller firstName over generated default", async () => {
+      const query = `
+        mutation {
+          createUser(firstName: "ParityFirst") {
+            id
+            firstName
+            lastName
+          }
+        }
+      `;
+      const response = await yoga.fetch(
+        new Request("http://localhost/graphql", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ query }),
+        }),
+      );
+      const data = (await response.json()) as {
+        data?: { createUser?: { firstName: string } };
+        errors?: unknown;
+      };
+      expect(response.status).toBe(200);
+      expect(data.errors).toBeUndefined();
+      expect(data.data?.createUser?.firstName).toBe("ParityFirst");
+    });
+
+    it("updateProduct applies title override", async () => {
+      const query = `
+        mutation {
+          updateProduct(id: "prod-99", title: "Overridden title") {
+            id
+            title
+          }
+        }
+      `;
+      const response = await yoga.fetch(
+        new Request("http://localhost/graphql", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ query }),
+        }),
+      );
+      const data = (await response.json()) as {
+        data?: { updateProduct?: { id: string; title: string } };
+        errors?: unknown;
+      };
+      expect(response.status).toBe(200);
+      expect(data.errors).toBeUndefined();
+      expect(data.data?.updateProduct?.id).toBe("prod-99");
+      expect(data.data?.updateProduct?.title).toBe("Overridden title");
+    });
+
+    it("deleteStock returns DeleteResult with id", async () => {
+      const query = `
+        mutation {
+          deleteStock(id: "stock-42") {
+            deleted
+            id
+          }
+        }
+      `;
+      const response = await yoga.fetch(
+        new Request("http://localhost/graphql", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ query }),
+        }),
+      );
+      const data = (await response.json()) as {
+        data?: { deleteStock?: { deleted: boolean; id: string } };
+        errors?: unknown;
+      };
+      expect(response.status).toBe(200);
+      expect(data.errors).toBeUndefined();
+      expect(data.data?.deleteStock).toEqual({ deleted: true, id: "stock-42" });
+    });
+
+    it("schema exposes deleteUser mutation field", async () => {
+      const query = `{ __type(name: "Mutation") { fields { name } } }`;
+      const response = await yoga.fetch(
+        new Request("http://localhost/graphql", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ query }),
+        }),
+      );
+      const data = (await response.json()) as {
+        data?: { __type?: { fields?: { name: string }[] } };
+        errors?: unknown;
+      };
+      const names = data.data?.__type?.fields?.map((f) => f.name) ?? [];
+      expect(names).toContain("deleteUser");
+      expect(names).toContain("createEvent");
     });
   });
 

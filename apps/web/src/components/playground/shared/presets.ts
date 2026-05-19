@@ -116,6 +116,27 @@ export const GRAPHQL_PRESETS: readonly GraphqlPreset[] = [
 }`,
     variables: JSON.stringify({ id: "1", completed: true, todo: "Done via GraphQL" }, null, 2),
   },
+  {
+    id: "gql-create-user",
+    label: "Create user",
+    query: `mutation {
+  createUser(firstName: "Playground", email: "playground@mockforge.dev") {
+    id
+    firstName
+    email
+  }
+}`,
+  },
+  {
+    id: "gql-delete-stock",
+    label: "Delete stock",
+    query: `mutation {
+  deleteStock(id: "demo-stock-1") {
+    deleted
+    id
+  }
+}`,
+  },
 ];
 
 export const WS_PRESETS: readonly WsPreset[] = [
