@@ -46,13 +46,23 @@ describe("Playground GraphQL — GraphqlPanel", () => {
       </QueryClientProvider>,
     );
 
+    expect(screen.getByRole("textbox", { name: "GraphQL endpoint URL" })).toHaveValue(
+      "http://localhost:4000/graphql",
+    );
+
     await user.click(screen.getByRole("button", { name: "Product by id" }));
 
     expect(screen.getByRole("textbox", { name: "GraphQL query" })).toHaveValue(
-      "query Product($id: ID!) { product(id: $id) { id title price } }",
+      `query Product($id: String!) {
+  product(id: $id) {
+    id
+    title
+    price
+  }
+}`,
     );
     expect(screen.getByRole("textbox", { name: "GraphQL variables JSON" })).toHaveValue(
-      JSON.stringify({ id: "1" }),
+      JSON.stringify({ id: "1" }, null, 2),
     );
     expect(vi.mocked(fetch)).not.toHaveBeenCalled();
 
@@ -60,9 +70,9 @@ describe("Playground GraphQL — GraphqlPanel", () => {
 
     await waitFor(() => expect(vi.mocked(fetch)).toHaveBeenCalledTimes(1));
     const [url, init] = vi.mocked(fetch).mock.calls[0]!;
-    expect(String(url)).toMatch(/\/graphql$/u);
+    expect(url as string).toMatch(/\/graphql$/u);
     expect(init?.method).toBe("POST");
-    const body = JSON.parse(String(init?.body));
+    const body = JSON.parse(init?.body as string);
     expect(body.query).toContain("product");
     expect(body.variables).toEqual({ id: "1" });
     expect(await screen.findByText("200")).toBeInTheDocument();
@@ -87,7 +97,7 @@ describe("Playground GraphQL — GraphqlPanel", () => {
 
     await waitFor(() => expect(vi.mocked(fetch)).toHaveBeenCalled());
     const [, init] = vi.mocked(fetch).mock.calls[0]!;
-    const body = JSON.parse(String(init?.body));
+    const body = JSON.parse(init?.body as string);
     expect(body).toHaveProperty("query");
     expect(body).not.toHaveProperty("variables");
   });

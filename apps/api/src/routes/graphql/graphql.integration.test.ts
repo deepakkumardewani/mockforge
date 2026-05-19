@@ -10,6 +10,8 @@ import "./types/tier2";
 import "./queries/tier1";
 import "./queries/tier2";
 
+import "./mutations/tier1";
+
 // Build the schema
 const schema = builder.toSchema();
 
@@ -527,6 +529,61 @@ describe("GraphQL Integration Tests", () => {
         expect(data.data.users[0].address).toHaveProperty("city");
         expect(data.data.users[0].address).toHaveProperty("country");
       }
+    });
+  });
+
+  describe("Mutations", () => {
+    it("createPost returns a Post with caller title", async () => {
+      const query = `
+        mutation {
+          createPost(title: "Integration title", body: "Hello") {
+            id
+            title
+            body
+          }
+        }
+      `;
+      const request = new Request("http://localhost/graphql", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query }),
+      });
+      const response = await yoga.fetch(request);
+      const data = (await response.json()) as {
+        data?: { createPost?: { title: string; body: string } };
+        errors?: unknown;
+      };
+      expect(response.status).toBe(200);
+      expect(data.errors).toBeUndefined();
+      expect(data.data?.createPost?.title).toBe("Integration title");
+      expect(data.data?.createPost?.body).toBe("Hello");
+    });
+
+    it("updateTodo returns merged Todo", async () => {
+      const query = `
+        mutation {
+          updateTodo(id: "todo-1", completed: true, todo: "Ship feature") {
+            id
+            todo
+            completed
+          }
+        }
+      `;
+      const request = new Request("http://localhost/graphql", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query }),
+      });
+      const response = await yoga.fetch(request);
+      const data = (await response.json()) as {
+        data?: { updateTodo?: { id: string; todo: string; completed: boolean } };
+        errors?: unknown;
+      };
+      expect(response.status).toBe(200);
+      expect(data.errors).toBeUndefined();
+      expect(data.data?.updateTodo?.id).toBe("todo-1");
+      expect(data.data?.updateTodo?.todo).toBe("Ship feature");
+      expect(data.data?.updateTodo?.completed).toBe(true);
     });
   });
 

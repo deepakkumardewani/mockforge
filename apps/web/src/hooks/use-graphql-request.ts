@@ -4,6 +4,8 @@ import { useMutation } from "@tanstack/react-query";
 import { API_BASE } from "@/lib/api-client";
 import type { RestResponseData } from "@/hooks/use-rest-request";
 
+export const PLAYGROUND_GRAPHQL_URL = `${API_BASE}/graphql`;
+
 export interface GraphqlRequestInput {
   query: string;
   variablesJson: string;
@@ -28,7 +30,7 @@ export async function sendGraphqlFetch(
     body.variables = JSON.parse(varsTrimmed) as unknown;
   }
 
-  const res = await fetch(`${API_BASE}/graphql`, {
+  const res = await fetch(PLAYGROUND_GRAPHQL_URL, {
     method: "POST",
     headers: buildHeaders(mfId),
     body: JSON.stringify(body),

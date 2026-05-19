@@ -10,6 +10,8 @@ import "./types/tier2";
 import "./queries/tier1";
 import "./queries/tier2";
 
+import "./mutations/tier1";
+
 // Build the schema
 const schema = builder.toSchema();
 
