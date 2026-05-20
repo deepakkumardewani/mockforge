@@ -10,4 +10,3 @@
 | React best practices                      | `~/.claude/skills/vercel-react-best-practices/SKILL.md`      |
 | Next best practices                       | `~/.claude/skills/next-best-practices/SKILL.md`       |
 ---
-

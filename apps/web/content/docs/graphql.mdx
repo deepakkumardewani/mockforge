@@ -5,19 +5,11 @@ description: GraphQL API for querying and mutating MockForge data with a typed s
 
 MockForge provides a GraphQL API with the same 14 entities as the REST API. Send `POST` requests with a JSON body `{ "query": "...", "variables": { ... } }`. Mutations use the same generator + shallow-merge semantics as REST `POST` / `PUT` and do not persist.
 
-## Endpoint
-
-| Environment | URL |
-| ----------- | --- |
-| Production | `POST https://api.mockforge.dev/graphql` |
-| Local dev | `POST http://localhost:4000/graphql` |
-
 ## Playground
 
-| Tool | URL |
-| ---- | --- |
-| **GraphiQL** (API server) | Open `http://localhost:4000/graphql` in a browser while the API is running — GraphiQL is enabled on `GET` / `POST` at that path. Production: `https://api.mockforge.dev/graphql`. |
-| **In-app playground** | [`/playground`](/playground) on the web app — GraphQL tab with presets for queries and mutations. |
+Try queries and mutations in the browser with no setup:
+
+**[/playground](/playground)** — open the GraphQL tab for an editor, variables panel, and live responses.
 
 ## Query structure
 
@@ -119,16 +111,8 @@ mutation DeleteTodo {
 }
 ```
 
-All 14 standard resources (excluding `/rest/custom`) expose create, update, and delete where REST does.
+All 14 standard resources (excluding custom REST schemas) expose create, update, and delete where REST does.
 
 ## Headers
 
-Include `X-MF-ID` for identity-scoped rate limiting:
-
-```bash
-curl -X POST \
-  -H "Content-Type: application/json" \
-  -H "X-MF-ID: your-custom-id" \
-  -d '{"query":"{ users(limit: 5) { id firstName } }"}' \
-  http://localhost:4000/graphql
-```
+Include the `X-MF-ID` header for identity-scoped rate limiting when calling the API from your own client. The playground attaches it automatically.
