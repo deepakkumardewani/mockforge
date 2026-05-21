@@ -8,7 +8,8 @@ import type { HeaderRow } from "@/components/playground/rest/HeadersEditor";
 import { createEmptyHeaderRow, HeadersEditor } from "@/components/playground/rest/HeadersEditor";
 import { BodyEditor } from "@/components/playground/rest/BodyEditor";
 import { MethodUrlBar } from "@/components/playground/rest/MethodUrlBar";
-import { ResponseViewer } from "@/components/playground/rest/ResponseViewer";
+import { SearchHints } from "@/components/playground/rest/SearchHints";
+import { ResponseViewer } from "@/components/playground/shared/ResponseViewer";
 import { useMfId } from "@/hooks/use-mf-id";
 import type { RestRequestInput } from "@/hooks/use-rest-request";
 import { useRestRequest } from "@/hooks/use-rest-request";
@@ -34,7 +35,8 @@ export function RestPanel() {
 
   const onPresetSelect = useCallback((preset: (typeof REST_PRESETS)[number]) => {
     setMethod(preset.method);
-    setUrl(preset.url);
+    // Ensure URL always stored with /api/ prefix for consistency with autocomplete
+    setUrl(preset.url.startsWith("/api/") ? preset.url : `/api/${preset.url.replace(/^\//, "")}`);
     setBody(preset.body ?? "");
     setBodyValid(true);
     setHeaderRows([createEmptyHeaderRow()]);
@@ -63,16 +65,30 @@ export function RestPanel() {
     }
   }
 
-  return (
-    <div className="flex min-w-0 flex-col gap-6">
-      <PresetPicker
-        presets={REST_PRESETS}
-        onSelect={onPresetSelect}
-        ariaLabel="REST example presets"
-      />
+  const isSearchUrl = url.includes("/search");
 
-      <div className="flex flex-col gap-6 lg:grid lg:grid-cols-2 lg:items-start lg:gap-10">
-        <div className="flex min-w-0 flex-col gap-4">
+  const appendParam = useCallback((key: string, value: string) => {
+    setUrl((prev) => {
+      const [base, queryStr = ""] = prev.split("?");
+      const params = new URLSearchParams(queryStr);
+      if (params.has(key)) return prev;
+      params.set(key, value);
+      return `${base}?${params.toString()}`;
+    });
+  }, []);
+
+  return (
+    <div className="flex h-full min-h-0 flex-col gap-4">
+      <div className="shrink-0">
+        <PresetPicker
+          presets={REST_PRESETS}
+          onSelect={onPresetSelect}
+          ariaLabel="REST example presets"
+        />
+      </div>
+
+      <div className="grid min-h-0 flex-1 grid-cols-1 gap-4 overflow-y-auto lg:grid-cols-2 lg:grid-rows-1 lg:items-stretch lg:gap-8 lg:overflow-hidden">
+        <div className="flex min-h-0 min-w-0 flex-col gap-3 lg:overflow-y-auto lg:pr-1">
           <MethodUrlBar
             method={method}
             url={url}
@@ -82,11 +98,12 @@ export function RestPanel() {
             isLoading={isLoading}
             canSend={bodyValid && url.trim().length > 0}
           />
+          {isSearchUrl && <SearchHints url={url} onAppendParam={appendParam} />}
           <HeadersEditor rows={headerRows} onChange={setHeaderRows} />
           <BodyEditor value={body} onChange={setBody} onValidityChange={setBodyValid} />
         </div>
 
-        <div className="min-w-0 lg:sticky lg:top-6 lg:self-start">
+        <div className="min-h-0 min-w-0">
           <ResponseViewer response={response} transportError={error} />
         </div>
       </div>

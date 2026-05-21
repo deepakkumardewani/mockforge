@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { render, screen, waitFor, act, renderHook, fireEvent } from "@testing-library/react";
+import { render, screen, waitFor, act, renderHook, fireEvent, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { GraphqlPanel } from "@/components/playground/graphql/GraphqlPanel";
@@ -119,6 +119,52 @@ describe("Playground GraphQL — GraphqlPanel", () => {
     const send = screen.getByRole("button", { name: "Send" });
     expect(send).toBeDisabled();
     expect(vi.mocked(fetch)).not.toHaveBeenCalled();
+  });
+
+  it("toggles schema panel open and closed from the request bar", async () => {
+    const user = userEvent.setup();
+    render(
+      <QueryClientProvider
+        client={new QueryClient({ defaultOptions: { mutations: { retry: false } } })}
+      >
+        <GraphqlPanel />
+      </QueryClientProvider>,
+    );
+
+    expect(screen.queryByLabelText("GraphQL schema")).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "Toggle schema panel" }));
+    expect(screen.getByLabelText("GraphQL schema")).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "Toggle schema panel" }));
+    expect(screen.queryByLabelText("GraphQL schema")).not.toBeInTheDocument();
+  });
+
+  it("appends a schema-built operation into the query editor", async () => {
+    const user = userEvent.setup();
+    render(
+      <QueryClientProvider
+        client={new QueryClient({ defaultOptions: { mutations: { retry: false } } })}
+      >
+        <GraphqlPanel />
+      </QueryClientProvider>,
+    );
+
+    fireEvent.change(screen.getByRole("textbox", { name: "GraphQL query" }), {
+      target: { value: "query { __typename }" },
+    });
+    await user.click(screen.getByRole("button", { name: "Toggle schema panel" }));
+    await user.click(screen.getByRole("button", { name: /^Query/u }));
+    await user.click(screen.getByRole("button", { name: /^users/u }));
+
+    const schemaPanel = screen.getByLabelText("GraphQL schema");
+    await user.click(within(schemaPanel).getByRole("checkbox", { name: "id" }));
+    await user.click(screen.getByRole("button", { name: "Insert operation" }));
+
+    const queryEditor = screen.getByRole("textbox", { name: "GraphQL query" }) as HTMLTextAreaElement;
+    expect(queryEditor.value).toContain("query { __typename }");
+    expect(queryEditor.value).toContain("users {");
+    expect(queryEditor.value).toContain("id");
   });
 
   it("renders GraphQL errors payload in the response body", async () => {

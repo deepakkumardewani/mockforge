@@ -13,14 +13,16 @@ export interface ResponseViewerProps {
 export function ResponseViewer({ response, transportError }: ResponseViewerProps) {
   return (
     <section
-      className="flex min-h-[12rem] min-w-0 flex-col gap-4 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-raised)] p-4"
+      className="flex h-full min-h-[12rem] min-w-0 flex-col gap-3 overflow-hidden rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-raised)] p-4"
       aria-label="HTTP response"
     >
       {!response ? (
         <p className="text-sm text-[var(--color-text-muted)]">Send a request to see the response</p>
       ) : (
         <>
-          <div className="flex flex-wrap items-center gap-3">
+          <h2 className="shrink-0 text-base font-bold text-[var(--color-text-primary)]">Response</h2>
+
+          <div className="flex shrink-0 flex-wrap items-center gap-3">
             <StatusPill httpStatus={response.status} />
             <span className="font-mono text-xs text-[var(--color-text-muted)]">
               {response.timeMs}&nbsp;ms
@@ -28,20 +30,22 @@ export function ResponseViewer({ response, transportError }: ResponseViewerProps
             <span className="text-xs text-[var(--color-text-muted)]">{response.statusText}</span>
           </div>
 
-          <div>
-            <h3 className="mb-2 text-sm font-semibold text-[var(--color-text-primary)]">Body</h3>
+          <div className="flex min-h-0 flex-1 flex-col">
+            <h3 className="mb-2 shrink-0 text-sm font-semibold text-[var(--color-text-primary)]">Body</h3>
             {response.body !== null ? (
-              <JsonView value={response.body} maxHeightClassName="max-h-[28rem]" />
+              <div className="min-h-0 flex-1 overflow-y-auto rounded-lg">
+                <JsonView value={response.body} maxHeightClassName="" />
+              </div>
             ) : (
               <p className="text-sm text-[var(--color-text-muted)]">Empty body</p>
             )}
           </div>
 
-          <details className="group">
+          <details className="group shrink-0">
             <summary className="cursor-pointer text-sm font-semibold text-[var(--color-text-primary)] hover:text-[var(--color-accent)]">
               Response headers
             </summary>
-            <JsonView value={response.headers} maxHeightClassName="max-h-48 mt-2" />
+            <JsonView value={response.headers} maxHeightClassName="max-h-40 mt-2" />
           </details>
         </>
       )}

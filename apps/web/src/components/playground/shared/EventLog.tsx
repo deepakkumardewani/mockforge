@@ -42,8 +42,8 @@ export function EventLog({ events, emptyHint = "Connect to see messages." }: Eve
   }
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-raised)]">
-      <div className="border-b border-[var(--color-border)] px-3 py-2">
+    <div className="flex h-full min-h-[12rem] min-w-0 flex-col overflow-hidden rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-raised)]">
+      <div className="shrink-0 border-b border-[var(--color-border)] px-3 py-2">
         <p className="text-xs font-medium text-[var(--color-text-muted)]">Event log</p>
       </div>
       <div
@@ -52,7 +52,7 @@ export function EventLog({ events, emptyHint = "Connect to see messages." }: Eve
         role="log"
         aria-live="polite"
         aria-relevant="additions"
-        className="max-h-[min(24rem,50vh)] min-h-[12rem] space-y-3 overflow-y-auto px-3 py-3"
+        className="min-h-0 flex-1 space-y-3 overflow-y-auto px-3 py-3"
       >
         {events.length === 0 ? (
           <p className="text-sm text-[var(--color-text-muted)]">{emptyHint}</p>

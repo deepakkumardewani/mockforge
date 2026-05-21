@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, waitFor, act, renderHook } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ResponseViewer } from "@/components/playground/rest/ResponseViewer";
+import { ResponseViewer } from "@/components/playground/shared/ResponseViewer";
 import { useRestRequest } from "@/hooks/use-rest-request";
 
 function makeQueryWrapper() {

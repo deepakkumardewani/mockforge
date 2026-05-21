@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { render, waitFor } from "@testing-library/react";
-import { EventLog } from "@/components/playground/ws/EventLog";
+import { EventLog } from "@/components/playground/shared/EventLog";
 
 const ev = (id: string, message: string, at: number) => ({
   id,

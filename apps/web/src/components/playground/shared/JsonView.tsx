@@ -14,7 +14,7 @@ export function JsonView({ value, maxHeightClassName = "max-h-64" }: JsonViewPro
 
   return (
     <pre
-      className={`max-w-full overflow-auto break-words rounded-lg bg-[var(--color-code-bg)] p-4 font-mono text-xs leading-relaxed text-[var(--color-code-text)] whitespace-pre-wrap ${maxHeightClassName}`}
+      className={`max-w-full overflow-auto break-all rounded-lg bg-[var(--color-code-bg)] p-4 font-mono text-xs leading-relaxed text-[var(--color-code-text)] whitespace-pre-wrap ${maxHeightClassName}`}
     >
       {text}
     </pre>

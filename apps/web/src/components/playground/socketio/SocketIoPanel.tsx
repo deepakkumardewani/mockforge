@@ -3,7 +3,7 @@
 import { useCallback, useMemo, useState } from "react";
 import { PresetPicker } from "@/components/playground/shared/PresetPicker";
 import { SOCKETIO_PRESETS } from "@/components/playground/shared/presets";
-import { EventLog } from "@/components/playground/ws/EventLog";
+import { EventLog } from "@/components/playground/shared/EventLog";
 import { useSocketIoConsole } from "@/hooks/use-socketio-console";
 import { getSocketIoBaseUrl } from "@/lib/playground-env";
 import { EmitComposer } from "@/components/playground/socketio/EmitComposer";
@@ -46,15 +46,17 @@ export function SocketIoPanel() {
   }
 
   return (
-    <div className="flex min-h-0 flex-col gap-8">
-      <PresetPicker
-        presets={SOCKETIO_PRESETS}
-        onSelect={onPresetSelect}
-        ariaLabel="Socket.IO example presets"
-      />
+    <div className="flex h-full min-h-0 flex-col gap-4">
+      <div className="shrink-0">
+        <PresetPicker
+          presets={SOCKETIO_PRESETS}
+          onSelect={onPresetSelect}
+          ariaLabel="Socket.IO example presets"
+        />
+      </div>
 
-      <div className="flex min-h-0 flex-col gap-8 lg:grid lg:grid-cols-2 lg:items-stretch lg:gap-10">
-        <div className="flex min-h-0 min-w-0 flex-col gap-5">
+      <div className="grid min-h-0 flex-1 grid-cols-1 gap-4 overflow-y-auto lg:grid-cols-2 lg:grid-rows-1 lg:items-stretch lg:gap-8 lg:overflow-hidden">
+        <div className="flex min-h-0 min-w-0 flex-col gap-3 lg:overflow-y-auto lg:pr-1">
           <NamespaceBar
             baseUrl={baseUrl}
             namespace={namespace}
@@ -77,7 +79,7 @@ export function SocketIoPanel() {
           />
         </div>
 
-        <div className="flex min-h-0 min-w-0 flex-col lg:sticky lg:top-6 lg:self-stretch">
+        <div className="min-h-0 min-w-0">
           <EventLog events={events} emptyHint="Connect and subscribe to see events in this log." />
         </div>
       </div>
