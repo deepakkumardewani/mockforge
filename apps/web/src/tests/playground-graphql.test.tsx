@@ -1,6 +1,14 @@
 import type { ReactNode } from "react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { render, screen, waitFor, act, renderHook, fireEvent, within } from "@testing-library/react";
+import {
+  render,
+  screen,
+  waitFor,
+  act,
+  renderHook,
+  fireEvent,
+  within,
+} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { GraphqlPanel } from "@/components/playground/graphql/GraphqlPanel";
@@ -140,7 +148,7 @@ describe("Playground GraphQL — GraphqlPanel", () => {
     expect(screen.queryByLabelText("GraphQL schema")).not.toBeInTheDocument();
   });
 
-  it("appends a schema-built operation into the query editor", async () => {
+  it("replaces the query when applying schema selection over unrelated text", async () => {
     const user = userEvent.setup();
     render(
       <QueryClientProvider
@@ -156,15 +164,45 @@ describe("Playground GraphQL — GraphqlPanel", () => {
     await user.click(screen.getByRole("button", { name: "Toggle schema panel" }));
     await user.click(screen.getByRole("button", { name: /^Query/u }));
     await user.click(screen.getByRole("button", { name: /^users/u }));
+    await user.click(screen.getByRole("button", { name: "Apply to query" }));
+
+    const queryEditor = screen.getByRole("textbox", {
+      name: "GraphQL query",
+    }) as HTMLTextAreaElement;
+    expect(queryEditor.value).not.toContain("__typename");
+    expect(queryEditor.value).toContain("users {");
+    expect(queryEditor.value).toContain("firstName");
+    expect(queryEditor.value.match(/^query \{/gm)?.length).toBe(1);
+  });
+
+  it("updates field selection in place when re-applying the same root field", async () => {
+    const user = userEvent.setup();
+    render(
+      <QueryClientProvider
+        client={new QueryClient({ defaultOptions: { mutations: { retry: false } } })}
+      >
+        <GraphqlPanel />
+      </QueryClientProvider>,
+    );
+
+    await user.click(screen.getByRole("button", { name: "Toggle schema panel" }));
+    await user.click(screen.getByRole("button", { name: /^Query/u }));
+    await user.click(screen.getByRole("button", { name: /^users/u }));
+    await user.click(screen.getByRole("button", { name: "Apply to query" }));
 
     const schemaPanel = screen.getByLabelText("GraphQL schema");
-    await user.click(within(schemaPanel).getByRole("checkbox", { name: "id" }));
-    await user.click(screen.getByRole("button", { name: "Insert operation" }));
+    await user.click(within(schemaPanel).getByRole("checkbox", { name: "firstName" }));
+    await user.click(within(schemaPanel).getByRole("checkbox", { name: "lastName" }));
+    await user.click(within(schemaPanel).getByRole("checkbox", { name: "email" }));
+    await user.click(screen.getByRole("button", { name: "Apply to query" }));
 
-    const queryEditor = screen.getByRole("textbox", { name: "GraphQL query" }) as HTMLTextAreaElement;
-    expect(queryEditor.value).toContain("query { __typename }");
+    const queryEditor = screen.getByRole("textbox", {
+      name: "GraphQL query",
+    }) as HTMLTextAreaElement;
     expect(queryEditor.value).toContain("users {");
     expect(queryEditor.value).toContain("id");
+    expect(queryEditor.value).not.toContain("firstName");
+    expect(queryEditor.value.match(/^query \{/gm)?.length).toBe(1);
   });
 
   it("renders GraphQL errors payload in the response body", async () => {

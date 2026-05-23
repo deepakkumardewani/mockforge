@@ -24,7 +24,6 @@
     "@radix-ui/react-tabs": "^1.1.13",
     "@radix-ui/react-tooltip": "^1.1.6",
     "@tanstack/react-query": "^5.62.8",
-    "framer-motion": "^11.15.0",
     "fumadocs-core": "14",
     "fumadocs-mdx": "11.2.1",
     "fumadocs-ui": "14",

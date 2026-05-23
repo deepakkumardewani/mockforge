@@ -13,7 +13,7 @@ const TRIGGER_CLASS =
 
 export function PlaygroundTabs() {
   return (
-    <Tabs.Root defaultValue="rest" className="flex min-w-0 flex-1 flex-col overflow-hidden">
+    <Tabs.Root defaultValue="rest" className="flex w-full min-w-0 flex-1 flex-col overflow-hidden">
       <Tabs.List
         aria-label="Protocol"
         className="flex w-full min-w-0 shrink-0 flex-wrap gap-1 border-b border-[var(--color-border)] pb-px"
@@ -32,16 +32,32 @@ export function PlaygroundTabs() {
         </Tabs.Trigger>
       </Tabs.List>
 
-      <Tabs.Content value="rest" tabIndex={0} className="mt-4 flex min-h-0 flex-1 flex-col overflow-hidden pb-4 outline-none">
+      <Tabs.Content
+        value="rest"
+        tabIndex={0}
+        className="mt-4 flex min-h-0 flex-1 flex-col overflow-hidden pb-4 outline-none"
+      >
         <RestPanel />
       </Tabs.Content>
-      <Tabs.Content value="graphql" tabIndex={0} className="mt-4 flex min-h-0 flex-1 flex-col overflow-hidden pb-4 outline-none">
+      <Tabs.Content
+        value="graphql"
+        tabIndex={0}
+        className="mt-4 flex min-h-0 flex-1 flex-col overflow-hidden pb-4 outline-none"
+      >
         <GraphqlPanel />
       </Tabs.Content>
-      <Tabs.Content value="websocket" tabIndex={0} className="mt-4 flex min-h-0 flex-1 flex-col overflow-hidden pb-4 outline-none">
+      <Tabs.Content
+        value="websocket"
+        tabIndex={0}
+        className="mt-4 flex min-h-0 flex-1 flex-col overflow-hidden pb-4 outline-none"
+      >
         <WsPanel />
       </Tabs.Content>
-      <Tabs.Content value="socketio" tabIndex={0} className="mt-4 flex min-h-0 flex-1 flex-col overflow-hidden pb-4 outline-none">
+      <Tabs.Content
+        value="socketio"
+        tabIndex={0}
+        className="mt-4 flex min-h-0 flex-1 flex-col overflow-hidden pb-4 outline-none"
+      >
         <SocketIoPanel />
       </Tabs.Content>
     </Tabs.Root>

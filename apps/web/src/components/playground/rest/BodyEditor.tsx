@@ -26,12 +26,36 @@ export function BodyEditor({ value, onChange, onValidityChange }: BodyEditorProp
     onValidityChange(valid);
   }, [valid, value, onValidityChange]);
 
+  const handleFormat = () => {
+    if (!value.trim()) {
+      return;
+    }
+
+    try {
+      const parsed = JSON.parse(value);
+      const formatted = JSON.stringify(parsed, null, 2);
+      onChange(formatted);
+    } catch {
+      // Silently ignore parse errors — user will see validation message
+    }
+  };
+
   return (
     <section
-      className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-raised)] p-4"
+      className="flex min-h-0 flex-1 flex-col rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-raised)] p-4"
       aria-label="Request body"
     >
-      <h3 className="mb-3 text-sm font-semibold text-[var(--color-text-primary)]">Body</h3>
+      <div className="mb-3 flex items-center justify-between">
+        <h3 className="text-sm font-semibold text-[var(--color-text-primary)]">Body</h3>
+        <button
+          onClick={handleFormat}
+          className="rounded-lg bg-[var(--color-accent)] px-3 py-1 text-xs font-medium text-[var(--color-text-primary)] hover:opacity-80 active:opacity-70"
+          aria-label="Format JSON"
+          type="button"
+        >
+          Format
+        </button>
+      </div>
       <textarea
         value={value}
         onChange={(e) => onChange(e.target.value)}
@@ -39,7 +63,7 @@ export function BodyEditor({ value, onChange, onValidityChange }: BodyEditorProp
         spellCheck={false}
         aria-label="JSON request body"
         placeholder="{ }"
-        className="min-h-40 w-full resize-y rounded-lg bg-[var(--color-surface)] p-3 font-mono text-sm text-[var(--color-text-primary)] outline-none ring-[var(--color-accent)] placeholder:text-[var(--color-text-muted)] focus-visible:ring-2"
+        className="min-h-0 flex-1 w-full resize-none rounded-lg bg-[var(--color-surface)] p-3 font-mono text-sm text-[var(--color-text-primary)] outline-none ring-[var(--color-accent)] placeholder:text-[var(--color-text-muted)] focus-visible:ring-2"
       />
       {!valid ? (
         <p className="mt-2 text-xs font-medium text-[var(--color-accent)]" role="alert">

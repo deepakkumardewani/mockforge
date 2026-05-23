@@ -10,21 +10,21 @@ const router = new Hono();
 router.get("/", zValidator("query", paginationSchema), (c) => {
   const params = c.req.valid("query");
   const data = generateTodos(params);
-  const total = data.length;
-  return c.json(respond(data, total, params, "todos"));
+  return c.json(respond(data, 100, params, "todos"));
 });
 
 router.get("/search", zValidator("query", z.object({ q: z.string().default("") })), (c) => {
   const { q } = c.req.valid("query");
   const params = paginationSchema.parse({ search: q });
   const data = generateTodos(params);
-  const total = data.length;
-  return c.json(respond(data, total, params, "todos"));
+  return c.json(respond(data, data.length, params, "todos"));
 });
 
 router.get("/:id", (c) => {
-  const item = generateTodos({ limit: 1, skip: 0, order: "asc" })[0];
-  return c.json({ data: item });
+  const id = Number(c.req.param("id"));
+  const skip = Number.isFinite(id) && id > 0 ? id - 1 : 0;
+  const item = generateTodos({ limit: 1, skip, order: "asc" })[0];
+  return c.json({ data: item ?? null });
 });
 
 router.post("/", async (c) => {

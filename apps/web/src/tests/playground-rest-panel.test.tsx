@@ -34,7 +34,8 @@ describe("Playground REST — RestPanel", () => {
 
     await user.click(screen.getByRole("button", { name: "List users" }));
 
-    expect(screen.getByRole("textbox", { name: "Request URL" })).toHaveValue("/api/users");
+    // Input shows suffix only; /api/ prefix is a fixed adornment
+    expect(screen.getByRole("combobox", { name: "Request URL suffix" })).toHaveValue("users");
     expect(vi.mocked(fetch)).not.toHaveBeenCalled();
 
     await user.click(screen.getByRole("button", { name: "Send" }));

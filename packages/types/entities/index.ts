@@ -1,5 +1,5 @@
 export interface User {
-  id: string;
+  id: number;
   firstName: string;
   lastName: string;
   email: string;
@@ -20,7 +20,7 @@ export interface User {
 }
 
 export interface Product {
-  id: string;
+  id: number;
   title: string;
   description: string;
   price: number;
@@ -37,10 +37,10 @@ export interface Product {
 }
 
 export interface Post {
-  id: string;
+  id: number;
   title: string;
   body: string;
-  userId: string;
+  userId: number;
   tags: string[];
   reactions: number;
   views: number;
@@ -48,9 +48,9 @@ export interface Post {
 }
 
 export interface Comment {
-  id: string;
-  postId: string;
-  userId: string;
+  id: number;
+  postId: number;
+  userId: number;
   body: string;
   author: string;
   email: string;
@@ -58,8 +58,8 @@ export interface Comment {
 }
 
 export interface Todo {
-  id: string;
-  userId: string;
+  id: number;
+  userId: number;
   todo: string;
   completed: boolean;
   priority: "low" | "medium" | "high";
@@ -68,7 +68,7 @@ export interface Todo {
 }
 
 export interface CartItem {
-  productId: string;
+  productId: number;
   title: string;
   price: number;
   quantity: number;
@@ -79,8 +79,8 @@ export interface CartItem {
 }
 
 export interface Cart {
-  id: string;
-  userId: string;
+  id: number;
+  userId: number;
   products: CartItem[];
   total: number;
   discountedTotal: number;
@@ -90,18 +90,18 @@ export interface Cart {
 }
 
 export interface Message {
-  id: string;
-  senderId: string;
-  receiverId: string;
-  roomId: string;
+  id: number;
+  senderId: number;
+  receiverId: number;
+  roomId: number;
   body: string;
   read: boolean;
   createdAt: string;
 }
 
 export interface Notification {
-  id: string;
-  userId: string;
+  id: number;
+  userId: number;
   type: "info" | "warning" | "success" | "error";
   title: string;
   message: string;
@@ -110,7 +110,7 @@ export interface Notification {
 }
 
 export interface Quote {
-  id: string;
+  id: number;
   content: string;
   author: string;
   category: string;
@@ -125,7 +125,7 @@ export interface RecipeIngredient {
 }
 
 export interface Recipe {
-  id: string;
+  id: number;
   name: string;
   description: string;
   prepTimeMinutes: number;
@@ -143,7 +143,7 @@ export interface Recipe {
 }
 
 export interface Country {
-  id: string;
+  id: number;
   name: string;
   code: string;
   capital: string;
@@ -158,7 +158,7 @@ export interface Country {
 }
 
 export interface Company {
-  id: string;
+  id: number;
   name: string;
   industry: string;
   description: string;
@@ -174,7 +174,7 @@ export interface Company {
 }
 
 export interface Stock {
-  id: string;
+  id: number;
   symbol: string;
   name: string;
   price: number;
@@ -190,7 +190,7 @@ export interface Stock {
 }
 
 export interface Event {
-  id: string;
+  id: number;
   title: string;
   description: string;
   category: string;

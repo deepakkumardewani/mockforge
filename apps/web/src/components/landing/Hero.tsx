@@ -57,9 +57,15 @@ export function Hero() {
   const [displayedCode, setDisplayedCode] = useState("");
   const [charIndex, setCharIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
+  // Holds the typewriter's rapid setState loop until the entrance finishes, so
+  // it doesn't thrash the main thread (delaying LCP) while the hero paints in.
+  // The terminal is still animating into view during this window, so visually
+  // the deferred start is imperceptible.
+  const [typingStarted, setTypingStarted] = useState(false);
 
   // Orchestrated entrance
   useEffect(() => {
+    const startTyping = setTimeout(() => setTypingStarted(true), 700);
     const ctx = gsap.context(() => {
       if (
         !headlineRef.current ||
@@ -100,11 +106,15 @@ export function Hero() {
         );
     }, sectionRef);
 
-    return () => ctx.revert();
+    return () => {
+      clearTimeout(startTyping);
+      ctx.revert();
+    };
   }, []);
 
   // Typewriter
   useEffect(() => {
+    if (!typingStarted) return;
     const snippet = CODE_SNIPPETS[snippetIndex];
     const fullText = snippet.code;
     let timeout: ReturnType<typeof setTimeout>;
@@ -134,7 +144,7 @@ export function Hero() {
     }
 
     return () => clearTimeout(timeout);
-  }, [charIndex, isDeleting, snippetIndex]);
+  }, [charIndex, isDeleting, snippetIndex, typingStarted]);
 
   const activeSnippet = CODE_SNIPPETS[snippetIndex];
 

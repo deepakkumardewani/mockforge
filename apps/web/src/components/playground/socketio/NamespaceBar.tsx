@@ -31,7 +31,7 @@ export function NamespaceBar({
   const fieldsDisabled = isConnected || isConnecting;
 
   return (
-    <div className="flex flex-col gap-4 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-raised)] p-3">
+    <div className="flex shrink-0 flex-col gap-4 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-raised)] p-3">
       <div className="grid gap-3 sm:grid-cols-3">
         <label className="flex min-w-0 flex-col gap-1.5">
           <span className="text-xs font-medium text-[var(--color-text-muted)]">Base URL</span>

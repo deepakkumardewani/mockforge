@@ -16,7 +16,7 @@ export function generateCarts(params: PaginationParams): Cart[] {
       const discountedTotal = total * (1 - discountPercentage / 100);
 
       return {
-        productId: faker.string.uuid(),
+        productId: faker.number.int({ min: 1, max: 100 }),
         title: faker.commerce.productName(),
         price,
         quantity,
@@ -32,8 +32,8 @@ export function generateCarts(params: PaginationParams): Cart[] {
     const totalQuantity = products.reduce((sum, p) => sum + p.quantity, 0);
 
     items.push({
-      id: faker.string.uuid(),
-      userId: faker.string.uuid(),
+      id: i + 1,
+      userId: faker.number.int({ min: 1, max: 100 }),
       products,
       total,
       discountedTotal,

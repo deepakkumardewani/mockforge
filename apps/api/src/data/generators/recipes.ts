@@ -23,7 +23,7 @@ export function generateRecipes(params: PaginationParams): Recipe[] {
     );
 
     items.push({
-      id: faker.string.uuid(),
+      id: i + 1,
       name: faker.lorem.words(2),
       description: faker.lorem.paragraphs(1),
       prepTimeMinutes: faker.number.int({ min: 5, max: 60 }),

@@ -12,9 +12,11 @@ export function JsonView({ value, maxHeightClassName = "max-h-64" }: JsonViewPro
     text = '"[Unable to stringify]"';
   }
 
+  const embedded = maxHeightClassName === "";
+
   return (
     <pre
-      className={`max-w-full overflow-auto break-all rounded-lg bg-[var(--color-code-bg)] p-4 font-mono text-xs leading-relaxed text-[var(--color-code-text)] whitespace-pre-wrap ${maxHeightClassName}`}
+      className={`min-w-0 w-full break-all rounded-lg bg-[var(--color-code-bg)] p-4 font-mono text-xs leading-relaxed text-[var(--color-code-text)] whitespace-pre-wrap ${embedded ? "" : "max-w-full overflow-auto"} ${maxHeightClassName}`}
     >
       {text}
     </pre>

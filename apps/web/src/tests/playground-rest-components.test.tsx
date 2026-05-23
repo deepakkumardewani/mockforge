@@ -48,9 +48,7 @@ describe("Playground REST — BodyEditor", () => {
     const mockOnChange = vi.fn();
     const mockOnValidityChange = vi.fn();
 
-    render(
-      <BodyEditor value="" onChange={mockOnChange} onValidityChange={mockOnValidityChange} />,
-    );
+    render(<BodyEditor value="" onChange={mockOnChange} onValidityChange={mockOnValidityChange} />);
 
     expect(screen.getByText("Body")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Format JSON" })).toBeInTheDocument();
@@ -73,12 +71,8 @@ describe("Playground REST — BodyEditor", () => {
 
     await user.click(screen.getByRole("button", { name: "Format JSON" }));
 
-    expect(mockOnChange).toHaveBeenCalledWith(
-      JSON.stringify(JSON.parse(minifiedJson), null, 2),
-    );
-    expect(mockOnChange).toHaveBeenCalledWith(
-      '{\n  "name": "test",\n  "value": 123\n}',
-    );
+    expect(mockOnChange).toHaveBeenCalledWith(JSON.stringify(JSON.parse(minifiedJson), null, 2));
+    expect(mockOnChange).toHaveBeenCalledWith('{\n  "name": "test",\n  "value": 123\n}');
   });
 
   it("Format button does nothing on invalid JSON", async () => {
@@ -106,9 +100,7 @@ describe("Playground REST — BodyEditor", () => {
     const mockOnChange = vi.fn();
     const mockOnValidityChange = vi.fn();
 
-    render(
-      <BodyEditor value="" onChange={mockOnChange} onValidityChange={mockOnValidityChange} />,
-    );
+    render(<BodyEditor value="" onChange={mockOnChange} onValidityChange={mockOnValidityChange} />);
 
     await user.click(screen.getByRole("button", { name: "Format JSON" }));
 
@@ -129,7 +121,9 @@ describe("Playground REST — BodyEditor", () => {
       />,
     );
 
-    expect(screen.getByText("Invalid JSON — fix syntax or clear the body before sending.")).toBeInTheDocument();
+    expect(
+      screen.getByText("Invalid JSON — fix syntax or clear the body before sending."),
+    ).toBeInTheDocument();
   });
 
   it("does not show error message for valid JSON", () => {
@@ -146,6 +140,8 @@ describe("Playground REST — BodyEditor", () => {
       />,
     );
 
-    expect(screen.queryByText("Invalid JSON — fix syntax or clear the body before sending.")).not.toBeInTheDocument();
+    expect(
+      screen.queryByText("Invalid JSON — fix syntax or clear the body before sending."),
+    ).not.toBeInTheDocument();
   });
 });

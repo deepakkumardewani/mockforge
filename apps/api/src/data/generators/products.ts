@@ -8,7 +8,7 @@ export function generateProducts(params: PaginationParams): Product[] {
 
   for (let i = 0; i < itemsToGenerate; i++) {
     items.push({
-      id: faker.string.uuid(),
+      id: i + 1,
       title: faker.commerce.productName(),
       description: faker.commerce.productDescription(),
       price: parseFloat(faker.commerce.price({ min: 10, max: 500, dec: 2 })),

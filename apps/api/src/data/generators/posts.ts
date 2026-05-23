@@ -8,10 +8,10 @@ export function generatePosts(params: PaginationParams): Post[] {
 
   for (let i = 0; i < itemsToGenerate; i++) {
     items.push({
-      id: faker.string.uuid(),
+      id: i + 1,
       title: faker.lorem.sentence(),
       body: faker.lorem.paragraphs(3),
-      userId: faker.string.uuid(),
+      userId: faker.number.int({ min: 1, max: 100 }),
       tags: [faker.lorem.word(), faker.lorem.word(), faker.lorem.word()],
       reactions: faker.number.int({ min: 0, max: 500 }),
       views: faker.number.int({ min: 0, max: 10000 }),

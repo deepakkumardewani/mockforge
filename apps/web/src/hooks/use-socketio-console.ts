@@ -70,6 +70,7 @@ export function useSocketIoConsole({ url, namespace, listenEvent }: UseSocketIoC
     }
 
     disconnect();
+    setEvents([]);
 
     setStatus("connecting");
     let socket: Socket;

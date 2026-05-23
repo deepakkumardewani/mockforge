@@ -170,4 +170,36 @@ describe("useSocketIoConsole", () => {
 
     expect(socket.disconnect).toHaveBeenCalled();
   });
+
+  it("clears prior events when reconnecting", () => {
+    const { socket } = createListenersSocket("tick");
+    const { result } = renderHook(() =>
+      useSocketIoConsole({
+        url: "http://localhost:4001",
+        namespace: "/ticker",
+        listenEvent: "tick",
+      }),
+    );
+
+    act(() => {
+      result.current.connect();
+    });
+    act(() => {
+      socket.simulateConnect();
+    });
+    act(() => {
+      socket.simulateListenPayload({ price: 1 });
+    });
+
+    expect(result.current.events.length).toBeGreaterThan(0);
+
+    act(() => {
+      result.current.disconnect();
+    });
+    act(() => {
+      result.current.connect();
+    });
+
+    expect(result.current.events).toHaveLength(0);
+  });
 });

@@ -17,7 +17,7 @@ export function generateEvents(params: PaginationParams): Event[] {
 
     const isFree = faker.datatype.boolean();
     items.push({
-      id: faker.string.uuid(),
+      id: i + 1,
       title: faker.lorem.words(3),
       description: faker.lorem.paragraphs(2),
       category: eventCategories[faker.number.int({ min: 0, max: 5 })],

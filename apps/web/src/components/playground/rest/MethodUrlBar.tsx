@@ -1,8 +1,11 @@
 "use client";
 
 import type { HttpMethod } from "@/components/playground/shared/presets";
+import { EndpointAutocomplete } from "@/components/playground/rest/EndpointAutocomplete";
 
 const METHODS: HttpMethod[] = ["GET", "POST", "PUT", "DELETE"];
+
+const API_PREFIX = "/api/";
 
 export interface MethodUrlBarProps {
   method: HttpMethod;
@@ -26,6 +29,14 @@ export function MethodUrlBar({
 }: MethodUrlBarProps) {
   const sendDisabled = isLoading || !canSend;
 
+  // The autocomplete works with the path suffix (without /api/ prefix).
+  // The full URL stored externally may include /api/ or not — normalise both ways.
+  const suffix = url.startsWith(API_PREFIX) ? url.slice(API_PREFIX.length) : url;
+
+  function handleSuffixChange(newSuffix: string) {
+    onUrlChange(API_PREFIX + newSuffix);
+  }
+
   return (
     <div className="flex flex-wrap items-stretch gap-2 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-raised)] p-2">
       <select
@@ -40,13 +51,13 @@ export function MethodUrlBar({
           </option>
         ))}
       </select>
-      <input
-        value={url}
-        onChange={(e) => onUrlChange(e.target.value)}
-        placeholder="/api/users"
-        aria-label="Request URL"
-        className="min-w-0 flex-1 rounded-lg bg-[var(--color-surface)] px-3 py-2 font-mono text-sm text-[var(--color-text-primary)] outline-none ring-[var(--color-accent)] placeholder:text-[var(--color-text-muted)] focus-visible:ring-2 sm:min-w-[12rem]"
+
+      <EndpointAutocomplete
+        value={suffix}
+        onChange={handleSuffixChange}
+        onMethodChange={onMethodChange}
       />
+
       <button
         type="button"
         onClick={onSend}

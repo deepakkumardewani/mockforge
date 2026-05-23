@@ -8,7 +8,7 @@ export function generateCompanies(params: PaginationParams): Company[] {
 
   for (let i = 0; i < itemsToGenerate; i++) {
     items.push({
-      id: faker.string.uuid(),
+      id: i + 1,
       name: faker.company.name(),
       industry: faker.lorem.word(),
       description: faker.lorem.paragraphs(1),

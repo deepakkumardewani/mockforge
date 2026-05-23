@@ -8,9 +8,9 @@ export function generateComments(params: PaginationParams): Comment[] {
 
   for (let i = 0; i < itemsToGenerate; i++) {
     items.push({
-      id: faker.string.uuid(),
-      postId: faker.string.uuid(),
-      userId: faker.string.uuid(),
+      id: i + 1,
+      postId: faker.number.int({ min: 1, max: 100 }),
+      userId: faker.number.int({ min: 1, max: 100 }),
       body: faker.lorem.paragraphs(1),
       author: faker.person.fullName(),
       email: faker.internet.email(),

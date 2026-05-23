@@ -13,7 +13,7 @@ builder.mutationType({
       args: {
         title: t.arg.string({ required: true }),
         body: t.arg.string(),
-        userId: t.arg.string(),
+        userId: t.arg.int(),
       },
       resolve: (_root, args) => {
         const base = generatePosts({ limit: 1, skip: 0, order: "asc" })[0]!;
@@ -29,7 +29,7 @@ builder.mutationType({
     updateTodo: t.field({
       type: "Todo",
       args: {
-        id: t.arg.string({ required: true }),
+        id: t.arg.int({ required: true }),
         todo: t.arg.string(),
         completed: t.arg.boolean(),
       },

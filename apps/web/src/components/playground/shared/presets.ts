@@ -24,12 +24,26 @@ export type WsPreset = {
   readonly url: string;
 };
 
+export type WsMessagePreset = {
+  readonly id: string;
+  readonly label: string;
+  readonly message: string;
+};
+
 export type SocketIoPreset = {
   readonly id: string;
   readonly label: string;
   readonly baseUrl: string;
   readonly namespace: string;
   readonly event: string;
+};
+
+export type SocketIoEmitPreset = {
+  readonly id: string;
+  readonly label: string;
+  readonly event: string;
+  /** JSON payload string; empty string means no payload */
+  readonly payload: string;
 };
 
 export const REST_PRESETS: readonly RestPreset[] = [
@@ -150,6 +164,20 @@ export const WS_PRESETS: readonly WsPreset[] = [
   { id: "ws-ticker", label: "Ticker", url: "ws://localhost:4000/ws/ticker" },
 ];
 
+/** Sample outbound payloads for the playground WS composer (fixed ticker endpoint). */
+export const WS_MESSAGE_PRESETS: readonly WsMessagePreset[] = [
+  { id: "ws-msg-ping", label: "Pong reply", message: "pong" },
+  {
+    id: "ws-msg-chat",
+    label: "Chat JSON",
+    message: JSON.stringify({ text: "Hello from playground", userId: 1 }),
+  },
+  { id: "ws-msg-type", label: "Typed ping", message: JSON.stringify({ type: "ping" }) },
+];
+
+export const WS_TICKER_ENDPOINT_INFO =
+  "Streams live stock price updates every second (server-push; sent messages are ignored on this endpoint).";
+
 export const SOCKETIO_PRESETS: readonly SocketIoPreset[] = [
   {
     id: "sio-chat",
@@ -173,3 +201,27 @@ export const SOCKETIO_PRESETS: readonly SocketIoPreset[] = [
     event: "tick",
   },
 ];
+
+/** Sample emit payloads for the Socket.IO composer. */
+export const SOCKETIO_EMIT_PRESETS: readonly SocketIoEmitPreset[] = [
+  {
+    id: "sio-emit-chat",
+    label: "Chat message",
+    event: "message",
+    payload: JSON.stringify({ text: "Hello from playground", userId: 1 }),
+  },
+  { id: "sio-emit-ping", label: "Ping", event: "ping", payload: "" },
+  {
+    id: "sio-emit-subscribe",
+    label: "Subscribe",
+    event: "subscribe",
+    payload: JSON.stringify({ symbols: ["AAPL", "GOOG"] }),
+  },
+];
+
+export const SOCKETIO_NAMESPACE_INFO: Readonly<Record<string, string>> = {
+  "/ticker": "Emits tick events every second with live stock price updates (listen on tick).",
+  "/chat": "Broadcasts chat messages in a room; emit message to post and receive auto-replies.",
+  "/notifications":
+    "Pushes notification events every few seconds after connect (listen on notification).",
+};

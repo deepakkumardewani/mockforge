@@ -28,7 +28,7 @@ export function VariablesEditor({ value, onChange, onValidityChange }: Variables
 
   return (
     <section
-      className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-raised)] p-4"
+      className="shrink-0 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-raised)] p-4"
       aria-label="GraphQL variables"
     >
       <h3 className="mb-3 text-sm font-semibold text-[var(--color-text-primary)]">Variables</h3>

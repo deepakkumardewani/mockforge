@@ -3,10 +3,10 @@ import builder from "../builder";
 // Message type
 builder.objectType("Message", {
   fields: (t) => ({
-    id: t.exposeString("id"),
-    senderId: t.exposeString("senderId"),
-    receiverId: t.exposeString("receiverId"),
-    roomId: t.exposeString("roomId"),
+    id: t.exposeInt("id"),
+    senderId: t.exposeInt("senderId"),
+    receiverId: t.exposeInt("receiverId"),
+    roomId: t.exposeInt("roomId"),
     body: t.exposeString("body"),
     read: t.exposeBoolean("read"),
     createdAt: t.exposeString("createdAt"),
@@ -16,8 +16,8 @@ builder.objectType("Message", {
 // Notification type
 builder.objectType("Notification", {
   fields: (t) => ({
-    id: t.exposeString("id"),
-    userId: t.exposeString("userId"),
+    id: t.exposeInt("id"),
+    userId: t.exposeInt("userId"),
     type: t.exposeString("type"),
     title: t.exposeString("title"),
     message: t.exposeString("message"),
@@ -29,7 +29,7 @@ builder.objectType("Notification", {
 // Quote type
 builder.objectType("Quote", {
   fields: (t) => ({
-    id: t.exposeString("id"),
+    id: t.exposeInt("id"),
     content: t.exposeString("content"),
     author: t.exposeString("author"),
     category: t.exposeString("category"),
@@ -50,7 +50,7 @@ builder.objectType("RecipeIngredient", {
 // Recipe type
 builder.objectType("Recipe", {
   fields: (t) => ({
-    id: t.exposeString("id"),
+    id: t.exposeInt("id"),
     name: t.exposeString("name"),
     description: t.exposeString("description"),
     prepTimeMinutes: t.exposeInt("prepTimeMinutes"),
@@ -74,7 +74,7 @@ builder.objectType("Recipe", {
 // Country type
 builder.objectType("Country", {
   fields: (t) => ({
-    id: t.exposeString("id"),
+    id: t.exposeInt("id"),
     name: t.exposeString("name"),
     code: t.exposeString("code"),
     capital: t.exposeString("capital"),
@@ -92,7 +92,7 @@ builder.objectType("Country", {
 // Company type
 builder.objectType("Company", {
   fields: (t) => ({
-    id: t.exposeString("id"),
+    id: t.exposeInt("id"),
     name: t.exposeString("name"),
     industry: t.exposeString("industry"),
     description: t.exposeString("description"),
@@ -111,7 +111,7 @@ builder.objectType("Company", {
 // Stock type
 builder.objectType("Stock", {
   fields: (t) => ({
-    id: t.exposeString("id"),
+    id: t.exposeInt("id"),
     symbol: t.exposeString("symbol"),
     name: t.exposeString("name"),
     price: t.exposeFloat("price"),
@@ -130,7 +130,7 @@ builder.objectType("Stock", {
 // Event type
 builder.objectType("Event", {
   fields: (t) => ({
-    id: t.exposeString("id"),
+    id: t.exposeInt("id"),
     title: t.exposeString("title"),
     description: t.exposeString("description"),
     category: t.exposeString("category"),

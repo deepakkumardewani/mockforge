@@ -17,10 +17,14 @@ export function ResponseViewer({ response, transportError }: ResponseViewerProps
       aria-label="HTTP response"
     >
       {!response ? (
-        <p className="text-sm text-[var(--color-text-muted)]">Send a request to see the response</p>
+        <p className="flex flex-1 text-sm text-[var(--color-text-muted)]">
+          Send a request to see the response
+        </p>
       ) : (
         <>
-          <h2 className="shrink-0 text-base font-bold text-[var(--color-text-primary)]">Response</h2>
+          <h2 className="shrink-0 text-base font-bold text-[var(--color-text-primary)]">
+            Response
+          </h2>
 
           <div className="flex shrink-0 flex-wrap items-center gap-3">
             <StatusPill httpStatus={response.status} />
@@ -31,9 +35,11 @@ export function ResponseViewer({ response, transportError }: ResponseViewerProps
           </div>
 
           <div className="flex min-h-0 flex-1 flex-col">
-            <h3 className="mb-2 shrink-0 text-sm font-semibold text-[var(--color-text-primary)]">Body</h3>
+            <h3 className="mb-2 shrink-0 text-sm font-semibold text-[var(--color-text-primary)]">
+              Body
+            </h3>
             {response.body !== null ? (
-              <div className="min-h-0 flex-1 overflow-y-auto rounded-lg">
+              <div className="min-h-0 flex-1 overflow-auto [scrollbar-gutter:stable] rounded-lg">
                 <JsonView value={response.body} maxHeightClassName="" />
               </div>
             ) : (

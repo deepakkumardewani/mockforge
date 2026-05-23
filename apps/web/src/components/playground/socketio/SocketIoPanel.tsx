@@ -1,9 +1,19 @@
 "use client";
 
 import { useCallback, useMemo, useState } from "react";
+import { EndpointInfo } from "@/components/playground/shared/EndpointInfo";
 import { PresetPicker } from "@/components/playground/shared/PresetPicker";
-import { SOCKETIO_PRESETS } from "@/components/playground/shared/presets";
+import {
+  SOCKETIO_EMIT_PRESETS,
+  SOCKETIO_NAMESPACE_INFO,
+  SOCKETIO_PRESETS,
+} from "@/components/playground/shared/presets";
 import { EventLog } from "@/components/playground/shared/EventLog";
+import {
+  PLAYGROUND_PANEL_GRID,
+  PLAYGROUND_PANEL_LEFT,
+  PLAYGROUND_PANEL_RIGHT,
+} from "@/components/playground/shared/panel-layout";
 import { useSocketIoConsole } from "@/hooks/use-socketio-console";
 import { getSocketIoBaseUrl } from "@/lib/playground-env";
 import { EmitComposer } from "@/components/playground/socketio/EmitComposer";
@@ -28,10 +38,20 @@ export function SocketIoPanel() {
 
   const { status, events, connect, disconnect, emit } = useSocketIoConsole(consoleOpts);
 
+  const namespaceInfo =
+    SOCKETIO_NAMESPACE_INFO[namespace] ??
+    "Connect and listen on the configured event to see incoming payloads.";
+
   const onPresetSelect = useCallback((preset: (typeof SOCKETIO_PRESETS)[number]) => {
     setBaseUrl(preset.baseUrl);
     setNamespace(preset.namespace);
     setListenEvent(preset.event);
+    setEmitError(null);
+  }, []);
+
+  const onEmitPresetSelect = useCallback((preset: (typeof SOCKETIO_EMIT_PRESETS)[number]) => {
+    setEmitEvent(preset.event);
+    setEmitPayload(preset.payload);
     setEmitError(null);
   }, []);
 
@@ -55,8 +75,8 @@ export function SocketIoPanel() {
         />
       </div>
 
-      <div className="grid min-h-0 flex-1 grid-cols-1 gap-4 overflow-y-auto lg:grid-cols-2 lg:grid-rows-1 lg:items-stretch lg:gap-8 lg:overflow-hidden">
-        <div className="flex min-h-0 min-w-0 flex-col gap-3 lg:overflow-y-auto lg:pr-1">
+      <div className={PLAYGROUND_PANEL_GRID}>
+        <div className={PLAYGROUND_PANEL_LEFT}>
           <NamespaceBar
             baseUrl={baseUrl}
             namespace={namespace}
@@ -67,6 +87,12 @@ export function SocketIoPanel() {
             onListenEventChange={setListenEvent}
             onConnect={connect}
             onDisconnect={disconnect}
+          />
+          <EndpointInfo description={namespaceInfo} />
+          <PresetPicker
+            presets={SOCKETIO_EMIT_PRESETS}
+            onSelect={onEmitPresetSelect}
+            ariaLabel="Socket.IO emit presets"
           />
           <EmitComposer
             eventName={emitEvent}
@@ -79,7 +105,7 @@ export function SocketIoPanel() {
           />
         </div>
 
-        <div className="min-h-0 min-w-0">
+        <div className={PLAYGROUND_PANEL_RIGHT}>
           <EventLog events={events} emptyHint="Connect and subscribe to see events in this log." />
         </div>
       </div>

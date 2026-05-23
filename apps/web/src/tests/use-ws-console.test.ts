@@ -168,4 +168,42 @@ describe("useWsConsole", () => {
 
     expect(ws?.close).toHaveBeenCalled();
   });
+
+  it("clears prior events when reconnecting", () => {
+    const { MockWebSocket, instances } = mockWebSocket();
+    vi.stubGlobal("WebSocket", MockWebSocket as unknown as typeof WebSocket);
+
+    const { result } = renderHook(() => useWsConsole("ws://test/ws"));
+
+    act(() => {
+      result.current.connect();
+    });
+    act(() => {
+      instances[0]?.simulateOpen();
+    });
+    act(() => {
+      instances[0]?.simulateMessage("stale-in");
+    });
+
+    expect(result.current.events).toHaveLength(1);
+
+    act(() => {
+      result.current.disconnect();
+    });
+    act(() => {
+      result.current.connect();
+    });
+
+    expect(result.current.events).toHaveLength(0);
+
+    act(() => {
+      instances[1]?.simulateOpen();
+    });
+    act(() => {
+      instances[1]?.simulateMessage("fresh-in");
+    });
+
+    expect(result.current.events).toHaveLength(1);
+    expect(result.current.events[0]?.message).toBe("fresh-in");
+  });
 });

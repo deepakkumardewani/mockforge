@@ -10,6 +10,11 @@ import { BodyEditor } from "@/components/playground/rest/BodyEditor";
 import { MethodUrlBar } from "@/components/playground/rest/MethodUrlBar";
 import { SearchHints } from "@/components/playground/rest/SearchHints";
 import { ResponseViewer } from "@/components/playground/shared/ResponseViewer";
+import {
+  PLAYGROUND_PANEL_GRID,
+  PLAYGROUND_PANEL_LEFT,
+  PLAYGROUND_PANEL_RIGHT,
+} from "@/components/playground/shared/panel-layout";
 import { useMfId } from "@/hooks/use-mf-id";
 import type { RestRequestInput } from "@/hooks/use-rest-request";
 import { useRestRequest } from "@/hooks/use-rest-request";
@@ -87,8 +92,8 @@ export function RestPanel() {
         />
       </div>
 
-      <div className="grid min-h-0 flex-1 grid-cols-1 gap-4 overflow-y-auto lg:grid-cols-2 lg:grid-rows-1 lg:items-stretch lg:gap-8 lg:overflow-hidden">
-        <div className="flex min-h-0 min-w-0 flex-col gap-3 lg:overflow-y-auto lg:pr-1">
+      <div className={PLAYGROUND_PANEL_GRID}>
+        <div className={PLAYGROUND_PANEL_LEFT}>
           <MethodUrlBar
             method={method}
             url={url}
@@ -103,7 +108,7 @@ export function RestPanel() {
           <BodyEditor value={body} onChange={setBody} onValidityChange={setBodyValid} />
         </div>
 
-        <div className="min-h-0 min-w-0">
+        <div className={PLAYGROUND_PANEL_RIGHT}>
           <ResponseViewer response={response} transportError={error} />
         </div>
       </div>

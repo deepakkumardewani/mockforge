@@ -8,7 +8,7 @@ export function generateCountries(params: PaginationParams): Country[] {
 
   for (let i = 0; i < itemsToGenerate; i++) {
     items.push({
-      id: faker.string.uuid(),
+      id: i + 1,
       name: faker.location.country(),
       code: faker.location.countryCode("alpha-2"),
       capital: faker.location.city(),

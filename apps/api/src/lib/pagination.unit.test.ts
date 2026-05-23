@@ -12,7 +12,7 @@ describe("pagination", () => {
 
     it("should apply default values", () => {
       const result = paginationSchema.parse({});
-      expect(result.limit).toBe(10);
+      expect(result.limit).toBe(30);
       expect(result.skip).toBe(0);
       expect(result.order).toBe("asc");
     });

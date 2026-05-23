@@ -9,7 +9,7 @@ export interface MessageComposerProps {
 
 export function MessageComposer({ value, onChange, onSend, canSend }: MessageComposerProps) {
   return (
-    <div className="flex flex-col gap-2 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-raised)] p-3">
+    <div className="flex min-h-0 flex-1 flex-col gap-2 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-raised)] p-3">
       <label
         className="text-xs font-medium text-[var(--color-text-muted)]"
         htmlFor="ws-message-body"
@@ -20,9 +20,9 @@ export function MessageComposer({ value, onChange, onSend, canSend }: MessageCom
         id="ws-message-body"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        rows={4}
+        rows={1}
         placeholder='e.g. {"type":"ping"}'
-        className="min-h-[6rem] resize-y rounded-lg bg-[var(--color-surface)] px-3 py-2 font-mono text-sm text-[var(--color-text-primary)] outline-none ring-[var(--color-accent)] placeholder:text-[var(--color-text-muted)] focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-60"
+        className="min-h-0 flex-1 resize-none rounded-lg bg-[var(--color-surface)] px-3 py-2 font-mono text-sm text-[var(--color-text-primary)] outline-none ring-[var(--color-accent)] placeholder:text-[var(--color-text-muted)] focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-60"
         disabled={!canSend}
       />
       <div className="flex justify-end">

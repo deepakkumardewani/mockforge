@@ -52,7 +52,7 @@ export function EventLog({ events, emptyHint = "Connect to see messages." }: Eve
         role="log"
         aria-live="polite"
         aria-relevant="additions"
-        className="min-h-0 flex-1 space-y-3 overflow-y-auto px-3 py-3"
+        className="min-h-0 flex-1 space-y-3 overflow-y-auto [scrollbar-gutter:stable] px-3 py-3"
       >
         {events.length === 0 ? (
           <p className="text-sm text-[var(--color-text-muted)]">{emptyHint}</p>

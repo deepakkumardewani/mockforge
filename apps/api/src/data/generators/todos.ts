@@ -10,8 +10,8 @@ export function generateTodos(params: PaginationParams): Todo[] {
 
   for (let i = 0; i < itemsToGenerate; i++) {
     items.push({
-      id: faker.string.uuid(),
-      userId: faker.string.uuid(),
+      id: i + 1,
+      userId: faker.number.int({ min: 1, max: 100 }),
       todo: faker.lorem.sentence(),
       completed: faker.datatype.boolean(),
       priority: priorities[faker.number.int({ min: 0, max: 2 })],

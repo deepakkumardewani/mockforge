@@ -15,8 +15,8 @@ export function generateNotifications(params: PaginationParams): Notification[] 
 
   for (let i = 0; i < itemsToGenerate; i++) {
     items.push({
-      id: faker.string.uuid(),
-      userId: faker.string.uuid(),
+      id: i + 1,
+      userId: faker.number.int({ min: 1, max: 100 }),
       type: notificationTypes[faker.number.int({ min: 0, max: 3 })],
       title: faker.lorem.sentence(),
       message: faker.lorem.paragraphs(1),

@@ -8,7 +8,7 @@ export function generateQuotes(params: PaginationParams): Quote[] {
 
   for (let i = 0; i < itemsToGenerate; i++) {
     items.push({
-      id: faker.string.uuid(),
+      id: i + 1,
       content: faker.lorem.sentences(2),
       author: faker.person.fullName(),
       category: faker.lorem.word(),

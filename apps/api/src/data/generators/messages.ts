@@ -8,10 +8,10 @@ export function generateMessages(params: PaginationParams): Message[] {
 
   for (let i = 0; i < itemsToGenerate; i++) {
     items.push({
-      id: faker.string.uuid(),
-      senderId: faker.string.uuid(),
-      receiverId: faker.string.uuid(),
-      roomId: faker.string.uuid(),
+      id: i + 1,
+      senderId: faker.number.int({ min: 1, max: 100 }),
+      receiverId: faker.number.int({ min: 1, max: 100 }),
+      roomId: faker.number.int({ min: 1, max: 20 }),
       body: faker.lorem.paragraphs(1),
       read: faker.datatype.boolean(),
       createdAt: faker.date.recent().toISOString(),

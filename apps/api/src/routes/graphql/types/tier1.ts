@@ -3,7 +3,7 @@ import builder from "../builder";
 // User type
 builder.objectType("User", {
   fields: (t) => ({
-    id: t.exposeString("id"),
+    id: t.exposeInt("id"),
     firstName: t.exposeString("firstName"),
     lastName: t.exposeString("lastName"),
     email: t.exposeString("email"),
@@ -35,7 +35,7 @@ builder.objectType("UserAddress", {
 // Product type
 builder.objectType("Product", {
   fields: (t) => ({
-    id: t.exposeString("id"),
+    id: t.exposeInt("id"),
     title: t.exposeString("title"),
     description: t.exposeString("description"),
     price: t.exposeFloat("price"),
@@ -55,10 +55,10 @@ builder.objectType("Product", {
 // Post type
 builder.objectType("Post", {
   fields: (t) => ({
-    id: t.exposeString("id"),
+    id: t.exposeInt("id"),
     title: t.exposeString("title"),
     body: t.exposeString("body"),
-    userId: t.exposeString("userId"),
+    userId: t.exposeInt("userId"),
     tags: t.exposeStringList("tags"),
     reactions: t.exposeInt("reactions"),
     views: t.exposeInt("views"),
@@ -69,9 +69,9 @@ builder.objectType("Post", {
 // Comment type
 builder.objectType("Comment", {
   fields: (t) => ({
-    id: t.exposeString("id"),
-    postId: t.exposeString("postId"),
-    userId: t.exposeString("userId"),
+    id: t.exposeInt("id"),
+    postId: t.exposeInt("postId"),
+    userId: t.exposeInt("userId"),
     body: t.exposeString("body"),
     author: t.exposeString("author"),
     email: t.exposeString("email"),
@@ -82,8 +82,8 @@ builder.objectType("Comment", {
 // Todo type
 builder.objectType("Todo", {
   fields: (t) => ({
-    id: t.exposeString("id"),
-    userId: t.exposeString("userId"),
+    id: t.exposeInt("id"),
+    userId: t.exposeInt("userId"),
     todo: t.exposeString("todo"),
     completed: t.exposeBoolean("completed"),
     priority: t.exposeString("priority"),
@@ -95,7 +95,7 @@ builder.objectType("Todo", {
 // Cart item nested type
 builder.objectType("CartItem", {
   fields: (t) => ({
-    productId: t.exposeString("productId"),
+    productId: t.exposeInt("productId"),
     title: t.exposeString("title"),
     price: t.exposeFloat("price"),
     quantity: t.exposeInt("quantity"),
@@ -109,8 +109,8 @@ builder.objectType("CartItem", {
 // Cart type
 builder.objectType("Cart", {
   fields: (t) => ({
-    id: t.exposeString("id"),
-    userId: t.exposeString("userId"),
+    id: t.exposeInt("id"),
+    userId: t.exposeInt("userId"),
     products: t.field({
       type: ["CartItem"],
       resolve: (cart) => cart.products,

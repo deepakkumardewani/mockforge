@@ -54,7 +54,7 @@ export function generateStocks(params: PaginationParams): Stock[] {
     const change = parseFloat((price * (changePercent / 100)).toFixed(2));
 
     items.push({
-      id: faker.string.uuid(),
+      id: i + 1,
       symbol,
       name: STOCK_NAMES[symbol] || faker.company.name(),
       price,

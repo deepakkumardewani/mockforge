@@ -4,13 +4,13 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { PlaygroundTabs } from "@/components/playground/PlaygroundTabs";
 import { JsonView } from "@/components/playground/shared/JsonView";
 import { ResponseViewer } from "@/components/playground/shared/ResponseViewer";
+import { PLAYGROUND_PANEL_GRID } from "@/components/playground/shared/panel-layout";
 
 vi.mock("@/hooks/use-mf-id", () => ({
   useMfId: () => null,
 }));
 
-const TAB_CONTENT_CLASS =
-  "mt-4 flex min-h-0 flex-1 flex-col overflow-hidden pb-4 outline-none";
+const TAB_CONTENT_CLASS = "mt-4 flex min-h-0 flex-1 flex-col overflow-hidden pb-4 outline-none";
 
 function renderTabs() {
   return render(
@@ -22,6 +22,13 @@ function renderTabs() {
   );
 }
 
+describe("Playground layout — panel grid", () => {
+  it("uses minmax(0,1fr) columns to prevent content-driven width expansion", () => {
+    expect(PLAYGROUND_PANEL_GRID).toContain("minmax(0,1fr)");
+    expect(PLAYGROUND_PANEL_GRID).toContain("overflow-hidden");
+  });
+});
+
 describe("Playground layout — JsonView", () => {
   it("wraps long strings with break-all to prevent column expansion", () => {
     const longUrl = "https://example.com/" + "a".repeat(200);
@@ -30,6 +37,14 @@ describe("Playground layout — JsonView", () => {
     const pre = container.querySelector("pre");
     expect(pre?.className).toContain("break-all");
     expect(pre?.className).toContain("overflow-auto");
+  });
+
+  it("defers scrolling to parent when embedded (empty maxHeightClassName)", () => {
+    const { container } = render(<JsonView value={{ ok: true }} maxHeightClassName="" />);
+
+    const pre = container.querySelector("pre");
+    expect(pre?.className).not.toContain("overflow-auto");
+    expect(pre?.className).toContain("min-w-0");
   });
 });
 

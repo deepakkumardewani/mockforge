@@ -11,3 +11,4 @@ apps/api/.env.test
 .claude/
 *.tsbuildinfo
 apps/web/.source
+node-compile-cache/

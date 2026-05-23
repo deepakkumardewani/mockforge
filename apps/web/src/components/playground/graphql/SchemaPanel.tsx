@@ -4,12 +4,13 @@ import { useMemo, useState } from "react";
 import { Accordion } from "@/components/playground/shared/Accordion";
 import {
   buildOperation,
+  getDefaultScalarsForField,
   getGraphqlRootFieldsByKind,
   type GraphqlRootField,
 } from "@/components/playground/graphql/build-operation";
 
 export type SchemaPanelProps = {
-  onConfirm: (operation: string) => void;
+  onConfirm: (rootField: string, selectedFields: readonly string[]) => void;
 };
 
 function RootFieldSection({
@@ -44,7 +45,9 @@ function RootFieldSection({
       {expanded && (
         <div className="space-y-2 border-t border-[var(--color-border)] px-3 py-2">
           {field.selectableScalars.length === 0 ? (
-            <p className="text-xs text-[var(--color-text-muted)]">No sub-fields — inserts call only.</p>
+            <p className="text-xs text-[var(--color-text-muted)]">
+              No sub-fields — inserts call only.
+            </p>
           ) : (
             field.selectableScalars.map((scalar) => (
               <label
@@ -107,7 +110,7 @@ export function SchemaPanel({ onConfirm }: SchemaPanelProps) {
 
   function activateField(name: string) {
     setActiveField(name);
-    setSelectedScalars(new Set());
+    setSelectedScalars(new Set(getDefaultScalarsForField(name)));
   }
 
   function toggleScalar(scalar: string) {
@@ -123,8 +126,8 @@ export function SchemaPanel({ onConfirm }: SchemaPanelProps) {
   const built = activeField ? buildOperation(activeField, [...selectedScalars]) : null;
 
   return (
-    <aside
-      className="flex h-full min-h-0 min-w-0 flex-col gap-3 overflow-hidden rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-raised)] p-3"
+    <section
+      className="flex max-h-72 min-h-0 w-full flex-col gap-3 overflow-hidden rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-raised)] p-3"
       aria-label="GraphQL schema"
     >
       <h3 className="text-sm font-semibold text-[var(--color-text-primary)]">Schema</h3>
@@ -149,12 +152,12 @@ export function SchemaPanel({ onConfirm }: SchemaPanelProps) {
       <button
         type="button"
         disabled={!built}
-        onClick={() => built && onConfirm(built)}
+        onClick={() => activeField && built && onConfirm(activeField, [...selectedScalars])}
         className="shrink-0 rounded-lg px-3 py-2 text-sm font-medium text-[var(--color-bg)] transition-opacity disabled:cursor-not-allowed disabled:opacity-50"
         style={{ background: "var(--color-accent)" }}
       >
-        Insert operation
+        Apply to query
       </button>
-    </aside>
+    </section>
   );
 }

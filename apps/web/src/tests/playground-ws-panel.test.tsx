@@ -35,6 +35,10 @@ function mockWebSocket() {
       this.readyState = MockWebSocket.OPEN;
       this.onopen?.();
     }
+
+    simulateMessage(data: string) {
+      this.onmessage?.({ data });
+    }
   }
 
   return { MockWebSocket, instances };
@@ -82,5 +86,47 @@ describe("Playground WebSocket — WsPanel", () => {
 
     unmount();
     expect(ws?.close).toHaveBeenCalled();
+  });
+
+  it("shows endpoint info and message presets that fill the composer", async () => {
+    const user = userEvent.setup();
+    const { MockWebSocket } = mockWebSocket();
+    vi.stubGlobal("WebSocket", MockWebSocket as unknown as typeof WebSocket);
+
+    render(<WsPanel />);
+
+    expect(screen.getByText(/Streams live stock price updates/i)).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "Pong reply" }));
+
+    const messageBox = screen.getByRole("textbox", { name: "Message" });
+    expect(messageBox).toHaveValue("pong");
+  });
+
+  it("clears the event log when reconnecting", async () => {
+    const user = userEvent.setup();
+    const { MockWebSocket, instances } = mockWebSocket();
+    vi.stubGlobal("WebSocket", MockWebSocket as unknown as typeof WebSocket);
+
+    render(<WsPanel />);
+
+    await user.click(screen.getByRole("button", { name: "Connect" }));
+    await waitFor(() => expect(instances[0]).toBeDefined());
+
+    act(() => {
+      instances[0]?.simulateOpen();
+    });
+    act(() => {
+      instances[0]?.simulateMessage("before-reconnect");
+    });
+
+    await waitFor(() => {
+      expect(screen.getByRole("log").textContent).toContain("before-reconnect");
+    });
+
+    await user.click(screen.getByRole("button", { name: "Disconnect" }));
+    await user.click(screen.getByRole("button", { name: "Connect" }));
+
+    expect(screen.getByRole("log").textContent).not.toContain("before-reconnect");
   });
 });

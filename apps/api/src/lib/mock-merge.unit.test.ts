@@ -10,10 +10,10 @@ describe("pickDefined", () => {
 
 describe("mergeGeneratedRow", () => {
   it("shallow-merges overlay onto generated row", () => {
-    const row = mergeGeneratedRow(
-      () => [{ id: "1", title: "Generated" }],
-      { title: "Caller", id: "99" },
-    );
+    const row = mergeGeneratedRow(() => [{ id: "1", title: "Generated" }], {
+      title: "Caller",
+      id: "99",
+    });
     expect(row).toEqual({ id: "99", title: "Caller" });
     expect(MOCK_GENERATE_PARAMS).toEqual({ limit: 1, skip: 0, order: "asc" });
   });

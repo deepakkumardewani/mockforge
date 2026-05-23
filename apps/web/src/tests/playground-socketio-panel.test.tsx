@@ -80,4 +80,43 @@ describe("Playground Socket.IO — SocketIoPanel", () => {
     unmount();
     expect(socket.disconnect).toHaveBeenCalled();
   });
+
+  it("shows namespace info and emit presets that fill the composer", async () => {
+    const user = userEvent.setup();
+    mockIo();
+
+    render(<SocketIoPanel />);
+
+    expect(screen.getByText(/Emits tick events every second/i)).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "Chat message" }));
+
+    expect(screen.getByLabelText("Emit event name")).toHaveValue("message");
+    expect(screen.getByLabelText(/Payload \(JSON/)).toHaveValue(
+      '{"text":"Hello from playground","userId":1}',
+    );
+  });
+
+  it("clears the event log when reconnecting", async () => {
+    const user = userEvent.setup();
+    const socket = mockIo();
+
+    render(<SocketIoPanel />);
+
+    await user.click(screen.getByRole("button", { name: "Connect" }));
+    await waitFor(() => expect(ioMock).toHaveBeenCalledTimes(1));
+
+    act(() => {
+      socket.simulateConnect();
+    });
+
+    await waitFor(() => {
+      expect(screen.getByRole("log").textContent).toContain("[connected]");
+    });
+
+    await user.click(screen.getByRole("button", { name: "Disconnect" }));
+    await user.click(screen.getByRole("button", { name: "Connect" }));
+
+    expect(screen.getByRole("log").textContent).not.toContain("[connected]");
+  });
 });

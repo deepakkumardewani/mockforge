@@ -42,6 +42,7 @@ export function useWsConsole(url: string) {
     }
 
     disconnect();
+    setEvents([]);
 
     setStatus("connecting");
     try {
