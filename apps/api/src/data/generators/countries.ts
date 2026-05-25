@@ -1,41 +1,22 @@
-import { faker } from "@faker-js/faker";
 import type { Country } from "@mockforge/types";
 import type { PaginationParams } from "../../lib/pagination";
+import seedData from "../seed/countries.json";
+
+const seed = seedData as Country[];
 
 export function generateCountries(params: PaginationParams): Country[] {
-  const items: Country[] = [];
-  const itemsToGenerate = params.search ? 200 : params.limit + params.skip;
+  let items = seed;
 
-  for (let i = 0; i < itemsToGenerate; i++) {
-    items.push({
-      id: i + 1,
-      name: faker.location.country(),
-      code: faker.location.countryCode("alpha-2"),
-      capital: faker.location.city(),
-      region: faker.lorem.word(),
-      subregion: faker.lorem.word(),
-      population: faker.number.int({ min: 100000, max: 1000000000 }),
-      area: faker.number.int({ min: 1000, max: 10000000 }),
-      currency: faker.finance.currencyCode(),
-      language: faker.lorem.word(),
-      flag: faker.helpers.arrayElement(["🇺🇸", "🇬🇧", "🇨🇦", "🇫🇷", "🇩🇪", "🇮🇳", "🇯🇵", "🇦🇺"]),
-      createdAt: faker.date.recent().toISOString(),
-    });
-  }
-
-  let filtered = items;
   if (params.search) {
-    const searchLower = params.search.toLowerCase();
-    filtered = items.filter(
+    const q = params.search.toLowerCase();
+    items = seed.filter(
       (c) =>
-        c.name.toLowerCase().includes(searchLower) ||
-        c.code.toLowerCase().includes(searchLower) ||
-        c.capital.toLowerCase().includes(searchLower) ||
-        c.currency.toLowerCase().includes(searchLower),
+        c.name.toLowerCase().includes(q) ||
+        c.code.toLowerCase().includes(q) ||
+        c.capital.toLowerCase().includes(q) ||
+        c.currency.toLowerCase().includes(q),
     );
   }
 
-  const start = params.skip;
-  const end = start + params.limit;
-  return filtered.slice(start, end);
+  return items.slice(params.skip, params.skip + params.limit);
 }

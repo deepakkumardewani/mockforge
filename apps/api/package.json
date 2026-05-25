@@ -12,7 +12,8 @@
     "test": "vitest run --project unit",
     "test:integration": "vitest run --project integration",
     "test:coverage": "vitest run --coverage",
-    "test:watch": "vitest --watch"
+    "test:watch": "vitest --watch",
+    "seed": "bun run scripts/generate-seed.ts"
   },
   "dependencies": {
     "@faker-js/faker": "^9.3.0",

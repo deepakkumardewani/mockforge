@@ -1,32 +1,16 @@
-import { faker } from "@faker-js/faker";
 import type { Todo } from "@mockforge/types";
 import type { PaginationParams } from "../../lib/pagination";
+import seedData from "../seed/todos.json";
 
-const priorities: Array<"low" | "medium" | "high"> = ["low", "medium", "high"];
+const seed = seedData as Todo[];
 
 export function generateTodos(params: PaginationParams): Todo[] {
-  const items: Todo[] = [];
-  const itemsToGenerate = params.search ? 200 : params.limit + params.skip;
+  let items = seed;
 
-  for (let i = 0; i < itemsToGenerate; i++) {
-    items.push({
-      id: i + 1,
-      userId: faker.number.int({ min: 1, max: 100 }),
-      todo: faker.lorem.sentence(),
-      completed: faker.datatype.boolean(),
-      priority: priorities[faker.number.int({ min: 0, max: 2 })],
-      dueDate: faker.date.future().toISOString(),
-      createdAt: faker.date.recent().toISOString(),
-    });
-  }
-
-  let filtered = items;
   if (params.search) {
-    const searchLower = params.search.toLowerCase();
-    filtered = items.filter((t) => t.todo.toLowerCase().includes(searchLower));
+    const q = params.search.toLowerCase();
+    items = seed.filter((t) => t.todo.toLowerCase().includes(q));
   }
 
-  const start = params.skip;
-  const end = start + params.limit;
-  return filtered.slice(start, end);
+  return items.slice(params.skip, params.skip + params.limit);
 }
