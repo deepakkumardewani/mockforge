@@ -1,0 +1,2002 @@
+[
+  {
+    "id": 1,
+    "title": "Soft Metal Bike",
+    "description": "Fresh Computer designed with Gold for male performance",
+    "price": 70.49,
+    "discountPercentage": 39,
+    "rating": 4,
+    "stock": 30,
+    "brand": "Hintz Group",
+    "category": "Outdoors",
+    "thumbnail": "https://loremflickr.com/2829/762?lock=953006941035447",
+    "images": [
+      "https://picsum.photos/seed/ozUyanQDE/2513/486",
+      "https://picsum.photos/seed/xJKBa/3467/3575",
+      "https://loremflickr.com/3189/2880?lock=4177627507148592"
+    ],
+    "sku": "AK1OYCFP",
+    "weight": 2.15,
+    "createdAt": "2026-05-22T18:28:40.259Z"
+  },
+  {
+    "id": 2,
+    "title": "Sleek Bronze Tuna",
+    "description": "The Open-source zero tolerance archive Chips offers reliable performance and gummy design",
+    "price": 464.95,
+    "discountPercentage": 30,
+    "rating": 3.3,
+    "stock": 51,
+    "brand": "Sporer Group",
+    "category": "Shoes",
+    "thumbnail": "https://picsum.photos/seed/zRqXs8/2251/3048",
+    "images": [
+      "https://loremflickr.com/1558/3806?lock=7819133098596635",
+      "https://loremflickr.com/3525/1401?lock=6526237459391999",
+      "https://loremflickr.com/1246/3131?lock=4370894239979050"
+    ],
+    "sku": "MNRNMWOM",
+    "weight": 5.24,
+    "createdAt": "2026-05-23T07:41:00.920Z"
+  },
+  {
+    "id": 3,
+    "title": "Frozen Concrete Towels",
+    "description": "The sleek and pure Bacon comes with olive LED lighting for smart functionality",
+    "price": 277.49,
+    "discountPercentage": 9,
+    "rating": 4.8,
+    "stock": 82,
+    "brand": "Bechtelar Group",
+    "category": "Movies",
+    "thumbnail": "https://loremflickr.com/2152/2035?lock=6708118234904844",
+    "images": [
+      "https://loremflickr.com/673/760?lock=2578579760662028",
+      "https://picsum.photos/seed/p4gYAI0w2/990/2581",
+      "https://picsum.photos/seed/sWF4sets/2277/3683"
+    ],
+    "sku": "AMAVPFKW",
+    "weight": 9.12,
+    "createdAt": "2026-05-22T20:36:38.242Z"
+  },
+  {
+    "id": 4,
+    "title": "Bespoke Rubber Shoes",
+    "description": "Mills, Lehner and Barrows's most advanced Cheese technology increases practical capabilities",
+    "price": 283.09,
+    "discountPercentage": 28,
+    "rating": 0.4,
+    "stock": 83,
+    "brand": "Pouros, Zboncak and Gottlieb",
+    "category": "Health",
+    "thumbnail": "https://picsum.photos/seed/ScS3TkjvW/1318/1762",
+    "images": [
+      "https://picsum.photos/seed/cqnULvZ/192/1409",
+      "https://loremflickr.com/1861/233?lock=3927773704445939",
+      "https://picsum.photos/seed/AIWSvM/628/3790"
+    ],
+    "sku": "YY77WG1I",
+    "weight": 0.32,
+    "createdAt": "2026-05-23T05:52:22.074Z"
+  },
+  {
+    "id": 5,
+    "title": "Licensed Wooden Hat",
+    "description": "Discover the tempting new Tuna with an exciting mix of Gold ingredients",
+    "price": 166.99,
+    "discountPercentage": 31,
+    "rating": 2,
+    "stock": 8,
+    "brand": "Gleason LLC",
+    "category": "Tools",
+    "thumbnail": "https://loremflickr.com/1072/3246?lock=4846963160591075",
+    "images": [
+      "https://picsum.photos/seed/PEYIVw7w/283/3736",
+      "https://loremflickr.com/508/2370?lock=5607660659379508",
+      "https://loremflickr.com/41/780?lock=8561374971574314"
+    ],
+    "sku": "NQIBIPDX",
+    "weight": 1.31,
+    "createdAt": "2026-05-23T00:30:37.076Z"
+  },
+  {
+    "id": 6,
+    "title": "Awesome Ceramic Shirt",
+    "description": "Featuring Neon-enhanced technology, our Hat offers unparalleled bowed performance",
+    "price": 405.77,
+    "discountPercentage": 43,
+    "rating": 3.4,
+    "stock": 10,
+    "brand": "Sporer, Schmeler and Lang",
+    "category": "Computers",
+    "thumbnail": "https://picsum.photos/seed/ddNb4/3381/2908",
+    "images": [
+      "https://picsum.photos/seed/QyTV04f/3994/100",
+      "https://loremflickr.com/2677/3553?lock=5467127800553381",
+      "https://picsum.photos/seed/u5yv8r/754/3220"
+    ],
+    "sku": "KWA0LIM3",
+    "weight": 7.55,
+    "createdAt": "2026-05-23T14:30:36.929Z"
+  },
+  {
+    "id": 7,
+    "title": "Fresh Concrete Chair",
+    "description": "Professional-grade Car perfect for ruddy training and recreational use",
+    "price": 284.49,
+    "discountPercentage": 28,
+    "rating": 0,
+    "stock": 15,
+    "brand": "Blick, Quigley and Waelchi",
+    "category": "Computers",
+    "thumbnail": "https://picsum.photos/seed/J5Fpt3bNsi/1482/2276",
+    "images": [
+      "https://picsum.photos/seed/7fVAxA/1536/3417",
+      "https://picsum.photos/seed/8xWjR/1464/3228",
+      "https://loremflickr.com/3056/992?lock=917358610687878"
+    ],
+    "sku": "JCNVI7PU",
+    "weight": 5.41,
+    "createdAt": "2026-05-23T11:13:36.291Z"
+  },
+  {
+    "id": 8,
+    "title": "Ergonomic Silk Salad",
+    "description": "Professional-grade Salad perfect for content training and recreational use",
+    "price": 336.25,
+    "discountPercentage": 17,
+    "rating": 4.5,
+    "stock": 118,
+    "brand": "Kirlin - Roob",
+    "category": "Outdoors",
+    "thumbnail": "https://loremflickr.com/1978/3579?lock=3698344279762137",
+    "images": [
+      "https://picsum.photos/seed/5Rjbepfj8i/3594/3585",
+      "https://loremflickr.com/2289/1767?lock=6723443058741624",
+      "https://loremflickr.com/3574/3027?lock=6705338939344182"
+    ],
+    "sku": "98LOF38R",
+    "weight": 6.34,
+    "createdAt": "2026-05-22T21:39:47.078Z"
+  },
+  {
+    "id": 9,
+    "title": "Licensed Granite Pizza",
+    "description": "Featuring Nobelium-enhanced technology, our Chips offers unparalleled aggressive performance",
+    "price": 192.65,
+    "discountPercentage": 3,
+    "rating": 4,
+    "stock": 43,
+    "brand": "Schmitt, Macejkovic and Robel",
+    "category": "Kids",
+    "thumbnail": "https://loremflickr.com/1422/3235?lock=5145028567069893",
+    "images": [
+      "https://loremflickr.com/2981/1516?lock=4137421040496897",
+      "https://picsum.photos/seed/U6eHPRp5/3272/3719",
+      "https://loremflickr.com/1751/923?lock=6955967762407429"
+    ],
+    "sku": "4PQA5K5X",
+    "weight": 8.07,
+    "createdAt": "2026-05-23T02:37:02.561Z"
+  },
+  {
+    "id": 10,
+    "title": "Fresh Wooden Computer",
+    "description": "Experience the white brilliance of our Bacon, perfect for warmhearted environments",
+    "price": 93.85,
+    "discountPercentage": 43,
+    "rating": 2.4,
+    "stock": 199,
+    "brand": "Blanda, Zemlak and Jaskolski",
+    "category": "Electronics",
+    "thumbnail": "https://loremflickr.com/2231/1217?lock=12865370718275",
+    "images": [
+      "https://picsum.photos/seed/hh9ahNUYeS/1798/3347",
+      "https://picsum.photos/seed/aqhJsZ3m/1313/452",
+      "https://loremflickr.com/1928/2013?lock=6568412228198750"
+    ],
+    "sku": "SWNQYPIO",
+    "weight": 3.17,
+    "createdAt": "2026-05-23T02:48:12.549Z"
+  },
+  {
+    "id": 11,
+    "title": "Frozen Wooden Chips",
+    "description": "Discover the bad new Bike with an exciting mix of Ceramic ingredients",
+    "price": 237.55,
+    "discountPercentage": 37,
+    "rating": 2.1,
+    "stock": 67,
+    "brand": "Ryan - Bechtelar",
+    "category": "Automotive",
+    "thumbnail": "https://loremflickr.com/3182/1909?lock=2121789310521957",
+    "images": [
+      "https://picsum.photos/seed/wYXdOcd/3730/3438",
+      "https://picsum.photos/seed/vUU9m/2704/1620",
+      "https://picsum.photos/seed/a75UcprB4e/2476/638"
+    ],
+    "sku": "VUM1KCHU",
+    "weight": 6.34,
+    "createdAt": "2026-05-22T17:18:43.419Z"
+  },
+  {
+    "id": 12,
+    "title": "Soft Wooden Ball",
+    "description": "Our golden-inspired Chair brings a taste of luxury to your well-worn lifestyle",
+    "price": 256.55,
+    "discountPercentage": 17,
+    "rating": 4.3,
+    "stock": 87,
+    "brand": "Dicki - Runte",
+    "category": "Computers",
+    "thumbnail": "https://loremflickr.com/3069/824?lock=4192733911250501",
+    "images": [
+      "https://loremflickr.com/3772/3726?lock=3226550281318638",
+      "https://loremflickr.com/598/2040?lock=8113326263926612",
+      "https://loremflickr.com/3720/1534?lock=8072578475380912"
+    ],
+    "sku": "O0JQEC2D",
+    "weight": 2.63,
+    "createdAt": "2026-05-22T16:50:33.494Z"
+  },
+  {
+    "id": 13,
+    "title": "Fresh Silk Soap",
+    "description": "Our zebra-friendly Chair ensures fragrant comfort for your pets",
+    "price": 94.63,
+    "discountPercentage": 31,
+    "rating": 2.1,
+    "stock": 187,
+    "brand": "Ebert - Mann",
+    "category": "Jewelry",
+    "thumbnail": "https://picsum.photos/seed/Dj5q7WtjL/159/1612",
+    "images": [
+      "https://picsum.photos/seed/F2zL8eS1Kt/1992/1240",
+      "https://picsum.photos/seed/xFHXwoX/1787/29",
+      "https://loremflickr.com/2568/1193?lock=7589056277675849"
+    ],
+    "sku": "METCB3PX",
+    "weight": 4.36,
+    "createdAt": "2026-05-23T09:33:15.279Z"
+  },
+  {
+    "id": 14,
+    "title": "Sleek Rubber Bacon",
+    "description": "Experience the violet brilliance of our Soap, perfect for frozen environments",
+    "price": 220.49,
+    "discountPercentage": 1,
+    "rating": 4.7,
+    "stock": 48,
+    "brand": "Boehm - Ward",
+    "category": "Industrial",
+    "thumbnail": "https://loremflickr.com/2668/3646?lock=5598040189699029",
+    "images": [
+      "https://picsum.photos/seed/lnx0ecfNh/156/747",
+      "https://picsum.photos/seed/4mKyOX/766/2017",
+      "https://loremflickr.com/3170/2415?lock=360910244694260"
+    ],
+    "sku": "ZN9FHAAR",
+    "weight": 8.36,
+    "createdAt": "2026-05-22T21:56:43.640Z"
+  },
+  {
+    "id": 15,
+    "title": "Incredible Marble Pizza",
+    "description": "The purple Car combines Guyana aesthetics with Francium-based durability",
+    "price": 19.99,
+    "discountPercentage": 44,
+    "rating": 2.6,
+    "stock": 186,
+    "brand": "Kuhn Group",
+    "category": "Outdoors",
+    "thumbnail": "https://picsum.photos/seed/wFM8B2u9bm/988/3598",
+    "images": [
+      "https://loremflickr.com/1730/2493?lock=4536852056437089",
+      "https://picsum.photos/seed/JkLquE1E/731/2296",
+      "https://loremflickr.com/2474/1240?lock=819073716686281"
+    ],
+    "sku": "VG7MAP2E",
+    "weight": 8.9,
+    "createdAt": "2026-05-22T15:48:22.645Z"
+  },
+  {
+    "id": 16,
+    "title": "Fantastic Wooden Pants",
+    "description": "Innovative Ball featuring exhausted technology and Steel construction",
+    "price": 213.87,
+    "discountPercentage": 20,
+    "rating": 1,
+    "stock": 103,
+    "brand": "Schneider, Bergstrom and Pouros",
+    "category": "Industrial",
+    "thumbnail": "https://picsum.photos/seed/pt4hkWhsFa/3629/490",
+    "images": [
+      "https://picsum.photos/seed/F7W8MgVI/1946/2954",
+      "https://loremflickr.com/3015/877?lock=5564766545873772",
+      "https://picsum.photos/seed/gPwsjAJpDH/3080/416"
+    ],
+    "sku": "I3RSGETS",
+    "weight": 3.78,
+    "createdAt": "2026-05-23T09:34:46.306Z"
+  },
+  {
+    "id": 17,
+    "title": "Electronic Granite Tuna",
+    "description": "The olive Cheese combines Sao Tome and Principe aesthetics with Uranium-based durability",
+    "price": 121.75,
+    "discountPercentage": 19,
+    "rating": 2.5,
+    "stock": 121,
+    "brand": "Kuhlman LLC",
+    "category": "Books",
+    "thumbnail": "https://loremflickr.com/3251/2167?lock=6900929674390916",
+    "images": [
+      "https://loremflickr.com/3729/3789?lock=1220627482541253",
+      "https://picsum.photos/seed/fpnNsa/2074/451",
+      "https://loremflickr.com/1069/2036?lock=5509304545836876"
+    ],
+    "sku": "ZIWUWF8I",
+    "weight": 8.95,
+    "createdAt": "2026-05-23T14:54:55.200Z"
+  },
+  {
+    "id": 18,
+    "title": "Small Bamboo Towels",
+    "description": "New Bacon model with 45 GB RAM, 47 GB storage, and grimy features",
+    "price": 241.9,
+    "discountPercentage": 33,
+    "rating": 2.2,
+    "stock": 164,
+    "brand": "Carter, Lemke and Graham",
+    "category": "Baby",
+    "thumbnail": "https://loremflickr.com/2674/3451?lock=7317571691491400",
+    "images": [
+      "https://loremflickr.com/3413/3657?lock=8142085375099206",
+      "https://loremflickr.com/1283/2209?lock=395245706452171",
+      "https://loremflickr.com/2881/1778?lock=1715092299488198"
+    ],
+    "sku": "F0N4BNUM",
+    "weight": 3.21,
+    "createdAt": "2026-05-23T14:43:12.131Z"
+  },
+  {
+    "id": 19,
+    "title": "Oriental Aluminum Gloves",
+    "description": "The Eliseo Bike is the latest in a series of petty products from Becker Group",
+    "price": 315.05,
+    "discountPercentage": 27,
+    "rating": 1.4,
+    "stock": 190,
+    "brand": "Reichert, Blick and Breitenberg",
+    "category": "Health",
+    "thumbnail": "https://loremflickr.com/643/3913?lock=4390719924301311",
+    "images": [
+      "https://loremflickr.com/1457/2557?lock=3875945809966229",
+      "https://loremflickr.com/1099/3551?lock=8230125603051334",
+      "https://picsum.photos/seed/Xwim4/3332/1190"
+    ],
+    "sku": "Z2ERWFWT",
+    "weight": 7.03,
+    "createdAt": "2026-05-22T17:13:06.767Z"
+  },
+  {
+    "id": 20,
+    "title": "Fantastic Ceramic Sausages",
+    "description": "Experience the green brilliance of our Soap, perfect for minty environments",
+    "price": 182.69,
+    "discountPercentage": 13,
+    "rating": 3.3,
+    "stock": 107,
+    "brand": "Hyatt, Powlowski and Kuhn",
+    "category": "Home",
+    "thumbnail": "https://loremflickr.com/1071/1820?lock=6364869995265293",
+    "images": [
+      "https://loremflickr.com/3762/1317?lock=4470229084540949",
+      "https://picsum.photos/seed/WcSHsxQtnu/2178/674",
+      "https://picsum.photos/seed/D6B74woA5/2316/757"
+    ],
+    "sku": "QAZYGK5Y",
+    "weight": 2.86,
+    "createdAt": "2026-05-23T01:45:27.354Z"
+  },
+  {
+    "id": 21,
+    "title": "Oriental Aluminum Shoes",
+    "description": "Our creamy-inspired Car brings a taste of luxury to your ripe lifestyle",
+    "price": 132.45,
+    "discountPercentage": 29,
+    "rating": 2,
+    "stock": 73,
+    "brand": "Ortiz - Witting",
+    "category": "Books",
+    "thumbnail": "https://loremflickr.com/2388/1697?lock=2289155192161700",
+    "images": [
+      "https://picsum.photos/seed/b5IcGo/3300/1941",
+      "https://loremflickr.com/1663/1877?lock=906304183851369",
+      "https://picsum.photos/seed/sbd1Td/1239/2655"
+    ],
+    "sku": "EH7D48DL",
+    "weight": 7.08,
+    "createdAt": "2026-05-23T04:57:51.692Z"
+  },
+  {
+    "id": 22,
+    "title": "Fresh Metal Bike",
+    "description": "Our fluffy-inspired Pants brings a taste of luxury to your zealous lifestyle",
+    "price": 307.89,
+    "discountPercentage": 13,
+    "rating": 2.4,
+    "stock": 73,
+    "brand": "Hills, Hintz and Hoppe",
+    "category": "Shoes",
+    "thumbnail": "https://loremflickr.com/2603/2457?lock=7367025892014693",
+    "images": [
+      "https://picsum.photos/seed/uF0Srl8/154/3483",
+      "https://loremflickr.com/1758/1985?lock=6112826691340079",
+      "https://picsum.photos/seed/6okzR44Qd/1684/3845"
+    ],
+    "sku": "FXP78YWP",
+    "weight": 3.27,
+    "createdAt": "2026-05-23T06:08:48.102Z"
+  },
+  {
+    "id": 23,
+    "title": "Tasty Silk Tuna",
+    "description": "Discover the monkey-like agility of our Shoes, perfect for evil users",
+    "price": 395.69,
+    "discountPercentage": 25,
+    "rating": 2.8,
+    "stock": 146,
+    "brand": "Moore LLC",
+    "category": "Industrial",
+    "thumbnail": "https://loremflickr.com/2562/1038?lock=1074303715508089",
+    "images": [
+      "https://picsum.photos/seed/Mlpob3AZa/899/2001",
+      "https://loremflickr.com/187/3118?lock=7472767065275377",
+      "https://loremflickr.com/2816/3782?lock=5962494244560766"
+    ],
+    "sku": "SDRBVWOJ",
+    "weight": 6.64,
+    "createdAt": "2026-05-22T18:18:27.282Z"
+  },
+  {
+    "id": 24,
+    "title": "Recycled Granite Table",
+    "description": "Bespoke Shoes designed with Aluminum for near performance",
+    "price": 82.59,
+    "discountPercentage": 8,
+    "rating": 2.9,
+    "stock": 143,
+    "brand": "Purdy, Osinski and Huels",
+    "category": "Automotive",
+    "thumbnail": "https://picsum.photos/seed/Jw4bQIT/481/2138",
+    "images": [
+      "https://loremflickr.com/471/3960?lock=106103692909983",
+      "https://picsum.photos/seed/zUjFbC/3989/1125",
+      "https://loremflickr.com/1346/845?lock=1610857138980533"
+    ],
+    "sku": "TOFRJKYR",
+    "weight": 8.61,
+    "createdAt": "2026-05-23T05:10:00.755Z"
+  },
+  {
+    "id": 25,
+    "title": "Ergonomic Plastic Keyboard",
+    "description": "Stylish Table designed to make you stand out with unselfish looks",
+    "price": 377.85,
+    "discountPercentage": 16,
+    "rating": 4.9,
+    "stock": 134,
+    "brand": "Hansen - Mueller",
+    "category": "Baby",
+    "thumbnail": "https://loremflickr.com/96/1800?lock=3947842895630346",
+    "images": [
+      "https://picsum.photos/seed/cjA494OK/1051/659",
+      "https://picsum.photos/seed/D2CMvmh/3013/2865",
+      "https://picsum.photos/seed/LySwwzK/2571/2771"
+    ],
+    "sku": "X43WWCT5",
+    "weight": 7.68,
+    "createdAt": "2026-05-23T09:31:10.213Z"
+  },
+  {
+    "id": 26,
+    "title": "Generic Concrete Soap",
+    "description": "Discover the fantastic new Pants with an exciting mix of Wooden ingredients",
+    "price": 342.25,
+    "discountPercentage": 17,
+    "rating": 1.4,
+    "stock": 200,
+    "brand": "Nolan, Hermiston and Beatty",
+    "category": "Automotive",
+    "thumbnail": "https://picsum.photos/seed/2mer4XdVqZ/2217/3048",
+    "images": [
+      "https://loremflickr.com/2216/3723?lock=6739536017400893",
+      "https://loremflickr.com/3612/559?lock=3824210071028779",
+      "https://picsum.photos/seed/0O5DU/3734/2170"
+    ],
+    "sku": "CF4BAJIS",
+    "weight": 5.99,
+    "createdAt": "2026-05-22T19:41:48.602Z"
+  },
+  {
+    "id": 27,
+    "title": "Refined Concrete Pizza",
+    "description": "Experience the cyan brilliance of our Gloves, perfect for simplistic environments",
+    "price": 138.3,
+    "discountPercentage": 10,
+    "rating": 3.1,
+    "stock": 17,
+    "brand": "Ratke LLC",
+    "category": "Jewelry",
+    "thumbnail": "https://loremflickr.com/1130/1512?lock=6476381812351297",
+    "images": [
+      "https://loremflickr.com/2016/2835?lock=2922279771171256",
+      "https://loremflickr.com/1337/103?lock=7235524355921662",
+      "https://loremflickr.com/3589/2073?lock=277643482576643"
+    ],
+    "sku": "S0WULV1A",
+    "weight": 5.49,
+    "createdAt": "2026-05-22T20:50:59.815Z"
+  },
+  {
+    "id": 28,
+    "title": "Handmade Metal Sausages",
+    "description": "Discover the crocodile-like agility of our Cheese, perfect for any users",
+    "price": 70.29,
+    "discountPercentage": 5,
+    "rating": 0.5,
+    "stock": 144,
+    "brand": "Gerhold, Aufderhar and Fadel",
+    "category": "Baby",
+    "thumbnail": "https://loremflickr.com/414/1726?lock=4647227332540880",
+    "images": [
+      "https://picsum.photos/seed/lnpJsRWk/1014/3762",
+      "https://loremflickr.com/2243/381?lock=3724168545772667",
+      "https://loremflickr.com/825/3506?lock=4104227812307678"
+    ],
+    "sku": "BGNRZR4S",
+    "weight": 8.21,
+    "createdAt": "2026-05-23T06:20:06.482Z"
+  },
+  {
+    "id": 29,
+    "title": "Sleek Granite Bike",
+    "description": "Discover the peacock-like agility of our Shirt, perfect for major users",
+    "price": 216.39,
+    "discountPercentage": 6,
+    "rating": 1,
+    "stock": 11,
+    "brand": "Altenwerth - Murazik",
+    "category": "Electronics",
+    "thumbnail": "https://loremflickr.com/3892/775?lock=3223146617431671",
+    "images": [
+      "https://loremflickr.com/34/3356?lock=8468387106695732",
+      "https://picsum.photos/seed/nE23syT6/3568/2142",
+      "https://loremflickr.com/3290/840?lock=2851701215026657"
+    ],
+    "sku": "O9VNRUQH",
+    "weight": 4.9,
+    "createdAt": "2026-05-22T21:46:15.398Z"
+  },
+  {
+    "id": 30,
+    "title": "Small Marble Cheese",
+    "description": "Innovative Shoes featuring yellow technology and Bamboo construction",
+    "price": 400.09,
+    "discountPercentage": 44,
+    "rating": 2.1,
+    "stock": 108,
+    "brand": "Abernathy - Frami",
+    "category": "Kids",
+    "thumbnail": "https://loremflickr.com/485/455?lock=5835197291345629",
+    "images": [
+      "https://loremflickr.com/2848/714?lock=8470343463314945",
+      "https://picsum.photos/seed/aOLAkg7vA/1043/3413",
+      "https://loremflickr.com/1437/1901?lock=5773669281783482"
+    ],
+    "sku": "TAN8CJVH",
+    "weight": 9.5,
+    "createdAt": "2026-05-22T17:06:16.583Z"
+  },
+  {
+    "id": 31,
+    "title": "Modern Aluminum Table",
+    "description": "Our sweet-inspired Car brings a taste of luxury to your unaware lifestyle",
+    "price": 164.39,
+    "discountPercentage": 30,
+    "rating": 0.2,
+    "stock": 55,
+    "brand": "Johnston - Tremblay",
+    "category": "Toys",
+    "thumbnail": "https://picsum.photos/seed/9VKJHcdG/2548/647",
+    "images": [
+      "https://picsum.photos/seed/sNPEegj7g/879/1755",
+      "https://picsum.photos/seed/IG5Vz/838/1821",
+      "https://loremflickr.com/1455/3026?lock=6246581287399164"
+    ],
+    "sku": "2QRDDFLT",
+    "weight": 6.18,
+    "createdAt": "2026-05-23T02:32:16.855Z"
+  },
+  {
+    "id": 32,
+    "title": "Soft Granite Soap",
+    "description": "The Integrated data-driven functionalities Shoes offers reliable performance and monstrous design",
+    "price": 404.95,
+    "discountPercentage": 12,
+    "rating": 0.5,
+    "stock": 159,
+    "brand": "Goldner - Steuber",
+    "category": "Games",
+    "thumbnail": "https://loremflickr.com/3892/3918?lock=369099012909824",
+    "images": [
+      "https://loremflickr.com/2820/1804?lock=6372799007811273",
+      "https://loremflickr.com/125/3480?lock=1146723459367177",
+      "https://picsum.photos/seed/oketyDfWa/703/3841"
+    ],
+    "sku": "X0TKRZRP",
+    "weight": 7.33,
+    "createdAt": "2026-05-23T08:02:49.776Z"
+  },
+  {
+    "id": 33,
+    "title": "Sleek Ceramic Pants",
+    "description": "Professional-grade Computer perfect for genuine training and recreational use",
+    "price": 79.59,
+    "discountPercentage": 34,
+    "rating": 3.3,
+    "stock": 191,
+    "brand": "Bechtelar, Torp and Stracke",
+    "category": "Grocery",
+    "thumbnail": "https://picsum.photos/seed/5brAOZo2NB/2343/3904",
+    "images": [
+      "https://picsum.photos/seed/uiYFphJfa/794/1979",
+      "https://picsum.photos/seed/Eh07V/2119/1160",
+      "https://picsum.photos/seed/YnG3oXxh/3469/935"
+    ],
+    "sku": "7HDNW1IV",
+    "weight": 3.21,
+    "createdAt": "2026-05-22T21:38:25.144Z"
+  },
+  {
+    "id": 34,
+    "title": "Licensed Silk Bike",
+    "description": "Rustic Chair designed with Plastic for impossible performance",
+    "price": 393.89,
+    "discountPercentage": 21,
+    "rating": 2.4,
+    "stock": 75,
+    "brand": "Bechtelar LLC",
+    "category": "Grocery",
+    "thumbnail": "https://picsum.photos/seed/iDheJ25/779/3264",
+    "images": [
+      "https://loremflickr.com/28/612?lock=8969390344936598",
+      "https://loremflickr.com/1155/597?lock=8431869550320286",
+      "https://picsum.photos/seed/kcnjFhz/2081/1459"
+    ],
+    "sku": "4BPWNFF7",
+    "weight": 0.59,
+    "createdAt": "2026-05-22T22:54:58.173Z"
+  },
+  {
+    "id": 35,
+    "title": "Ergonomic Bronze Shirt",
+    "description": "Discover the frog-like agility of our Keyboard, perfect for genuine users",
+    "price": 154.6,
+    "discountPercentage": 9,
+    "rating": 0.5,
+    "stock": 180,
+    "brand": "Lubowitz Inc",
+    "category": "Beauty",
+    "thumbnail": "https://loremflickr.com/2357/2101?lock=4070074522232521",
+    "images": [
+      "https://loremflickr.com/3187/2362?lock=4936138821424308",
+      "https://picsum.photos/seed/IF1pk/2811/3171",
+      "https://picsum.photos/seed/NVY0CpRfYC/2677/865"
+    ],
+    "sku": "N5BL1O0E",
+    "weight": 3.65,
+    "createdAt": "2026-05-23T06:15:43.296Z"
+  },
+  {
+    "id": 36,
+    "title": "Practical Cotton Bike",
+    "description": "Discover the miserly new Sausages with an exciting mix of Granite ingredients",
+    "price": 217.09,
+    "discountPercentage": 17,
+    "rating": 4.9,
+    "stock": 175,
+    "brand": "McKenzie - Stamm",
+    "category": "Grocery",
+    "thumbnail": "https://picsum.photos/seed/G4bLQCD1PM/72/298",
+    "images": [
+      "https://loremflickr.com/1036/2834?lock=363261796566772",
+      "https://loremflickr.com/805/715?lock=3769057999105529",
+      "https://loremflickr.com/2034/1907?lock=262746024240700"
+    ],
+    "sku": "BOIRKRU8",
+    "weight": 6.96,
+    "createdAt": "2026-05-22T20:31:55.320Z"
+  },
+  {
+    "id": 37,
+    "title": "Handmade Aluminum Shoes",
+    "description": "Ergonomic Table made with Silk for all-day silky support",
+    "price": 313.59,
+    "discountPercentage": 40,
+    "rating": 2.3,
+    "stock": 189,
+    "brand": "Koepp and Sons",
+    "category": "Shoes",
+    "thumbnail": "https://loremflickr.com/2218/720?lock=8719621926743302",
+    "images": [
+      "https://loremflickr.com/3012/3244?lock=4214103403161926",
+      "https://loremflickr.com/2586/3320?lock=7678086895465721",
+      "https://loremflickr.com/2194/790?lock=2539395648426120"
+    ],
+    "sku": "W39O8ESW",
+    "weight": 7.64,
+    "createdAt": "2026-05-23T02:19:19.826Z"
+  },
+  {
+    "id": 38,
+    "title": "Rustic Metal Bike",
+    "description": "Experience the magenta brilliance of our Sausages, perfect for ill-fated environments",
+    "price": 93.65,
+    "discountPercentage": 21,
+    "rating": 2.6,
+    "stock": 34,
+    "brand": "Stehr Inc",
+    "category": "Health",
+    "thumbnail": "https://picsum.photos/seed/B5XIM/3902/1333",
+    "images": [
+      "https://loremflickr.com/2816/2359?lock=7731540066473348",
+      "https://picsum.photos/seed/xsc0evnr/3827/1996",
+      "https://loremflickr.com/3922/1401?lock=1202601174641449"
+    ],
+    "sku": "2MZL9ZFE",
+    "weight": 0.12,
+    "createdAt": "2026-05-22T18:42:52.060Z"
+  },
+  {
+    "id": 39,
+    "title": "Generic Bamboo Tuna",
+    "description": "Introducing the Comoros-inspired Pants, blending tough style with local craftsmanship",
+    "price": 481.19,
+    "discountPercentage": 1,
+    "rating": 3.2,
+    "stock": 83,
+    "brand": "DuBuque - O'Kon",
+    "category": "Grocery",
+    "thumbnail": "https://picsum.photos/seed/7MF7HrW8Dn/719/2756",
+    "images": [
+      "https://picsum.photos/seed/gNZfrwi0dh/3827/1320",
+      "https://picsum.photos/seed/5EEX0fVVI/1774/685",
+      "https://picsum.photos/seed/bO8tWb/3063/366"
+    ],
+    "sku": "YZYAJQJH",
+    "weight": 9.72,
+    "createdAt": "2026-05-22T19:16:01.319Z"
+  },
+  {
+    "id": 40,
+    "title": "Recycled Aluminum Pants",
+    "description": "Frozen Chair designed with Metal for robust performance",
+    "price": 166.42,
+    "discountPercentage": 47,
+    "rating": 2.3,
+    "stock": 170,
+    "brand": "Kassulke Group",
+    "category": "Grocery",
+    "thumbnail": "https://loremflickr.com/2150/90?lock=7037831148016488",
+    "images": [
+      "https://picsum.photos/seed/yMxk8/2720/2540",
+      "https://picsum.photos/seed/FNEovNno/3550/1883",
+      "https://loremflickr.com/383/3658?lock=5838549220030904"
+    ],
+    "sku": "PPG4ALPA",
+    "weight": 8.97,
+    "createdAt": "2026-05-23T07:20:01.118Z"
+  },
+  {
+    "id": 41,
+    "title": "Small Granite Mouse",
+    "description": "Soft Gloves designed with Concrete for ill performance",
+    "price": 150.5,
+    "discountPercentage": 3,
+    "rating": 3.4,
+    "stock": 34,
+    "brand": "Berge Inc",
+    "category": "Music",
+    "thumbnail": "https://loremflickr.com/3540/886?lock=4236302414066772",
+    "images": [
+      "https://picsum.photos/seed/Q0oUJxwlw/3494/3051",
+      "https://picsum.photos/seed/9rpGfDSpUZ/2621/1674",
+      "https://picsum.photos/seed/609ZbvQ1Bh/425/932"
+    ],
+    "sku": "RHGFD2PH",
+    "weight": 8.09,
+    "createdAt": "2026-05-23T10:47:41.418Z"
+  },
+  {
+    "id": 42,
+    "title": "Incredible Metal Pants",
+    "description": "The Intuitive discrete customer loyalty Keyboard offers reliable performance and joyous design",
+    "price": 54.69,
+    "discountPercentage": 10,
+    "rating": 2.1,
+    "stock": 45,
+    "brand": "Hilpert Inc",
+    "category": "Home",
+    "thumbnail": "https://picsum.photos/seed/p2uyyHb/814/623",
+    "images": [
+      "https://picsum.photos/seed/ud3k8/1009/3243",
+      "https://loremflickr.com/2840/2135?lock=83240828198772",
+      "https://picsum.photos/seed/Aj5dbqE/3232/705"
+    ],
+    "sku": "G0WBXATZ",
+    "weight": 9.28,
+    "createdAt": "2026-05-23T11:28:01.796Z"
+  },
+  {
+    "id": 43,
+    "title": "Generic Ceramic Chicken",
+    "description": "Our rich-inspired Ball brings a taste of luxury to your strange lifestyle",
+    "price": 151.89,
+    "discountPercentage": 45,
+    "rating": 4.2,
+    "stock": 105,
+    "brand": "Tillman, Kunze and Haley",
+    "category": "Music",
+    "thumbnail": "https://picsum.photos/seed/pdmhaKfsn/881/1554",
+    "images": [
+      "https://loremflickr.com/3928/1564?lock=809078451623824",
+      "https://loremflickr.com/2363/2397?lock=3889702183557512",
+      "https://picsum.photos/seed/676Bc/216/2066"
+    ],
+    "sku": "FAXQEKDU",
+    "weight": 0.2,
+    "createdAt": "2026-05-23T07:41:56.277Z"
+  },
+  {
+    "id": 44,
+    "title": "Licensed Steel Car",
+    "description": "The Self-enabling client-driven functionalities Chair offers reliable performance and fatherly design",
+    "price": 282.54,
+    "discountPercentage": 6,
+    "rating": 4.9,
+    "stock": 46,
+    "brand": "Hayes, Conroy and Stiedemann",
+    "category": "Electronics",
+    "thumbnail": "https://loremflickr.com/2635/2266?lock=4465944784525993",
+    "images": [
+      "https://picsum.photos/seed/38Irp8v7tL/2929/352",
+      "https://picsum.photos/seed/QpL27coQl/1033/1923",
+      "https://picsum.photos/seed/zl5Z74S/2618/2837"
+    ],
+    "sku": "IEKOGLPI",
+    "weight": 5.12,
+    "createdAt": "2026-05-23T14:13:53.844Z"
+  },
+  {
+    "id": 45,
+    "title": "Bespoke Granite Pants",
+    "description": "Bespoke Mouse designed with Silk for ugly performance",
+    "price": 19.37,
+    "discountPercentage": 33,
+    "rating": 2.2,
+    "stock": 9,
+    "brand": "Kovacek, Barrows and Pollich",
+    "category": "Health",
+    "thumbnail": "https://loremflickr.com/498/857?lock=5172776342865630",
+    "images": [
+      "https://picsum.photos/seed/C0HpzElU8F/2488/2023",
+      "https://loremflickr.com/18/3698?lock=854641167071907",
+      "https://loremflickr.com/1332/1494?lock=5270307388235609"
+    ],
+    "sku": "R2JOGIHJ",
+    "weight": 1,
+    "createdAt": "2026-05-22T22:07:31.644Z"
+  },
+  {
+    "id": 46,
+    "title": "Sleek Wooden Hat",
+    "description": "Discover the flamingo-like agility of our Mouse, perfect for wavy users",
+    "price": 188.85,
+    "discountPercentage": 38,
+    "rating": 3,
+    "stock": 125,
+    "brand": "Murphy LLC",
+    "category": "Toys",
+    "thumbnail": "https://picsum.photos/seed/5tvPrz/2929/3108",
+    "images": [
+      "https://picsum.photos/seed/9AAa7Yoea/2108/153",
+      "https://picsum.photos/seed/Tojso/2670/2438",
+      "https://loremflickr.com/3454/3717?lock=7781641961097362"
+    ],
+    "sku": "MVFZHP0Z",
+    "weight": 3.39,
+    "createdAt": "2026-05-22T23:19:50.302Z"
+  },
+  {
+    "id": 47,
+    "title": "Oriental Silk Pants",
+    "description": "The Dillan Keyboard is the latest in a series of advanced products from Okuneva LLC",
+    "price": 370.79,
+    "discountPercentage": 5,
+    "rating": 3,
+    "stock": 55,
+    "brand": "Keeling - Luettgen",
+    "category": "Games",
+    "thumbnail": "https://loremflickr.com/2882/2575?lock=6799287279809635",
+    "images": [
+      "https://picsum.photos/seed/HnWOA/2595/2550",
+      "https://loremflickr.com/1009/815?lock=4292542426247390",
+      "https://loremflickr.com/1184/2060?lock=8806454119032562"
+    ],
+    "sku": "6VUWIRDL",
+    "weight": 3.01,
+    "createdAt": "2026-05-23T05:27:49.228Z"
+  },
+  {
+    "id": 48,
+    "title": "Intelligent Marble Chicken",
+    "description": "New black Chicken with ergonomic design for careless comfort",
+    "price": 408.35,
+    "discountPercentage": 13,
+    "rating": 4.4,
+    "stock": 97,
+    "brand": "Larson - Homenick",
+    "category": "Industrial",
+    "thumbnail": "https://loremflickr.com/459/3987?lock=3136582758450190",
+    "images": [
+      "https://picsum.photos/seed/I6QJd9j/2841/1456",
+      "https://loremflickr.com/3904/1028?lock=270398154708348",
+      "https://picsum.photos/seed/Ox2jzWRe/1589/2285"
+    ],
+    "sku": "DCVQMOVS",
+    "weight": 2.53,
+    "createdAt": "2026-05-23T03:42:24.671Z"
+  },
+  {
+    "id": 49,
+    "title": "Awesome Bamboo Table",
+    "description": "The orange Computer combines Saudi Arabia aesthetics with Protactinium-based durability",
+    "price": 364.09,
+    "discountPercentage": 23,
+    "rating": 1.7,
+    "stock": 151,
+    "brand": "Conn - Jacobi",
+    "category": "Toys",
+    "thumbnail": "https://loremflickr.com/904/2449?lock=639732432799316",
+    "images": [
+      "https://picsum.photos/seed/h5WnzNkI8i/1952/2808",
+      "https://loremflickr.com/579/3245?lock=6461796769594348",
+      "https://picsum.photos/seed/ktBZWRT/3773/2111"
+    ],
+    "sku": "TETOXPBI",
+    "weight": 9.51,
+    "createdAt": "2026-05-22T21:27:25.354Z"
+  },
+  {
+    "id": 50,
+    "title": "Refined Granite Chicken",
+    "description": "The purple Chips combines Namibia aesthetics with Cadmium-based durability",
+    "price": 107.25,
+    "discountPercentage": 37,
+    "rating": 2.1,
+    "stock": 71,
+    "brand": "Jast LLC",
+    "category": "Home",
+    "thumbnail": "https://loremflickr.com/1989/540?lock=1523152525842687",
+    "images": [
+      "https://picsum.photos/seed/oUDLmXOQ/505/3730",
+      "https://loremflickr.com/689/1084?lock=2440133353731679",
+      "https://loremflickr.com/3421/128?lock=2467205818600144"
+    ],
+    "sku": "CENY0QP7",
+    "weight": 6.76,
+    "createdAt": "2026-05-23T08:26:11.248Z"
+  },
+  {
+    "id": 51,
+    "title": "Recycled Plastic Bacon",
+    "description": "Turner, Armstrong and Watsica's most advanced Shoes technology increases bulky capabilities",
+    "price": 372.05,
+    "discountPercentage": 29,
+    "rating": 4.7,
+    "stock": 89,
+    "brand": "Kreiger and Sons",
+    "category": "Baby",
+    "thumbnail": "https://picsum.photos/seed/UW3o1kxU/2004/2748",
+    "images": [
+      "https://loremflickr.com/3386/510?lock=5307648334492259",
+      "https://picsum.photos/seed/oTnJt7VsJm/2128/1066",
+      "https://loremflickr.com/76/403?lock=6214646443306419"
+    ],
+    "sku": "KHHHUUUR",
+    "weight": 1.99,
+    "createdAt": "2026-05-22T22:58:11.845Z"
+  },
+  {
+    "id": 52,
+    "title": "Bespoke Metal Cheese",
+    "description": "Introducing the Gambia-inspired Cheese, blending sorrowful style with local craftsmanship",
+    "price": 73.55,
+    "discountPercentage": 35,
+    "rating": 3.2,
+    "stock": 162,
+    "brand": "Gulgowski - Goyette",
+    "category": "Books",
+    "thumbnail": "https://picsum.photos/seed/nIkhx14p/1157/1239",
+    "images": [
+      "https://loremflickr.com/3771/2886?lock=7622954973993763",
+      "https://picsum.photos/seed/dvyxzWT/2929/2444",
+      "https://picsum.photos/seed/guQvK/3502/3205"
+    ],
+    "sku": "8FJALGLH",
+    "weight": 3.68,
+    "createdAt": "2026-05-23T04:54:44.949Z"
+  },
+  {
+    "id": 53,
+    "title": "Electronic Silk Computer",
+    "description": "Savor the delicious essence in our Table, designed for interesting culinary adventures",
+    "price": 99.35,
+    "discountPercentage": 10,
+    "rating": 1.7,
+    "stock": 162,
+    "brand": "Runolfsson, Kiehn and Rau",
+    "category": "Garden",
+    "thumbnail": "https://picsum.photos/seed/sFxQL3/845/2531",
+    "images": [
+      "https://picsum.photos/seed/R6lSc4MP/3993/3009",
+      "https://picsum.photos/seed/PpchvwNN/651/3417",
+      "https://loremflickr.com/2325/3123?lock=450941171123681"
+    ],
+    "sku": "S4FHPSI0",
+    "weight": 3.01,
+    "createdAt": "2026-05-23T05:27:35.859Z"
+  },
+  {
+    "id": 54,
+    "title": "Handcrafted Marble Table",
+    "description": "Frozen Hat designed with Marble for zealous performance",
+    "price": 125.39,
+    "discountPercentage": 0,
+    "rating": 0,
+    "stock": 92,
+    "brand": "Bahringer LLC",
+    "category": "Electronics",
+    "thumbnail": "https://loremflickr.com/2240/1204?lock=3667494994857893",
+    "images": [
+      "https://loremflickr.com/929/2139?lock=4579313933939351",
+      "https://picsum.photos/seed/t4Bgw/630/2684",
+      "https://picsum.photos/seed/oWMhQqPP/2070/3697"
+    ],
+    "sku": "BHIIIIE0",
+    "weight": 7.15,
+    "createdAt": "2026-05-22T19:41:40.943Z"
+  },
+  {
+    "id": 55,
+    "title": "Electronic Ceramic Fish",
+    "description": "Our wolf-friendly Sausages ensures glass comfort for your pets",
+    "price": 229.79,
+    "discountPercentage": 9,
+    "rating": 4.3,
+    "stock": 51,
+    "brand": "Swaniawski LLC",
+    "category": "Games",
+    "thumbnail": "https://picsum.photos/seed/OXVUvms/2735/79",
+    "images": [
+      "https://loremflickr.com/2759/3536?lock=8270348732604529",
+      "https://picsum.photos/seed/66iCNT/3260/3915",
+      "https://loremflickr.com/2495/23?lock=898253789026204"
+    ],
+    "sku": "MV2LBESU",
+    "weight": 4.28,
+    "createdAt": "2026-05-23T14:31:49.900Z"
+  },
+  {
+    "id": 56,
+    "title": "Fantastic Granite Sausages",
+    "description": "Professional-grade Towels perfect for left training and recreational use",
+    "price": 53.39,
+    "discountPercentage": 8,
+    "rating": 2.7,
+    "stock": 106,
+    "brand": "Price - Muller",
+    "category": "Clothing",
+    "thumbnail": "https://picsum.photos/seed/jBWF4sT/1878/2881",
+    "images": [
+      "https://picsum.photos/seed/VmQpr/378/3955",
+      "https://loremflickr.com/2537/3098?lock=5342674240857155",
+      "https://loremflickr.com/747/1384?lock=4224919946868531"
+    ],
+    "sku": "K692TX7W",
+    "weight": 7.33,
+    "createdAt": "2026-05-23T06:53:10.012Z"
+  },
+  {
+    "id": 57,
+    "title": "Oriental Silk Bike",
+    "description": "Our salty-inspired Shoes brings a taste of luxury to your rotating lifestyle",
+    "price": 271.69,
+    "discountPercentage": 31,
+    "rating": 4.5,
+    "stock": 99,
+    "brand": "Jacobson, Brakus and Berge",
+    "category": "Baby",
+    "thumbnail": "https://picsum.photos/seed/3dhx88WNb/1521/1349",
+    "images": [
+      "https://picsum.photos/seed/7Jognule/1626/1423",
+      "https://picsum.photos/seed/2ELOuc/1594/77",
+      "https://loremflickr.com/2949/2799?lock=8137173665334581"
+    ],
+    "sku": "6YRGWIBR",
+    "weight": 0.72,
+    "createdAt": "2026-05-23T00:56:16.765Z"
+  },
+  {
+    "id": 58,
+    "title": "Refined Cotton Chips",
+    "description": "Professional-grade Soap perfect for idolized training and recreational use",
+    "price": 87.59,
+    "discountPercentage": 33,
+    "rating": 1.4,
+    "stock": 39,
+    "brand": "Auer, Kessler and Bahringer",
+    "category": "Health",
+    "thumbnail": "https://loremflickr.com/2004/1287?lock=3390197549375763",
+    "images": [
+      "https://picsum.photos/seed/chafdwyW/2689/3129",
+      "https://picsum.photos/seed/fg2iK2dH/783/2567",
+      "https://picsum.photos/seed/9ozW4vk/3130/1821"
+    ],
+    "sku": "V1JOYRHI",
+    "weight": 3.83,
+    "createdAt": "2026-05-23T11:38:23.227Z"
+  },
+  {
+    "id": 59,
+    "title": "Unbranded Gold Fish",
+    "description": "The Intuitive leading edge conglomeration Sausages offers reliable performance and strong design",
+    "price": 392.55,
+    "discountPercentage": 40,
+    "rating": 1.7,
+    "stock": 34,
+    "brand": "Klein - Herman",
+    "category": "Industrial",
+    "thumbnail": "https://loremflickr.com/752/3438?lock=2039496570196778",
+    "images": [
+      "https://loremflickr.com/1923/1995?lock=2448703735159013",
+      "https://picsum.photos/seed/IJ8XOcb/679/2874",
+      "https://picsum.photos/seed/MKBG1jD/503/554"
+    ],
+    "sku": "02QGGGNJ",
+    "weight": 0.36,
+    "createdAt": "2026-05-23T13:58:21.937Z"
+  },
+  {
+    "id": 60,
+    "title": "Gorgeous Bamboo Hat",
+    "description": "The indigo Cheese combines Comoros aesthetics with Erbium-based durability",
+    "price": 463.31,
+    "discountPercentage": 48,
+    "rating": 4.4,
+    "stock": 43,
+    "brand": "Rowe and Sons",
+    "category": "Books",
+    "thumbnail": "https://loremflickr.com/3064/1355?lock=3795426070866473",
+    "images": [
+      "https://picsum.photos/seed/oCmoHWxL5d/3175/1859",
+      "https://loremflickr.com/2009/81?lock=4660336512113463",
+      "https://picsum.photos/seed/VEpVMc8F/60/1058"
+    ],
+    "sku": "YMJCZX7P",
+    "weight": 2.52,
+    "createdAt": "2026-05-23T10:14:28.882Z"
+  },
+  {
+    "id": 61,
+    "title": "Tasty Plastic Pants",
+    "description": "Our fox-friendly Pizza ensures remorseful comfort for your pets",
+    "price": 107.25,
+    "discountPercentage": 24,
+    "rating": 2.7,
+    "stock": 154,
+    "brand": "Jast and Sons",
+    "category": "Books",
+    "thumbnail": "https://loremflickr.com/3982/476?lock=8016577583132550",
+    "images": [
+      "https://picsum.photos/seed/ZiI7pQmAvE/980/2919",
+      "https://picsum.photos/seed/t4yk9QwVNG/3891/223",
+      "https://loremflickr.com/21/1711?lock=8203738265619014"
+    ],
+    "sku": "AHWGDB53",
+    "weight": 3.72,
+    "createdAt": "2026-05-23T08:52:55.441Z"
+  },
+  {
+    "id": 62,
+    "title": "Licensed Gold Mouse",
+    "description": "New black Salad with ergonomic design for stormy comfort",
+    "price": 100.15,
+    "discountPercentage": 4,
+    "rating": 4.1,
+    "stock": 144,
+    "brand": "Bradtke, Raynor and Parisian",
+    "category": "Shoes",
+    "thumbnail": "https://loremflickr.com/167/93?lock=1340165719400281",
+    "images": [
+      "https://loremflickr.com/2233/3669?lock=7610636408462920",
+      "https://loremflickr.com/1/674?lock=2955687039780684",
+      "https://picsum.photos/seed/W7d1qhR/3632/388"
+    ],
+    "sku": "BCW5RZPT",
+    "weight": 8.23,
+    "createdAt": "2026-05-22T18:03:33.452Z"
+  },
+  {
+    "id": 63,
+    "title": "Fresh Aluminum Chips",
+    "description": "Ergonomic Hat made with Plastic for all-day sinful support",
+    "price": 469.99,
+    "discountPercentage": 33,
+    "rating": 1.4,
+    "stock": 50,
+    "brand": "Glover - Langosh",
+    "category": "Grocery",
+    "thumbnail": "https://loremflickr.com/2050/2691?lock=2263578412337517",
+    "images": [
+      "https://picsum.photos/seed/FeAzuyuzI/665/1398",
+      "https://loremflickr.com/439/2998?lock=600131657626811",
+      "https://loremflickr.com/3904/3828?lock=3992472067714659"
+    ],
+    "sku": "BUPWDLBJ",
+    "weight": 9.1,
+    "createdAt": "2026-05-23T12:28:32.483Z"
+  },
+  {
+    "id": 64,
+    "title": "Luxurious Concrete Chips",
+    "description": "Discover the gorilla-like agility of our Chips, perfect for suburban users",
+    "price": 71,
+    "discountPercentage": 48,
+    "rating": 2,
+    "stock": 43,
+    "brand": "Hartmann Group",
+    "category": "Jewelry",
+    "thumbnail": "https://loremflickr.com/1907/3462?lock=5799446717226161",
+    "images": [
+      "https://picsum.photos/seed/Vkv00e6ga/3052/3038",
+      "https://loremflickr.com/115/3637?lock=6630038541901147",
+      "https://picsum.photos/seed/F0ZSTElT/609/3649"
+    ],
+    "sku": "IY6V8DYL",
+    "weight": 6.19,
+    "createdAt": "2026-05-22T21:09:26.891Z"
+  },
+  {
+    "id": 65,
+    "title": "Awesome Rubber Tuna",
+    "description": "The Multi-tiered transitional generative AI Keyboard offers reliable performance and kaleidoscopic design",
+    "price": 389.89,
+    "discountPercentage": 13,
+    "rating": 0.2,
+    "stock": 117,
+    "brand": "Cormier - O'Kon",
+    "category": "Kids",
+    "thumbnail": "https://picsum.photos/seed/ODiYgcr3YA/3008/2014",
+    "images": [
+      "https://loremflickr.com/2228/2623?lock=288802487278330",
+      "https://loremflickr.com/2449/2864?lock=6821112112378302",
+      "https://loremflickr.com/908/885?lock=3350630923140493"
+    ],
+    "sku": "QPNAIEAY",
+    "weight": 6.18,
+    "createdAt": "2026-05-23T15:08:24.090Z"
+  },
+  {
+    "id": 66,
+    "title": "Gorgeous Plastic Cheese",
+    "description": "Innovative Keyboard featuring dead technology and Ceramic construction",
+    "price": 27.59,
+    "discountPercentage": 4,
+    "rating": 0.9,
+    "stock": 20,
+    "brand": "Botsford and Sons",
+    "category": "Automotive",
+    "thumbnail": "https://picsum.photos/seed/OuQBG/998/3562",
+    "images": [
+      "https://picsum.photos/seed/207Ezy1/3974/930",
+      "https://loremflickr.com/1877/3698?lock=5628801204149484",
+      "https://picsum.photos/seed/oTeh3NpeeT/3119/3135"
+    ],
+    "sku": "PYCTOU7P",
+    "weight": 3.45,
+    "createdAt": "2026-05-23T03:32:30.477Z"
+  },
+  {
+    "id": 67,
+    "title": "Incredible Granite Car",
+    "description": "Our crunchy-inspired Ball brings a taste of luxury to your intent lifestyle",
+    "price": 317.05,
+    "discountPercentage": 23,
+    "rating": 1.9,
+    "stock": 75,
+    "brand": "Kunze and Sons",
+    "category": "Sports",
+    "thumbnail": "https://picsum.photos/seed/1TeVIL/683/545",
+    "images": [
+      "https://picsum.photos/seed/ij9cMa/806/937",
+      "https://picsum.photos/seed/7zUMCj/114/2517",
+      "https://picsum.photos/seed/Xg1xHNcgv/2167/365"
+    ],
+    "sku": "KRTNZLKP",
+    "weight": 2.75,
+    "createdAt": "2026-05-23T04:41:33.145Z"
+  },
+  {
+    "id": 68,
+    "title": "Fantastic Granite Chips",
+    "description": "Innovative Tuna featuring splendid technology and Wooden construction",
+    "price": 19.79,
+    "discountPercentage": 2,
+    "rating": 2,
+    "stock": 187,
+    "brand": "McKenzie - Kuvalis",
+    "category": "Sports",
+    "thumbnail": "https://picsum.photos/seed/WP2tojrnq/336/2726",
+    "images": [
+      "https://picsum.photos/seed/CPmqpnV/3917/355",
+      "https://loremflickr.com/3315/436?lock=3853905975310252",
+      "https://loremflickr.com/395/2476?lock=4705120073898390"
+    ],
+    "sku": "0JFUYSM2",
+    "weight": 8.46,
+    "createdAt": "2026-05-23T13:27:20.488Z"
+  },
+  {
+    "id": 69,
+    "title": "Sleek Bamboo Tuna",
+    "description": "Innovative Sausages featuring esteemed technology and Steel construction",
+    "price": 161.69,
+    "discountPercentage": 48,
+    "rating": 0.3,
+    "stock": 142,
+    "brand": "Kris Group",
+    "category": "Movies",
+    "thumbnail": "https://loremflickr.com/764/2211?lock=8607472179781189",
+    "images": [
+      "https://loremflickr.com/115/799?lock=3729591411668099",
+      "https://picsum.photos/seed/z5HaMfplR/931/1965",
+      "https://loremflickr.com/507/2263?lock=6348236529954386"
+    ],
+    "sku": "UQUVWUZG",
+    "weight": 1.07,
+    "createdAt": "2026-05-23T11:17:33.883Z"
+  },
+  {
+    "id": 70,
+    "title": "Handmade Bamboo Shirt",
+    "description": "New plum Table with ergonomic design for well-worn comfort",
+    "price": 435.19,
+    "discountPercentage": 41,
+    "rating": 1.8,
+    "stock": 120,
+    "brand": "Hickle and Sons",
+    "category": "Home",
+    "thumbnail": "https://loremflickr.com/1859/3990?lock=1606868601818211",
+    "images": [
+      "https://picsum.photos/seed/HfRTc8YRT/2052/3256",
+      "https://picsum.photos/seed/3KvEvuah/3545/2167",
+      "https://picsum.photos/seed/gAB9N/636/783"
+    ],
+    "sku": "MEHWPH5P",
+    "weight": 5.59,
+    "createdAt": "2026-05-22T20:05:02.902Z"
+  },
+  {
+    "id": 71,
+    "title": "Incredible Metal Chips",
+    "description": "The lavender Soap combines South Sudan aesthetics with Potassium-based durability",
+    "price": 50.69,
+    "discountPercentage": 46,
+    "rating": 1.8,
+    "stock": 57,
+    "brand": "Klocko Inc",
+    "category": "Movies",
+    "thumbnail": "https://picsum.photos/seed/IoFtZJ/3038/3412",
+    "images": [
+      "https://picsum.photos/seed/sfm1wvwYU/3810/3340",
+      "https://loremflickr.com/647/1476?lock=3247391828982957",
+      "https://picsum.photos/seed/N8Iqi3umfH/3194/2096"
+    ],
+    "sku": "LF3Q0WCJ",
+    "weight": 2.46,
+    "createdAt": "2026-05-22T15:48:08.834Z"
+  },
+  {
+    "id": 72,
+    "title": "Fresh Bronze Pants",
+    "description": "Experience the pink brilliance of our Chips, perfect for any environments",
+    "price": 22.99,
+    "discountPercentage": 40,
+    "rating": 2.2,
+    "stock": 91,
+    "brand": "Ratke Inc",
+    "category": "Beauty",
+    "thumbnail": "https://loremflickr.com/2224/1308?lock=5827177909192915",
+    "images": [
+      "https://picsum.photos/seed/HxGSqpLA4/1977/2481",
+      "https://picsum.photos/seed/X3Bqk5yt6/3568/124",
+      "https://picsum.photos/seed/pXRi9qozAK/2450/2952"
+    ],
+    "sku": "V6RJY7X5",
+    "weight": 2.31,
+    "createdAt": "2026-05-22T16:42:15.214Z"
+  },
+  {
+    "id": 73,
+    "title": "Recycled Silk Gloves",
+    "description": "Luxurious Pizza designed with Silk for happy performance",
+    "price": 453.99,
+    "discountPercentage": 45,
+    "rating": 0.6,
+    "stock": 165,
+    "brand": "Zboncak Inc",
+    "category": "Industrial",
+    "thumbnail": "https://loremflickr.com/2119/1287?lock=8067309094984013",
+    "images": [
+      "https://picsum.photos/seed/pfRHxB5t/3210/558",
+      "https://picsum.photos/seed/pcESKRxK8l/775/834",
+      "https://picsum.photos/seed/8amiCTXEPw/1558/2045"
+    ],
+    "sku": "CWYKDMMX",
+    "weight": 4.44,
+    "createdAt": "2026-05-23T09:42:30.118Z"
+  },
+  {
+    "id": 74,
+    "title": "Refined Ceramic Mouse",
+    "description": "The Jarrell Towels is the latest in a series of blond products from Stamm, Zemlak and Parisian",
+    "price": 468.9,
+    "discountPercentage": 29,
+    "rating": 1.9,
+    "stock": 187,
+    "brand": "Lind Inc",
+    "category": "Industrial",
+    "thumbnail": "https://picsum.photos/seed/A80fH6U/1882/192",
+    "images": [
+      "https://loremflickr.com/860/819?lock=125936074655679",
+      "https://picsum.photos/seed/htXfJr/3087/3500",
+      "https://loremflickr.com/1192/1824?lock=7193936292215003"
+    ],
+    "sku": "FI4XBSOY",
+    "weight": 4.78,
+    "createdAt": "2026-05-23T09:02:37.153Z"
+  },
+  {
+    "id": 75,
+    "title": "Handcrafted Bronze Gloves",
+    "description": "Experience the blue brilliance of our Pants, perfect for narrow environments",
+    "price": 334.45,
+    "discountPercentage": 14,
+    "rating": 4.7,
+    "stock": 153,
+    "brand": "Bashirian, Graham and Dietrich",
+    "category": "Automotive",
+    "thumbnail": "https://loremflickr.com/970/2715?lock=4584695454811636",
+    "images": [
+      "https://loremflickr.com/3551/2775?lock=3354901948983310",
+      "https://picsum.photos/seed/QKBmdMu/1823/708",
+      "https://loremflickr.com/899/781?lock=7000045747276653"
+    ],
+    "sku": "EWRZSRR0",
+    "weight": 4.26,
+    "createdAt": "2026-05-23T06:08:05.270Z"
+  },
+  {
+    "id": 76,
+    "title": "Luxurious Metal Car",
+    "description": "Savor the spicy essence in our Computer, designed for austere culinary adventures",
+    "price": 209.89,
+    "discountPercentage": 40,
+    "rating": 3.2,
+    "stock": 118,
+    "brand": "Kub LLC",
+    "category": "Health",
+    "thumbnail": "https://loremflickr.com/2793/1735?lock=1926944209009514",
+    "images": [
+      "https://picsum.photos/seed/cXvUHI5d0/24/1204",
+      "https://picsum.photos/seed/O8alplL/2864/1378",
+      "https://picsum.photos/seed/WZ5in/388/1405"
+    ],
+    "sku": "MADK7PHZ",
+    "weight": 8.9,
+    "createdAt": "2026-05-23T08:23:36.523Z"
+  },
+  {
+    "id": 77,
+    "title": "Fantastic Gold Hat",
+    "description": "Discover the comfortable new Salad with an exciting mix of Granite ingredients",
+    "price": 22.5,
+    "discountPercentage": 26,
+    "rating": 1.1,
+    "stock": 24,
+    "brand": "Funk LLC",
+    "category": "Toys",
+    "thumbnail": "https://picsum.photos/seed/QtRi7RA/2300/3559",
+    "images": [
+      "https://loremflickr.com/3556/3751?lock=4512330322351314",
+      "https://picsum.photos/seed/yH8OBW/1500/2503",
+      "https://picsum.photos/seed/Y2Kwm/1358/433"
+    ],
+    "sku": "4CAHUIRX",
+    "weight": 1,
+    "createdAt": "2026-05-23T13:57:28.595Z"
+  },
+  {
+    "id": 78,
+    "title": "Handcrafted Bamboo Fish",
+    "description": "Savor the smoky essence in our Ball, designed for sudden culinary adventures",
+    "price": 49.19,
+    "discountPercentage": 42,
+    "rating": 1.8,
+    "stock": 123,
+    "brand": "Bergstrom - Emmerich",
+    "category": "Beauty",
+    "thumbnail": "https://picsum.photos/seed/EBptpQe0E/1250/2058",
+    "images": [
+      "https://picsum.photos/seed/6uBhI/810/3560",
+      "https://loremflickr.com/2380/1299?lock=6756753054655754",
+      "https://loremflickr.com/859/3338?lock=5197851511200675"
+    ],
+    "sku": "SRNCMQBU",
+    "weight": 1.98,
+    "createdAt": "2026-05-22T16:12:20.467Z"
+  },
+  {
+    "id": 79,
+    "title": "Awesome Metal Pizza",
+    "description": "Introducing the Ghana-inspired Salad, blending vengeful style with local craftsmanship",
+    "price": 119.09,
+    "discountPercentage": 39,
+    "rating": 1.1,
+    "stock": 16,
+    "brand": "Stokes, Jacobson and Prosacco",
+    "category": "Industrial",
+    "thumbnail": "https://picsum.photos/seed/lTa9zEc/3411/1260",
+    "images": [
+      "https://loremflickr.com/1563/3786?lock=6020058018009958",
+      "https://picsum.photos/seed/szGASmid2/2960/1793",
+      "https://picsum.photos/seed/CQtRmVHf/173/3480"
+    ],
+    "sku": "YX8AJ3WD",
+    "weight": 8.77,
+    "createdAt": "2026-05-23T07:48:41.317Z"
+  },
+  {
+    "id": 80,
+    "title": "Gorgeous Granite Salad",
+    "description": "Swift - Walsh's most advanced Salad technology increases impassioned capabilities",
+    "price": 476.99,
+    "discountPercentage": 46,
+    "rating": 2.4,
+    "stock": 92,
+    "brand": "Cormier Inc",
+    "category": "Shoes",
+    "thumbnail": "https://loremflickr.com/62/1092?lock=3744394593961916",
+    "images": [
+      "https://picsum.photos/seed/fVMzHVIm/2913/3195",
+      "https://loremflickr.com/2852/162?lock=3659832509623602",
+      "https://loremflickr.com/668/93?lock=5896306249080668"
+    ],
+    "sku": "NZLBWAIK",
+    "weight": 0.89,
+    "createdAt": "2026-05-23T12:15:21.840Z"
+  },
+  {
+    "id": 81,
+    "title": "Rustic Aluminum Bike",
+    "description": "Discover the horse-like agility of our Keyboard, perfect for unwelcome users",
+    "price": 190.49,
+    "discountPercentage": 27,
+    "rating": 2,
+    "stock": 55,
+    "brand": "Schuppe - Zieme",
+    "category": "Games",
+    "thumbnail": "https://picsum.photos/seed/UyrEXN2/1527/2472",
+    "images": [
+      "https://loremflickr.com/1329/1882?lock=6306728876091001",
+      "https://picsum.photos/seed/SLmJ6M/3305/2925",
+      "https://picsum.photos/seed/c1qzSVwK/2129/1169"
+    ],
+    "sku": "RKCND1IP",
+    "weight": 3.99,
+    "createdAt": "2026-05-23T02:20:12.531Z"
+  },
+  {
+    "id": 82,
+    "title": "Sleek Rubber Chicken",
+    "description": "Introducing the Mauritania-inspired Car, blending unripe style with local craftsmanship",
+    "price": 347.25,
+    "discountPercentage": 48,
+    "rating": 1.1,
+    "stock": 155,
+    "brand": "Osinski - Koss",
+    "category": "Games",
+    "thumbnail": "https://loremflickr.com/3449/3417?lock=5489934084687332",
+    "images": [
+      "https://picsum.photos/seed/WbFFfk/1471/1663",
+      "https://loremflickr.com/3339/3047?lock=4809453011616410",
+      "https://loremflickr.com/247/835?lock=774382564334214"
+    ],
+    "sku": "QIWGWYBY",
+    "weight": 6.42,
+    "createdAt": "2026-05-22T16:19:30.682Z"
+  },
+  {
+    "id": 83,
+    "title": "Recycled Steel Shoes",
+    "description": "Professional-grade Salad perfect for broken training and recreational use",
+    "price": 336.95,
+    "discountPercentage": 30,
+    "rating": 0.8,
+    "stock": 41,
+    "brand": "Champlin Inc",
+    "category": "Shoes",
+    "thumbnail": "https://picsum.photos/seed/oBKTUM/1309/1952",
+    "images": [
+      "https://loremflickr.com/914/100?lock=1274958705126966",
+      "https://loremflickr.com/2841/2644?lock=7535366863909253",
+      "https://picsum.photos/seed/r4oLUpq/995/1729"
+    ],
+    "sku": "HWGRNB6C",
+    "weight": 1.87,
+    "createdAt": "2026-05-23T03:49:52.900Z"
+  },
+  {
+    "id": 84,
+    "title": "Licensed Steel Hat",
+    "description": "Innovative Cheese featuring decent technology and Gold construction",
+    "price": 101.79,
+    "discountPercentage": 17,
+    "rating": 1.8,
+    "stock": 171,
+    "brand": "Raynor and Sons",
+    "category": "Sports",
+    "thumbnail": "https://loremflickr.com/1314/3809?lock=3394232984344711",
+    "images": [
+      "https://loremflickr.com/3583/1099?lock=2725779220657604",
+      "https://picsum.photos/seed/FcVg95y78i/2449/1753",
+      "https://picsum.photos/seed/gfX0ScWlr/1127/2417"
+    ],
+    "sku": "HAJYJ20S",
+    "weight": 1.32,
+    "createdAt": "2026-05-23T07:31:49.437Z"
+  },
+  {
+    "id": 85,
+    "title": "Fantastic Gold Chair",
+    "description": "Our bitter-inspired Ball brings a taste of luxury to your corny lifestyle",
+    "price": 357.19,
+    "discountPercentage": 25,
+    "rating": 2.3,
+    "stock": 191,
+    "brand": "Satterfield, Mills and Klocko",
+    "category": "Games",
+    "thumbnail": "https://picsum.photos/seed/2Wjr7P/3788/2412",
+    "images": [
+      "https://loremflickr.com/111/3336?lock=7985459614571422",
+      "https://picsum.photos/seed/bRpoan/2919/659",
+      "https://picsum.photos/seed/8aRo0gBN86/3486/1453"
+    ],
+    "sku": "VKALQLNF",
+    "weight": 7.29,
+    "createdAt": "2026-05-23T01:39:30.020Z"
+  },
+  {
+    "id": 86,
+    "title": "Unbranded Cotton Towels",
+    "description": "Fresh Shoes designed with Gold for knowledgeable performance",
+    "price": 374.79,
+    "discountPercentage": 10,
+    "rating": 2.1,
+    "stock": 151,
+    "brand": "Pfeffer Inc",
+    "category": "Health",
+    "thumbnail": "https://picsum.photos/seed/0aEBMfL/178/3270",
+    "images": [
+      "https://picsum.photos/seed/sSqQA/2752/1291",
+      "https://picsum.photos/seed/7p46piV/768/2324",
+      "https://picsum.photos/seed/gWwPm6F0t/1503/3031"
+    ],
+    "sku": "BCYSOVUV",
+    "weight": 8.9,
+    "createdAt": "2026-05-23T10:26:43.129Z"
+  },
+  {
+    "id": 87,
+    "title": "Frozen Marble Cheese",
+    "description": "New Hat model with 84 GB RAM, 897 GB storage, and agile features",
+    "price": 432.25,
+    "discountPercentage": 1,
+    "rating": 2,
+    "stock": 198,
+    "brand": "Kassulke - Hackett",
+    "category": "Sports",
+    "thumbnail": "https://loremflickr.com/3477/951?lock=5648760475606760",
+    "images": [
+      "https://loremflickr.com/1346/2688?lock=1201553491673701",
+      "https://picsum.photos/seed/dZqHb/2745/850",
+      "https://loremflickr.com/2439/2904?lock=7466041449246087"
+    ],
+    "sku": "BOYZAOLO",
+    "weight": 7.61,
+    "createdAt": "2026-05-23T03:10:01.591Z"
+  },
+  {
+    "id": 88,
+    "title": "Tasty Concrete Fish",
+    "description": "The orange Ball combines Equatorial Guinea aesthetics with Oganesson-based durability",
+    "price": 161.05,
+    "discountPercentage": 17,
+    "rating": 2.7,
+    "stock": 168,
+    "brand": "Cronin, Hayes and Harvey",
+    "category": "Automotive",
+    "thumbnail": "https://loremflickr.com/2393/3419?lock=6665651212143025",
+    "images": [
+      "https://loremflickr.com/2511/1503?lock=6389021278093702",
+      "https://loremflickr.com/3418/2743?lock=1947652765209024",
+      "https://picsum.photos/seed/PyGY5/278/2281"
+    ],
+    "sku": "T7OQUVAH",
+    "weight": 8.33,
+    "createdAt": "2026-05-22T18:30:09.198Z"
+  },
+  {
+    "id": 89,
+    "title": "Rustic Granite Gloves",
+    "description": "New Keyboard model with 95 GB RAM, 549 GB storage, and delicious features",
+    "price": 364.85,
+    "discountPercentage": 30,
+    "rating": 2.8,
+    "stock": 173,
+    "brand": "Cartwright, Stanton and Jerde",
+    "category": "Computers",
+    "thumbnail": "https://picsum.photos/seed/0u6Khr/3479/1728",
+    "images": [
+      "https://picsum.photos/seed/EUGO6/349/1147",
+      "https://picsum.photos/seed/Fp2MGtTk/1003/3578",
+      "https://picsum.photos/seed/8dEnPWNn/1177/3491"
+    ],
+    "sku": "MLA2NUEC",
+    "weight": 9.7,
+    "createdAt": "2026-05-22T16:11:11.085Z"
+  },
+  {
+    "id": 90,
+    "title": "Rustic Concrete Bacon",
+    "description": "Elegant Mouse designed with Concrete for authorized performance",
+    "price": 66.65,
+    "discountPercentage": 24,
+    "rating": 1.7,
+    "stock": 84,
+    "brand": "Vandervort, Rau and Torp",
+    "category": "Games",
+    "thumbnail": "https://picsum.photos/seed/oZOqJg6/1525/2455",
+    "images": [
+      "https://loremflickr.com/1410/1612?lock=7338993909903764",
+      "https://loremflickr.com/1437/2322?lock=1576231305504297",
+      "https://picsum.photos/seed/niRZDNMmzP/3558/2435"
+    ],
+    "sku": "G1K8EU2D",
+    "weight": 3.1,
+    "createdAt": "2026-05-23T06:23:28.922Z"
+  },
+  {
+    "id": 91,
+    "title": "Licensed Ceramic Car",
+    "description": "Featuring Neodymium-enhanced technology, our Chicken offers unparalleled left performance",
+    "price": 38.89,
+    "discountPercentage": 33,
+    "rating": 1.4,
+    "stock": 114,
+    "brand": "Walter, Gibson and Harvey",
+    "category": "Health",
+    "thumbnail": "https://loremflickr.com/3708/3605?lock=1188318228207834",
+    "images": [
+      "https://loremflickr.com/1982/427?lock=1336536668094925",
+      "https://picsum.photos/seed/BR7Gpco/2544/3798",
+      "https://loremflickr.com/304/2781?lock=2804892693970363"
+    ],
+    "sku": "7RUZZPBK",
+    "weight": 1.27,
+    "createdAt": "2026-05-22T18:04:45.346Z"
+  },
+  {
+    "id": 92,
+    "title": "Recycled Ceramic Chips",
+    "description": "Our penguin-friendly Pants ensures scratchy comfort for your pets",
+    "price": 153.39,
+    "discountPercentage": 15,
+    "rating": 4.9,
+    "stock": 163,
+    "brand": "Abshire - Baumbach",
+    "category": "Computers",
+    "thumbnail": "https://picsum.photos/seed/dovOQUvH6/458/2133",
+    "images": [
+      "https://loremflickr.com/2261/995?lock=5711019265888430",
+      "https://loremflickr.com/1028/209?lock=199595352042021",
+      "https://loremflickr.com/34/442?lock=1992586257675479"
+    ],
+    "sku": "ZI7XRGIY",
+    "weight": 7.15,
+    "createdAt": "2026-05-23T09:03:38.255Z"
+  },
+  {
+    "id": 93,
+    "title": "Oriental Steel Soap",
+    "description": "Professional-grade Gloves perfect for suburban training and recreational use",
+    "price": 12.79,
+    "discountPercentage": 23,
+    "rating": 4.4,
+    "stock": 45,
+    "brand": "Cole Inc",
+    "category": "Books",
+    "thumbnail": "https://picsum.photos/seed/7J316XWcae/1455/1494",
+    "images": [
+      "https://loremflickr.com/2062/2279?lock=6815052213003806",
+      "https://picsum.photos/seed/MOilWa2/1238/3688",
+      "https://picsum.photos/seed/x6AM5a0ASF/1816/3205"
+    ],
+    "sku": "Y3TOJYHT",
+    "weight": 8.81,
+    "createdAt": "2026-05-23T09:46:11.616Z"
+  },
+  {
+    "id": 94,
+    "title": "Luxurious Bamboo Keyboard",
+    "description": "New silver Table with ergonomic design for strong comfort",
+    "price": 469.89,
+    "discountPercentage": 4,
+    "rating": 0.1,
+    "stock": 126,
+    "brand": "Yost Inc",
+    "category": "Games",
+    "thumbnail": "https://picsum.photos/seed/qDRuda0I6/2498/3302",
+    "images": [
+      "https://picsum.photos/seed/F37uki4/976/1192",
+      "https://loremflickr.com/3582/2767?lock=585881902053887",
+      "https://loremflickr.com/3899/2725?lock=6320631307324126"
+    ],
+    "sku": "KMTQ0VBC",
+    "weight": 9.2,
+    "createdAt": "2026-05-23T13:32:39.957Z"
+  },
+  {
+    "id": 95,
+    "title": "Unbranded Steel Tuna",
+    "description": "Featuring Fermium-enhanced technology, our Shoes offers unparalleled buttery performance",
+    "price": 489.9,
+    "discountPercentage": 0,
+    "rating": 0.1,
+    "stock": 93,
+    "brand": "Pollich - Mann",
+    "category": "Baby",
+    "thumbnail": "https://loremflickr.com/651/1552?lock=7135704535684673",
+    "images": [
+      "https://loremflickr.com/1664/374?lock=818197596758397",
+      "https://picsum.photos/seed/PkgyIZ83HP/516/959",
+      "https://picsum.photos/seed/UYQjcxsS/3385/2714"
+    ],
+    "sku": "6FK5JOC9",
+    "weight": 8.61,
+    "createdAt": "2026-05-23T02:19:37.957Z"
+  },
+  {
+    "id": 96,
+    "title": "Soft Granite Chicken",
+    "description": "Ergonomic Bacon made with Granite for all-day imaginary support",
+    "price": 298.79,
+    "discountPercentage": 39,
+    "rating": 4.7,
+    "stock": 20,
+    "brand": "Willms - Bashirian",
+    "category": "Toys",
+    "thumbnail": "https://loremflickr.com/19/3494?lock=8454056863882744",
+    "images": [
+      "https://loremflickr.com/1268/2617?lock=2182712897127643",
+      "https://picsum.photos/seed/RrYXkSQ/3094/2115",
+      "https://loremflickr.com/843/2497?lock=7536420178873154"
+    ],
+    "sku": "A4OZRYR3",
+    "weight": 7.49,
+    "createdAt": "2026-05-23T05:09:01.159Z"
+  },
+  {
+    "id": 97,
+    "title": "Incredible Concrete Keyboard",
+    "description": "Introducing the Maldives-inspired Table, blending every style with local craftsmanship",
+    "price": 427.09,
+    "discountPercentage": 31,
+    "rating": 1.8,
+    "stock": 169,
+    "brand": "Reinger Group",
+    "category": "Garden",
+    "thumbnail": "https://loremflickr.com/3932/3234?lock=2501876139445372",
+    "images": [
+      "https://picsum.photos/seed/vOr7yXNzE/1319/2601",
+      "https://loremflickr.com/3722/1713?lock=8802209495973965",
+      "https://loremflickr.com/3453/1292?lock=3738691414258333"
+    ],
+    "sku": "9XPSBX1L",
+    "weight": 5.81,
+    "createdAt": "2026-05-23T06:36:01.070Z"
+  },
+  {
+    "id": 98,
+    "title": "Bespoke Ceramic Ball",
+    "description": "Innovative Pizza featuring pleasant technology and Marble construction",
+    "price": 143.79,
+    "discountPercentage": 43,
+    "rating": 3.1,
+    "stock": 37,
+    "brand": "Swaniawski - Roberts",
+    "category": "Kids",
+    "thumbnail": "https://picsum.photos/seed/iQLiqb6Ig/1628/1048",
+    "images": [
+      "https://loremflickr.com/3280/3982?lock=4260721626120217",
+      "https://picsum.photos/seed/sAYkVgZ/3208/3156",
+      "https://picsum.photos/seed/g77lLB/2681/1854"
+    ],
+    "sku": "6QBXFATE",
+    "weight": 0.28,
+    "createdAt": "2026-05-22T15:56:38.986Z"
+  },
+  {
+    "id": 99,
+    "title": "Elegant Ceramic Gloves",
+    "description": "Our parrot-friendly Pants ensures afraid comfort for your pets",
+    "price": 48.09,
+    "discountPercentage": 19,
+    "rating": 3.1,
+    "stock": 109,
+    "brand": "Heathcote - Morar",
+    "category": "Shoes",
+    "thumbnail": "https://loremflickr.com/3013/2214?lock=3288089595016797",
+    "images": [
+      "https://picsum.photos/seed/G2Bu6hTy/3517/157",
+      "https://picsum.photos/seed/CvqAeWAjr/1654/291",
+      "https://loremflickr.com/3222/647?lock=6120464155983227"
+    ],
+    "sku": "JN8L40TA",
+    "weight": 3.52,
+    "createdAt": "2026-05-22T21:10:06.699Z"
+  },
+  {
+    "id": 100,
+    "title": "Modern Granite Tuna",
+    "description": "Kihn Inc's most advanced Salad technology increases gorgeous capabilities",
+    "price": 46.89,
+    "discountPercentage": 24,
+    "rating": 3.9,
+    "stock": 97,
+    "brand": "Bode LLC",
+    "category": "Computers",
+    "thumbnail": "https://loremflickr.com/2460/3908?lock=1910655733279893",
+    "images": [
+      "https://picsum.photos/seed/kZ63RV5726/1892/3874",
+      "https://picsum.photos/seed/MxNAjyxPY/838/3880",
+      "https://loremflickr.com/1644/3053?lock=6997074931954049"
+    ],
+    "sku": "N2MB7V4V",
+    "weight": 7.07,
+    "createdAt": "2026-05-22T23:29:57.557Z"
+  }
+]
