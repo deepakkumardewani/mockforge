@@ -1,4 +1,5 @@
 import type { WebSocketHandler } from "bun";
+import { incrementRequestCounter } from "../stats/increment-counter";
 import { statsWsHandler } from "./stats";
 import { notificationsWsHandler } from "./notifications";
 import { chatWsHandler } from "./chat";
@@ -51,12 +52,15 @@ export const websocketHandlers: WebSocketHandler<WsData> = {
         statsWsHandler.open(ws);
         break;
       case "notifications":
+        incrementRequestCounter();
         notificationsWsHandler.open(ws);
         break;
       case "chat":
+        incrementRequestCounter();
         chatWsHandler.open(ws, ws.data.roomId ?? "default");
         break;
       case "ticker":
+        incrementRequestCounter();
         tickerWsHandler.open(ws);
         break;
     }

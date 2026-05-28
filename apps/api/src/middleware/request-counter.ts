@@ -1,22 +1,12 @@
 import { Context, Next } from "hono";
-import { getRedis } from "../db/redis";
-
-const STATS_KEY = "stats:total_requests";
+import { incrementRequestCounter, isCountableHttpPath } from "../stats/increment-counter";
 
 export async function requestCounterMiddleware(c: Context, next: Next) {
   await next();
 
-  // Only count 2xx responses
   const status = c.res.status;
-  if (status >= 200 && status < 300) {
-    // Fire and forget - don't await
-    void (async () => {
-      try {
-        const redis = getRedis();
-        await redis.incr(STATS_KEY);
-      } catch (error) {
-        console.error("[RequestCounter] Failed to increment counter:", error);
-      }
-    })();
-  }
+  if (status < 200 || status >= 300) return;
+  if (!isCountableHttpPath(c.req.path)) return;
+
+  incrementRequestCounter();
 }

@@ -1,5 +1,6 @@
 import { Server as SocketIoServer } from "socket.io";
 import type { Server as HttpServer } from "node:http";
+import { incrementRequestCounter } from "../../stats/increment-counter";
 import { registerNotificationsNamespace } from "./notifications";
 import { registerChatNamespace } from "./chat";
 import { registerTickerNamespace } from "./ticker";
@@ -17,6 +18,13 @@ export function createSocketIoServer(httpServer: HttpServer): SocketIoServer {
     },
     path: "/socket.io",
   });
+
+  for (const namespace of ["/notifications", "/chat", "/ticker"]) {
+    const ns = io.of(namespace);
+    ns.on("connection", () => {
+      incrementRequestCounter();
+    });
+  }
 
   registerNotificationsNamespace(io.of("/notifications"));
   registerChatNamespace(io.of("/chat"));

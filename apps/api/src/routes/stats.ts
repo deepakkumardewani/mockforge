@@ -6,11 +6,10 @@ const app = new Hono();
 app.get("/api/stats", async (c) => {
   try {
     const redis = getRedis();
-    const total = await redis.get("stats:total_requests");
+    const raw = await redis.get("stats:total_requests");
+    const total = raw !== null ? Number(raw) : 0;
 
-    return c.json({
-      total: typeof total === "number" ? total : 0,
-    });
+    return c.json({ total });
   } catch (error) {
     console.error("[Stats] Error fetching stats:", error);
     return c.json(

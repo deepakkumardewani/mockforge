@@ -11,6 +11,7 @@ vi.mock("../db/redis", () => ({
 
 // Mock Context
 class MockContext {
+  req = { path: "/api/products" };
   res = {
     status: 200,
   };
@@ -24,7 +25,6 @@ class MockContext {
 describe("Request Counter Middleware", () => {
   beforeEach(() => {
     mockIncr.mockClear();
-    vi.clearAllTimers();
   });
 
   it("should increment counter on 2xx response", async () => {
@@ -52,6 +52,20 @@ describe("Request Counter Middleware", () => {
     await new Promise((resolve) => setTimeout(resolve, 100));
 
     expect(mockIncr).toHaveBeenCalledWith("stats:total_requests");
+  });
+
+  it("should not increment counter on excluded paths", async () => {
+    const ctx = new MockContext() as any;
+    ctx.req.path = "/api/stats";
+    ctx.res.status = 200;
+
+    const next = async () => {};
+
+    await requestCounterMiddleware(ctx, next);
+
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
+    expect(mockIncr).not.toHaveBeenCalled();
   });
 
   it("should not increment counter on 3xx response", async () => {
