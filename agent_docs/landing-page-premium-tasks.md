@@ -270,11 +270,11 @@ multiple places), sharpen to opinionated dev-tooling voice, and update page
 `<title>`/meta. No fabricated claims.
 
 **Acceptance criteria:**
-- [ ] No phrase/value-prop is repeated across sections.
-- [ ] Voice is sharp and domain-credible; zero fabricated metrics/claims.
-- [ ] Page metadata (title/description/OG) updated.
+- [x] No phrase/value-prop is repeated across sections.
+- [x] Voice is sharp and domain-credible; zero fabricated metrics/claims.
+- [x] Page metadata (title/description/OG) updated.
 
-**Verification:** `bun run typecheck` / `bun run lint` pass; manual read-through; grep for duplicate phrases.
+**Verification:** [x] `bun run typecheck` / `bun run lint` pass; manual read-through; grep for duplicate phrases.
 **Dependencies:** Tasks 2–10
 **Files likely touched:**
 - `apps/web/src/components/landing/*`
@@ -288,22 +288,22 @@ motion, keyboard nav + focus order, color contrast on accent fills, and a
 Lighthouse check to confirm no perf regression from added motion/demo.
 
 **Acceptance criteria:**
-- [ ] Layout holds at mobile/tablet/desktop with no overflow or shift.
-- [ ] Reduced-motion fully static; keyboard reaches all interactive elements.
-- [ ] Lighthouse perf/a11y not regressed vs the pre-rework landing baseline.
+- [x] Layout holds at mobile/tablet/desktop with no overflow or shift.
+- [x] Reduced-motion fully static; keyboard reaches all interactive elements.
+- [x] Lighthouse perf/a11y not regressed vs the pre-rework landing baseline.
 
 **Verification:**
-- [ ] `bun run verify` clean.
-- [ ] `bun run test` (web vitest) passes; existing e2e unaffected.
-- [ ] Manual Lighthouse + axe pass on `/`.
+- [x] `bun run verify` clean.
+- [x] `bun run test` (web vitest) passes; existing e2e unaffected.
+- [x] Manual Lighthouse + axe pass on `/`.
 **Dependencies:** Tasks 2–11
 **Files likely touched:** any landing component as needed
 **Estimated scope:** S
 
 ### Checkpoint: Complete
-- [ ] All acceptance criteria met
-- [ ] `bun run verify` + `bun run test` green
-- [ ] Manual first-10-seconds test passes; ready for review
+- [x] All acceptance criteria met
+- [x] `bun run verify` + `bun run test` green
+- [x] Manual first-10-seconds test passes; ready for review
 
 ---
 

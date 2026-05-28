@@ -3,13 +3,10 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 
-const GITHUB_URL = "https://github.com/mockforge/mockforge";
-
 const NAV_LINKS = [
-  { label: "Docs", href: "/docs", external: false },
-  { label: "Playground", href: "/playground", external: false },
-  { label: "Builder", href: "/builder", external: false },
-  { label: "GitHub", href: GITHUB_URL, external: true },
+  { label: "Docs", href: "/docs" },
+  { label: "Playground", href: "/playground" },
+  { label: "Builder", href: "/builder" },
 ] as const;
 
 export function Nav() {
@@ -24,63 +21,40 @@ export function Nav() {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
+      className={`fixed inset-x-0 top-0 z-40 transition-all duration-300 ${
         scrolled
           ? "border-b border-[var(--color-border)] bg-[var(--color-surface)]/95 backdrop-blur-sm"
           : "bg-transparent"
       }`}
     >
       <nav
-        className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 sm:px-10 lg:px-16"
+        className="mx-auto flex max-w-7xl items-center gap-6 px-6 py-4 pr-24 sm:px-10 sm:pr-28 lg:px-16 lg:pr-32"
         aria-label="Primary navigation"
       >
-        {/* Brand */}
-        <Link
-          href="/"
-          className="font-display text-lg font-bold text-[var(--color-text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] rounded"
-        >
-          MockForge
-        </Link>
+        <div className="flex min-w-0 flex-1 items-center gap-8 lg:gap-10">
+          <Link
+            href="/"
+            className="shrink-0 rounded font-display text-lg font-bold text-[var(--color-text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
+          >
+            MockForge
+          </Link>
 
-        {/* Desktop links */}
-        <ul className="hidden items-center gap-8 md:flex" role="list">
-          {NAV_LINKS.map((link) => (
-            <li key={link.label}>
-              {link.external ? (
-                <a
-                  href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm font-medium text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] rounded"
-                >
-                  {link.label}
-                </a>
-              ) : (
+          <ul className="hidden items-center gap-8 md:flex" role="list">
+            {NAV_LINKS.map((link) => (
+              <li key={link.label}>
                 <Link
                   href={link.href}
                   className="text-sm font-medium text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] rounded"
                 >
                   {link.label}
                 </Link>
-              )}
-            </li>
-          ))}
-        </ul>
-
-        {/* Desktop CTA */}
-        <div className="hidden items-center md:flex">
-          <Link
-            href="/playground"
-            className="rounded-lg px-4 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
-            style={{ background: "var(--color-accent)" }}
-          >
-            Get Started
-          </Link>
+              </li>
+            ))}
+          </ul>
         </div>
 
-        {/* Mobile hamburger */}
         <button
-          className="rounded p-2 text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] md:hidden"
+          className="ml-auto rounded p-2 text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] md:hidden"
           aria-label="Toggle navigation menu"
           aria-expanded={mobileOpen}
           aria-controls="mobile-menu"
@@ -104,7 +78,6 @@ export function Nav() {
         </button>
       </nav>
 
-      {/* Mobile menu */}
       {mobileOpen && (
         <div
           id="mobile-menu"
@@ -114,36 +87,16 @@ export function Nav() {
           <ul role="list" className="flex flex-col">
             {NAV_LINKS.map((link) => (
               <li key={link.label}>
-                {link.external ? (
-                  <a
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block py-3 text-sm font-medium text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-text-primary)]"
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    {link.label}
-                  </a>
-                ) : (
-                  <Link
-                    href={link.href}
-                    className="block py-3 text-sm font-medium text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-text-primary)]"
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    {link.label}
-                  </Link>
-                )}
+                <Link
+                  href={link.href}
+                  className="block rounded py-3 text-sm font-medium text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  {link.label}
+                </Link>
               </li>
             ))}
           </ul>
-          <Link
-            href="/playground"
-            className="mt-4 block rounded-lg px-4 py-2.5 text-center text-sm font-semibold text-white"
-            style={{ background: "var(--color-accent)" }}
-            onClick={() => setMobileOpen(false)}
-          >
-            Get Started
-          </Link>
         </div>
       )}
     </header>

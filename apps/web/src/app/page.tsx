@@ -12,7 +12,7 @@ export default function HomePage() {
   return (
     <>
       <Nav />
-      <main>
+      <main className="overflow-x-clip">
         <Hero />
         <LiveDemo />
         <ProtocolShowcase />

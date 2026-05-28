@@ -55,8 +55,7 @@ export function EntityBrowser() {
           14 typed resources
         </h2>
         <p className="mt-4 max-w-xl text-lg text-[var(--color-text-muted)]">
-          Each card maps to a fully-modeled endpoint with realistic fields — browse the catalogue,
-          then explore responses in the playground.
+          Every resource ships with modeled fields, filters, and pagination — pick one and query it.
         </p>
       </div>
 

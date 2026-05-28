@@ -18,7 +18,7 @@ export function Footer() {
               MockForge
             </span>
             <p className="mt-3 max-w-xs text-sm leading-relaxed text-[var(--color-text-muted)]">
-              Unified fake data API for developers who prototype against real-shaped endpoints.
+              Local mock server for frontend teams, integration tests, and rapid prototypes.
             </p>
           </div>
 
@@ -26,7 +26,7 @@ export function Footer() {
             <p className="mb-4 font-mono text-xs font-medium uppercase tracking-[0.15em] text-[var(--color-text-muted)]">
               Links
             </p>
-            <nav className="flex flex-col gap-2.5">
+            <nav className="flex flex-col gap-2.5" aria-label="Footer">
               <Link
                 href="/docs"
                 className="text-sm text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"

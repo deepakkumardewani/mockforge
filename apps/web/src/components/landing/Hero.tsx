@@ -119,8 +119,17 @@ export function Hero() {
   // Typewriter
   useEffect(() => {
     if (!typingStarted) return;
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const snippet = CODE_SNIPPETS[snippetIndex];
     const fullText = snippet.code;
+
+    if (prefersReducedMotion) {
+      setDisplayedCode(fullText);
+      setCharIndex(fullText.length);
+      setIsDeleting(false);
+      return;
+    }
+
     let timeout: ReturnType<typeof setTimeout>;
 
     if (!isDeleting) {
@@ -176,18 +185,6 @@ export function Hero() {
       <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-16 lg:grid-cols-2 lg:gap-12">
         {/* Left column — text */}
         <div>
-          {/* Wordmark badge */}
-          <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-surface-raised)] px-3 py-1">
-            <span
-              className="font-display text-sm font-bold tracking-widest uppercase"
-              style={{ color: "var(--color-accent)" }}
-            >
-              MockForge
-            </span>
-            <span className="h-1 w-1 rounded-full" style={{ background: "var(--color-accent)" }} />
-            <span className="text-xs text-[var(--color-text-muted)]">v2</span>
-          </div>
-
           {/* Headline — word-by-word clip-path */}
           <div ref={headlineRef} className="overflow-hidden" aria-label="Fake Data. Real Power.">
             <p className="font-display text-5xl font-extrabold leading-[1.1] tracking-tight text-[var(--color-text-primary)] sm:text-6xl xl:text-7xl">
@@ -209,8 +206,7 @@ export function Hero() {
             ref={subRef}
             className="mt-6 max-w-[42ch] text-lg leading-relaxed text-[var(--color-text-muted)]"
           >
-            Instant REST, GraphQL, WebSocket, and Socket.io mock APIs — no signup, no tokens, no
-            wait.
+            REST, GraphQL, WebSocket, and Socket.io on one mock server — point your client and go.
           </p>
 
           <div ref={ctasRef} className="mt-10 flex flex-wrap items-center gap-3">
@@ -234,14 +230,11 @@ export function Hero() {
 
           {/* Social proof line */}
           <p ref={socialProofRef} className="mt-10 text-sm text-[var(--color-text-muted)]">
-            No registration ·{" "}
+            No signup · No API keys ·{" "}
             <span style={{ color: "var(--color-accent)" }} className="font-medium">
-              4 protocols
+              Open source
             </span>{" "}
-            · 14 entity types ·{" "}
-            <span style={{ color: "var(--color-accent)" }} className="font-medium">
-              zero setup
-            </span>
+            · 14 typed resources
           </p>
         </div>
 
@@ -296,7 +289,7 @@ export function Hero() {
               <code>
                 {displayedCode}
                 <span
-                  className="inline-block h-4 w-1.5 animate-pulse align-middle"
+                  className="inline-block h-4 w-1.5 animate-pulse align-middle motion-reduce:animate-none"
                   style={{ background: "var(--color-accent)" }}
                 />
               </code>

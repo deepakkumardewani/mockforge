@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Bricolage_Grotesque } from "next/font/google";
 import { Providers } from "@/components/Providers";
+import { siteMetadata } from "@/lib/site-metadata";
 import "./globals.css";
 
 const displayFont = Bricolage_Grotesque({
@@ -10,11 +11,7 @@ const displayFont = Bricolage_Grotesque({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  title: "MockForge — Unified Fake Data API",
-  description:
-    "REST, GraphQL, WebSocket, and Socket.io fake data APIs for prototyping and testing.",
-};
+export const metadata: Metadata = siteMetadata;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

@@ -56,8 +56,7 @@ export function LiveDemo() {
             See it work, right now.
           </h2>
           <p className="livedemo-sub mt-4 text-base leading-relaxed text-[var(--color-text-muted)]">
-            Fire a real request against the running mock API. No setup, no tokens — watch the JSON
-            land.
+            Hit run on a live GET — the JSON you see is what your app would receive.
           </p>
         </div>
 

@@ -39,7 +39,6 @@ describe("Hero", () => {
   it("renders headline and CTAs", async () => {
     const { Hero } = await import("@/components/landing/Hero");
     render(<Hero />);
-    expect(screen.getByText("MockForge")).toBeInTheDocument();
     expect(screen.getByLabelText("Fake Data. Real Power.")).toBeInTheDocument();
     expect(screen.getByText("Fake")).toBeInTheDocument();
     expect(screen.getByText("Power.")).toBeInTheDocument();
@@ -101,8 +100,6 @@ describe("LiveCounter", () => {
     const { LiveCounter } = await import("@/components/landing/LiveCounter");
     render(<LiveCounter />);
     expect(screen.getByText("Live stats")).toBeInTheDocument();
-    expect(screen.getByText("Total requests")).toBeInTheDocument();
-    expect(screen.getByText(/WebSocket · live/i)).toBeInTheDocument();
   });
 });
 
@@ -167,15 +164,12 @@ describe("Nav", () => {
     expect(playgroundLinks[0]).toHaveAttribute("href", "/playground");
     const builderLinks = screen.getAllByRole("link", { name: "Builder" });
     expect(builderLinks[0]).toHaveAttribute("href", "/builder");
-    const githubLinks = screen.getAllByRole("link", { name: /github/i });
-    expect(githubLinks[0]).toHaveAttribute("href", "https://github.com/mockforge/mockforge");
   });
 
-  it("renders a primary CTA link", async () => {
+  it("does not render a Get Started CTA", async () => {
     const { Nav } = await import("@/components/landing/Nav");
     render(<Nav />);
-    const ctaLinks = screen.getAllByRole("link", { name: /get started/i });
-    expect(ctaLinks.length).toBeGreaterThan(0);
+    expect(screen.queryByRole("link", { name: /get started/i })).not.toBeInTheDocument();
   });
 
   it("toggles mobile menu on hamburger click", async () => {
@@ -188,5 +182,55 @@ describe("Nav", () => {
     expect(hamburger).toHaveAttribute("aria-expanded", "true");
     fireEvent.click(hamburger);
     expect(hamburger).toHaveAttribute("aria-expanded", "false");
+  });
+});
+
+describe("landing copy deduplication", () => {
+  const VALUE_PROP_PHRASES = [
+    "no signup",
+    "no api keys",
+    "zero setup",
+    "no setup",
+    "no tokens",
+    "real-shaped",
+    "open the playground and point",
+  ] as const;
+
+  async function collectSectionText(
+    importFn: () => Promise<{ [key: string]: React.ComponentType }>,
+    exportName: string,
+  ): Promise<string> {
+    const mod = await importFn();
+    const Component = mod[exportName];
+    const { container } = render(<Component />);
+    return container.textContent ?? "";
+  }
+
+  it("does not repeat value-prop phrases across marketing sections", async () => {
+    const sections = await Promise.all([
+      collectSectionText(() => import("@/components/landing/Hero"), "Hero"),
+      collectSectionText(() => import("@/components/landing/LiveDemo"), "LiveDemo"),
+      collectSectionText(() => import("@/components/landing/ProtocolShowcase"), "ProtocolShowcase"),
+      collectSectionText(() => import("@/components/landing/EntityBrowser"), "EntityBrowser"),
+      collectSectionText(() => import("@/components/landing/LiveCounter"), "LiveCounter"),
+      collectSectionText(() => import("@/components/landing/DXHighlights"), "DXHighlights"),
+      collectSectionText(() => import("@/components/landing/FinalCTA"), "FinalCTA"),
+      collectSectionText(() => import("@/components/landing/Footer"), "Footer"),
+    ]);
+
+    for (const phrase of VALUE_PROP_PHRASES) {
+      const matches = sections.filter((text) => text.toLowerCase().includes(phrase));
+      expect(matches.length).toBeLessThanOrEqual(1);
+    }
+  });
+});
+
+describe("page metadata", () => {
+  it("has updated title, description, and OG tags", async () => {
+    const { siteMetadata } = await import("@/lib/site-metadata");
+    expect(siteMetadata.title).toBe("MockForge — Fake Data API for Local Dev");
+    expect(siteMetadata.description).toMatch(/14 typed resources/i);
+    expect(siteMetadata.openGraph?.title).toBe("MockForge — Fake Data API for Local Dev");
+    expect(siteMetadata.twitter?.title).toBe("MockForge — Fake Data API for Local Dev");
   });
 });

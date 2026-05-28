@@ -58,7 +58,8 @@ export function DXHighlights() {
 
   function handleTabChange(tab: Tab) {
     if (tab === activeTab) return;
-    if (!codeRef.current) {
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReducedMotion || !codeRef.current) {
       setActiveTab(tab);
       setVisibleTab(tab);
       return;
@@ -94,8 +95,7 @@ export function DXHighlights() {
           Wire it in minutes
         </h2>
         <p className="mt-4 max-w-xl text-lg text-[var(--color-text-muted)]">
-          Point your HTTP client at localhost — no SDK install, no auth dance. POST a user in three
-          lines and move on.
+          Your stack already speaks HTTP. POST a user in three lines — JavaScript, Python, or cURL.
         </p>
       </div>
 

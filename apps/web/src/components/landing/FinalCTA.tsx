@@ -32,8 +32,8 @@ export function FinalCTA() {
             Stop stubbing. Start shipping.
           </h2>
           <p className="mx-auto mt-4 max-w-lg text-base leading-relaxed text-[var(--color-text-muted)] sm:text-lg">
-            Your next feature deserves real-shaped data — open the playground and point your app at
-            it today.
+            Hand-rolled fixtures break on every schema change. Mock against endpoints that stay in
+            sync.
           </p>
           <div className="mt-10">
             <Link
