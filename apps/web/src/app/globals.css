@@ -125,6 +125,13 @@ body {
   animation: mesh-drift-b 28s ease-in-out infinite;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .hero-mesh-a,
+  .hero-mesh-b {
+    animation: none;
+  }
+}
+
 /* Clip-path entrance animation — used by GSAP via inline styles */
 .clip-hidden {
   clip-path: inset(0 100% 0 0);

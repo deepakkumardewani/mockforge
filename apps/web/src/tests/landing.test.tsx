@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 
 vi.mock("gsap", () => ({
   default: {
@@ -9,6 +9,9 @@ vi.mock("gsap", () => ({
       fromTo: vi.fn().mockReturnThis(),
     })),
     fromTo: vi.fn(),
+    to: vi.fn((_target, vars) => {
+      vars?.onComplete?.();
+    }),
     getProperty: vi.fn(() => 0),
   },
 }));
@@ -24,6 +27,10 @@ vi.mock("next/link", () => ({
   ),
 }));
 
+vi.mock("@/hooks/use-ws-stats", () => ({
+  useWsStats: () => null,
+}));
+
 beforeEach(() => {
   vi.clearAllMocks();
 });
@@ -36,12 +43,18 @@ describe("Hero", () => {
     expect(screen.getByLabelText("Fake Data. Real Power.")).toBeInTheDocument();
     expect(screen.getByText("Fake")).toBeInTheDocument();
     expect(screen.getByText("Power.")).toBeInTheDocument();
-    expect(screen.getByText("Explore Docs")).toBeInTheDocument();
-    expect(screen.getByText("Try the Builder")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Try the playground →" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "Open Playground" })).toHaveAttribute(
       "href",
       "/playground",
     );
+    expect(screen.getByRole("link", { name: "Read the Docs" })).toHaveAttribute("href", "/docs");
+  });
+
+  it("has exactly two CTAs with no builder link", async () => {
+    const { Hero } = await import("@/components/landing/Hero");
+    render(<Hero />);
+    expect(screen.queryByRole("link", { name: /builder/i })).not.toBeInTheDocument();
+    expect(screen.getAllByRole("link")).toHaveLength(2);
   });
 });
 
@@ -49,6 +62,9 @@ describe("ProtocolShowcase", () => {
   it("renders all four protocol cards", async () => {
     const { ProtocolShowcase } = await import("@/components/landing/ProtocolShowcase");
     render(<ProtocolShowcase />);
+    expect(
+      screen.getByRole("heading", { name: "Pick your wire format", level: 2 }),
+    ).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "REST", level: 3 })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "GraphQL", level: 3 })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "WebSocket", level: 3 })).toBeInTheDocument();
@@ -60,6 +76,9 @@ describe("EntityBrowser", () => {
   it("renders all 14 entity cards", async () => {
     const { EntityBrowser } = await import("@/components/landing/EntityBrowser");
     render(<EntityBrowser />);
+    expect(
+      screen.getByRole("heading", { name: "14 typed resources", level: 2 }),
+    ).toBeInTheDocument();
     expect(screen.getByText("User")).toBeInTheDocument();
     expect(screen.getByText("Product")).toBeInTheDocument();
     expect(screen.getByText("Post")).toBeInTheDocument();
@@ -81,8 +100,9 @@ describe("LiveCounter", () => {
   it("renders counter text", async () => {
     const { LiveCounter } = await import("@/components/landing/LiveCounter");
     render(<LiveCounter />);
-    expect(screen.getByText("Requests served")).toBeInTheDocument();
-    expect(screen.getByText("Live via WebSocket")).toBeInTheDocument();
+    expect(screen.getByText("Live stats")).toBeInTheDocument();
+    expect(screen.getByText("Total requests")).toBeInTheDocument();
+    expect(screen.getByText(/WebSocket · live/i)).toBeInTheDocument();
   });
 });
 
@@ -93,7 +113,29 @@ describe("DXHighlights", () => {
     expect(screen.getByText("JavaScript")).toBeInTheDocument();
     expect(screen.getByText("Python")).toBeInTheDocument();
     expect(screen.getByText("cURL")).toBeInTheDocument();
-    expect(screen.getByText("Copy, paste, build")).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Wire it in minutes", level: 2 }),
+    ).toBeInTheDocument();
+  });
+
+  it("switches tabs and shows distinct code sample", async () => {
+    const { DXHighlights } = await import("@/components/landing/DXHighlights");
+    render(<DXHighlights />);
+    expect(screen.getByText(/Create a user via REST/i)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("tab", { name: "Python" }));
+    expect(screen.getByText(/import requests/i)).toBeInTheDocument();
+  });
+});
+
+describe("FinalCTA", () => {
+  it("renders closing CTA with playground link", async () => {
+    const { FinalCTA } = await import("@/components/landing/FinalCTA");
+    render(<FinalCTA />);
+    expect(screen.getByRole("heading", { name: /stop stubbing/i })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /open the playground/i })).toHaveAttribute(
+      "href",
+      "/playground",
+    );
   });
 });
 
@@ -105,5 +147,46 @@ describe("Footer", () => {
     expect(screen.getByText("GitHub")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Schema Builder" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Playground" })).toHaveAttribute("href", "/playground");
+  });
+});
+
+describe("Nav", () => {
+  it("renders the brand mark", async () => {
+    const { Nav } = await import("@/components/landing/Nav");
+    render(<Nav />);
+    expect(screen.getByText("MockForge")).toBeInTheDocument();
+  });
+
+  it("renders all navigation links with correct hrefs", async () => {
+    const { Nav } = await import("@/components/landing/Nav");
+    render(<Nav />);
+    // getAllByRole because links appear in both desktop and mobile menus
+    const docsLinks = screen.getAllByRole("link", { name: "Docs" });
+    expect(docsLinks[0]).toHaveAttribute("href", "/docs");
+    const playgroundLinks = screen.getAllByRole("link", { name: "Playground" });
+    expect(playgroundLinks[0]).toHaveAttribute("href", "/playground");
+    const builderLinks = screen.getAllByRole("link", { name: "Builder" });
+    expect(builderLinks[0]).toHaveAttribute("href", "/builder");
+    const githubLinks = screen.getAllByRole("link", { name: /github/i });
+    expect(githubLinks[0]).toHaveAttribute("href", "https://github.com/mockforge/mockforge");
+  });
+
+  it("renders a primary CTA link", async () => {
+    const { Nav } = await import("@/components/landing/Nav");
+    render(<Nav />);
+    const ctaLinks = screen.getAllByRole("link", { name: /get started/i });
+    expect(ctaLinks.length).toBeGreaterThan(0);
+  });
+
+  it("toggles mobile menu on hamburger click", async () => {
+    const { Nav } = await import("@/components/landing/Nav");
+    render(<Nav />);
+    const hamburger = screen.getByRole("button", { name: /toggle navigation menu/i });
+    expect(hamburger).toBeInTheDocument();
+    // Mobile menu items exist in DOM but may be hidden via CSS — verify toggle behavior
+    fireEvent.click(hamburger);
+    expect(hamburger).toHaveAttribute("aria-expanded", "true");
+    fireEvent.click(hamburger);
+    expect(hamburger).toHaveAttribute("aria-expanded", "false");
   });
 });

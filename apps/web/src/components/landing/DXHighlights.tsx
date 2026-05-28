@@ -1,89 +1,61 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
+import { useRevealOnScroll } from "./useRevealOnScroll";
+import { Section } from "./Section";
 
 const TABS = ["JavaScript", "Python", "cURL"] as const;
 type Tab = (typeof TABS)[number];
 
 const CODE_SAMPLES: Record<Tab, string> = {
-  JavaScript: `// Fetch products from MockForge
-const res = await fetch(
-  "http://localhost:4000/api/products?limit=5"
-);
-
-const { data, total } = await res.json();
-
-data.forEach((product) => {
-  console.log(\`\${product.title}: $\${product.price}\`);
+  JavaScript: `// Create a user via REST
+const res = await fetch("http://localhost:4000/api/users", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    firstName: "Alex",
+    lastName: "Dev",
+    email: "alex@example.com",
+  }),
 });
 
-// Response includes pagination metadata
-console.log(\`Showing \${data.length} of \${total}\`);`,
+const user = await res.json();
+console.log(user.id, user.username);`,
   Python: `import requests
 
-# Fetch products from MockForge
-resp = requests.get(
-    "http://localhost:4000/api/products",
-    params={"limit": 5}
+# Create a user via REST
+resp = requests.post(
+    "http://localhost:4000/api/users",
+    json={
+        "firstName": "Alex",
+        "lastName": "Dev",
+        "email": "alex@example.com",
+    },
 )
 
-body = resp.json()
-for product in body["data"]:
-    print(f'{product["title"]}: $' + str(product["price"]))
+user = resp.json()
+print(user["id"], user["username"])`,
+  cURL: `# Create a user via REST
+curl -X POST "http://localhost:4000/api/users" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "firstName": "Alex",
+    "lastName": "Dev",
+    "email": "alex@example.com"
+  }'
 
-# Response includes pagination metadata
-print(f'Showing {len(body["data"])} of {body["total"]}')`,
-  cURL: `# Fetch products from MockForge
-curl "http://localhost:4000/api/products?limit=5"
-
-# Response:
-# {
-#   "data": [
-#     { "title": "Product 1", "price": 29.99 },
-#     ...
-#   ],
-#   "total": 142,
-#   "limit": 5,
-#   "skip": 0
-# }
-
-# With custom identity header
-curl -H "X-MF-ID: my-custom-id" \\
-  "http://localhost:4000/api/products"`,
+# Response includes generated id + username
+# { "id": 42, "username": "alexdev", ... }`,
 };
 
 export function DXHighlights() {
-  const sectionRef = useRef<HTMLElement>(null);
+  const containerRef = useRevealOnScroll([{ selector: ".dx-animate", stagger: 0.12 }]);
   const codeRef = useRef<HTMLPreElement>(null);
   const [activeTab, setActiveTab] = useState<Tab>("JavaScript");
   const [visibleTab, setVisibleTab] = useState<Tab>("JavaScript");
   const [copied, setCopied] = useState(false);
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      if (!sectionRef.current) return;
-      gsap.fromTo(
-        sectionRef.current.querySelectorAll(".dx-animate"),
-        { y: 32, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.7,
-          stagger: 0.14,
-          ease: "power3.out",
-          scrollTrigger: { trigger: sectionRef.current, start: "top 80%" },
-        },
-      );
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
-
-  // Fade out → swap content → fade in on tab change
   function handleTabChange(tab: Tab) {
     if (tab === activeTab) return;
     if (!codeRef.current) {
@@ -110,94 +82,101 @@ export function DXHighlights() {
   }
 
   return (
-    <section ref={sectionRef} className="px-6 py-28 sm:px-10 lg:px-16">
-      <div className="mx-auto max-w-7xl">
-        <div className="dx-animate mb-16">
-          <span
-            className="mb-3 block font-mono text-xs font-medium uppercase tracking-[0.2em]"
-            style={{ color: "var(--color-accent)" }}
-          >
-            Quick start
-          </span>
-          <h2 className="font-display text-4xl font-bold text-[var(--color-text-primary)] sm:text-5xl">
-            Copy, paste, build
-          </h2>
-          <p className="mt-4 max-w-xl text-lg text-[var(--color-text-muted)]">
-            No SDKs to install. No tokens to manage. Just a URL and your favourite HTTP client.
-          </p>
-        </div>
+    <Section ref={containerRef}>
+      <div className="dx-animate mb-12 max-w-2xl">
+        <span
+          className="mb-3 block font-mono text-xs font-medium uppercase tracking-[0.2em]"
+          style={{ color: "var(--color-accent)" }}
+        >
+          Integration
+        </span>
+        <h2 className="font-display text-4xl font-bold text-[var(--color-text-primary)] sm:text-5xl">
+          Wire it in minutes
+        </h2>
+        <p className="mt-4 max-w-xl text-lg text-[var(--color-text-muted)]">
+          Point your HTTP client at localhost — no SDK install, no auth dance. POST a user in three
+          lines and move on.
+        </p>
+      </div>
 
-        <div className="dx-animate mx-auto max-w-2xl">
-          {/* Tab bar */}
-          <div
-            className="flex items-end border-b border-[var(--color-border)]"
-            style={{ background: "var(--color-surface-raised)" }}
-          >
-            {TABS.map((tab) => (
-              <button
-                key={tab}
-                onClick={() => handleTabChange(tab)}
-                className="relative px-5 py-3 text-sm font-medium transition-colors"
-                style={{
-                  color: activeTab === tab ? "var(--color-accent)" : "var(--color-text-muted)",
-                }}
-              >
-                {tab}
-                {/* Underline indicator */}
-                {activeTab === tab && (
-                  <span
-                    className="absolute inset-x-0 bottom-0 h-0.5"
-                    style={{ background: "var(--color-accent)" }}
-                  />
-                )}
-              </button>
-            ))}
-            <div className="ml-auto flex items-center pr-3">
-              <button
-                onClick={handleCopy}
-                className="rounded px-3 py-1.5 text-xs font-medium transition-colors"
-                style={{
-                  color: copied ? "var(--color-accent)" : "var(--color-text-muted)",
-                }}
-              >
-                {copied ? "Copied!" : "Copy"}
-              </button>
-            </div>
-          </div>
-
-          {/* Code block */}
-          <div
-            className="overflow-hidden rounded-b-xl border border-t-0 border-[var(--color-border)]"
-            style={{ background: "var(--color-code-bg)" }}
-          >
-            <pre
-              ref={codeRef}
-              className="overflow-x-auto p-6 font-mono text-sm leading-relaxed text-[var(--color-code-text)]"
+      <div className="dx-animate mx-auto max-w-2xl">
+        <div
+          className="flex items-end overflow-hidden rounded-t-xl border border-b-0 border-[var(--color-border)]"
+          role="tablist"
+          aria-label="Code samples"
+          style={{ background: "var(--color-surface-raised)" }}
+        >
+          {TABS.map((tab) => (
+            <button
+              key={tab}
+              type="button"
+              role="tab"
+              id={`dx-tab-${tab}`}
+              aria-selected={activeTab === tab}
+              aria-controls="dx-code-panel"
+              onClick={() => handleTabChange(tab)}
+              className="relative px-5 py-3 text-sm font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--color-accent)]"
+              style={{
+                color: activeTab === tab ? "var(--color-accent)" : "var(--color-text-muted)",
+              }}
             >
-              <code>{CODE_SAMPLES[visibleTab]}</code>
-            </pre>
+              {tab}
+              {activeTab === tab && (
+                <span
+                  className="absolute inset-x-0 bottom-0 h-0.5"
+                  style={{ background: "var(--color-accent)" }}
+                />
+              )}
+            </button>
+          ))}
+          <div className="ml-auto flex items-center pr-3">
+            <button
+              type="button"
+              onClick={handleCopy}
+              className="rounded px-3 py-1.5 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
+              style={{
+                color: copied ? "var(--color-accent)" : "var(--color-text-muted)",
+              }}
+            >
+              {copied ? "Copied!" : "Copy"}
+            </button>
           </div>
         </div>
 
-        {/* Zero-signup callout */}
-        <div className="dx-animate mx-auto mt-10 max-w-2xl">
-          <div
-            className="flex items-start gap-4 rounded-xl border border-[var(--color-border)] p-5"
-            style={{ background: "var(--color-surface-raised)" }}
+        <div
+          id="dx-code-panel"
+          role="tabpanel"
+          aria-labelledby={`dx-tab-${activeTab}`}
+          className="overflow-hidden rounded-b-xl border border-[var(--color-border)]"
+          style={{ background: "var(--color-code-bg)" }}
+        >
+          <pre
+            ref={codeRef}
+            className="overflow-x-auto p-6 font-mono text-sm leading-relaxed text-[var(--color-code-text)]"
           >
-            <span
-              className="mt-0.5 shrink-0 font-mono text-sm font-bold"
-              style={{ color: "var(--color-accent)" }}
-            >
-              →
-            </span>
-            <p className="text-sm leading-relaxed text-[var(--color-text-muted)]">
-              <span className="font-semibold text-[var(--color-text-primary)]">Zero signup.</span>{" "}
-              No API keys, no rate-limit tiers, no login walls. Open the URL and go.
-            </p>
-          </div>
+            <code>{CODE_SAMPLES[visibleTab]}</code>
+          </pre>
         </div>
       </div>
-    </section>
+
+      <div className="dx-animate mx-auto mt-10 max-w-2xl">
+        <div
+          className="flex items-start gap-4 rounded-xl border border-[var(--color-border)] p-5"
+          style={{ background: "var(--color-surface-raised)" }}
+        >
+          <span
+            className="mt-0.5 shrink-0 font-mono text-sm font-bold"
+            style={{ color: "var(--color-accent)" }}
+          >
+            →
+          </span>
+          <p className="text-sm leading-relaxed text-[var(--color-text-muted)]">
+            <span className="font-semibold text-[var(--color-text-primary)]">Runs locally.</span>{" "}
+            Spin up the mock server, hit the same endpoints in CI, and keep your frontend decoupled
+            from backend availability.
+          </p>
+        </div>
+      </div>
+    </Section>
   );
 }

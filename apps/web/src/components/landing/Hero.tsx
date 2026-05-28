@@ -66,6 +66,9 @@ export function Hero() {
   // Orchestrated entrance
   useEffect(() => {
     const startTyping = setTimeout(() => setTypingStarted(true), 700);
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return () => clearTimeout(startTyping);
+    }
     const ctx = gsap.context(() => {
       if (
         !headlineRef.current ||
@@ -110,6 +113,7 @@ export function Hero() {
       clearTimeout(startTyping);
       ctx.revert();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Typewriter
@@ -186,7 +190,7 @@ export function Hero() {
 
           {/* Headline — word-by-word clip-path */}
           <div ref={headlineRef} className="overflow-hidden" aria-label="Fake Data. Real Power.">
-            <p className="font-display text-5xl font-bold leading-tight tracking-tight text-[var(--color-text-primary)] sm:text-6xl xl:text-7xl">
+            <p className="font-display text-5xl font-extrabold leading-[1.1] tracking-tight text-[var(--color-text-primary)] sm:text-6xl xl:text-7xl">
               {["Fake", "Data."].map((word) => (
                 <span key={word} className="word mr-[0.25em] inline-block last:mr-0">
                   {word}
@@ -203,31 +207,28 @@ export function Hero() {
 
           <p
             ref={subRef}
-            className="mt-6 max-w-md text-lg leading-relaxed text-[var(--color-text-muted)]"
+            className="mt-6 max-w-[42ch] text-lg leading-relaxed text-[var(--color-text-muted)]"
           >
-            Instant REST, GraphQL, WebSocket, and Socket.io APIs for prototyping and testing. No
-            signup, no tokens — just data.
+            Instant REST, GraphQL, WebSocket, and Socket.io mock APIs — no signup, no tokens, no
+            wait.
           </p>
 
-          <div ref={ctasRef} className="mt-10 flex flex-wrap items-center gap-4">
-            <Link
-              href="/docs"
-              className="rounded-lg px-6 py-3 font-semibold text-[var(--color-surface)] transition-all hover:brightness-110"
-              style={{ background: "var(--color-accent)" }}
-            >
-              Explore Docs
-            </Link>
-            <Link
-              href="/builder"
-              className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-raised)] px-6 py-3 font-medium text-[var(--color-text-primary)] transition-all hover:bg-[var(--color-surface-hover)]"
-            >
-              Try the Builder
-            </Link>
+          <div ref={ctasRef} className="mt-10 flex flex-wrap items-center gap-3">
             <Link
               href="/playground"
-              className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-raised)] px-6 py-3 font-medium text-[var(--color-text-primary)] transition-all hover:bg-[var(--color-surface-hover)]"
+              className="rounded-lg px-6 py-3 font-semibold transition-all hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
+              style={{
+                background: "var(--color-accent)",
+                color: "var(--color-on-accent)",
+              }}
             >
-              Try the playground →
+              Open Playground
+            </Link>
+            <Link
+              href="/docs"
+              className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-raised)] px-6 py-3 font-medium text-[var(--color-text-primary)] transition-all hover:bg-[var(--color-surface-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
+            >
+              Read the Docs
             </Link>
           </div>
 

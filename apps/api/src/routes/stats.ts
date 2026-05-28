@@ -9,7 +9,13 @@ app.get("/api/stats", async (c) => {
     const raw = await redis.get("stats:total_requests");
     const total = raw !== null ? Number(raw) : 0;
 
-    return c.json({ total });
+    return c.json({
+      total,
+      nodeEnv: process.env.NODE_ENV,
+      redisLocal: process.env.REDIS_LOCAL,
+      redisUrl: process.env.REDIS_URL,
+      upstashUrl: process.env.UPSTASH_REDIS_REST_URL,
+    });
   } catch (error) {
     console.error("[Stats] Error fetching stats:", error);
     return c.json(

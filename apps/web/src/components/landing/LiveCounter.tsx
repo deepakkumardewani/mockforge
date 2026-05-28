@@ -2,40 +2,23 @@
 
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useWsStats } from "@/hooks/use-ws-stats";
-
-gsap.registerPlugin(ScrollTrigger);
+import { useRevealOnScroll } from "./useRevealOnScroll";
 
 function formatNumber(n: number): string {
   return new Intl.NumberFormat("en-US").format(n);
 }
 
 export function LiveCounter() {
-  const sectionRef = useRef<HTMLElement>(null);
+  const containerRef = useRevealOnScroll({
+    selector: ".counter-animate",
+    stagger: 0.1,
+    to: { duration: 0.75, ease: "power3.out" },
+    triggerStart: "top 85%",
+  });
   const counterRef = useRef<HTMLSpanElement>(null);
   const total = useWsStats();
   const prevTotal = useRef(0);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      if (!sectionRef.current) return;
-      gsap.fromTo(
-        sectionRef.current.querySelectorAll(".counter-animate"),
-        { y: 32, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.75,
-          stagger: 0.12,
-          ease: "power3.out",
-          scrollTrigger: { trigger: sectionRef.current, start: "top 85%" },
-        },
-      );
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
 
   useEffect(() => {
     if (total !== null && total !== prevTotal.current && counterRef.current) {
@@ -60,26 +43,35 @@ export function LiveCounter() {
   }, [total]);
 
   return (
-    <section ref={sectionRef} className="relative overflow-hidden">
-      {/* Full-bleed accent rule */}
+    <section ref={containerRef} aria-labelledby="live-counter-label">
       <div className="h-px w-full" style={{ background: "var(--color-accent)" }} />
 
       <div
         className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-16"
         style={{
-          paddingTop: "clamp(3.5rem, 8vw, 6rem)",
-          paddingBottom: "clamp(3.5rem, 8vw, 6rem)",
+          paddingTop: "clamp(3.5rem, 7vw, 5.5rem)",
+          paddingBottom: "clamp(3.5rem, 7vw, 5.5rem)",
         }}
       >
-        <div className="flex flex-col gap-12 lg:flex-row lg:items-end lg:justify-between lg:gap-16">
-          {/* Counter — tight label→metric grouping, generous separation from meta */}
-          <div className="counter-animate min-w-0 flex-1">
-            <p className="mb-2 font-mono text-xs font-medium uppercase tracking-[0.2em] text-[var(--color-text-muted)]">
-              Requests served
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(16rem,22rem)] lg:items-end lg:gap-16">
+          {/* Primary — metric */}
+          <div className="counter-animate min-w-0">
+            <p
+              className="mb-6 font-mono text-xs font-medium uppercase tracking-[0.2em]"
+              style={{ color: "var(--color-accent)" }}
+            >
+              Live stats
             </p>
-            <h2
+            <p
+              id="live-counter-label"
+              className="mb-2 font-mono text-xs font-medium uppercase tracking-[0.15em] text-[var(--color-text-muted)]"
+            >
+              Total requests
+            </p>
+            <p
               aria-busy={total === null}
-              className="font-display text-[clamp(3.5rem,12vw,9rem)] font-black leading-none tabular-nums tracking-tight text-[var(--color-text-primary)]"
+              aria-live="polite"
+              className="font-display text-[clamp(3.5rem,12vw,8.5rem)] font-black leading-none tabular-nums tracking-tight text-[var(--color-text-primary)]"
             >
               {total !== null ? (
                 <span ref={counterRef}>{formatNumber(total)}</span>
@@ -88,31 +80,32 @@ export function LiveCounter() {
                   aria-hidden
                   className="inline-block animate-pulse rounded-md bg-[var(--color-border)]"
                   style={{
-                    width: "clamp(8rem, 36vw, 16rem)",
-                    height: "clamp(3.5rem, 12vw, 9rem)",
+                    width: "clamp(9rem, 36vw, 16rem)",
+                    height: "clamp(3.5rem, 12vw, 8.5rem)",
                   }}
                 />
               )}
-            </h2>
+            </p>
           </div>
 
-          {/* Meta — aligned with reading edge on mobile; end-aligned on large screens */}
-          <div className="counter-animate flex max-w-md flex-col gap-5 border-t border-[var(--color-border)] pt-10 lg:border-t-0 lg:pt-0 lg:text-right">
-            <p className="text-pretty text-base leading-relaxed text-[var(--color-text-muted)] lg:ml-auto">
-              Real data. Real developers. Growing every second.
+          {/* Secondary — context */}
+          <div className="counter-animate flex flex-col gap-5 border-t border-[var(--color-border)] pt-8 lg:border-t-0 lg:pt-0 lg:pb-2">
+            <p className="max-w-sm text-pretty text-sm leading-relaxed text-[var(--color-text-muted)] sm:text-base">
+              Cumulative count of requests handled by the mock API. Updates arrive over the stats
+              WebSocket as new traffic comes in.
             </p>
-            <span className="inline-flex items-center gap-2 text-sm text-[var(--color-text-muted)] lg:ml-auto">
-              <span className="relative flex h-2.5 w-2.5 shrink-0">
+            <span className="inline-flex items-center gap-2 font-mono text-xs text-[var(--color-text-muted)]">
+              <span className="relative flex h-2 w-2 shrink-0">
                 <span
-                  className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-75"
+                  className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-75 motion-reduce:animate-none"
                   style={{ background: "var(--color-accent)" }}
                 />
                 <span
-                  className="relative inline-flex h-2.5 w-2.5 rounded-full"
+                  className="relative inline-flex h-2 w-2 rounded-full"
                   style={{ background: "var(--color-accent)" }}
                 />
               </span>
-              Live via WebSocket
+              WebSocket · live
             </span>
           </div>
         </div>
