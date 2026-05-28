@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-export function ThemeToggle() {
+export function ThemeToggle({ className }: { className?: string }) {
   const [dark, setDark] = useState(false);
 
   useEffect(() => {
@@ -19,7 +19,10 @@ export function ThemeToggle() {
   return (
     <button
       onClick={toggle}
-      className="fixed right-4 top-4 z-50 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-raised)] p-2 text-[var(--color-text-primary)] transition-colors hover:bg-[var(--color-surface-hover)]"
+      className={
+        className ??
+        "inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-raised)] text-[var(--color-text-muted)] transition-colors hover:bg-[var(--color-surface-hover)] hover:text-[var(--color-text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
+      }
       aria-label="Toggle theme"
     >
       {dark ? (

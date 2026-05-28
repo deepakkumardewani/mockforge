@@ -3,7 +3,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
-import { ThemeToggle } from "@/components/ThemeToggle";
+import { GlobalHeaderActions } from "@/components/GlobalHeaderActions";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -111,7 +111,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
     <QueryProvider>
       <ScrollTriggerRefresher />
       <FumadocsStyleGate />
-      <ThemeToggle />
+      <GlobalHeaderActions />
       {children}
     </QueryProvider>
   );
