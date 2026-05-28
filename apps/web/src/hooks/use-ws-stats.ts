@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { API_BASE } from "@/lib/api-client";
 
 const WS_URL = process.env.NEXT_PUBLIC_WS_URL ?? "ws://localhost:4000/ws/stats";
 
@@ -11,6 +12,19 @@ export function useWsStats() {
 
   useEffect(() => {
     let mounted = true;
+
+    async function bootstrap() {
+      try {
+        const res = await fetch(`${API_BASE}/api/stats`);
+        if (!res.ok) return;
+        const data = (await res.json()) as { total?: number };
+        if (mounted && typeof data.total === "number") {
+          setTotal(data.total);
+        }
+      } catch {
+        // WebSocket will attempt live updates
+      }
+    }
 
     function connect() {
       if (wsRef.current?.readyState === WebSocket.OPEN) return;
@@ -46,6 +60,7 @@ export function useWsStats() {
       }
     }
 
+    void bootstrap();
     connect();
 
     return () => {

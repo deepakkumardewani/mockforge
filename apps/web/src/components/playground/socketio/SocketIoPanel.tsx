@@ -66,17 +66,14 @@ export function SocketIoPanel() {
   }
 
   return (
-    <div className="flex h-full min-h-0 flex-col gap-4">
-      <div className="shrink-0">
-        <PresetPicker
-          presets={SOCKETIO_PRESETS}
-          onSelect={onPresetSelect}
-          ariaLabel="Socket.IO example presets"
-        />
-      </div>
-
+    <div className="flex h-full min-h-0 flex-col">
       <div className={PLAYGROUND_PANEL_GRID}>
         <div className={PLAYGROUND_PANEL_LEFT}>
+          <PresetPicker
+            presets={SOCKETIO_PRESETS}
+            onSelect={onPresetSelect}
+            ariaLabel="Socket.IO example presets"
+          />
           <NamespaceBar
             baseUrl={baseUrl}
             namespace={namespace}

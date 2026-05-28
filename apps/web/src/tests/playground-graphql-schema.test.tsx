@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { render, screen, within } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import {
   buildOperation,
@@ -168,79 +168,52 @@ describe("getGraphqlRootFieldsByKind", () => {
 });
 
 describe("SchemaPanel", () => {
-  it("renders Query and Mutation groups from the catalogue", () => {
-    render(<SchemaPanel onConfirm={vi.fn()} />);
-    expect(screen.getByRole("button", { name: /^Query/u })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /^Mutation/u })).toBeInTheDocument();
+  it("renders Query and Mutation section headings", () => {
+    render(<SchemaPanel onSelect={vi.fn()} />);
+    expect(screen.getByText("Query")).toBeInTheDocument();
+    expect(screen.getByText("Mutation")).toBeInTheDocument();
   });
 
-  it("selects all scalars by default when a root field is expanded", async () => {
-    const user = userEvent.setup();
-    render(<SchemaPanel onConfirm={vi.fn()} />);
-
-    await user.click(screen.getByRole("button", { name: /^Query/u }));
-    await user.click(screen.getByRole("button", { name: /^users/u }));
-
-    const panel = screen.getByLabelText("GraphQL schema");
-    for (const scalar of ["id", "firstName", "lastName", "email"]) {
-      expect(within(panel).getByRole("checkbox", { name: scalar })).toBeChecked();
-    }
-    expect(screen.getByRole("button", { name: "Apply to query" })).toBeEnabled();
+  it("renders field rows for all root fields without checkboxes", () => {
+    render(<SchemaPanel onSelect={vi.fn()} />);
+    expect(screen.getByRole("button", { name: /users/ })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /deleteUser/ })).toBeInTheDocument();
+    expect(screen.queryByRole("checkbox")).not.toBeInTheDocument();
   });
 
-  it("confirms a valid operation with default-selected scalars", async () => {
+  it("calls onSelect with all scalars immediately on field row click", async () => {
     const user = userEvent.setup();
-    const onConfirm = vi.fn();
-    render(<SchemaPanel onConfirm={onConfirm} />);
+    const onSelect = vi.fn();
+    render(<SchemaPanel onSelect={onSelect} />);
 
-    await user.click(screen.getByRole("button", { name: /^Query/u }));
-    await user.click(screen.getByRole("button", { name: /^users/u }));
-    await user.click(screen.getByRole("button", { name: "Apply to query" }));
+    await user.click(screen.getByRole("button", { name: /^users/ }));
 
-    expect(onConfirm).toHaveBeenCalledWith("users", ["id", "firstName", "lastName", "email"]);
+    expect(onSelect).toHaveBeenCalledWith("users", ["id", "firstName", "lastName", "email"]);
   });
 
-  it("confirms only the remaining selected scalars after deselecting some", async () => {
+  it("calls onSelect with empty scalars for delete mutations", async () => {
     const user = userEvent.setup();
-    const onConfirm = vi.fn();
-    render(<SchemaPanel onConfirm={onConfirm} />);
+    const onSelect = vi.fn();
+    render(<SchemaPanel onSelect={onSelect} />);
 
-    await user.click(screen.getByRole("button", { name: /^Query/u }));
-    await user.click(screen.getByRole("button", { name: /^users/u }));
+    await user.click(screen.getByRole("button", { name: /^deleteUser/ }));
 
-    const panel = screen.getByLabelText("GraphQL schema");
-    await user.click(within(panel).getByRole("checkbox", { name: "firstName" }));
-    await user.click(within(panel).getByRole("checkbox", { name: "lastName" }));
-    await user.click(within(panel).getByRole("checkbox", { name: "email" }));
-    await user.click(screen.getByRole("button", { name: "Apply to query" }));
-
-    expect(onConfirm).toHaveBeenCalledWith("users", ["id"]);
+    expect(onSelect).toHaveBeenCalledWith("deleteUser", []);
   });
 
-  it("disables apply when all scalars are deselected for a query field", async () => {
-    const user = userEvent.setup();
-    render(<SchemaPanel onConfirm={vi.fn()} />);
-
-    await user.click(screen.getByRole("button", { name: /^Query/u }));
-    await user.click(screen.getByRole("button", { name: /^users/u }));
-
-    const panel = screen.getByLabelText("GraphQL schema");
-    for (const scalar of ["id", "firstName", "lastName", "email"]) {
-      await user.click(within(panel).getByRole("checkbox", { name: scalar }));
-    }
-
-    expect(screen.getByRole("button", { name: "Apply to query" })).toBeDisabled();
+  it("does not render an Apply to query button", () => {
+    render(<SchemaPanel onSelect={vi.fn()} />);
+    expect(screen.queryByRole("button", { name: "Apply to query" })).not.toBeInTheDocument();
   });
 
-  it("allows apply for delete mutations without selectable fields", async () => {
+  it("calls onSelect once per click without requiring confirmation", async () => {
     const user = userEvent.setup();
-    const onConfirm = vi.fn();
-    render(<SchemaPanel onConfirm={onConfirm} />);
+    const onSelect = vi.fn();
+    render(<SchemaPanel onSelect={onSelect} />);
 
-    await user.click(screen.getByRole("button", { name: /^Mutation/u }));
-    await user.click(screen.getByRole("button", { name: /^deleteUser/u }));
-    await user.click(screen.getByRole("button", { name: "Apply to query" }));
+    await user.click(screen.getByRole("button", { name: /^users/ }));
+    await user.click(screen.getByRole("button", { name: /^users/ }));
 
-    expect(onConfirm).toHaveBeenCalledWith("deleteUser", []);
+    expect(onSelect).toHaveBeenCalledTimes(2);
   });
 });

@@ -5,6 +5,7 @@ import { GRAPHQL_PRESETS } from "@/components/playground/shared/presets";
 import { PresetPicker } from "@/components/playground/shared/PresetPicker";
 import { ResponseViewer } from "@/components/playground/shared/ResponseViewer";
 import {
+  GRAPHQL_PANEL_GRID,
   PLAYGROUND_PANEL_GRID,
   PLAYGROUND_PANEL_LEFT,
   PLAYGROUND_PANEL_RIGHT,
@@ -18,13 +19,28 @@ import { GraphqlRequestBar } from "@/components/playground/graphql/GraphqlReques
 import { mergeOperation } from "@/components/playground/graphql/build-operation";
 import { SchemaPanel } from "@/components/playground/graphql/SchemaPanel";
 
+const SCHEMA_SIDEBAR_KEY = "mf_schema_sidebar_open";
+
+function readSidebarState(): boolean {
+  if (typeof window === "undefined") return false;
+  return localStorage.getItem(SCHEMA_SIDEBAR_KEY) === "true";
+}
+
 export function GraphqlPanel() {
   const mfId = useMfId();
   const { send, isLoading, response, error } = useGraphqlRequest(mfId);
   const [query, setQuery] = useState("");
   const [variables, setVariables] = useState("");
   const [variablesValid, setVariablesValid] = useState(true);
-  const [schemaOpen, setSchemaOpen] = useState(false);
+  const [schemaOpen, setSchemaOpen] = useState(readSidebarState);
+
+  const toggleSchema = useCallback(() => {
+    setSchemaOpen((prev) => {
+      const next = !prev;
+      localStorage.setItem(SCHEMA_SIDEBAR_KEY, String(next));
+      return next;
+    });
+  }, []);
 
   const onPresetSelect = useCallback((preset: (typeof GRAPHQL_PRESETS)[number]) => {
     setQuery(preset.query);
@@ -54,27 +70,45 @@ export function GraphqlPanel() {
     }
   }
 
+  const gridClass = schemaOpen ? GRAPHQL_PANEL_GRID : PLAYGROUND_PANEL_GRID;
+
   return (
     <div className="flex h-full min-h-0 flex-col gap-4">
-      <div className="shrink-0">
+      <div className="flex shrink-0 items-center gap-2">
         <PresetPicker
           presets={GRAPHQL_PRESETS}
           onSelect={onPresetSelect}
           ariaLabel="GraphQL example presets"
         />
+        <button
+          type="button"
+          onClick={toggleSchema}
+          aria-pressed={schemaOpen}
+          aria-label="Toggle schema sidebar"
+          title={schemaOpen ? "Hide schema" : "Show schema"}
+          className={`shrink-0 rounded-lg border px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${
+            schemaOpen
+              ? "border-[var(--color-accent)] bg-[var(--color-surface-raised)] text-[var(--color-accent)]"
+              : "border-[var(--color-border)] bg-[var(--color-surface-raised)] text-[var(--color-text-muted)] hover:border-[var(--color-accent)]"
+          }`}
+        >
+          {schemaOpen ? "«" : "»"}
+        </button>
       </div>
 
-      <div className={PLAYGROUND_PANEL_GRID}>
+      <div className={gridClass}>
+        {schemaOpen && (
+          <div className={PLAYGROUND_PANEL_LEFT}>
+            <SchemaPanel onSelect={applySchemaSelection} />
+          </div>
+        )}
         <div className={PLAYGROUND_PANEL_LEFT}>
           <GraphqlRequestBar
             endpointUrl={PLAYGROUND_GRAPHQL_URL}
             onSend={handleSend}
             isLoading={isLoading}
             canSend={canSend}
-            schemaOpen={schemaOpen}
-            onToggleSchema={() => setSchemaOpen((open) => !open)}
           />
-          {schemaOpen && <SchemaPanel onConfirm={applySchemaSelection} />}
           <QueryEditor value={query} onChange={setQuery} />
           <VariablesEditor
             value={variables}

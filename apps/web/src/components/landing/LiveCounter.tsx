@@ -77,8 +77,22 @@ export function LiveCounter() {
             <p className="mb-2 font-mono text-xs font-medium uppercase tracking-[0.2em] text-[var(--color-text-muted)]">
               Requests served
             </p>
-            <h2 className="font-display text-[clamp(3.5rem,12vw,9rem)] font-black leading-none tabular-nums tracking-tight text-[var(--color-text-primary)]">
-              <span ref={counterRef}>{total !== null ? formatNumber(total) : "—"}</span>
+            <h2
+              aria-busy={total === null}
+              className="font-display text-[clamp(3.5rem,12vw,9rem)] font-black leading-none tabular-nums tracking-tight text-[var(--color-text-primary)]"
+            >
+              {total !== null ? (
+                <span ref={counterRef}>{formatNumber(total)}</span>
+              ) : (
+                <span
+                  aria-hidden
+                  className="inline-block animate-pulse rounded-md bg-[var(--color-border)]"
+                  style={{
+                    width: "clamp(8rem, 36vw, 16rem)",
+                    height: "clamp(3.5rem, 12vw, 9rem)",
+                  }}
+                />
+              )}
             </h2>
           </div>
 

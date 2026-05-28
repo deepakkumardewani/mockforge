@@ -83,17 +83,14 @@ export function RestPanel() {
   }, []);
 
   return (
-    <div className="flex h-full min-h-0 flex-col gap-4">
-      <div className="shrink-0">
-        <PresetPicker
-          presets={REST_PRESETS}
-          onSelect={onPresetSelect}
-          ariaLabel="REST example presets"
-        />
-      </div>
-
+    <div className="flex h-full min-h-0 flex-col">
       <div className={PLAYGROUND_PANEL_GRID}>
         <div className={PLAYGROUND_PANEL_LEFT}>
+          <PresetPicker
+            presets={REST_PRESETS}
+            onSelect={onPresetSelect}
+            ariaLabel="REST example presets"
+          />
           <MethodUrlBar
             method={method}
             url={url}

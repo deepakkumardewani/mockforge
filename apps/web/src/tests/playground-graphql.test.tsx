@@ -1,14 +1,6 @@
 import type { ReactNode } from "react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import {
-  render,
-  screen,
-  waitFor,
-  act,
-  renderHook,
-  fireEvent,
-  within,
-} from "@testing-library/react";
+import { render, screen, waitFor, act, renderHook, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { GraphqlPanel } from "@/components/playground/graphql/GraphqlPanel";
@@ -30,11 +22,13 @@ function makeQueryWrapper() {
 describe("Playground GraphQL — GraphqlPanel", () => {
   beforeEach(() => {
     vi.stubGlobal("fetch", vi.fn());
+    localStorage.clear();
   });
 
   afterEach(() => {
     vi.unstubAllGlobals();
     vi.restoreAllMocks();
+    localStorage.clear();
   });
 
   it("preset populates query and variables without calling fetch until Send", async () => {
@@ -129,7 +123,7 @@ describe("Playground GraphQL — GraphqlPanel", () => {
     expect(vi.mocked(fetch)).not.toHaveBeenCalled();
   });
 
-  it("toggles schema panel open and closed from the request bar", async () => {
+  it("toggles schema sidebar open and closed", async () => {
     const user = userEvent.setup();
     render(
       <QueryClientProvider
@@ -141,14 +135,33 @@ describe("Playground GraphQL — GraphqlPanel", () => {
 
     expect(screen.queryByLabelText("GraphQL schema")).not.toBeInTheDocument();
 
-    await user.click(screen.getByRole("button", { name: "Toggle schema panel" }));
+    await user.click(screen.getByRole("button", { name: "Toggle schema sidebar" }));
     expect(screen.getByLabelText("GraphQL schema")).toBeInTheDocument();
 
-    await user.click(screen.getByRole("button", { name: "Toggle schema panel" }));
+    await user.click(screen.getByRole("button", { name: "Toggle schema sidebar" }));
     expect(screen.queryByLabelText("GraphQL schema")).not.toBeInTheDocument();
   });
 
-  it("replaces the query when applying schema selection over unrelated text", async () => {
+  it("persists schema sidebar state to localStorage", async () => {
+    const user = userEvent.setup();
+    render(
+      <QueryClientProvider
+        client={new QueryClient({ defaultOptions: { mutations: { retry: false } } })}
+      >
+        <GraphqlPanel />
+      </QueryClientProvider>,
+    );
+
+    expect(localStorage.getItem("mf_schema_sidebar_open")).toBeNull();
+
+    await user.click(screen.getByRole("button", { name: "Toggle schema sidebar" }));
+    expect(localStorage.getItem("mf_schema_sidebar_open")).toBe("true");
+
+    await user.click(screen.getByRole("button", { name: "Toggle schema sidebar" }));
+    expect(localStorage.getItem("mf_schema_sidebar_open")).toBe("false");
+  });
+
+  it("clicking a schema field replaces existing unrelated query content", async () => {
     const user = userEvent.setup();
     render(
       <QueryClientProvider
@@ -161,10 +174,8 @@ describe("Playground GraphQL — GraphqlPanel", () => {
     fireEvent.change(screen.getByRole("textbox", { name: "GraphQL query" }), {
       target: { value: "query { __typename }" },
     });
-    await user.click(screen.getByRole("button", { name: "Toggle schema panel" }));
-    await user.click(screen.getByRole("button", { name: /^Query/u }));
+    await user.click(screen.getByRole("button", { name: "Toggle schema sidebar" }));
     await user.click(screen.getByRole("button", { name: /^users/u }));
-    await user.click(screen.getByRole("button", { name: "Apply to query" }));
 
     const queryEditor = screen.getByRole("textbox", {
       name: "GraphQL query",
@@ -175,7 +186,7 @@ describe("Playground GraphQL — GraphqlPanel", () => {
     expect(queryEditor.value.match(/^query \{/gm)?.length).toBe(1);
   });
 
-  it("updates field selection in place when re-applying the same root field", async () => {
+  it("clicking a different schema field replaces the previous query", async () => {
     const user = userEvent.setup();
     render(
       <QueryClientProvider
@@ -185,23 +196,17 @@ describe("Playground GraphQL — GraphqlPanel", () => {
       </QueryClientProvider>,
     );
 
-    await user.click(screen.getByRole("button", { name: "Toggle schema panel" }));
-    await user.click(screen.getByRole("button", { name: /^Query/u }));
+    await user.click(screen.getByRole("button", { name: "Toggle schema sidebar" }));
     await user.click(screen.getByRole("button", { name: /^users/u }));
-    await user.click(screen.getByRole("button", { name: "Apply to query" }));
-
-    const schemaPanel = screen.getByLabelText("GraphQL schema");
-    await user.click(within(schemaPanel).getByRole("checkbox", { name: "firstName" }));
-    await user.click(within(schemaPanel).getByRole("checkbox", { name: "lastName" }));
-    await user.click(within(schemaPanel).getByRole("checkbox", { name: "email" }));
-    await user.click(screen.getByRole("button", { name: "Apply to query" }));
 
     const queryEditor = screen.getByRole("textbox", {
       name: "GraphQL query",
     }) as HTMLTextAreaElement;
     expect(queryEditor.value).toContain("users {");
-    expect(queryEditor.value).toContain("id");
-    expect(queryEditor.value).not.toContain("firstName");
+
+    await user.click(screen.getByRole("button", { name: /^products/u }));
+    expect(queryEditor.value).not.toContain("users");
+    expect(queryEditor.value).toContain("products {");
     expect(queryEditor.value.match(/^query \{/gm)?.length).toBe(1);
   });
 
