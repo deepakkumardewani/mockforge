@@ -3,6 +3,13 @@
 import Link from "next/link";
 import { useRevealOnScroll } from "./useRevealOnScroll";
 import { Section } from "./Section";
+import { SECTION_IDENTITY } from "./depth";
+
+const PROOF_POINTS = [
+  "Hosted Playground + Builder",
+  "Real-time WebSocket feeds",
+  "Cross-protocol request stats",
+] as const;
 
 export function FinalCTA() {
   const containerRef = useRevealOnScroll({
@@ -13,29 +20,20 @@ export function FinalCTA() {
   });
 
   return (
-    <Section ref={containerRef} className="py-24 sm:py-28">
+    <Section ref={containerRef} className={`${SECTION_IDENTITY.finalCta} py-20 sm:py-24`}>
       <div
-        className="finalcta-animate relative overflow-hidden rounded-2xl border border-[var(--color-border)] px-8 py-16 text-center sm:px-12 sm:py-20"
+        className="finalcta-animate grid gap-8 overflow-hidden rounded-xl border border-[var(--color-border)] lg:grid-cols-[1.2fr_1fr] lg:gap-0"
         style={{ background: "var(--color-surface-raised)" }}
       >
-        <div
-          className="pointer-events-none absolute inset-0 opacity-[0.06]"
-          style={{
-            background:
-              "radial-gradient(ellipse 70% 80% at 50% 100%, var(--color-accent), transparent)",
-          }}
-          aria-hidden
-        />
-
-        <div className="relative z-10 mx-auto max-w-2xl">
-          <h2 className="font-display text-3xl font-bold tracking-tight text-[var(--color-text-primary)] sm:text-4xl lg:text-5xl">
+        <div className="flex flex-col justify-center px-8 py-10 sm:px-10 sm:py-12">
+          <h2 className="font-display text-[clamp(1.75rem,4vw,2.75rem)] font-bold leading-tight tracking-tight text-[var(--color-text-primary)]">
             Stop stubbing. Start shipping.
           </h2>
-          <p className="mx-auto mt-4 max-w-lg text-base leading-relaxed text-[var(--color-text-muted)] sm:text-lg">
+          <p className="mt-4 max-w-md text-base leading-relaxed text-[var(--color-text-muted)]">
             Hand-rolled fixtures break on every schema change. Mock against endpoints that stay in
             sync.
           </p>
-          <div className="mt-10">
+          <div className="mt-8">
             <Link
               href="/playground"
               className="inline-flex rounded-lg px-8 py-3.5 text-base font-semibold transition-all hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
@@ -47,6 +45,32 @@ export function FinalCTA() {
               Open the Playground
             </Link>
           </div>
+        </div>
+
+        <div
+          className="flex flex-col justify-center border-t border-[var(--color-border)] px-8 py-8 lg:border-t-0 lg:border-l lg:px-10"
+          style={{ background: "var(--color-surface)" }}
+        >
+          <p className="mb-4 font-mono text-[10px] font-semibold uppercase tracking-widest text-[var(--color-text-muted)]">
+            What you get
+          </p>
+          <ul className="space-y-3">
+            {PROOF_POINTS.map((point) => (
+              <li key={point} className="flex items-center gap-3 text-sm text-[var(--color-text-primary)]">
+                <span
+                  className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full font-mono text-[10px] font-bold"
+                  style={{
+                    background: "var(--color-accent-glow)",
+                    color: "var(--color-accent)",
+                  }}
+                  aria-hidden
+                >
+                  ✓
+                </span>
+                {point}
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </Section>

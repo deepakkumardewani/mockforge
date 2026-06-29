@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import gsap from "gsap";
 import { useRevealOnScroll } from "./useRevealOnScroll";
 import { Section } from "./Section";
+import { SECTION_IDENTITY } from "./depth";
 
 const TABS = ["JavaScript", "Python", "cURL"] as const;
 type Tab = (typeof TABS)[number];
@@ -83,98 +84,98 @@ export function DXHighlights() {
   }
 
   return (
-    <Section ref={containerRef}>
-      <div className="dx-animate mb-12 max-w-2xl">
-        <span
-          className="mb-3 block font-mono text-xs font-medium uppercase tracking-[0.2em]"
-          style={{ color: "var(--color-accent)" }}
-        >
-          Integration
-        </span>
-        <h2 className="font-display text-4xl font-bold text-[var(--color-text-primary)] sm:text-5xl">
-          Wire it in minutes
-        </h2>
-        <p className="mt-4 max-w-xl text-lg text-[var(--color-text-muted)]">
-          Your stack already speaks HTTP. POST a user in three lines — JavaScript, Python, or cURL.
-        </p>
-      </div>
+    <Section ref={containerRef} className={SECTION_IDENTITY.dxHighlights}>
+      <div className="grid items-start gap-12 lg:grid-cols-2 lg:gap-16">
+        <div className="dx-animate">
+          <span
+            className="mb-3 block font-mono text-xs font-medium uppercase tracking-[0.2em]"
+            style={{ color: "var(--color-accent)" }}
+          >
+            Integration
+          </span>
+          <h2 className="font-display text-4xl font-bold text-[var(--color-text-primary)] sm:text-5xl">
+            Wire it in minutes
+          </h2>
+          <p className="mt-4 text-lg leading-relaxed text-[var(--color-text-muted)]">
+            Your stack already speaks HTTP. POST a user in three lines — JavaScript, Python, or cURL.
+          </p>
 
-      <div className="dx-animate mx-auto max-w-2xl">
-        <div
-          className="flex items-end overflow-hidden rounded-t-xl border border-b-0 border-[var(--color-border)]"
-          role="tablist"
-          aria-label="Code samples"
-          style={{ background: "var(--color-surface-raised)" }}
-        >
-          {TABS.map((tab) => (
-            <button
-              key={tab}
-              type="button"
-              role="tab"
-              id={`dx-tab-${tab}`}
-              aria-selected={activeTab === tab}
-              aria-controls="dx-code-panel"
-              onClick={() => handleTabChange(tab)}
-              className="relative px-5 py-3 text-sm font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--color-accent)]"
-              style={{
-                color: activeTab === tab ? "var(--color-accent)" : "var(--color-text-muted)",
-              }}
+          <div
+            className="mt-8 flex items-start gap-4 rounded-xl border border-[var(--color-border)] p-5"
+            style={{ background: "var(--color-surface-raised)" }}
+          >
+            <span
+              className="mt-0.5 shrink-0 font-mono text-sm font-bold"
+              style={{ color: "var(--color-accent)" }}
             >
-              {tab}
-              {activeTab === tab && (
-                <span
-                  className="absolute inset-x-0 bottom-0 h-0.5"
-                  style={{ background: "var(--color-accent)" }}
-                />
-              )}
-            </button>
-          ))}
-          <div className="ml-auto flex items-center pr-3">
-            <button
-              type="button"
-              onClick={handleCopy}
-              className="rounded px-3 py-1.5 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
-              style={{
-                color: copied ? "var(--color-accent)" : "var(--color-text-muted)",
-              }}
-            >
-              {copied ? "Copied!" : "Copy"}
-            </button>
+              →
+            </span>
+            <p className="text-sm leading-relaxed text-[var(--color-text-muted)]">
+              <span className="font-semibold text-[var(--color-text-primary)]">Runs locally.</span>{" "}
+              Spin up the mock server, hit the same endpoints in CI, and keep your frontend decoupled
+              from backend availability.
+            </p>
           </div>
         </div>
 
-        <div
-          id="dx-code-panel"
-          role="tabpanel"
-          aria-labelledby={`dx-tab-${activeTab}`}
-          className="overflow-hidden rounded-b-xl border border-[var(--color-border)]"
-          style={{ background: "var(--color-code-bg)" }}
-        >
-          <pre
-            ref={codeRef}
-            className="overflow-x-auto p-6 font-mono text-sm leading-relaxed text-[var(--color-code-text)]"
+        <div className="dx-animate min-w-0">
+          <div
+            className="flex items-end overflow-hidden rounded-t-xl border border-b-0 border-[var(--color-border)]"
+            role="tablist"
+            aria-label="Code samples"
+            style={{ background: "var(--color-surface-raised)" }}
           >
-            <code>{CODE_SAMPLES[visibleTab]}</code>
-          </pre>
-        </div>
-      </div>
+            {TABS.map((tab) => (
+              <button
+                key={tab}
+                type="button"
+                role="tab"
+                id={`dx-tab-${tab}`}
+                aria-selected={activeTab === tab}
+                aria-controls="dx-code-panel"
+                onClick={() => handleTabChange(tab)}
+                className="relative px-5 py-3 text-sm font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--color-accent)]"
+                style={{
+                  color: activeTab === tab ? "var(--color-accent)" : "var(--color-text-muted)",
+                }}
+              >
+                {tab}
+                {activeTab === tab && (
+                  <span
+                    className="absolute inset-x-0 bottom-0 h-0.5"
+                    style={{ background: "var(--color-accent)" }}
+                  />
+                )}
+              </button>
+            ))}
+            <div className="ml-auto flex items-center pr-3">
+              <button
+                type="button"
+                onClick={handleCopy}
+                className="rounded px-3 py-1.5 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
+                style={{
+                  color: copied ? "var(--color-accent)" : "var(--color-text-muted)",
+                }}
+              >
+                {copied ? "Copied!" : "Copy"}
+              </button>
+            </div>
+          </div>
 
-      <div className="dx-animate mx-auto mt-10 max-w-2xl">
-        <div
-          className="flex items-start gap-4 rounded-xl border border-[var(--color-border)] p-5"
-          style={{ background: "var(--color-surface-raised)" }}
-        >
-          <span
-            className="mt-0.5 shrink-0 font-mono text-sm font-bold"
-            style={{ color: "var(--color-accent)" }}
+          <div
+            id="dx-code-panel"
+            role="tabpanel"
+            aria-labelledby={`dx-tab-${activeTab}`}
+            className="overflow-hidden rounded-b-xl border border-[var(--color-border)]"
+            style={{ background: "var(--color-code-bg)" }}
           >
-            →
-          </span>
-          <p className="text-sm leading-relaxed text-[var(--color-text-muted)]">
-            <span className="font-semibold text-[var(--color-text-primary)]">Runs locally.</span>{" "}
-            Spin up the mock server, hit the same endpoints in CI, and keep your frontend decoupled
-            from backend availability.
-          </p>
+            <pre
+              ref={codeRef}
+              className="overflow-x-auto p-6 font-mono text-sm leading-relaxed text-[var(--color-code-text)]"
+            >
+              <code>{CODE_SAMPLES[visibleTab]}</code>
+            </pre>
+          </div>
         </div>
       </div>
     </Section>

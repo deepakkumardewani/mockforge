@@ -2,6 +2,7 @@
 
 import { useRevealOnScroll } from "./useRevealOnScroll";
 import { Section } from "./Section";
+import { AccentGlowWash, SECTION_IDENTITY } from "./depth";
 
 interface Entity {
   name: string;
@@ -24,6 +25,7 @@ const ENTITIES: Entity[] = [
   { name: "Company", icon: "🏢", fields: ["name", "industry", "employees", "website"] },
   { name: "Stock", icon: "📈", fields: ["symbol", "price", "changePercent", "volume"] },
   { name: "Event", icon: "📅", fields: ["title", "category", "location", "startDate"] },
+  { name: "Custom", icon: "⚙️", fields: ["schema", "slug", "fields", "Builder"] },
 ];
 
 export function EntityBrowser() {
@@ -43,7 +45,8 @@ export function EntityBrowser() {
   ]);
 
   return (
-    <Section ref={containerRef}>
+    <Section ref={containerRef} className={SECTION_IDENTITY.entityBrowser}>
+      <AccentGlowWash position="bottom" />
       <div className="section-heading mb-12 overflow-hidden sm:mb-16">
         <span
           className="mb-3 block font-mono text-xs font-medium uppercase tracking-[0.2em]"
@@ -52,10 +55,10 @@ export function EntityBrowser() {
           Schema
         </span>
         <h2 className="font-display text-4xl font-bold text-[var(--color-text-primary)] sm:text-5xl">
-          14 typed resources
+          15 typed resources
         </h2>
         <p className="mt-4 max-w-xl text-lg text-[var(--color-text-muted)]">
-          Every resource ships with modeled fields, filters, and pagination — pick one and query it.
+          Every resource ships with modeled fields, pagination, and search — pick one and query it.
         </p>
       </div>
 

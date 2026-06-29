@@ -2,6 +2,7 @@
 
 import { useRevealOnScroll } from "./useRevealOnScroll";
 import { Section } from "./Section";
+import { DepthTexture, SECTION_IDENTITY } from "./depth";
 
 interface Protocol {
   title: string;
@@ -17,7 +18,7 @@ const PROTOCOLS: Protocol[] = [
     abbr: "REST",
     tag: "HTTP/1.1",
     description:
-      "Pagination, filtering, and sorting on every resource. The shape you'd expect from a production backend.",
+      "Pagination (limit/skip), search, and sort on every resource. The shape you'd expect from a production backend.",
     sample: `GET /api/products?limit=5&sort=price
 → { "data": [...], "total": 142 }`,
   },
@@ -68,7 +69,8 @@ export function ProtocolShowcase() {
   ]);
 
   return (
-    <Section ref={containerRef}>
+    <Section ref={containerRef} className={SECTION_IDENTITY.protocols}>
+      <DepthTexture variant="dot" />
       <div className="section-heading mb-16 overflow-hidden">
         <span
           className="mb-3 block font-mono text-xs font-medium uppercase tracking-[0.2em]"
