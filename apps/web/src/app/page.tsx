@@ -7,8 +7,11 @@ import { LiveCounter } from "@/components/landing/LiveCounter";
 import { DXHighlights } from "@/components/landing/DXHighlights";
 import { FinalCTA } from "@/components/landing/FinalCTA";
 import { Footer } from "@/components/landing/Footer";
+import { fetchStatsTotal } from "@/lib/stats";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const statsTotal = await fetchStatsTotal();
+
   return (
     <>
       <Nav />
@@ -17,7 +20,7 @@ export default function HomePage() {
         <LiveDemo />
         <ProtocolShowcase />
         <EntityBrowser />
-        <LiveCounter />
+        <LiveCounter initialTotal={statsTotal} />
         <DXHighlights />
         <FinalCTA />
         <Footer />

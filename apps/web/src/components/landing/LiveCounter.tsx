@@ -2,8 +2,11 @@
 
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { useWsStats } from "@/hooks/use-ws-stats";
 import { useRevealOnScroll } from "./useRevealOnScroll";
+
+type LiveCounterProps = {
+  initialTotal?: number | null;
+};
 
 function formatNumber(n: number): string {
   return new Intl.NumberFormat("en-US").format(n);
@@ -24,7 +27,7 @@ function LivePulse() {
   );
 }
 
-export function LiveCounter() {
+export function LiveCounter({ initialTotal = null }: LiveCounterProps) {
   const containerRef = useRevealOnScroll({
     selector: ".counter-animate",
     stagger: 0.1,
@@ -32,7 +35,7 @@ export function LiveCounter() {
     triggerStart: "top 85%",
   });
   const counterRef = useRef<HTMLSpanElement>(null);
-  const total = useWsStats();
+  const total = initialTotal;
   const prevTotal = useRef(0);
 
   useEffect(() => {
@@ -86,7 +89,7 @@ export function LiveCounter() {
             style={{ color: "var(--color-accent)" }}
           >
             <LivePulse />
-            Live stats
+            Requests served
           </p>
           <p
             aria-busy={total === null}

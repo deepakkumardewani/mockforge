@@ -27,10 +27,6 @@ vi.mock("next/link", () => ({
   ),
 }));
 
-vi.mock("@/hooks/use-ws-stats", () => ({
-  useWsStats: () => null,
-}));
-
 beforeEach(() => {
   vi.clearAllMocks();
 });
@@ -99,7 +95,7 @@ describe("LiveCounter", () => {
   it("renders counter text", async () => {
     const { LiveCounter } = await import("@/components/landing/LiveCounter");
     render(<LiveCounter />);
-    expect(screen.getByText("Live stats")).toBeInTheDocument();
+    expect(screen.getByText("Requests served")).toBeInTheDocument();
   });
 });
 
