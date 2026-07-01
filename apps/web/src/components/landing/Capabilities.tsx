@@ -71,7 +71,7 @@ export function Capabilities() {
           Built for real dev workflows
         </h2>
         <p className="mt-4 max-w-xl text-lg text-[var(--color-text-muted)]">
-          Every feature below is implemented and queryable today — not a roadmap slide.
+          Ship-ready today — every capability below is live in the Playground, not on a roadmap.
         </p>
       </div>
 

@@ -122,11 +122,11 @@ export function LiveCounter({ initialTotal = null }: LiveCounterProps) {
 
           <div className="max-w-md lg:pb-4">
             <p className="text-lg leading-relaxed text-[var(--color-text-muted)] sm:text-xl">
-              Real requests served across{" "}
+              Authentic cross-protocol telemetry — real request hits on the mock server across{" "}
               <span className="font-semibold text-[var(--color-text-primary)]">
                 REST, GraphQL, WebSocket, and Socket.io
-              </span>{" "}
-              — tracked live from the mock server.
+              </span>
+              .
             </p>
             <ul className="mt-6 flex flex-wrap gap-2" aria-label="Protocols counted">
               {PROTOCOL_TAGS.map((tag) => (

@@ -42,8 +42,7 @@ export function Quickstart() {
           Start in the Playground in seconds
         </h2>
         <p className="mt-4 max-w-xl text-lg text-[var(--color-text-muted)]">
-          MockForge is web-native — no CLI, no package install. Open the Playground and point your
-          client at the live API.
+          No CLI, no install step. Open the Playground, copy the base URL, and query live data.
         </p>
       </div>
 

@@ -109,10 +109,10 @@ export function LiveDemo() {
             Live demo
           </p>
           <h2 className="livedemo-heading font-display text-3xl font-extrabold tracking-tight text-[var(--color-text-primary)] sm:text-4xl">
-            See it work, right now.
+            Hit a live endpoint. See real JSON.
           </h2>
           <p className="livedemo-sub mt-4 text-base leading-relaxed text-[var(--color-text-muted)]">
-            Hit run on a live GET — the JSON you see is what your app would receive.
+            Pick a resource, run a GET — the response is what your production client would receive.
           </p>
         </div>
 

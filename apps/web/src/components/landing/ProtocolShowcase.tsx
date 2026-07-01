@@ -2,7 +2,7 @@
 
 import { useRevealOnScroll } from "./useRevealOnScroll";
 import { Section } from "./Section";
-import { DepthTexture, SECTION_IDENTITY } from "./depth";
+import { SECTION_IDENTITY } from "./depth";
 
 interface Protocol {
   title: string;
@@ -70,7 +70,6 @@ export function ProtocolShowcase() {
 
   return (
     <Section ref={containerRef} className={SECTION_IDENTITY.protocols}>
-      <DepthTexture variant="dot" />
       <div className="section-heading mb-16 overflow-hidden">
         <span
           className="mb-3 block font-mono text-xs font-medium uppercase tracking-[0.2em]"
@@ -82,8 +81,7 @@ export function ProtocolShowcase() {
           Pick your wire format
         </h2>
         <p className="mt-4 max-w-xl text-lg text-[var(--color-text-muted)]">
-          One schema behind four transports — swap REST for GraphQL or WebSocket without rethinking
-          your data model.
+          Same typed resources across four wire formats — use the transport your stack already speaks.
         </p>
       </div>
 

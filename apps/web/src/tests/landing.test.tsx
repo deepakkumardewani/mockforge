@@ -90,7 +90,7 @@ describe("EntityBrowser", () => {
     expect(
       screen.getByRole("heading", { name: "15 typed resources", level: 2 }),
     ).toBeInTheDocument();
-    expect(screen.getByText(/pagination, and search/i)).toBeInTheDocument();
+    expect(screen.getByText(/pagination and search/i)).toBeInTheDocument();
     expect(screen.queryByText(/filters/i)).not.toBeInTheDocument();
     expect(screen.getByText("User")).toBeInTheDocument();
     expect(screen.getByText("Product")).toBeInTheDocument();
@@ -116,6 +116,7 @@ describe("LiveCounter", () => {
     render(<LiveCounter initialTotal={12345} />);
     expect(screen.getByText("Requests served")).toBeInTheDocument();
     expect(screen.getByText(/REST, GraphQL, WebSocket, and Socket.io/i)).toBeInTheDocument();
+    expect(screen.getByText(/authentic cross-protocol telemetry/i)).toBeInTheDocument();
     expect(screen.getByText("12,345")).toBeInTheDocument();
   });
 });
@@ -137,6 +138,7 @@ describe("Capabilities", () => {
     expect(
       screen.getByRole("heading", { name: "Built for real dev workflows", level: 2 }),
     ).toBeInTheDocument();
+    expect(screen.getByText(/not on a roadmap/i)).toBeInTheDocument();
     expect(screen.getByText(/one schema, four protocols/i)).toBeInTheDocument();
     expect(screen.getByText(/pagination, search, sort/i)).toBeInTheDocument();
     expect(screen.queryByText(/latency/i)).not.toBeInTheDocument();
@@ -164,6 +166,7 @@ describe("UseCasesTrust", () => {
     render(<UseCasesTrust />);
     expect(screen.getByText("Frontend development")).toBeInTheDocument();
     expect(screen.getByText("Integration & CI testing")).toBeInTheDocument();
+    expect(screen.getByText(/without setup overhead/i)).toBeInTheDocument();
     expect(screen.getByText("Signup-free access")).toBeInTheDocument();
     expect(screen.queryByText(/open source/i)).not.toBeInTheDocument();
   });
@@ -210,6 +213,7 @@ describe("FinalCTA", () => {
     const { FinalCTA } = await import("@/components/landing/FinalCTA");
     render(<FinalCTA />);
     expect(screen.getByRole("heading", { name: /stop stubbing/i })).toBeInTheDocument();
+    expect(screen.getByText(/fixtures drift/i)).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /open the playground/i })).toHaveAttribute(
       "href",
       "/playground",

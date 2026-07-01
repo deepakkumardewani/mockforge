@@ -30,8 +30,8 @@ export function FinalCTA() {
             Stop stubbing. Start shipping.
           </h2>
           <p className="mt-4 max-w-md text-base leading-relaxed text-[var(--color-text-muted)]">
-            Hand-rolled fixtures break on every schema change. Mock against endpoints that stay in
-            sync.
+            Fixtures drift. Typed endpoints stay in sync with your schema — no install step, no
+            hand-maintained stubs.
           </p>
           <div className="mt-8">
             <Link

@@ -57,6 +57,10 @@ export function UseCasesTrust() {
         <h2 className="font-display text-4xl font-bold text-[var(--color-text-primary)] sm:text-5xl">
           Built for how you actually work
         </h2>
+        <p className="mt-4 max-w-xl text-lg text-[var(--color-text-muted)]">
+          From daily frontend work to CI pipelines and live demos — MockForge fits without setup
+          overhead.
+        </p>
       </div>
 
       <div className="usecase-animate grid gap-4 sm:grid-cols-2">

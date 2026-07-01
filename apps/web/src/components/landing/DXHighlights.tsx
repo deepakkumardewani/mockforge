@@ -97,7 +97,7 @@ export function DXHighlights() {
             Wire it in minutes
           </h2>
           <p className="mt-4 text-lg leading-relaxed text-[var(--color-text-muted)]">
-            Your stack already speaks HTTP. POST a user in three lines — JavaScript, Python, or cURL.
+            Point fetch, requests, or curl at the mock server — create a user in three lines.
           </p>
 
           <div
