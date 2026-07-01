@@ -20,7 +20,7 @@ export default async function HomePage() {
     <>
       <Nav />
       <main className="overflow-x-clip">
-        <Hero />
+        <Hero requestsServed={statsTotal} />
         <LiveDemo />
         <ProtocolShowcase />
         <Capabilities />

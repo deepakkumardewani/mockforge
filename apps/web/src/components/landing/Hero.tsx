@@ -1,9 +1,18 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import dynamic from "next/dynamic";
 import gsap from "gsap";
 import Link from "next/link";
 import { DepthTexture, SECTION_IDENTITY } from "./depth";
+
+const ProtocolForgeCanvas = dynamic(
+  () =>
+    import("./signature/ProtocolForgeCanvas").then((mod) => ({
+      default: mod.ProtocolForgeCanvas,
+    })),
+  { ssr: false },
+);
 
 const CODE_SNIPPETS = [
   {
@@ -53,7 +62,15 @@ const PROOF_ITEMS = [
   { label: "Real-time", value: "WS + Socket.io" },
 ] as const;
 
-export function Hero() {
+function formatRequests(n: number): string {
+  return new Intl.NumberFormat("en-US").format(n);
+}
+
+type HeroProps = {
+  requestsServed?: number | null;
+};
+
+export function Hero({ requestsServed = null }: HeroProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const terminalRef = useRef<HTMLDivElement>(null);
   const headlineRef = useRef<HTMLDivElement>(null);
@@ -176,9 +193,11 @@ export function Hero() {
       ref={sectionRef}
       className={`${SECTION_IDENTITY.hero} flex min-h-screen flex-col px-6 pt-24 pb-12 sm:px-10 lg:px-16`}
     >
-      <DepthTexture variant="dot" className="opacity-40" />
+      <DepthTexture variant="dot" />
 
-      <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
+      <ProtocolForgeCanvas className="pointer-events-auto absolute inset-x-0 bottom-0 z-[1] h-[min(52vh,28rem)] w-full opacity-70 motion-reduce:opacity-50 sm:h-[min(48vh,26rem)]" />
+
+      <div className="pointer-events-none absolute inset-0 z-[2] overflow-hidden" aria-hidden>
         <div
           className="hero-mesh-a absolute -top-1/3 -left-1/4 h-[70vw] w-[70vw] rounded-full opacity-[0.07]"
           style={{
@@ -216,7 +235,8 @@ export function Hero() {
               ref={subRef}
               className="mt-6 max-w-[42ch] text-lg leading-relaxed text-[var(--color-text-muted)]"
             >
-              REST, GraphQL, WebSocket, and Socket.io on one mock server — point your client and go.
+              One hosted mock server — REST, GraphQL, WebSocket, and Socket.io on a single schema.
+              Point your client and build.
             </p>
 
             <div ref={ctasRef} className="mt-8 flex flex-wrap items-center gap-3">
@@ -245,23 +265,41 @@ export function Hero() {
               </span>{" "}
               · 4 protocols, one schema
             </p>
+
+            {requestsServed !== null && (
+              <p className="mt-3 font-mono text-xs text-[var(--color-text-muted)]">
+                <span className="font-semibold text-[var(--color-text-primary)]">
+                  {formatRequests(requestsServed)}
+                </span>{" "}
+                live requests served on the mock server
+              </p>
+            )}
           </div>
 
-          <div ref={terminalRef} className="relative">
-            {/* Layered terminal stack — depth behind primary */}
+          <div ref={terminalRef} className="relative pb-4 pt-2">
+            {/* Layered terminal stack — offset cards behind primary */}
             <div
-              className="pointer-events-none absolute inset-x-4 top-6 hidden h-full rounded-xl border border-[var(--color-border)] opacity-30 sm:block"
-              style={{ background: "var(--color-code-bg)", transform: "rotate(-2deg) scale(0.96)" }}
+              className="pointer-events-none absolute inset-x-6 top-10 bottom-2 rounded-xl border border-[var(--color-accent)]/30 shadow-lg sm:block"
+              style={{
+                background: "var(--color-surface-raised)",
+                transform: "rotate(-4deg) translateY(14px)",
+                opacity: 0.85,
+              }}
               aria-hidden
             />
             <div
-              className="pointer-events-none absolute inset-x-2 top-3 hidden h-full rounded-xl border border-[var(--color-border)] opacity-50 sm:block"
-              style={{ background: "var(--color-code-bg)", transform: "rotate(1deg) scale(0.98)" }}
+              className="pointer-events-none absolute inset-x-3 top-5 bottom-1 rounded-xl border shadow-md sm:block"
+              style={{
+                background: "var(--color-code-bg)",
+                borderColor: "var(--color-border)",
+                transform: "rotate(2deg) translateY(7px)",
+                opacity: 0.92,
+              }}
               aria-hidden
             />
 
             <div
-              className="relative overflow-hidden rounded-xl border border-[var(--color-border)] shadow-2xl"
+              className="relative z-[1] overflow-hidden rounded-xl border border-[var(--color-border)] shadow-2xl"
               style={{ background: "var(--color-code-bg)" }}
             >
               <div
