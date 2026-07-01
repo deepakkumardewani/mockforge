@@ -7,8 +7,11 @@ playwright-report
 test-results
 apps/api/.env.test
 *.env.local
+.env.example
 .env
 .claude/
 *.tsbuildinfo
 apps/web/.source
 node-compile-cache/
+tasks/
+agent_docs/

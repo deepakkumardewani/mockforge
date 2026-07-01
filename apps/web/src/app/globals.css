@@ -3,12 +3,19 @@
 /* Class-based dark mode for `dark:*` utilities (not @variant — that nests inside rules). */
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* Light mode (default) — hex first as sRGB fallback, then okLCH per .impeccable.md */
+/*
+ * Molten Orange ramp (hue 42° — forge heat)
+ * Base: #FF6A3D ≈ oklch(0.70 0.19 42)
+ * AA: on-accent oklch(0.10…) on accent fills; light accent darkened for surface contrast
+ */
 :root {
-  --color-accent: #b8832a;
-  --color-accent: oklch(0.58 0.18 65);
-  --color-accent-glow: rgb(184 131 42 / 0.15);
-  --color-accent-glow: oklch(0.58 0.18 65 / 0.15);
+  --color-accent: #c94e28;
+  --color-accent: oklch(0.55 0.18 42);
+  --color-accent-muted: #a84322;
+  --color-accent-muted: oklch(0.48 0.16 42);
+  --color-accent-glow: rgb(201 78 40 / 0.12);
+  --color-accent-glow: oklch(0.55 0.08 42 / 0.12);
+  --color-accent-tint: oklch(0.55 0.06 42 / 0.12);
   --color-surface: #f9f9f7;
   --color-surface: oklch(0.98 0.004 65);
   --color-surface-raised: #f0efe9;
@@ -25,19 +32,26 @@
   --color-code-bg: oklch(0.16 0.008 65);
   --color-code-text: #e3e2df;
   --color-code-text: oklch(0.88 0.006 65);
-  /* Text on accent fills (buttons); ensures contrast when using var(--color-accent) backgrounds */
   --color-on-accent: #161513;
   --color-on-accent: oklch(0.12 0.01 65);
   --color-bg: #161513;
   --color-bg: oklch(0.12 0.01 65);
+  /* Depth / texture tokens */
+  --elevation-base: var(--color-surface);
+  --elevation-raised: var(--color-surface-raised);
+  --elevation-hover: var(--color-surface-hover);
+  --texture-line: oklch(0.35 0.02 65 / 0.08);
+  --texture-dot: oklch(0.35 0.03 65 / 0.18);
 }
 
-/* Dark mode */
 .dark {
-  --color-accent: #e8b565;
-  --color-accent: oklch(0.78 0.16 65);
-  --color-accent-glow: rgb(232 181 101 / 0.18);
-  --color-accent-glow: oklch(0.78 0.16 65 / 0.18);
+  --color-accent: #ff6a3d;
+  --color-accent: oklch(0.7 0.19 42);
+  --color-accent-muted: #e05a30;
+  --color-accent-muted: oklch(0.62 0.17 42);
+  --color-accent-glow: rgb(255 106 61 / 0.18);
+  --color-accent-glow: oklch(0.7 0.08 42 / 0.18);
+  --color-accent-tint: oklch(0.7 0.06 42 / 0.16);
   --color-surface: #141413;
   --color-surface: oklch(0.1 0.006 65);
   --color-surface-raised: #1c1c1b;
@@ -58,6 +72,8 @@
   --color-on-accent: oklch(0.1 0.006 65);
   --color-bg: #141413;
   --color-bg: oklch(0.1 0.006 65);
+  --texture-line: oklch(0.95 0.005 65 / 0.04);
+  --texture-dot: oklch(0.95 0.008 65 / 0.14);
 }
 
 html {
@@ -69,12 +85,10 @@ body {
   color: var(--color-text-primary);
 }
 
-/* Stronger panel borders on /playground only (dark mode contrast). */
 .dark .playground-scope {
   --color-border: oklch(0.38 0.016 65);
 }
 
-/* Focus visibility for playground: consistent ring + offset on top of page surface */
 .playground-scope :where(button, summary):focus-visible {
   outline: none;
 }
@@ -85,12 +99,116 @@ body {
     0 0 0 4px var(--color-accent);
 }
 
-/* Display font utility */
 .font-display {
   font-family: var(--font-display);
 }
 
-/* Ambient hero mesh — two blobs drifting at different speeds */
+/* ── Depth primitives (static, reduced-motion safe) ── */
+
+.depth-texture-dot {
+  background-image: radial-gradient(var(--texture-dot) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.depth-texture-grid {
+  background-image:
+    linear-gradient(var(--texture-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--texture-line) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.accent-glow-wash-bottom {
+  bottom: 0;
+  height: 55%;
+  background: linear-gradient(to top, var(--color-accent-tint), transparent);
+}
+
+.accent-glow-wash-top {
+  top: 0;
+  height: 35%;
+  background: linear-gradient(to bottom, var(--color-accent-tint), transparent);
+}
+
+.accent-glow-wash-center {
+  inset: 0;
+  background: radial-gradient(ellipse 80% 50% at 50% 50%, var(--color-accent-glow), transparent);
+}
+
+.tonal-panel {
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+}
+
+.tonal-panel-raised {
+  background: var(--elevation-raised);
+}
+
+.tonal-panel-hover {
+  background: var(--elevation-hover);
+}
+
+/* ── Per-section identity backgrounds (no adjacent duplicates) ── */
+
+[class*="section-identity-"] {
+  position: relative;
+  overflow: hidden;
+}
+
+.section-identity-base {
+  background: var(--elevation-base);
+}
+
+.section-identity-raised {
+  background: var(--elevation-raised);
+}
+
+.section-identity-textured-dot::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image: radial-gradient(var(--texture-dot) 1px, transparent 1px);
+  background-size: 24px 24px;
+  pointer-events: none;
+}
+
+.section-identity-textured-grid::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--texture-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--texture-line) 1px, transparent 1px);
+  background-size: 32px 32px;
+  pointer-events: none;
+}
+
+.section-identity-glow-trailing::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 0;
+  height: 50%;
+  background: linear-gradient(to top, var(--color-accent-tint), transparent);
+  pointer-events: none;
+}
+
+.section-identity-glow-leading::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 35%;
+  background: linear-gradient(to bottom, var(--color-accent-tint), transparent);
+  pointer-events: none;
+}
+
+.section-identity-panel-inset {
+  background: var(--elevation-base);
+  box-shadow: inset 0 0 0 1px var(--color-border);
+}
+
 @keyframes mesh-drift-a {
   0%,
   100% {
@@ -134,9 +252,130 @@ body {
   .hero-mesh-b {
     animation: none;
   }
+
+  .landing-btn-primary:active,
+  .landing-btn-secondary:active,
+  .landing-btn-ghost:active,
+  .landing-tab:active,
+  .landing-press:active {
+    transform: none;
+  }
+
+  .landing-panel-success-flash,
+  .landing-counter-tick {
+    animation: none;
+  }
+
+  .landing-content-enter {
+    animation: none;
+  }
 }
 
-/* Clip-path entrance animation — used by GSAP via inline styles */
+/* ── Landing micro-interactions (purposeful feedback, reduced-motion safe) ── */
+
+.landing-btn-primary {
+  transition:
+    transform 150ms ease-out,
+    filter 150ms ease-out;
+}
+
+.landing-btn-primary:hover {
+  filter: brightness(1.1);
+}
+
+.landing-btn-primary:active {
+  transform: scale(0.97);
+}
+
+.landing-btn-secondary {
+  transition:
+    transform 150ms ease-out,
+    background-color 150ms ease-out;
+}
+
+.landing-btn-secondary:hover {
+  background: var(--color-surface-hover);
+}
+
+.landing-btn-secondary:active {
+  transform: scale(0.98);
+}
+
+.landing-btn-ghost {
+  transition:
+    transform 150ms ease-out,
+    color 150ms ease-out,
+    background-color 150ms ease-out;
+}
+
+.landing-btn-ghost:active {
+  transform: scale(0.96);
+}
+
+.landing-tab {
+  transition:
+    transform 120ms ease-out,
+    color 150ms ease-out,
+    background-color 150ms ease-out;
+}
+
+.landing-tab:active {
+  transform: scale(0.96);
+}
+
+.landing-press {
+  transition: transform 120ms ease-out;
+}
+
+.landing-press:active {
+  transform: scale(0.94);
+}
+
+@keyframes landing-panel-success-flash {
+  0% {
+    box-shadow: inset 0 0 0 1px var(--color-accent);
+  }
+  100% {
+    box-shadow: inset 0 0 0 1px transparent;
+  }
+}
+
+.landing-panel-success-flash {
+  animation: landing-panel-success-flash 600ms ease-out;
+}
+
+@keyframes landing-counter-tick {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.02);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.landing-counter-tick {
+  display: inline-block;
+  animation: landing-counter-tick 350ms ease-out;
+}
+
+@keyframes landing-content-enter {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.landing-content-enter {
+  animation: landing-content-enter 200ms ease-out;
+}
+
 .clip-hidden {
   clip-path: inset(0 100% 0 0);
 }

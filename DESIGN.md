@@ -1,6 +1,6 @@
 ---
 name: MockForge
-description: High-precision mock API platform for developers. Dark-default, amber-accented, editorial typography.
+description: High-precision mock API platform for developers. Dark-default, molten-orange-accented, editorial typography.
 
 colors:
   # ── Dark mode (default) ───────────────────────────────────────────
@@ -10,15 +10,15 @@ colors:
   surface-hover: "#2a2a28"
   border: "#32322f"
   border-strong: "#4a4845"
-  accent: "#e8b565"
-  accent-muted: "#c49645"
+  accent: "#ff6a3d"
+  accent-muted: "#e05a30"
   on-accent: "#141413"
   text-primary: "#f2f1ef"
   text-muted: "#8f8d87"
   code-bg: "#0d0d0c"
   code-text: "#e3e2df"
   # ── Light mode overrides (.light class) ──────────────────────────
-  accent-lm: "#b8832a"
+  accent-lm: "#c94e28"
   surface-lm: "#f9f9f7"
   surface-raised-lm: "#f0efe9"
   surface-hover-lm: "#e8e6df"
@@ -153,7 +153,7 @@ components:
     fontSize: 14px
   input-field-focus:
     borderColor: "{colors.accent}"
-    boxShadow: "0 0 0 2px rgba(232, 181, 101, 0.15)"
+    boxShadow: "0 0 0 2px oklch(0.7 0.08 42 / 0.15)"
   code-block:
     backgroundColor: "{colors.code-bg}"
     textColor: "{colors.code-text}"
@@ -180,9 +180,9 @@ components:
 
 ## Brand & Style
 
-MockForge is a high-precision mock API platform built for developers — people building apps, running tests, and evaluating API shapes in a terminal-adjacent context. The design should feel like a crafted instrument, not a startup product. The brand mantra is **precise · inevitable · forged**: every element earns its place, nothing is decorative, and the amber accent carries the heat of the forge itself.
+MockForge is a high-precision mock API platform built for developers — people building apps, running tests, and evaluating API shapes in a terminal-adjacent context. The design should feel like a crafted instrument, not a startup product. The brand mantra is **precise · inevitable · forged**: every element earns its place, nothing is decorative, and the molten-orange accent carries the heat of the forge at peak temperature.
 
-The aesthetic is dark-first, editorially typographic, and asymmetric. Oversized Bricolage Grotesque headings act as visual anchors. Amber is the only accent and is used sparingly — on active states, labels, the cursor blink, a single rule line. It is never gradient. The UI avoids every "AI slop" tell: no gradient text, no glassmorphism, no icon-in-rounded-squares, no radial glow blobs, no centered-everything card grids.
+The aesthetic is dark-first, editorially typographic, and asymmetric. Oversized Bricolage Grotesque headings act as visual anchors. Molten orange is the only accent and is used sparingly — on active states, labels, the cursor blink, a single rule line. It is never gradient. The UI avoids every "AI slop" tell: no gradient text, no glassmorphism, no icon-in-rounded-squares, no radial glow blobs, no centered-everything card grids.
 
 ## Colors
 
@@ -194,15 +194,17 @@ The palette is warm near-black — not cold blue-gray like most dev tools. All s
 - `surface-hover` (#2a2a28) — hover and selected state backgrounds throughout UI chrome.
 - `border` (#32322f) — default dividers and panel edges.
 - `border-strong` (#4a4845) — reinforced panel borders for the playground, where dark-mode contrast demands harder edges.
-- `accent` (#e8b565) — Forge Amber. The only accent in the system. Active states, badge text, cursor blink. Never gradient, never overused.
-- `accent-muted` (#c49645) — pressed and hover state for amber interactive elements.
-- `on-accent` (#141413) — text placed directly on amber fills; near-black for contrast.
+- `accent` (#ff6a3d / `oklch(0.70 0.19 42)`) — True Molten Orange. The only accent in the system. Active states, badge text, cursor blink. Never gradient, never overused.
+- `accent-muted` (#e05a30 / `oklch(0.62 0.17 42)`) — pressed and hover state for molten-orange interactive elements.
+- `on-accent` (#141413) — text placed directly on molten-orange fills; near-black for contrast (AA verified).
 - `text-primary` (#f2f1ef) — main body and heading text; nearly white with warm undertone.
 - `text-muted` (#8f8d87) — secondary labels, metadata, placeholder text.
 - `code-bg` (#0d0d0c) — deeper-than-surface backdrop for terminal blocks and inline code regions.
 - `code-text` (#e3e2df) — warm off-white on code backgrounds; slightly softer than `text-primary`.
 
-**Light mode** (class-toggled): Surfaces flip to warm parchment tones (`surface-lm` #f9f9f7); amber deepens to `accent-lm` (#b8832a). The warm hue bias is preserved across both modes — the brand character stays consistent regardless of system preference.
+**Light mode** (class-toggled): Surfaces flip to warm parchment tones (`surface-lm` #f9f9f7); accent deepens to `accent-lm` (#c94e28 / `oklch(0.55 0.18 42)`) for AA contrast on light surfaces. The warm hue bias is preserved across both modes — the brand character stays consistent regardless of system preference.
+
+**Accent ramp tokens:** `accent-glow` (low-chroma wash for focus rings and ambient depth), `accent-tint` (section glow washes), `accent-muted` (hover/pressed). Chroma is reduced at lightness extremes per OKLCH discipline.
 
 ## Typography
 
@@ -234,6 +236,12 @@ The playground uses `panel-gap: 1px` — panels are separated by a single pixel 
 
 Depth is expressed through **tonal layering**, not box shadows. The surface hierarchy (`background` → `surface-raised` → `surface-hover`) creates perceived elevation through lightness alone — each step is approximately 4–6 OKLCH lightness units apart, subtle enough not to fragment the palette but distinct enough to read at a glance.
 
+**Depth & texture system (landing):**
+- `texture-line` / `texture-dot` — low-contrast grid or dot overlays; static CSS only, `prefers-reduced-motion` safe.
+- `accent-tint` / `accent-glow` — intentional molten-orange washes for section identity; not decorative blob slop.
+- `elevation-base` / `elevation-raised` / `elevation-hover` — named elevation steps for tonal panels.
+- **Per-section identity:** each landing section uses a distinct background treatment (base, raised, textured, glow-trailing, panel-inset) so no two consecutive sections share the same pattern.
+
 In the playground, `border-strong` provides additional visual separation between panels when tonal contrast alone is insufficient (dark-mode scope override). Shadows are reserved for truly floating UI — dropdowns, tooltips, command palettes — where a soft `rgba(0, 0, 0, 0.5)` drop shadow conveys real float above the canvas. There is no glassmorphism. Blur-based depth conflicts with the "forged, solid, precise" character of the brand.
 
 ## Shapes
@@ -251,16 +259,16 @@ Sharp but not harsh — the corners carry just enough radius to feel crafted wit
 
 ## Components
 
-**`card-standard`** — The default content container. `surface-raised` background with a 1px `border` edge and `lg` rounding. On hover (`card-hover`), the background lifts to `surface-hover` and the border gains an amber tint — a quiet acknowledgment without animation noise.
+**`card-standard`** — The default content container. `surface-raised` background with a 1px `border` edge and `lg` rounding. On hover (`card-hover`), the background lifts to `surface-hover` and the border gains a molten-orange tint — a quiet acknowledgment without animation noise.
 
-**`button-primary`** — Amber fill (`accent`), dark text (`on-accent`), 40px height, `md` rounding. Bricolage Grotesque at 14px/600 for label weight. The only button that uses the accent fill; reserved for the single primary CTA per view. Never stacked alongside other amber elements.
+**`button-primary`** — Molten-orange fill (`accent`), dark text (`on-accent`), 40px height, `md` rounding. Bricolage Grotesque at 14px/600 for label weight. The only button that uses the accent fill; reserved for the single primary CTA per view. Never stacked alongside other accent elements.
 
-**`button-ghost`** — Transparent with a `border` edge. On hover: background lifts to `surface-hover` and text + border shift to amber. This is the workhorse for secondary actions throughout the playground, dashboard, and navigation.
+**`button-ghost`** — Transparent with a `border` edge. On hover: background lifts to `surface-hover` and text + border shift to molten orange. This is the workhorse for secondary actions throughout the playground, dashboard, and navigation.
 
-**`input-field`** — `surface-raised` background, 40px height, `md` rounding. On focus: border shifts to `accent` with a soft amber glow ring at 2px spread. Never uses a filled or heavily shadow-based focus state — the amber ring is sufficient.
+**`input-field`** — `surface-raised` background, 40px height, `md` rounding. On focus: border shifts to `accent` with a soft molten-orange glow ring at 2px spread. Never uses a filled or heavily shadow-based focus state — the accent ring is sufficient.
 
 **`code-block`** — Deepest surface (`code-bg`), warm off-white text (`code-text`), `md` rounding, `lg` padding. Monospace font at 13px/20px. Used for request/response bodies, JSON previews, snippet displays, and terminal output sections.
 
-**`playground-panel`** — `surface-raised` background with `border-strong` edges and minimal `DEFAULT` rounding. Panels are separated by 1px gaps rendered in the base background color, creating hairline dividers without explicit border elements. Focus rings inside the playground scope use a 2px surface offset + 2px amber ring.
+**`playground-panel`** — `surface-raised` background with `border-strong` edges and minimal `DEFAULT` rounding. Panels are separated by 1px gaps rendered in the base background color, creating hairline dividers without explicit border elements. Focus rings inside the playground scope use a 2px surface offset + 2px molten-orange ring.
 
-**`label-badge`** — `surface-hover` background, amber text, uppercase small tracking (0.06em). Used for HTTP method labels (GET, POST, PUT, DELETE), protocol indicators (REST, GraphQL, Socket.IO), and status tags. Pill variant via `full` rounding for method chips; `sm` rounding for rectangular status badges.
+**`label-badge`** — `surface-hover` background, molten-orange text, uppercase small tracking (0.06em). Used for HTTP method labels (GET, POST, PUT, DELETE), protocol indicators (REST, GraphQL, Socket.IO), and status tags. Pill variant via `full` rounding for method chips; `sm` rounding for rectangular status badges.
