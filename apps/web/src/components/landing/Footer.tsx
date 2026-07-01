@@ -33,14 +33,12 @@ export function Footer() {
               >
                 Documentation
               </Link>
-              <a
-                href="https://github.com/mockforge/mockforge"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
+              <span
+                className="text-sm italic text-[var(--color-text-muted)]"
+                title="GitHub — coming soon"
               >
-                GitHub
-              </a>
+                GitHub — coming soon
+              </span>
               <Link
                 href="/builder"
                 className="text-sm text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"

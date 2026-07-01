@@ -27,8 +27,7 @@ const STRENGTHS: Strength[] = [
   },
   {
     title: "Frictionless start",
-    detail:
-      "No accounts, no config files. Change the base URL in your client and you're mocking.",
+    detail: "No accounts, no config files. Change the base URL in your client and you're mocking.",
   },
 ];
 

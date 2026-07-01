@@ -26,19 +26,14 @@ const CAPABILITIES: Capability[] = [
       "Every REST resource supports limit/skip pagination, text search, and sort — the query shape you'd expect from production.",
   },
   {
-    title: "Cross-protocol stats",
-    description:
-      "Unified request counting across all four protocols — the live counter on this page is real, Redis-backed telemetry.",
-  },
-  {
     title: "Zero auth",
     description:
-      "Signup-free, keyless access. Point your client at the hosted mock server and start querying immediately.",
+      "Signup-free, keyless access. Point your client at the server and start querying immediately.",
   },
   {
     title: "Hosted Playground + Builder",
     description:
-      "Explore every endpoint in the browser Playground or define custom schemas in the Builder — both live on this site.",
+      "Explore every endpoint in the browser Playground or define custom schemas in the Builder",
   },
 ];
 
@@ -47,7 +42,12 @@ export function Capabilities() {
     {
       selector: ".section-heading",
       from: { clipPath: "inset(0 100% 0 0)", y: 6 },
-      to: { clipPath: "inset(0 0% 0 0)", y: 0, duration: 0.8, ease: "power3.out" },
+      to: {
+        clipPath: "inset(0 0% 0 0)",
+        y: 0,
+        duration: 0.8,
+        ease: "power3.out",
+      },
     },
     {
       selector: ".capability-card",

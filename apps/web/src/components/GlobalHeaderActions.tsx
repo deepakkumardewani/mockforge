@@ -3,8 +3,6 @@
 import { usePathname } from "next/navigation";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
-const GITHUB_URL = "https://github.com/mockforge/mockforge";
-
 export const HEADER_ICON_BUTTON =
   "inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-raised)] text-[var(--color-text-muted)] transition-colors hover:bg-[var(--color-surface-hover)] hover:text-[var(--color-text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]";
 
@@ -27,17 +25,12 @@ function GitHubIcon() {
   );
 }
 
-function GitHubLink() {
+function GitHubComingSoon() {
   return (
-    <a
-      href={GITHUB_URL}
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label="GitHub"
-      className={HEADER_ICON_BUTTON}
-    >
+    <span className={`${HEADER_ICON_BUTTON} cursor-default`} title="GitHub — coming soon">
       <GitHubIcon />
-    </a>
+      <span className="sr-only">GitHub — coming soon</span>
+    </span>
   );
 }
 
@@ -47,7 +40,7 @@ export function GlobalHeaderActions() {
 
   return (
     <div className="fixed right-4 top-4 z-50 flex items-center gap-2">
-      {isHome && <GitHubLink />}
+      {isHome && <GitHubComingSoon />}
       <ThemeToggle className={HEADER_ICON_BUTTON} />
     </div>
   );

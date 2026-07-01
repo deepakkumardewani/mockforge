@@ -9,8 +9,6 @@ type LiveCounterProps = {
   initialTotal?: number | null;
 };
 
-const PROTOCOL_TAGS = ["REST", "GraphQL", "WebSocket", "Socket.io"] as const;
-
 function formatNumber(n: number): string {
   return new Intl.NumberFormat("en-US").format(n);
 }
@@ -54,6 +52,10 @@ export function LiveCounter({ initialTotal = null }: LiveCounterProps) {
     }
 
     if (counterRef.current) {
+      counterRef.current.classList.remove("landing-counter-tick");
+      // Force reflow so re-adding the class retriggers the animation
+      void counterRef.current.offsetWidth;
+      counterRef.current.classList.add("landing-counter-tick");
       gsap.fromTo(
         counterRef.current,
         { textContent: prevTotal.current },
@@ -122,23 +124,8 @@ export function LiveCounter({ initialTotal = null }: LiveCounterProps) {
 
           <div className="max-w-md lg:pb-4">
             <p className="text-lg leading-relaxed text-[var(--color-text-muted)] sm:text-xl">
-              Authentic cross-protocol telemetry — real request hits on the mock server across{" "}
-              <span className="font-semibold text-[var(--color-text-primary)]">
-                REST, GraphQL, WebSocket, and Socket.io
-              </span>
-              .
+              A running total of every request the mock server has handled so far.
             </p>
-            <ul className="mt-6 flex flex-wrap gap-2" aria-label="Protocols counted">
-              {PROTOCOL_TAGS.map((tag) => (
-                <li
-                  key={tag}
-                  className="rounded-full border border-[var(--color-border)] px-3 py-1 font-mono text-xs text-[var(--color-text-muted)]"
-                  style={{ background: "var(--color-surface-raised)" }}
-                >
-                  {tag}
-                </li>
-              ))}
-            </ul>
           </div>
         </div>
       </div>

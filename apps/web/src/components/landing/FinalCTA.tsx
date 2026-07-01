@@ -8,7 +8,7 @@ import { SECTION_IDENTITY } from "./depth";
 const PROOF_POINTS = [
   "Hosted Playground + Builder",
   "Real-time WebSocket feeds",
-  "Cross-protocol request stats",
+  "One schema, four protocols",
 ] as const;
 
 export function FinalCTA() {
@@ -36,7 +36,7 @@ export function FinalCTA() {
           <div className="mt-8">
             <Link
               href="/playground"
-              className="inline-flex rounded-lg px-8 py-3.5 text-base font-semibold transition-all hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
+              className="landing-btn-primary inline-flex rounded-lg px-8 py-3.5 text-base font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
               style={{
                 background: "var(--color-accent)",
                 color: "var(--color-on-accent)",
@@ -56,7 +56,10 @@ export function FinalCTA() {
           </p>
           <ul className="space-y-3">
             {PROOF_POINTS.map((point) => (
-              <li key={point} className="flex items-center gap-3 text-sm text-[var(--color-text-primary)]">
+              <li
+                key={point}
+                className="flex items-center gap-3 text-sm text-[var(--color-text-primary)]"
+              >
                 <span
                   className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full font-mono text-[10px] font-bold"
                   style={{

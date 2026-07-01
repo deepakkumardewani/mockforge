@@ -115,8 +115,9 @@ describe("LiveCounter", () => {
     const { LiveCounter } = await import("@/components/landing/LiveCounter");
     render(<LiveCounter initialTotal={12345} />);
     expect(screen.getByText("Requests served")).toBeInTheDocument();
-    expect(screen.getByText(/REST, GraphQL, WebSocket, and Socket.io/i)).toBeInTheDocument();
-    expect(screen.getByText(/authentic cross-protocol telemetry/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/running total of every request the mock server has handled so far/i),
+    ).toBeInTheDocument();
     expect(screen.getByText("12,345")).toBeInTheDocument();
   });
 });

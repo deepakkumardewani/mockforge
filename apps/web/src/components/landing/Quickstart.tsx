@@ -84,7 +84,7 @@ export function Quickstart() {
           <div className="border-t border-[var(--color-border)] px-5 py-4">
             <Link
               href="/playground"
-              className="inline-flex rounded-lg px-6 py-2.5 text-sm font-semibold transition-all hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
+              className="landing-btn-primary inline-flex rounded-lg px-6 py-2.5 text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
               style={{
                 background: "var(--color-accent)",
                 color: "var(--color-on-accent)",

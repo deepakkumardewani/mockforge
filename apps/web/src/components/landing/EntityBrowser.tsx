@@ -3,29 +3,29 @@
 import { useRevealOnScroll } from "./useRevealOnScroll";
 import { Section } from "./Section";
 import { SECTION_IDENTITY } from "./depth";
+import { EntityIcon } from "./entity-icons";
 
 interface Entity {
-  name: string;
-  icon: string;
+  name: Parameters<typeof EntityIcon>[0]["name"];
   fields: string[];
 }
 
 const ENTITIES: Entity[] = [
-  { name: "User", icon: "👤", fields: ["firstName", "lastName", "email", "username"] },
-  { name: "Product", icon: "📦", fields: ["title", "price", "category", "brand"] },
-  { name: "Post", icon: "📝", fields: ["title", "body", "tags", "reactions"] },
-  { name: "Comment", icon: "💬", fields: ["body", "author", "email", "postId"] },
-  { name: "Todo", icon: "✅", fields: ["todo", "completed", "priority", "dueDate"] },
-  { name: "Cart", icon: "🛒", fields: ["total", "totalProducts", "userId"] },
-  { name: "Message", icon: "✉️", fields: ["body", "senderId", "receiverId", "roomId"] },
-  { name: "Notification", icon: "🔔", fields: ["type", "title", "message", "read"] },
-  { name: "Quote", icon: "💭", fields: ["content", "author", "category"] },
-  { name: "Recipe", icon: "🍳", fields: ["name", "cuisine", "difficulty", "calories"] },
-  { name: "Country", icon: "🌍", fields: ["name", "capital", "region", "population"] },
-  { name: "Company", icon: "🏢", fields: ["name", "industry", "employees", "website"] },
-  { name: "Stock", icon: "📈", fields: ["symbol", "price", "changePercent", "volume"] },
-  { name: "Event", icon: "📅", fields: ["title", "category", "location", "startDate"] },
-  { name: "Custom", icon: "⚙️", fields: ["schema", "slug", "fields", "Builder"] },
+  { name: "User", fields: ["firstName", "lastName", "email", "username"] },
+  { name: "Product", fields: ["title", "price", "category", "brand"] },
+  { name: "Post", fields: ["title", "body", "tags", "reactions"] },
+  { name: "Comment", fields: ["body", "author", "email", "postId"] },
+  { name: "Todo", fields: ["todo", "completed", "priority", "dueDate"] },
+  { name: "Cart", fields: ["total", "totalProducts", "userId"] },
+  { name: "Message", fields: ["body", "senderId", "receiverId", "roomId"] },
+  { name: "Notification", fields: ["type", "title", "message", "read"] },
+  { name: "Quote", fields: ["content", "author", "category"] },
+  { name: "Recipe", fields: ["name", "cuisine", "difficulty", "calories"] },
+  { name: "Country", fields: ["name", "capital", "region", "population"] },
+  { name: "Company", fields: ["name", "industry", "employees", "website"] },
+  { name: "Stock", fields: ["symbol", "price", "changePercent", "volume"] },
+  { name: "Event", fields: ["title", "category", "location", "startDate"] },
+  { name: "Custom", fields: ["schema", "slug", "fields", "Builder"] },
 ];
 
 export function EntityBrowser() {
@@ -67,12 +67,12 @@ export function EntityBrowser() {
             key={entity.name}
             className="entity-card group rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-raised)] p-4 transition-[border-color,box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:border-[var(--color-accent)]/50 hover:shadow-md motion-reduce:hover:translate-y-0"
           >
-            <span
-              className="text-2xl transition-transform duration-200 group-hover:scale-110 motion-reduce:group-hover:scale-100"
-              aria-hidden
-            >
-              {entity.icon}
-            </span>
+            <EntityIcon
+              name={entity.name}
+              width={24}
+              height={24}
+              className="text-[var(--color-accent)] transition-transform duration-200 group-hover:scale-110 motion-reduce:group-hover:scale-100"
+            />
             <h3 className="mt-2 font-display text-sm font-semibold text-[var(--color-text-primary)]">
               {entity.name}
             </h3>

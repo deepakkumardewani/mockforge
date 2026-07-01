@@ -112,8 +112,8 @@ export function DXHighlights() {
             </span>
             <p className="text-sm leading-relaxed text-[var(--color-text-muted)]">
               <span className="font-semibold text-[var(--color-text-primary)]">Runs locally.</span>{" "}
-              Spin up the mock server, hit the same endpoints in CI, and keep your frontend decoupled
-              from backend availability.
+              Spin up the mock server, hit the same endpoints in CI, and keep your frontend
+              decoupled from backend availability.
             </p>
           </div>
         </div>
@@ -121,38 +121,42 @@ export function DXHighlights() {
         <div className="dx-animate min-w-0">
           <div
             className="flex items-end overflow-hidden rounded-t-xl border border-b-0 border-[var(--color-border)]"
-            role="tablist"
-            aria-label="Code samples"
             style={{ background: "var(--color-surface-raised)" }}
           >
-            {TABS.map((tab) => (
-              <button
-                key={tab}
-                type="button"
-                role="tab"
-                id={`dx-tab-${tab}`}
-                aria-selected={activeTab === tab}
-                aria-controls="dx-code-panel"
-                onClick={() => handleTabChange(tab)}
-                className="relative px-5 py-3 text-sm font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--color-accent)]"
-                style={{
-                  color: activeTab === tab ? "var(--color-accent)" : "var(--color-text-muted)",
-                }}
-              >
-                {tab}
-                {activeTab === tab && (
-                  <span
-                    className="absolute inset-x-0 bottom-0 h-0.5"
-                    style={{ background: "var(--color-accent)" }}
-                  />
-                )}
-              </button>
-            ))}
-            <div className="ml-auto flex items-center pr-3">
+            <div role="tablist" aria-label="Code samples" className="flex flex-1 items-end">
+              {TABS.map((tab) => (
+                <button
+                  key={tab}
+                  type="button"
+                  role="tab"
+                  id={`dx-tab-${tab}`}
+                  aria-selected={activeTab === tab}
+                  aria-controls="dx-code-panel"
+                  onClick={() => handleTabChange(tab)}
+                  className="relative px-5 py-3 text-sm font-medium landing-tab focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--color-accent)]"
+                  style={{
+                    color: activeTab === tab ? "var(--color-accent)" : "var(--color-text-muted)",
+                  }}
+                >
+                  {tab}
+                  {activeTab === tab && (
+                    <span
+                      className="absolute inset-x-0 bottom-0 h-0.5"
+                      style={{ background: "var(--color-accent)" }}
+                    />
+                  )}
+                </button>
+              ))}
+            </div>
+            <div className="flex items-center pr-3">
+              <span className="sr-only" aria-live="polite">
+                {copied ? "Code copied to clipboard" : ""}
+              </span>
               <button
                 type="button"
                 onClick={handleCopy}
-                className="rounded px-3 py-1.5 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
+                aria-label={copied ? "Copied to clipboard" : "Copy code sample"}
+                className="landing-btn-ghost rounded px-3 py-1.5 text-xs font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
                 style={{
                   color: copied ? "var(--color-accent)" : "var(--color-text-muted)",
                 }}

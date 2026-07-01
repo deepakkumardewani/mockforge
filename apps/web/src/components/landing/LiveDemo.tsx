@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { JsonView } from "@/components/playground/shared/JsonView";
 import { StatusPill } from "@/components/playground/shared/StatusPill";
 import { useRevealOnScroll } from "./useRevealOnScroll";
@@ -76,6 +76,15 @@ export function LiveDemo() {
 
   const [activeEndpoint, setActiveEndpoint] = useState<DemoEndpoint>(DEMO_ENDPOINTS[0]);
   const [state, setState] = useState<DemoState>({ phase: "idle" });
+  const [contentKey, setContentKey] = useState(0);
+  const [successFlash, setSuccessFlash] = useState(false);
+
+  useEffect(() => {
+    if (state.phase !== "success") return;
+    setSuccessFlash(true);
+    const timer = setTimeout(() => setSuccessFlash(false), 600);
+    return () => clearTimeout(timer);
+  }, [state.phase, contentKey]);
 
   async function runRequest() {
     setState({ phase: "loading" });
@@ -83,14 +92,17 @@ export function LiveDemo() {
       const res = await fetch(`${API_BASE}${activeEndpoint.path}`);
       const body = await res.json();
       setState({ phase: "success", status: res.status, body });
+      setContentKey((k) => k + 1);
     } catch {
       setState({ phase: "error", message: "Failed to connect — is the mock server running?" });
     }
   }
 
   function selectEndpoint(endpoint: DemoEndpoint) {
+    if (endpoint.id === activeEndpoint.id) return;
     setActiveEndpoint(endpoint);
     setState({ phase: "idle" });
+    setContentKey((k) => k + 1);
   }
 
   const isLoading = state.phase === "loading";
@@ -117,7 +129,7 @@ export function LiveDemo() {
         </div>
 
         <div
-          className="livedemo-panel overflow-hidden rounded-xl border border-[var(--color-border)]"
+          className={`livedemo-panel overflow-hidden rounded-xl border border-[var(--color-border)]${successFlash ? " landing-panel-success-flash" : ""}`}
           style={{ background: "var(--color-surface-raised)" }}
         >
           <div
@@ -131,18 +143,18 @@ export function LiveDemo() {
                 key={endpoint.id}
                 type="button"
                 role="tab"
+                id={`livedemo-tab-${endpoint.id}`}
                 aria-selected={activeEndpoint.id === endpoint.id}
+                aria-controls="livedemo-response-panel"
                 onClick={() => selectEndpoint(endpoint)}
-                className="rounded-lg px-3 py-1.5 font-mono text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
+                className="landing-tab rounded-lg px-3 py-1.5 font-mono text-xs font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
                 style={{
                   color:
                     activeEndpoint.id === endpoint.id
                       ? "var(--color-accent)"
                       : "var(--color-text-muted)",
                   background:
-                    activeEndpoint.id === endpoint.id
-                      ? "var(--color-accent-glow)"
-                      : "transparent",
+                    activeEndpoint.id === endpoint.id ? "var(--color-accent-glow)" : "transparent",
                 }}
               >
                 {endpoint.label}
@@ -171,7 +183,7 @@ export function LiveDemo() {
               type="button"
               onClick={runRequest}
               disabled={isLoading}
-              className="rounded-lg px-5 py-2 text-sm font-semibold transition-all hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
+              className="landing-btn-primary rounded-lg px-5 py-2 text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 disabled:active:transform-none"
               style={{
                 background: "var(--color-accent)",
                 color: "var(--color-on-accent)",
@@ -182,9 +194,14 @@ export function LiveDemo() {
             </button>
           </div>
 
-          <div className="p-5">
+          <div
+            id="livedemo-response-panel"
+            role="tabpanel"
+            aria-labelledby={`livedemo-tab-${activeEndpoint.id}`}
+            className="p-5"
+          >
             {state.phase === "idle" && (
-              <div className="space-y-4">
+              <div key={`idle-${contentKey}`} className="landing-content-enter space-y-4">
                 <div className="flex items-center gap-2">
                   <span
                     className="rounded px-2 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wider"
@@ -216,11 +233,11 @@ export function LiveDemo() {
             )}
 
             {state.phase === "success" && (
-              <div className="space-y-3">
+              <div key={`success-${contentKey}`} className="landing-content-enter space-y-3">
                 <div className="flex items-center gap-2">
                   <StatusPill httpStatus={state.status} />
                   <span className="text-xs text-[var(--color-text-muted)]">
-                    Real response from mock API
+                    Real response from server
                   </span>
                 </div>
                 <JsonView value={state.body} maxHeightClassName="max-h-72" />

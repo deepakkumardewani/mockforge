@@ -81,7 +81,8 @@ export function ProtocolShowcase() {
           Pick your wire format
         </h2>
         <p className="mt-4 max-w-xl text-lg text-[var(--color-text-muted)]">
-          Same typed resources across four wire formats — use the transport your stack already speaks.
+          Same typed resources across four wire formats — use the transport your stack already
+          speaks.
         </p>
       </div>
 

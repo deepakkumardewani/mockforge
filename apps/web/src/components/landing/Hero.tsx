@@ -1,18 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import dynamic from "next/dynamic";
 import gsap from "gsap";
 import Link from "next/link";
 import { DepthTexture, SECTION_IDENTITY } from "./depth";
-
-const ProtocolForgeCanvas = dynamic(
-  () =>
-    import("./signature/ProtocolForgeCanvas").then((mod) => ({
-      default: mod.ProtocolForgeCanvas,
-    })),
-  { ssr: false },
-);
 
 const CODE_SNIPPETS = [
   {
@@ -62,15 +53,14 @@ const PROOF_ITEMS = [
   { label: "Real-time", value: "WS + Socket.io" },
 ] as const;
 
-function formatRequests(n: number): string {
-  return new Intl.NumberFormat("en-US").format(n);
-}
+/** Fits the longest CODE_SNIPPETS entry so typing never resizes the card. */
+const TERMINAL_HEIGHT_CLASS = "h-[21.5rem] sm:h-[22.5rem]";
+const TERMINAL_STACK_SHELL_CLASS = "h-[23.5rem] sm:h-[24.5rem]";
+const TERMINAL_BORDER_CLASS = "border-[var(--color-border)] dark:border-[oklch(0.38_0.014_65)]";
+const TERMINAL_BORDER_STRONG_CLASS =
+  "border-[var(--color-border)] dark:border-[oklch(0.44_0.016_65)]";
 
-type HeroProps = {
-  requestsServed?: number | null;
-};
-
-export function Hero({ requestsServed = null }: HeroProps) {
+export function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const terminalRef = useRef<HTMLDivElement>(null);
   const headlineRef = useRef<HTMLDivElement>(null);
@@ -195,8 +185,6 @@ export function Hero({ requestsServed = null }: HeroProps) {
     >
       <DepthTexture variant="dot" />
 
-      <ProtocolForgeCanvas className="pointer-events-auto absolute inset-x-0 bottom-0 z-[1] h-[min(52vh,28rem)] w-full opacity-70 motion-reduce:opacity-50 sm:h-[min(48vh,26rem)]" />
-
       <div className="pointer-events-none absolute inset-0 z-[2] overflow-hidden" aria-hidden>
         <div
           className="hero-mesh-a absolute -top-1/3 -left-1/4 h-[70vw] w-[70vw] rounded-full opacity-[0.07]"
@@ -213,7 +201,7 @@ export function Hero({ requestsServed = null }: HeroProps) {
       </div>
 
       <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center">
-        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+        <div className="grid min-w-0 items-center gap-12 lg:grid-cols-2 lg:gap-16">
           <div>
             <div ref={headlineRef} className="overflow-hidden" aria-label="Fake Data. Real Power.">
               <p className="font-display text-[clamp(2.75rem,6vw,4.5rem)] font-extrabold leading-[1.05] tracking-tight text-[var(--color-text-primary)]">
@@ -235,14 +223,14 @@ export function Hero({ requestsServed = null }: HeroProps) {
               ref={subRef}
               className="mt-6 max-w-[42ch] text-lg leading-relaxed text-[var(--color-text-muted)]"
             >
-              One hosted mock server — REST, GraphQL, WebSocket, and Socket.io on a single schema.
-              Point your client and build.
+              One server — REST, GraphQL, WebSocket, and Socket.io on a single schema. Point your
+              client and build.
             </p>
 
             <div ref={ctasRef} className="mt-8 flex flex-wrap items-center gap-3">
               <Link
                 href="/playground"
-                className="rounded-lg px-6 py-3 font-semibold transition-all hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
+                className="landing-btn-primary rounded-lg px-6 py-3 font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
                 style={{
                   background: "var(--color-accent)",
                   color: "var(--color-on-accent)",
@@ -252,7 +240,7 @@ export function Hero({ requestsServed = null }: HeroProps) {
               </Link>
               <Link
                 href="/docs"
-                className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-raised)] px-6 py-3 font-medium text-[var(--color-text-primary)] transition-all hover:bg-[var(--color-surface-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
+                className="landing-btn-secondary rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-raised)] px-6 py-3 font-medium text-[var(--color-text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
               >
                 Read the Docs
               </Link>
@@ -265,104 +253,92 @@ export function Hero({ requestsServed = null }: HeroProps) {
               </span>{" "}
               · 4 protocols, one schema
             </p>
-
-            {requestsServed !== null && (
-              <p className="mt-3 font-mono text-xs text-[var(--color-text-muted)]">
-                <span className="font-semibold text-[var(--color-text-primary)]">
-                  {formatRequests(requestsServed)}
-                </span>{" "}
-                live requests served on the mock server
-              </p>
-            )}
           </div>
 
-          <div ref={terminalRef} className="relative pb-4 pt-2">
-            {/* Layered terminal stack — offset cards behind primary */}
-            <div
-              className="pointer-events-none absolute inset-x-6 top-10 bottom-2 rounded-xl border border-[var(--color-accent)]/30 shadow-lg sm:block"
-              style={{
-                background: "var(--color-surface-raised)",
-                transform: "rotate(-4deg) translateY(14px)",
-                opacity: 0.85,
-              }}
-              aria-hidden
-            />
-            <div
-              className="pointer-events-none absolute inset-x-3 top-5 bottom-1 rounded-xl border shadow-md sm:block"
-              style={{
-                background: "var(--color-code-bg)",
-                borderColor: "var(--color-border)",
-                transform: "rotate(2deg) translateY(7px)",
-                opacity: 0.92,
-              }}
-              aria-hidden
-            />
-
-            <div
-              className="relative z-[1] overflow-hidden rounded-xl border border-[var(--color-border)] shadow-2xl"
-              style={{ background: "var(--color-code-bg)" }}
-            >
+          <div ref={terminalRef} className="relative w-full min-w-0 pt-2">
+            <div className={`relative w-full ${TERMINAL_STACK_SHELL_CLASS}`}>
+              {/* Layered terminal stack — offset cards peek from behind primary */}
               <div
-                className="flex items-center justify-between border-b border-[var(--color-border)] px-4 py-3"
-                style={{ background: "var(--color-surface-raised)" }}
-              >
-                <div className="flex items-center gap-3">
-                  <span
-                    className="h-0.5 w-8 rounded-full"
-                    style={{ background: "var(--color-accent)" }}
-                  />
-                  <span className="font-mono text-xs font-medium text-[var(--color-text-muted)]">
-                    {activeSnippet.label}
-                  </span>
-                </div>
-                <div className="flex items-center gap-1">
-                  {CODE_SNIPPETS.map((s, i) => (
-                    <button
-                      key={s.label}
-                      type="button"
-                      aria-label={`Show ${s.label} code sample`}
-                      aria-pressed={snippetIndex === i}
-                      onClick={() => {
-                        setSnippetIndex(i);
-                        setCharIndex(0);
-                        setIsDeleting(false);
-                        setDisplayedCode("");
-                      }}
-                      className="rounded px-2 py-0.5 font-mono text-xs outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface-raised)]"
-                      style={
-                        snippetIndex === i
-                          ? {
-                              color: "var(--color-accent)",
-                              background: "var(--color-surface-hover)",
-                            }
-                          : { color: "var(--color-text-muted)" }
-                      }
-                    >
-                      {s.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
+                className="pointer-events-none absolute left-0 top-8 right-[2.75rem] bottom-0 rounded-xl border-2 shadow-lg"
+                style={{
+                  background: "var(--color-surface-raised)",
+                  borderColor: "color-mix(in oklch, var(--color-accent) 50%, var(--color-border))",
+                  transform: "rotate(-5deg) translate(6px, 12px)",
+                }}
+                aria-hidden
+              />
+              <div
+                className={`pointer-events-none absolute left-10 top-3 right-0 bottom-7 rounded-xl border shadow-md sm:left-12 sm:bottom-8 ${TERMINAL_BORDER_STRONG_CLASS}`}
+                style={{
+                  background: "var(--color-code-bg)",
+                  transform: "rotate(3deg) translate(-4px, 8px)",
+                }}
+                aria-hidden
+              />
 
-              <pre className="min-h-52 p-5 font-mono text-sm leading-relaxed text-[var(--color-code-text)] sm:min-h-56">
-                <code>
-                  {displayedCode}
-                  <span
-                    className="inline-block h-4 w-1.5 animate-pulse align-middle motion-reduce:animate-none"
-                    style={{ background: "var(--color-accent)" }}
-                  />
-                </code>
-              </pre>
+              <div
+                className={`absolute inset-x-0 top-0 z-10 flex ${TERMINAL_HEIGHT_CLASS} w-full flex-col overflow-hidden rounded-xl border shadow-2xl ${TERMINAL_BORDER_STRONG_CLASS}`}
+                style={{ background: "var(--color-code-bg)" }}
+              >
+                <div
+                  className={`flex shrink-0 items-center justify-between gap-2 border-b px-3 py-3 sm:px-4 ${TERMINAL_BORDER_CLASS}`}
+                  style={{ background: "var(--color-surface-raised)" }}
+                >
+                  <div className="hidden shrink-0 items-center gap-3 sm:flex">
+                    <span
+                      className="h-0.5 w-8 rounded-full"
+                      style={{ background: "var(--color-accent)" }}
+                    />
+                    <span className="font-mono text-xs font-medium text-[var(--color-text-muted)]">
+                      {activeSnippet.label}
+                    </span>
+                  </div>
+                  <div className="flex min-w-0 flex-1 items-center justify-end gap-1 overflow-x-auto">
+                    {CODE_SNIPPETS.map((s, i) => (
+                      <button
+                        key={s.label}
+                        type="button"
+                        aria-label={`Show ${s.label} code sample`}
+                        aria-pressed={snippetIndex === i}
+                        onClick={() => {
+                          setSnippetIndex(i);
+                          setCharIndex(0);
+                          setIsDeleting(false);
+                          setDisplayedCode("");
+                        }}
+                        className="landing-tab shrink-0 rounded px-2 py-0.5 font-mono text-xs outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface-raised)]"
+                        style={
+                          snippetIndex === i
+                            ? {
+                                color: "var(--color-accent)",
+                                background: "var(--color-surface-hover)",
+                              }
+                            : { color: "var(--color-text-muted)" }
+                        }
+                      >
+                        {s.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <pre className="min-h-0 flex-1 overflow-hidden p-4 font-mono text-xs leading-relaxed whitespace-pre-wrap break-words text-[var(--color-code-text)] sm:p-5 sm:text-sm">
+                  <code className="block">
+                    {displayedCode}
+                    <span
+                      className="inline-block h-3.5 w-1.5 animate-pulse align-middle motion-reduce:animate-none sm:h-4"
+                      style={{ background: "var(--color-accent)" }}
+                    />
+                  </code>
+                </pre>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
       {/* Honest proof strip — fills lower viewport */}
-      <div
-        ref={proofStripRef}
-        className="relative z-10 mx-auto mt-auto w-full max-w-7xl pt-10"
-      >
+      <div ref={proofStripRef} className="relative z-10 mx-auto mt-auto w-full max-w-7xl pt-10">
         <div
           className="grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-[var(--color-border)] sm:grid-cols-4"
           style={{ background: "var(--color-border)" }}
