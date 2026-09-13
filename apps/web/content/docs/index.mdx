@@ -1,30 +1,22 @@
 ---
-title: MockForge Documentation
-description: Hosted fake data API — REST, GraphQL, WebSockets, and Socket.io. Call it from your app.
+title: Overview
+description: Hosted fake data — REST, GraphQL, WebSockets, and Socket.IO. No signup.
 ---
 
-MockForge is a **hosted API**. Point your app at the origin and send requests. No signup required.
+Point your app at the origin and send requests. The [Playground](/playground) is optional.
 
 ## Base URL
 
-```
-https://api.mockforge.dev
-```
+<DocsBaseUrl />
 
-```bash
-curl https://api.mockforge.dev/api/products?limit=5
-```
+<DocsCurlList paths={["/api/products?limit=5"]} />
 
-Call REST, GraphQL, WebSockets, and Socket.io directly from your application. The [Playground](/playground) is optional if you want to explore the same API in the browser.
+## Protocols
 
-## What's available
+- **[REST](/docs/rest)** — 14 entities, pagination, search, non-persistent writes
+- **[GraphQL](/docs/graphql)** — same 14 entities, typed queries and mutations
+- **[WebSockets](/docs/websockets)** — stats, notifications, chat, ticker
+- **[Socket.IO](/docs/socketio)** — same live data with automatic reconnect
+- **[Custom schemas](/docs/custom-schemas)** — your fields, public `GET /api/custom/{slug}`
 
-- **REST API** — 14 entities, full CRUD, pagination, search
-- **GraphQL** — same 14 entities via a typed GraphQL schema
-- **WebSockets** — live streams for stats, notifications, chat, stock ticker
-- **Socket.io** — same real-time data with automatic reconnection
-- **Custom Schemas** — define your own schema, get a dedicated hosted endpoint
-
-## Getting started
-
-Send a request to the origin above, then browse the sidebar for protocol details and copy-paste examples.
+Identity and quotas live on one page: [Identity & rate limits](/docs/identity).

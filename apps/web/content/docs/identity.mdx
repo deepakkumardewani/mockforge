@@ -1,26 +1,59 @@
 ---
-title: Identity (mf_id)
-description: How MockForge identifies browsers without authentication.
+title: Identity & rate limits
+description: One browser UUID owns your schemas and, if you send it, raises the request quota.
 ---
 
-MockForge uses a browser-generated UUID (`mf_id`) instead of accounts or API keys.
+MockForge has no accounts. A browser UUID (`mf_id`) does two jobs:
 
-## How it works
+1. **Owns schema definitions** in the builder (`POST` / `GET` / `PUT` / `DELETE` `/api/schemas`)
+2. **Raises the HTTP quota** when you send it as `X-MF-ID`
 
-1. On first visit to the schema builder, your browser generates a `crypto.randomUUID()`.
-2. The UUID is stored in `localStorage` as `mf_id`.
-3. Every API request from the UI sends this UUID as the `X-MF-ID` header.
-4. The server uses it for rate limiting and schema ownership.
+Public sample data (`GET /api/{entity}`, `GET /api/custom/{slug}`, GraphQL) works without it.
 
-## Using mf_id directly
+| You send              | Quota       |
+| --------------------- | ----------- |
+| `X-MF-ID` header      | 300 req/min |
+| Nothing (IP fallback) | 60 req/min  |
 
-You can use any UUID as your identity for direct API calls:
+The limiter is a **fixed 60-second Redis window** keyed on that id (or an IP hash). Missing Redis fails open and may omit headers.
 
-```bash
-curl -H "X-MF-ID: 550e8400-e29b-41d4-a716-446655440000" \
-  https://api.mockforge.dev/api/products
+## Recovery key (builder)
+
+On first visit to the [builder](/builder):
+
+1. The browser stores `crypto.randomUUID()` in `localStorage` as `mf_id`
+2. Schema-management calls send it as `X-MF-ID`
+
+Copy the key and use **Restore** on another device (or after clearing storage). Restore accepts a UUID only. The API accepts any non-empty `X-MF-ID` for quotas.
+
+<DocsCurlList
+  templates={[
+    'curl {base}/api/schemas -H "X-MF-ID: 550e8400-e29b-41d4-a716-446655440000"',
+    'curl "{base}/api/custom/{slug}?limit=5"',
+  ]}
+/>
+
+The second call is public. Management verbs and ownership details: [Custom schemas](/docs/custom-schemas).
+
+## Response headers
+
+When the limiter runs, responses include:
+
+| Header                  | Meaning                        |
+| ----------------------- | ------------------------------ |
+| `X-RateLimit-Limit`     | Cap for this window            |
+| `X-RateLimit-Remaining` | Requests left                  |
+| `X-RateLimit-Reset`     | Unix time when the window ends |
+
+Over the cap:
+
+```json
+{
+  "error": {
+    "code": "TOO_MANY_REQUESTS",
+    "message": "Rate limit exceeded"
+  }
+}
 ```
 
-## Schema ownership
-
-Saved schemas are tied to your `mf_id`. Only the owner can delete a schema. If you clear `localStorage` or switch browsers, copy your `mf_id` from the builder UI first.
+`Retry-After` is `60` seconds. Playground and GraphQL attach `X-MF-ID` automatically so they share the higher cap.

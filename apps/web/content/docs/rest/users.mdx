@@ -1,124 +1,52 @@
 ---
 title: Users
-description: User profiles with contact information and personal details.
+description: Generated user profiles. Writes do not persist.
 ---
 
-Access user profile data with contact information, addresses, and personal details.
+`GET /api/users`. Envelope and verbs: [REST API](/docs/rest).
 
-## List users
+## Fields
 
-**Endpoint:** `GET /api/users`
+| Field       | Type                                        |
+| ----------- | ------------------------------------------- |
+| `id`        | number                                      |
+| `firstName` | string                                      |
+| `lastName`  | string                                      |
+| `email`     | string                                      |
+| `username`  | string                                      |
+| `phone`     | string                                      |
+| `avatar`    | string (URL)                                |
+| `birthDate` | string (ISO)                                |
+| `address`   | `{ street, city, state, zipCode, country }` |
+| `company`   | string                                      |
+| `jobTitle`  | string                                      |
+| `createdAt` | string (ISO)                                |
 
-**Query parameters:**
-
-| Parameter | Type   | Example |
-| --------- | ------ | ------- |
-| `limit`   | number | 10      |
-| `skip`    | number | 0       |
-| `search`  | string | john    |
-| `sort`    | string | id      |
-| `order`   | string | asc     |
-
-**Example request:**
-
-```bash
-curl "https://api.mockforge.dev/api/users?limit=5&skip=0"
-```
-
-**Example response:**
+## Sample
 
 ```json
 {
-  "data": [
-    {
-      "id": 1,
-      "firstName": "John",
-      "lastName": "Doe",
-      "email": "john.doe@example.com",
-      "phone": "+1-970-123-4567",
-      "username": "johndoe",
-      "image": "https://i.pravatar.cc/150?img=1",
-      "address": {
-        "street": "123 Main St",
-        "city": "Springfield",
-        "state": "IL",
-        "country": "USA",
-        "zipCode": "62701"
-      },
-      "company": {
-        "name": "Acme Corp",
-        "title": "Software Engineer"
-      }
-    }
-  ],
-  "pagination": {
-    "limit": 5,
-    "skip": 0,
-    "total": 100,
-    "hasMore": true
+  "data": {
+    "id": 1,
+    "firstName": "Garnet",
+    "lastName": "Reynolds-Miller",
+    "email": "Carley_Streich70@gmail.com",
+    "username": "Waino.Effertz18",
+    "phone": "526-323-4715 x5061",
+    "avatar": "https://cdn.jsdelivr.net/gh/faker-js/assets-person-portrait/male/512/96.jpg",
+    "birthDate": "1996-04-27T20:56:16.227Z",
+    "address": {
+      "street": "16414 Sylvia Flats",
+      "city": "Hahnmouth",
+      "state": "NV",
+      "zipCode": "97985",
+      "country": "Turks and Caicos Islands"
+    },
+    "company": "Dietrich - Bayer",
+    "jobTitle": "Product Markets Engineer",
+    "createdAt": "2026-05-23T11:28:32.834Z"
   }
 }
 ```
 
-## Get single user
-
-**Endpoint:** `GET /api/users/:id`
-
-**Example request:**
-
-```bash
-curl https://api.mockforge.dev/api/users/1
-```
-
-**Example response:**
-
-```json
-{
-  "id": 1,
-  "firstName": "John",
-  "lastName": "Doe",
-  "email": "john.doe@example.com",
-  "phone": "+1-970-123-4567",
-  "username": "johndoe",
-  "image": "https://i.pravatar.cc/150?img=1",
-  "address": {
-    "street": "123 Main St",
-    "city": "Springfield",
-    "state": "IL",
-    "country": "USA",
-    "zipCode": "62701"
-  },
-  "company": {
-    "name": "Acme Corp",
-    "title": "Software Engineer"
-  }
-}
-```
-
-## Search users
-
-**Example request:**
-
-```bash
-curl "https://api.mockforge.dev/api/users?search=john&limit=3"
-```
-
-Searches across `firstName`, `lastName`, `email`, and `username` fields.
-
-## Create user
-
-**Endpoint:** `POST /api/users`
-
-Creates a mock user. Does not persist.
-
-## Update user
-
-**Endpoint:** `PUT /api/users/:id`
-
-Updates a mock user. Does not persist.
-
-## Delete user
-
-**Endpoint:** `DELETE /api/users/:id`
-
-Deletes a mock user. Does not persist.
+<DocsCurlList paths={["/api/users?limit=5", "/api/users/search?q=john", "/api/users/1"]} />

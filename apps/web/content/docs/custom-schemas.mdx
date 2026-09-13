@@ -1,174 +1,104 @@
 ---
 title: Custom Schemas
-description: Define custom data schemas and get dedicated API endpoints.
+description: Define a schema in the builder and get a public GET endpoint of generated records.
 ---
 
-Create your own data schema in the MockForge schema builder, and get a dedicated API endpoint with full CRUD operations, search, and pagination.
+Create a schema in the MockForge builder. Saving it mints a **public GET** sample URL. Records are generated on each request — nothing you write is stored.
 
 ## Overview
 
-The custom schema builder lets you:
+1. **Define fields** — ten types (`string`, `number`, `boolean`, `date`, `enum`, `uuid`, `email`, `url`, `image`, `array`)
+2. **Preview** — a few sample rows update as you edit
+3. **Save** — mint `/api/custom/{slug}` (list + optional search)
+4. **Manage** — create, list, update, and delete **schema definitions** with `X-MF-ID`
 
-1. **Define fields** — choose from 10 field types
-2. **Preview** — see mock data generated in real-time
-3. **Save** — get a unique endpoint URL
-4. **Use** — access full REST API with pagination and search
-
-All schemas are tied to your `mf_id` (browser UUID).
+Generated endpoints do not need `X-MF-ID`. That header is only for schema management.
 
 ## Field types
 
-| Type       | Description           | Example                    |
-| ---------- | --------------------- | -------------------------- |
-| `text`     | Short text string     | "John Doe"                 |
-| `textarea` | Long text             | "Lorem ipsum dolor sit..." |
-| `email`    | Email address         | "john@example.com"         |
-| `number`   | Integer or decimal    | 42, 3.14                   |
-| `date`     | ISO 8601 date         | "2024-05-14"               |
-| `datetime` | ISO 8601 timestamp    | "2024-05-14T10:30:00Z"     |
-| `boolean`  | True/false            | true                       |
-| `url`      | Web URL               | "https://example.com"      |
-| `select`   | Dropdown with options | "option1"                  |
-| `array`    | List of values        | ["item1", "item2"]         |
+| Type      | Notes                                             | Example                                  |
+| --------- | ------------------------------------------------- | ---------------------------------------- |
+| `string`  | Short word                                        | `"Ada"`                                  |
+| `number`  | Integer; optional `min` / `max`                   | `42`                                     |
+| `boolean` | True/false                                        | `true`                                   |
+| `date`    | ISO 8601 timestamp                                | `"2026-03-14T10:30:00.000Z"`             |
+| `enum`    | Requires a non-empty `values` array               | `"active"`                               |
+| `uuid`    | UUID string                                       | `"550e8400-e29b-41d4-a716-446655440000"` |
+| `email`   | Email address                                     | `"jane@example.com"`                     |
+| `url`     | Web URL                                           | `"https://example.com"`                  |
+| `image`   | Image URL                                         | `"https://picsum.photos/seed/name/200"`  |
+| `array`   | Requires `items` (any type except nested `array`) | `["alpha", "beta"]`                      |
 
-## Step-by-step walkthrough
+## Schema management API
 
-### 1. Define your schema
+Send a recovery key as `X-MF-ID`. Create/update/delete only succeed for schemas owned by that id.
 
-In the schema builder UI:
+| Method   | Path                  | Purpose                        |
+| -------- | --------------------- | ------------------------------ |
+| `POST`   | `/api/schemas`        | Create (optional `persistent`) |
+| `GET`    | `/api/schemas`        | List schemas you own           |
+| `PUT`    | `/api/schemas/{slug}` | Update definition you own      |
+| `DELETE` | `/api/schemas/{slug}` | Delete a schema you own        |
 
-1. Enter a name: "Blog Post"
-2. Add fields:
-   - `title` (text)
-   - `author` (text)
-   - `content` (textarea)
-   - `publishedAt` (datetime)
-   - `tags` (array with options: "tech", "design", "business")
+<DocsCurlList
+  templates={[
+    `curl -X POST {base}/api/schemas -H "Content-Type: application/json" -H "X-MF-ID: 550e8400-e29b-41d4-a716-446655440000" -d '{"name":"Contact","fields":[{"name":"firstName","type":"string"},{"name":"email","type":"email"}]}'`,
+  ]}
+/>
 
-### 2. Preview
+Create returns `{ "slug": "…", "endpoint": "/api/custom/{slug}" }`. Non-persistent schemas expire after one hour; the builder saves persistent schemas.
 
-The builder generates 10 sample items in real-time. Adjust field definitions until preview looks good.
+## Generated endpoints (public GET)
 
-### 3. Save
+No identity header. Each call forges a new sample.
 
-Click "Save Schema". You'll get:
+**List** — `limit` (1–100, default 30), `skip` (default 0), optional `search` (case-insensitive substring over generated field values):
 
-- A unique endpoint: `https://api.mockforge.dev/api/custom/{schemaId}`
-- A schema ID (tied to your `mf_id`)
-
-### 4. Use the endpoint
-
-Your schema endpoint works like any other MockForge entity:
-
-**List items:**
-
-```bash
-curl "https://api.mockforge.dev/api/custom/{schemaId}?limit=10"
-```
-
-**Get single item:**
-
-```bash
-curl https://api.mockforge.dev/api/custom/{schemaId}/1
-```
-
-**Search:**
-
-```bash
-curl "https://api.mockforge.dev/api/custom/{schemaId}?search=tech&limit=5"
-```
-
-**Create (doesn't persist):**
-
-```bash
-curl -X POST \
-  -H "Content-Type: application/json" \
-  -d '{"title": "My Post", "author": "Jane"}' \
-  https://api.mockforge.dev/api/custom/{schemaId}
-```
-
-## Example schema: Contact
-
-```javascript
-{
-  "name": "Contact",
-  "fields": [
-    {
-      "name": "firstName",
-      "type": "text"
-    },
-    {
-      "name": "lastName",
-      "type": "text"
-    },
-    {
-      "name": "email",
-      "type": "email"
-    },
-    {
-      "name": "phone",
-      "type": "text"
-    },
-    {
-      "name": "company",
-      "type": "text"
-    }
-  ]
-}
-```
-
-**Response:**
+<DocsCurlList
+  templates={[
+    'curl "{base}/api/custom/{slug}?limit=10&skip=0"',
+    'curl "{base}/api/custom/{slug}?search=tech&limit=5"',
+  ]}
+/>
 
 ```json
 {
   "data": [
     {
-      "id": 1,
-      "firstName": "John",
-      "lastName": "Doe",
-      "email": "john@example.com",
-      "phone": "+1-555-0100",
-      "company": "Acme Corp"
+      "id": "7c9e6679-7425-40de-944b-e07fc1f90ae7",
+      "firstName": "Ada",
+      "email": "jane@example.com"
     }
   ],
-  "pagination": {
-    "limit": 10,
-    "skip": 0,
-    "total": 50,
-    "hasMore": true
+  "total": 10,
+  "limit": 10,
+  "skip": 0,
+  "meta": {
+    "entity": "Contact",
+    "generatedAt": "2026-09-13T14:30:00.000Z"
   }
 }
 ```
 
-## Schema ownership
+List `id` values are generated UUIDs. `total` is the generated (or search-filtered) set for that request, not a stored collection.
 
-- Schemas are tied to your `mf_id` (stored in `localStorage` as `mf_id`)
-- Only you can edit or delete your schema
-- If you clear `localStorage`, copy your `mf_id` from the UI before switching browsers
-- Other users can view your schema's public endpoint but cannot modify it
+**Detail** — one fresh record; `id` is the path segment you requested:
 
-## API response structure
-
-All custom schema endpoints follow the same response envelope as the 14 built-in entities:
+<DocsCurlList templates={['curl "{base}/api/custom/{slug}/any-id"']} />
 
 ```json
 {
-  "data": [
-    { "id": 1, "field1": "value1", "field2": "value2" },
-    { "id": 2, "field1": "value3", "field2": "value4" }
-  ],
-  "pagination": {
-    "limit": 10,
-    "skip": 0,
-    "total": 100,
-    "hasMore": true
+  "data": {
+    "id": "any-id",
+    "firstName": "ipsum",
+    "email": "sam@example.com"
   }
 }
 ```
 
-## Limitations
+There is no create/update/delete for generated rows, no `/search` path, and no GraphQL or WebSocket surface. Those verbs apply only to schema definitions.
 
-- Data is not persisted; writes return mock data
-- Schemas reset when the server restarts
-- Maximum of 50 fields per schema
-- Maximum of 10 custom schemas per `mf_id`
+## Ownership
+
+- Definitions are keyed by your recovery key (`localStorage` `mf_id`). Restore that key in the builder to manage the same schemas on another device.
+- Anyone can `GET` `/api/custom/{slug}` while the definition exists.

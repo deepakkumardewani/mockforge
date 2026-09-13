@@ -1,120 +1,48 @@
 ---
 title: Companies
-description: Company data and business information.
+description: Generated companies. Writes do not persist.
 ---
 
-Access company information including contact details, industry, and financials.
+`GET /api/companies`. Envelope and verbs: [REST API](/docs/rest).
 
-## List companies
+## Fields
 
-**Endpoint:** `GET /api/companies`
+| Field         | Type          |
+| ------------- | ------------- |
+| `id`          | number        |
+| `name`        | string        |
+| `industry`    | string        |
+| `description` | string        |
+| `website`     | string (URL)  |
+| `email`       | string        |
+| `phone`       | string        |
+| `address`     | string (flat) |
+| `foundedYear` | number        |
+| `employees`   | number        |
+| `revenue`     | string        |
+| `logo`        | string (URL)  |
+| `createdAt`   | string (ISO)  |
 
-**Query parameters:**
-
-| Parameter | Type   | Example |
-| --------- | ------ | ------- |
-| `limit`   | number | 10      |
-| `skip`    | number | 0       |
-| `search`  | string | tech    |
-| `sort`    | string | revenue |
-| `order`   | string | desc    |
-
-**Example request:**
-
-```bash
-curl "https://api.mockforge.dev/api/companies?limit=5&sort=revenue"
-```
-
-**Example response:**
+## Sample
 
 ```json
 {
-  "data": [
-    {
-      "id": 1,
-      "name": "TechCorp International",
-      "industry": "Technology",
-      "founded": 2010,
-      "employees": 5000,
-      "revenue": 1500000000,
-      "website": "https://techcorp.example.com",
-      "phone": "+1-555-0100",
-      "address": {
-        "street": "123 Tech Drive",
-        "city": "San Francisco",
-        "state": "CA",
-        "country": "USA",
-        "zipCode": "94105"
-      },
-      "ceo": "John Smith"
-    }
-  ],
-  "pagination": {
-    "limit": 5,
-    "skip": 0,
-    "total": 100,
-    "hasMore": true
+  "data": {
+    "id": 1,
+    "name": "Jones - Reichert",
+    "industry": "deserunt",
+    "description": "Molestias quo tersus annus.",
+    "website": "https://negative-galoshes.biz/",
+    "email": "Lorenza81@yahoo.com",
+    "phone": "1-338-510-3172 x863",
+    "address": "3195 Elta Crossing",
+    "foundedYear": 1969,
+    "employees": 2795,
+    "revenue": "$2,450,931,771",
+    "logo": "https://loremflickr.com/2732/3282?lock=4705953100953108",
+    "createdAt": "2026-05-22T16:35:21.482Z"
   }
 }
 ```
 
-## Get single company
-
-**Endpoint:** `GET /api/companies/:id`
-
-**Example request:**
-
-```bash
-curl https://api.mockforge.dev/api/companies/1
-```
-
-**Example response:**
-
-```json
-{
-  "id": 1,
-  "name": "TechCorp International",
-  "industry": "Technology",
-  "founded": 2010,
-  "employees": 5000,
-  "revenue": 1500000000,
-  "website": "https://techcorp.example.com",
-  "phone": "+1-555-0100",
-  "address": {
-    "street": "123 Tech Drive",
-    "city": "San Francisco",
-    "state": "CA",
-    "country": "USA",
-    "zipCode": "94105"
-  },
-  "ceo": "John Smith"
-}
-```
-
-## Search companies
-
-**Example request:**
-
-```bash
-curl "https://api.mockforge.dev/api/companies?search=tech&limit=3"
-```
-
-Searches across `name`, `industry`, and `website` fields.
-
-## Create company
-
-**Endpoint:** `POST /api/companies`
-
-Creates a mock company. Does not persist.
-
-## Update company
-
-**Endpoint:** `PUT /api/companies/:id`
-
-Updates a mock company. Does not persist.
-
-## Delete company
-
-**Endpoint:** `DELETE /api/companies/:id`
-
-Deletes a mock company. Does not persist.
+<DocsCurlList paths={["/api/companies?limit=5", "/api/companies/1"]} />

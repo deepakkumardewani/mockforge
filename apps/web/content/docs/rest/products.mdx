@@ -1,111 +1,52 @@
 ---
 title: Products
-description: Product catalog with pricing, inventory, and details.
+description: Generated catalog rows. Writes do not persist.
 ---
 
-Access product catalog with pricing, inventory, categories, and ratings.
+`GET /api/products`. Envelope and verbs: [REST API](/docs/rest).
 
-## List products
+## Fields
 
-**Endpoint:** `GET /api/products`
+| Field                | Type            |
+| -------------------- | --------------- |
+| `id`                 | number          |
+| `title`              | string          |
+| `description`        | string          |
+| `price`              | number          |
+| `discountPercentage` | number          |
+| `rating`             | number          |
+| `stock`              | number          |
+| `brand`              | string          |
+| `category`           | string          |
+| `thumbnail`          | string (URL)    |
+| `images`             | string[] (URLs) |
+| `sku`                | string          |
+| `weight`             | number          |
+| `createdAt`          | string (ISO)    |
 
-**Query parameters:**
-
-| Parameter | Type   | Example |
-| --------- | ------ | ------- |
-| `limit`   | number | 10      |
-| `skip`    | number | 0       |
-| `search`  | string | laptop  |
-| `sort`    | string | price   |
-| `order`   | string | asc     |
-
-**Example request:**
-
-```bash
-curl "https://api.mockforge.dev/api/products?limit=5&sort=price&order=asc"
-```
-
-**Example response:**
+## Sample
 
 ```json
 {
-  "data": [
-    {
-      "id": 1,
-      "title": "Wireless Headphones",
-      "description": "High-quality Bluetooth headphones",
-      "price": 79.99,
-      "discountPercentage": 10,
-      "rating": 4.5,
-      "stock": 50,
-      "category": "Electronics",
-      "thumbnail": "https://cdn.example.com/product-1.jpg",
-      "images": [
-        "https://cdn.example.com/product-1-1.jpg",
-        "https://cdn.example.com/product-1-2.jpg"
-      ]
-    }
-  ],
-  "pagination": {
-    "limit": 5,
-    "skip": 0,
-    "total": 100,
-    "hasMore": true
+  "data": {
+    "id": 1,
+    "title": "Soft Metal Bike",
+    "description": "Fresh Computer designed with Gold for male performance",
+    "price": 70.49,
+    "discountPercentage": 39,
+    "rating": 4,
+    "stock": 30,
+    "brand": "Hintz Group",
+    "category": "Outdoors",
+    "thumbnail": "https://loremflickr.com/2829/762?lock=953006941035447",
+    "images": ["https://picsum.photos/seed/ozUyanQDE/2513/486"],
+    "sku": "AK1OYCFP",
+    "weight": 2.15,
+    "createdAt": "2026-05-22T18:28:40.259Z"
   }
 }
 ```
 
-## Get single product
-
-**Endpoint:** `GET /api/products/:id`
-
-**Example request:**
-
-```bash
-curl https://api.mockforge.dev/api/products/1
-```
-
-**Example response:**
-
-```json
-{
-  "id": 1,
-  "title": "Wireless Headphones",
-  "description": "High-quality Bluetooth headphones",
-  "price": 79.99,
-  "discountPercentage": 10,
-  "rating": 4.5,
-  "stock": 50,
-  "category": "Electronics",
-  "thumbnail": "https://cdn.example.com/product-1.jpg",
-  "images": ["https://cdn.example.com/product-1-1.jpg", "https://cdn.example.com/product-1-2.jpg"]
-}
-```
-
-## Search products
-
-**Example request:**
-
-```bash
-curl "https://api.mockforge.dev/api/products?search=laptop&limit=3"
-```
-
-Searches across `title`, `description`, and `category` fields.
-
-## Create product
-
-**Endpoint:** `POST /api/products`
-
-Creates a mock product. Does not persist.
-
-## Update product
-
-**Endpoint:** `PUT /api/products/:id`
-
-Updates a mock product. Does not persist.
-
-## Delete product
-
-**Endpoint:** `DELETE /api/products/:id`
-
-Deletes a mock product. Does not persist.
+<DocsCurlList
+  paths={["/api/products?limit=5", "/api/products/search?q=phone", "/api/products/1"]}
+/>

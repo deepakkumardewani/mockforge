@@ -1,106 +1,46 @@
 ---
 title: Countries
-description: Country information and geographical data.
+description: Generated country rows. Writes do not persist.
 ---
 
-Access country information including geographical data, capitals, and population.
+`GET /api/countries`. Envelope and verbs: [REST API](/docs/rest).
 
-## List countries
+## Fields
 
-**Endpoint:** `GET /api/countries`
+| Field        | Type         |
+| ------------ | ------------ |
+| `id`         | number       |
+| `name`       | string       |
+| `code`       | string       |
+| `capital`    | string       |
+| `region`     | string       |
+| `subregion`  | string       |
+| `population` | number       |
+| `area`       | number       |
+| `currency`   | string       |
+| `language`   | string       |
+| `flag`       | string       |
+| `createdAt`  | string (ISO) |
 
-**Query parameters:**
-
-| Parameter | Type   | Example |
-| --------- | ------ | ------- |
-| `limit`   | number | 10      |
-| `skip`    | number | 0       |
-| `search`  | string | united  |
-| `sort`    | string | name    |
-| `order`   | string | asc     |
-
-**Example request:**
-
-```bash
-curl "https://api.mockforge.dev/api/countries?limit=5"
-```
-
-**Example response:**
+## Sample
 
 ```json
 {
-  "data": [
-    {
-      "id": 1,
-      "name": "United States",
-      "code": "US",
-      "capital": "Washington, D.C.",
-      "continent": "North America",
-      "population": 331000000,
-      "area": 9833000,
-      "currency": "USD",
-      "languages": ["English"]
-    }
-  ],
-  "pagination": {
-    "limit": 5,
-    "skip": 0,
-    "total": 195,
-    "hasMore": true
+  "data": {
+    "id": 1,
+    "name": "Russian Federation",
+    "code": "PA",
+    "capital": "Berwyn",
+    "region": "cresco",
+    "subregion": "tero",
+    "population": 846595354,
+    "area": 2648419,
+    "currency": "MWK",
+    "language": "attollo",
+    "flag": "🇯🇵",
+    "createdAt": "2026-05-23T09:06:59.242Z"
   }
 }
 ```
 
-## Get single country
-
-**Endpoint:** `GET /api/countries/:id`
-
-**Example request:**
-
-```bash
-curl https://api.mockforge.dev/api/countries/1
-```
-
-**Example response:**
-
-```json
-{
-  "id": 1,
-  "name": "United States",
-  "code": "US",
-  "capital": "Washington, D.C.",
-  "continent": "North America",
-  "population": 331000000,
-  "area": 9833000,
-  "currency": "USD",
-  "languages": ["English"]
-}
-```
-
-## Search countries
-
-**Example request:**
-
-```bash
-curl "https://api.mockforge.dev/api/countries?search=united&limit=3"
-```
-
-Searches across `name`, `capital`, and `continent` fields.
-
-## Create country
-
-**Endpoint:** `POST /api/countries`
-
-Creates a mock country. Does not persist.
-
-## Update country
-
-**Endpoint:** `PUT /api/countries/:id`
-
-Updates a mock country. Does not persist.
-
-## Delete country
-
-**Endpoint:** `DELETE /api/countries/:id`
-
-Deletes a mock country. Does not persist.
+<DocsCurlList paths={["/api/countries?limit=5", "/api/countries/1"]} />

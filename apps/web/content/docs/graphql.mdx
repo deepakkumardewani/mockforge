@@ -1,98 +1,39 @@
 ---
 title: GraphQL
-description: GraphQL API for querying and mutating MockForge data with a typed schema.
+description: Same 14 entities as REST, via POST /graphql. Mutations do not persist.
 ---
 
-MockForge provides a GraphQL API with the same 14 entities as the REST API. Mutations use the same generator + shallow-merge semantics as REST `POST` / `PUT` and do not persist.
+<DocsBaseUrl path="/graphql" />
 
-## Endpoint
+<DocsCurlList
+  templates={[
+    `curl -X POST {base}/graphql -H "Content-Type: application/json" -d '{"query":"{ users(limit: 2) { id firstName email } }"}'`,
+  ]}
+/>
 
-```
-https://api.mockforge.dev/graphql
-```
+Lists return **arrays** (no REST envelope). Args: `limit` (default 10, max 100), `skip`, `search` where supported. Singular fields (`user(id)`, `product(id)`, …) accept `id` but the generator does not key off it.
 
-Send `POST` requests with a JSON body `{ "query": "...", "variables": { ... } }`.
+The [Playground](/playground) GraphQL tab attaches `X-MF-ID` for the higher quota. See [Identity & rate limits](/docs/identity).
 
-```bash
-curl -X POST https://api.mockforge.dev/graphql \
-  -H "Content-Type: application/json" \
-  -d '{"query":"{ users(limit: 2) { id firstName email } }"}'
-```
+## Root fields
 
-## Playground
+Lists: `users`, `products`, `posts`, `comments`, `todos`, `carts`, `messages`, `notifications`, `quotes`, `recipes`, `countries`, `companies`, `stocks`, `events`.
 
-The [Playground](/playground) GraphQL tab is optional: use it to try queries and mutations in the browser (editor, variables, live responses).
-
-## Query structure
-
-List fields return arrays directly (not wrapped in a `data` envelope). Pagination args:
-
-- `limit` — number of items (default: 10, max: 100)
-- `skip` — offset (default: 0)
-- `search` — filter string where supported
-
-## Example queries
-
-### Users
+Singular: `user`, `product`, `post`, … (same names, singular).
 
 ```graphql
 query GetUsers {
   users(limit: 5, skip: 0) {
     id
     firstName
-    lastName
     email
-    phone
   }
 }
 ```
-
-### Products
-
-```graphql
-query GetProducts {
-  products(limit: 10) {
-    id
-    title
-    description
-    price
-    category
-  }
-}
-```
-
-### Stocks with search
-
-```graphql
-query SearchStocks {
-  stocks(search: "AAPL", limit: 5) {
-    id
-    symbol
-    name
-    price
-    change
-    changePercent
-  }
-}
-```
-
-## Query root
-
-- `users`, `products`, `posts`, `comments`, `todos`, `carts`
-- `messages`, `notifications`, `quotes`, `recipes`, `countries`, `companies`, `stocks`, `events`
-
-Singular lookups: `user(id)`, `product(id)`, `post(id)`, … (same pattern for each entity).
 
 ## Mutations
 
-Naming: `create*`, `update*`, `delete*` in camelCase (e.g. `createUser`, `updateProduct`, `deleteTodo`).
-
-- **Create / update** — optional scalar args are shallow-merged onto one generated row (same as REST body merge). Nested objects (e.g. cart `products`, recipe `ingredients`) are not overridable via separate GraphQL input types in this version; only top-level scalar fields on the mutation args apply.
-- **Delete** — returns `DeleteResult { deleted, id }`, matching REST `{ "deleted": true, "id": "..." }`.
-
-Existing mutations remain available: `createPost`, `updateTodo`.
-
-### Examples
+`create*`, `update*`, `delete*` (e.g. `createUser`, `updateProduct`, `deleteTodo`). Create/update shallow-merge optional scalar args onto one generated row. Nested objects are not separate input types. Delete returns `{ deleted, id }`. Custom schemas are REST-only.
 
 ```graphql
 mutation CreateUser {
@@ -103,28 +44,3 @@ mutation CreateUser {
   }
 }
 ```
-
-```graphql
-mutation UpdateProduct {
-  updateProduct(id: "1", title: "Custom title") {
-    id
-    title
-    price
-  }
-}
-```
-
-```graphql
-mutation DeleteTodo {
-  deleteTodo(id: "todo-1") {
-    deleted
-    id
-  }
-}
-```
-
-All 14 standard resources (excluding custom REST schemas) expose create, update, and delete where REST does.
-
-## Headers
-
-Include the `X-MF-ID` header for identity-scoped rate limiting when calling the API from your own client. The playground attaches it automatically.

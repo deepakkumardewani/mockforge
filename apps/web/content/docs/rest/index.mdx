@@ -1,114 +1,94 @@
 ---
-title: REST API
-description: MockForge REST API with 14 entities, pagination, search, and CRUD operations.
+title: Reference
+description: Fourteen generated entities. Paginated lists, search, and non-persistent writes.
 ---
 
-MockForge provides a comprehensive REST API for 14 different entities. All endpoints are available at `https://api.mockforge.dev/api/{entity}`.
+All built-in resources live at `/api/{entity}` on this origin. Data is generated per request.
 
-## Base URL
+<DocsBaseUrl path="/api/{entity}" />
 
-```
-https://api.mockforge.dev
-```
+## Query parameters
 
-## Pagination
+| Parameter | Default | Notes                              |
+| --------- | ------- | ---------------------------------- |
+| `limit`   | `30`    | 1–100                              |
+| `skip`    | `0`     | Offset                             |
+| `search`  | —       | Substring filter on list endpoints |
 
-All list endpoints support pagination with the following query parameters:
+`sort` and `order` are accepted but unused.
 
-| Parameter | Type        | Description                            | Default   |
-| --------- | ----------- | -------------------------------------- | --------- |
-| `limit`   | number      | Number of items per page               | 10        |
-| `skip`    | number      | Number of items to skip (offset)       | 0         |
-| `search`  | string      | Search query (searches indexed fields) | undefined |
-| `sort`    | string      | Field name to sort by                  | id        |
-| `order`   | asc \| desc | Sort order                             | asc       |
-
-## Response envelope
-
-All list responses use the following envelope format:
+## List envelope
 
 ```json
 {
-  "data": [
-    { "id": 1, "name": "Item 1", ... },
-    { "id": 2, "name": "Item 2", ... }
-  ],
-  "pagination": {
-    "limit": 10,
-    "skip": 0,
-    "total": 100,
-    "hasMore": true
+  "data": [{ "id": 1 }],
+  "total": 100,
+  "limit": 30,
+  "skip": 0,
+  "meta": {
+    "entity": "users",
+    "generatedAt": "2026-09-13T14:30:00.000Z"
   }
 }
 ```
 
-### Response fields
+## Single item
 
-| Field                | Type    | Description                                          |
-| -------------------- | ------- | ---------------------------------------------------- |
-| `data`               | array   | Array of entities matching the request               |
-| `pagination.limit`   | number  | The limit used in the request                        |
-| `pagination.skip`    | number  | The skip offset used in the request                  |
-| `pagination.total`   | number  | Total count of all items (respecting search filters) |
-| `pagination.hasMore` | boolean | Whether there are more items to fetch                |
+`GET /api/{entity}/:id` returns `{ "data": { ... } }`. The `:id` is a **1-based offset** into the generated set, not a stored primary key.
 
-## Single item response
+## Search
 
-When fetching a single item, the response is the entity object directly:
+Dedicated search (same envelope):
 
-```json
-{
-  "id": 1,
-  "name": "Item 1",
-  ...
-}
-```
+<DocsCurlList paths={["/api/users/search?q=john"]} />
 
-## Error response
+List endpoints also accept `?search=`.
 
-All errors use a consistent envelope:
+## Writes do not persist
+
+`POST`, `PUT`, and `DELETE` return a mock result. The next list call will not include them.
+
+- `POST /api/{entity}` → `{ data }` (201), body fields shallow-merged onto a generated row
+- `PUT /api/{entity}/:id` → `{ data }`
+- `DELETE /api/{entity}/:id` → `{ "deleted": true, "id": "..." }`
+
+## Errors
 
 ```json
 {
   "error": {
-    "code": "ERROR_CODE",
+    "code": "NOT_FOUND",
     "message": "Human-readable error message"
   }
 }
 ```
 
-Common error codes:
+| Code                    | Status | When              |
+| ----------------------- | ------ | ----------------- |
+| `INVALID_QUERY`         | 400    | Bad query params  |
+| `NOT_FOUND`             | 404    | Missing resource  |
+| `TOO_MANY_REQUESTS`     | 429    | Over the rate cap |
+| `INTERNAL_SERVER_ERROR` | 500    | Server failure    |
 
-| Code          | HTTP Status | Description              |
-| ------------- | ----------- | ------------------------ |
-| NOT_FOUND     | 404         | Resource not found       |
-| INVALID_QUERY | 400         | Invalid query parameters |
-| RATE_LIMITED  | 429         | Rate limit exceeded      |
-| SERVER_ERROR  | 500         | Internal server error    |
+Quotas: [Identity & rate limits](/docs/identity).
 
-## Write operations
+## Entities
 
-Write operations (POST, PUT, DELETE) return mock data without persisting:
+Each page lists every field and a sample `{ data }` object. Envelope and verbs stay on this page.
 
-- `POST /api/{entity}` creates a mock entity with a generated ID
-- `PUT /api/{entity}/:id` returns the updated entity
-- `DELETE /api/{entity}/:id` returns a success response
-
-All writes are stateless—refreshing the page or calling list endpoints will not include created/modified data.
-
-## Available entities
-
-- [Users](/docs/rest/users) — User profiles with contact info
-- [Products](/docs/rest/products) — Product catalog with pricing
-- [Posts](/docs/rest/posts) — Blog posts and content
-- [Comments](/docs/rest/comments) — Comments on posts
-- [Todos](/docs/rest/todos) — Task items
-- [Carts](/docs/rest/carts) — Shopping cart data
-- [Messages](/docs/rest/messages) — Direct messages
-- [Notifications](/docs/rest/notifications) — User notifications
-- [Quotes](/docs/rest/quotes) — Inspirational quotes
-- [Recipes](/docs/rest/recipes) — Recipe data with ingredients
-- [Countries](/docs/rest/countries) — Country information
-- [Companies](/docs/rest/companies) — Company data
-- [Stocks](/docs/rest/stocks) — Stock market data
-- [Events](/docs/rest/events) — Event listings
+| Entity                                    | Path                 |
+| ----------------------------------------- | -------------------- |
+| [Users](/docs/rest/users)                 | `/api/users`         |
+| [Products](/docs/rest/products)           | `/api/products`      |
+| [Posts](/docs/rest/posts)                 | `/api/posts`         |
+| [Comments](/docs/rest/comments)           | `/api/comments`      |
+| [Todos](/docs/rest/todos)                 | `/api/todos`         |
+| [Carts](/docs/rest/carts)                 | `/api/carts`         |
+| [Messages](/docs/rest/messages)           | `/api/messages`      |
+| [Notifications](/docs/rest/notifications) | `/api/notifications` |
+| [Quotes](/docs/rest/quotes)               | `/api/quotes`        |
+| [Recipes](/docs/rest/recipes)             | `/api/recipes`       |
+| [Countries](/docs/rest/countries)         | `/api/countries`     |
+| [Companies](/docs/rest/companies)         | `/api/companies`     |
+| [Stocks](/docs/rest/stocks)               | `/api/stocks`        |
+| [Events](/docs/rest/events)               | `/api/events`        |

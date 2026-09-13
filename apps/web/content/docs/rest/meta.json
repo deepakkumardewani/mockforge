@@ -1,0 +1,21 @@
+{
+  "title": "REST API",
+  "defaultOpen": false,
+  "pages": [
+    "index",
+    "users",
+    "products",
+    "posts",
+    "comments",
+    "todos",
+    "carts",
+    "messages",
+    "notifications",
+    "quotes",
+    "recipes",
+    "countries",
+    "companies",
+    "stocks",
+    "events"
+  ]
+}

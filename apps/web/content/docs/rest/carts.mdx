@@ -1,116 +1,49 @@
 ---
 title: Carts
-description: Shopping cart data with items and totals.
+description: Generated carts. Writes do not persist.
 ---
 
-Access shopping cart data with items, pricing, and checkout information.
+`GET /api/carts`. Envelope and verbs: [REST API](/docs/rest).
 
-## List carts
+## Fields
 
-**Endpoint:** `GET /api/carts`
+| Field             | Type                                                                                                                    |
+| ----------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `id`              | number                                                                                                                  |
+| `userId`          | number                                                                                                                  |
+| `products`        | `CartItem[]` — `productId`, `title`, `price`, `quantity`, `total`, `discountPercentage`, `discountedTotal`, `thumbnail` |
+| `total`           | number                                                                                                                  |
+| `discountedTotal` | number                                                                                                                  |
+| `totalProducts`   | number                                                                                                                  |
+| `totalQuantity`   | number                                                                                                                  |
+| `createdAt`       | string (ISO)                                                                                                            |
 
-**Query parameters:**
-
-| Parameter | Type   | Example |
-| --------- | ------ | ------- |
-| `limit`   | number | 10      |
-| `skip`    | number | 0       |
-| `search`  | string | active  |
-| `sort`    | string | date    |
-| `order`   | string | desc    |
-
-**Example request:**
-
-```bash
-curl "https://api.mockforge.dev/api/carts?limit=5"
-```
-
-**Example response:**
+## Sample
 
 ```json
 {
-  "data": [
-    {
-      "id": 1,
-      "userId": 1,
-      "items": [
-        {
-          "id": 101,
-          "productId": 1,
-          "quantity": 2,
-          "price": 79.99
-        }
-      ],
-      "total": 159.98,
-      "discountTotal": 15.99,
-      "tax": 12.8,
-      "createdAt": "2024-05-12T10:30:00Z"
-    }
-  ],
-  "pagination": {
-    "limit": 5,
-    "skip": 0,
-    "total": 50,
-    "hasMore": true
+  "data": {
+    "id": 1,
+    "userId": 89,
+    "products": [
+      {
+        "productId": 54,
+        "title": "Modern Bronze Gloves",
+        "price": 146.5,
+        "quantity": 3,
+        "total": 439.5,
+        "discountPercentage": 12,
+        "discountedTotal": 386.76,
+        "thumbnail": "https://loremflickr.com/1343/1402?lock=1439742145990876"
+      }
+    ],
+    "total": 3057.22,
+    "discountedTotal": 2451.96,
+    "totalProducts": 8,
+    "totalQuantity": 26,
+    "createdAt": "2026-05-23T08:04:45.475Z"
   }
 }
 ```
 
-## Get single cart
-
-**Endpoint:** `GET /api/carts/:id`
-
-**Example request:**
-
-```bash
-curl https://api.mockforge.dev/api/carts/1
-```
-
-**Example response:**
-
-```json
-{
-  "id": 1,
-  "userId": 1,
-  "items": [
-    {
-      "id": 101,
-      "productId": 1,
-      "quantity": 2,
-      "price": 79.99
-    }
-  ],
-  "total": 159.98,
-  "discountTotal": 15.99,
-  "tax": 12.8,
-  "createdAt": "2024-05-12T10:30:00Z"
-}
-```
-
-## Search carts
-
-**Example request:**
-
-```bash
-curl "https://api.mockforge.dev/api/carts?search=active&limit=3"
-```
-
-Searches across user-related fields.
-
-## Create cart
-
-**Endpoint:** `POST /api/carts`
-
-Creates a mock cart. Does not persist.
-
-## Update cart
-
-**Endpoint:** `PUT /api/carts/:id`
-
-Updates a mock cart. Does not persist.
-
-## Delete cart
-
-**Endpoint:** `DELETE /api/carts/:id`
-
-Deletes a mock cart. Does not persist.
+<DocsCurlList paths={["/api/carts?limit=5", "/api/carts/1"]} />

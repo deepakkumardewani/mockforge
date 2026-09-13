@@ -1,116 +1,54 @@
 ---
 title: Events
-description: Event listings and calendar information.
+description: Generated event listings. Writes do not persist.
 ---
 
-Access event listings with dates, locations, and attendee information.
+`GET /api/events`. Envelope and verbs: [REST API](/docs/rest).
 
-## List events
+## Fields
 
-**Endpoint:** `GET /api/events`
+| Field          | Type         |
+| -------------- | ------------ |
+| `id`           | number       |
+| `title`        | string       |
+| `description`  | string       |
+| `category`     | string       |
+| `location`     | string       |
+| `address`      | string       |
+| `startDate`    | string (ISO) |
+| `endDate`      | string (ISO) |
+| `organizer`    | string       |
+| `attendees`    | number       |
+| `maxAttendees` | number       |
+| `price`        | number       |
+| `isFree`       | boolean      |
+| `image`        | string (URL) |
+| `tags`         | string[]     |
+| `createdAt`    | string (ISO) |
 
-**Query parameters:**
-
-| Parameter | Type   | Example    |
-| --------- | ------ | ---------- |
-| `limit`   | number | 10         |
-| `skip`    | number | 0          |
-| `search`  | string | conference |
-| `sort`    | string | date       |
-| `order`   | string | asc        |
-
-**Example request:**
-
-```bash
-curl "https://api.mockforge.dev/api/events?limit=5&sort=date"
-```
-
-**Example response:**
+## Sample
 
 ```json
 {
-  "data": [
-    {
-      "id": 1,
-      "title": "Tech Conference 2024",
-      "description": "Annual tech industry conference",
-      "date": "2024-06-15T09:00:00Z",
-      "endDate": "2024-06-17T17:00:00Z",
-      "location": {
-        "city": "San Francisco",
-        "state": "CA",
-        "country": "USA",
-        "venue": "Moscone Center"
-      },
-      "attendees": 5000,
-      "category": "Technology",
-      "price": 499
-    }
-  ],
-  "pagination": {
-    "limit": 5,
-    "skip": 0,
-    "total": 250,
-    "hasMore": true
+  "data": {
+    "id": 1,
+    "title": "alius agnosco demens",
+    "description": "Teres suppellex verecundia.",
+    "category": "conference",
+    "location": "Lake Marco",
+    "address": "6797 Milan Center",
+    "startDate": "2027-04-30T11:30:31.341Z",
+    "endDate": "2027-05-05T11:30:31.341Z",
+    "organizer": "Mr. Jonathan Anderson",
+    "attendees": 228,
+    "maxAttendees": 7327,
+    "price": 0,
+    "isFree": true,
+    "image": "https://picsum.photos/seed/28yufW/640/159",
+    "tags": ["ultra", "comburo"],
+    "createdAt": "2026-05-23T02:58:33.364Z"
   }
 }
 ```
 
-## Get single event
-
-**Endpoint:** `GET /api/events/:id`
-
-**Example request:**
-
-```bash
-curl https://api.mockforge.dev/api/events/1
-```
-
-**Example response:**
-
-```json
-{
-  "id": 1,
-  "title": "Tech Conference 2024",
-  "description": "Annual tech industry conference",
-  "date": "2024-06-15T09:00:00Z",
-  "endDate": "2024-06-17T17:00:00Z",
-  "location": {
-    "city": "San Francisco",
-    "state": "CA",
-    "country": "USA",
-    "venue": "Moscone Center"
-  },
-  "attendees": 5000,
-  "category": "Technology",
-  "price": 499
-}
-```
-
-## Search events
-
-**Example request:**
-
-```bash
-curl "https://api.mockforge.dev/api/events?search=conference&limit=3"
-```
-
-Searches across `title`, `description`, `category`, and `venue` fields.
-
-## Create event
-
-**Endpoint:** `POST /api/events`
-
-Creates a mock event. Does not persist.
-
-## Update event
-
-**Endpoint:** `PUT /api/events/:id`
-
-Updates a mock event. Does not persist.
-
-## Delete event
-
-**Endpoint:** `DELETE /api/events/:id`
-
-Deletes a mock event. Does not persist.
+<DocsCurlList paths={["/api/events?limit=5", "/api/events/1"]} />
