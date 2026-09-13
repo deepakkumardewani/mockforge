@@ -11,6 +11,24 @@ export default defineConfig({
     coverage: {
       provider: "v8",
       reportsDirectory: "coverage",
+      include: [
+        "src/components/**/*.{ts,tsx}",
+        "src/hooks/**/*.{ts,tsx}",
+        "src/lib/**/*.{ts,tsx}",
+        "src/store/**/*.{ts,tsx}",
+      ],
+      exclude: [
+        "src/**/*.test.*",
+        "src/tests/**",
+        "src/app/**",
+        "src/lib/source.ts",
+        "src/components/builder/types.ts",
+        "src/components/Providers.tsx",
+        "src/components/playground/shared/CodeEditor.tsx",
+        "src/components/landing/entity-icons.tsx",
+        "src/components/landing/depth/**",
+      ],
+      thresholds: { lines: 90, statements: 90, functions: 90, branches: 80 },
     },
   },
   resolve: {

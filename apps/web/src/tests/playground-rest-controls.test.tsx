@@ -36,6 +36,9 @@ describe("Playground REST — HeadersEditor", () => {
       <>
         <HeadersEditor rows={rows} onChange={setRows} />
         <span data-testid="row-count">{rows.length}</span>
+        <pre data-testid="rows-json">
+          {JSON.stringify(rows.map(({ key, value }) => ({ key, value })))}
+        </pre>
       </>
     );
   }
@@ -47,6 +50,49 @@ describe("Playground REST — HeadersEditor", () => {
     expect(screen.getByTestId("row-count")).toHaveTextContent("1");
     await user.click(screen.getByRole("button", { name: "Add header" }));
     expect(screen.getByTestId("row-count")).toHaveTextContent("2");
+  });
+
+  it("updates header key and value on an empty row", async () => {
+    const user = userEvent.setup();
+    render(<HeaderHarness />);
+
+    await user.type(screen.getByRole("textbox", { name: "Header key" }), "Authorization");
+    await user.type(
+      screen.getByRole("textbox", { name: "Value for header Authorization" }),
+      "Bearer token",
+    );
+
+    expect(screen.getByTestId("rows-json")).toHaveTextContent(
+      JSON.stringify([{ key: "Authorization", value: "Bearer token" }]),
+    );
+  });
+
+  it("replaces the last row with an empty row when removed", async () => {
+    const user = userEvent.setup();
+    render(<HeaderHarness />);
+
+    await user.type(screen.getByRole("textbox", { name: "Header key" }), "X-Trace");
+    await user.click(screen.getByRole("button", { name: "Remove header row" }));
+
+    expect(screen.getByTestId("row-count")).toHaveTextContent("1");
+    expect(screen.getByRole("textbox", { name: "Header key" })).toHaveValue("");
+    expect(screen.getByRole("textbox", { name: "Value for header blank" })).toHaveValue("");
+  });
+
+  it("removes one of multiple header rows", async () => {
+    const user = userEvent.setup();
+    render(<HeaderHarness />);
+
+    await user.type(screen.getByRole("textbox", { name: "Header key" }), "Accept");
+    await user.click(screen.getByRole("button", { name: "Add header" }));
+
+    const keys = screen.getAllByRole("textbox", { name: "Header key" });
+    await user.type(keys[1]!, "Content-Type");
+    expect(screen.getByTestId("row-count")).toHaveTextContent("2");
+
+    await user.click(screen.getAllByRole("button", { name: "Remove header row" })[0]!);
+    expect(screen.getByTestId("row-count")).toHaveTextContent("1");
+    expect(screen.getByRole("textbox", { name: "Header key" })).toHaveValue("Content-Type");
   });
 });
 
@@ -78,5 +124,43 @@ describe("Playground REST — MethodUrlBar", () => {
       />,
     );
     expect(screen.getByRole("button", { name: /Sending/u })).toBeDisabled();
+  });
+
+  it("notifies method and URL suffix changes", async () => {
+    const user = userEvent.setup();
+    const onMethodChange = vi.fn();
+    const onUrlChange = vi.fn();
+
+    function Harness() {
+      const [method, setMethod] = useState<"GET" | "POST" | "PUT" | "DELETE">("GET");
+      const [url, setUrl] = useState("/api/users");
+      return (
+        <MethodUrlBar
+          method={method}
+          url={url}
+          onMethodChange={(next) => {
+            onMethodChange(next);
+            setMethod(next);
+          }}
+          onUrlChange={(next) => {
+            onUrlChange(next);
+            setUrl(next);
+          }}
+          onSend={vi.fn()}
+          isLoading={false}
+        />
+      );
+    }
+
+    render(<Harness />);
+
+    await user.selectOptions(screen.getByRole("combobox", { name: "HTTP method" }), "POST");
+    expect(onMethodChange).toHaveBeenCalledWith("POST");
+
+    const suffix = screen.getByRole("combobox", { name: "Request URL suffix" });
+    await user.clear(suffix);
+    await user.type(suffix, "posts");
+    expect(onUrlChange).toHaveBeenCalledWith("/api/posts");
+    expect(suffix).toHaveValue("posts");
   });
 });

@@ -92,10 +92,8 @@ describe("landing micro-interactions", () => {
   it("Hero CTAs use shared press-feedback classes", async () => {
     const { Hero } = await import("@/components/landing/Hero");
     render(<Hero />);
-    expect(screen.getByRole("link", { name: "Open Playground" })).toHaveClass(
-      "landing-btn-primary",
-    );
-    expect(screen.getByRole("link", { name: "Read the Docs" })).toHaveClass(
+    expect(screen.getByRole("link", { name: "Use the API" })).toHaveClass("landing-btn-primary");
+    expect(screen.getByRole("link", { name: "Explore in Playground" })).toHaveClass(
       "landing-btn-secondary",
     );
   });

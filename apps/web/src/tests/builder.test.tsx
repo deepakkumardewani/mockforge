@@ -91,7 +91,7 @@ describe("FieldEditor", () => {
 
   it("shows add field button", () => {
     renderFieldEditor();
-    expect(screen.getByText("+ Add Field")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /add field/i })).toBeInTheDocument();
   });
 
   it("shows enum values input when type is enum", () => {
@@ -99,7 +99,7 @@ describe("FieldEditor", () => {
       name: "Test",
       fields: [{ name: "status", type: "enum" }],
     });
-    expect(screen.getByPlaceholderText("A, B, C")).toBeInTheDocument();
+    expect(screen.getByPlaceholderText("draft, active, archived")).toBeInTheDocument();
   });
 
   it("shows min/max inputs when type is number", () => {
@@ -116,12 +116,12 @@ describe("FieldEditor", () => {
       name: "Test",
       fields: [{ name: "tags", type: "array" }],
     });
-    expect(screen.getByText("Item Type")).toBeInTheDocument();
+    expect(screen.getByText("Item type")).toBeInTheDocument();
   });
 
   it("adds a new field when add button is clicked", async () => {
     renderFieldEditor();
-    const addBtn = screen.getByText("+ Add Field");
+    const addBtn = screen.getByRole("button", { name: /add field/i });
     await userEvent.click(addBtn);
     await waitFor(() => {
       const inputs = screen.getAllByPlaceholderText("e.g. origin");
@@ -155,7 +155,7 @@ describe("JsonEditor", () => {
 
   it("renders Apply JSON button", () => {
     render(<JsonEditor formValues={baseFormValues} onApply={vi.fn()} />);
-    expect(screen.getByText("Apply JSON")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /apply and return to form/i })).toBeInTheDocument();
   });
 
   it("shows error for invalid JSON", async () => {
@@ -165,7 +165,7 @@ describe("JsonEditor", () => {
     await userEvent.clear(textarea);
     // Use fireEvent to set value directly for special characters
     await userEvent.type(textarea, "bad json");
-    await userEvent.click(screen.getByText("Apply JSON"));
+    await userEvent.click(screen.getByRole("button", { name: /apply and return to form/i }));
     await waitFor(() => {
       expect(screen.getByText(/Invalid JSON/i)).toBeInTheDocument();
     });
@@ -175,7 +175,7 @@ describe("JsonEditor", () => {
   it("calls onApply with valid JSON", async () => {
     const onApply = vi.fn();
     render(<JsonEditor formValues={baseFormValues} onApply={onApply} />);
-    await userEvent.click(screen.getByText("Apply JSON"));
+    await userEvent.click(screen.getByRole("button", { name: /apply and return to form/i }));
     await waitFor(() => {
       expect(onApply).toHaveBeenCalledWith(expect.objectContaining({ name: "Flight" }));
     });
@@ -199,7 +199,7 @@ describe("Preview", () => {
       fields: [{ name: "", type: "string" }],
     };
     render(<Preview formValues={emptyValues} />);
-    expect(screen.getByText("Add at least one field to see a live preview")).toBeInTheDocument();
+    expect(screen.getByText("Your sample response will appear here")).toBeInTheDocument();
   });
 
   it("shows live preview heading when fields are present", () => {
@@ -208,7 +208,7 @@ describe("Preview", () => {
       fields: [{ name: "name", type: "string" }],
     };
     render(<Preview formValues={values} />);
-    expect(screen.getByText("Live Preview")).toBeInTheDocument();
+    expect(screen.getByText("Generated response")).toBeInTheDocument();
   });
 });
 
@@ -230,7 +230,7 @@ describe("EndpointDisplay", () => {
 
   it("renders success message", () => {
     render(<EndpointDisplay endpoint="/api/custom/test-slug" />);
-    expect(screen.getByText("Schema saved! Your endpoint is ready:")).toBeInTheDocument();
+    expect(screen.getByText("Endpoint ready")).toBeInTheDocument();
   });
 
   it("has a copy button", () => {
@@ -256,10 +256,8 @@ describe("MfIdPrompt", () => {
 
   it("displays instructional text", () => {
     render(<MfIdPrompt mfId="abc-123-def" onDismiss={vi.fn()} />);
-    expect(screen.getByText("Your browser ID")).toBeInTheDocument();
-    expect(
-      screen.getByText("Save this ID to restore your schemas on another device."),
-    ).toBeInTheDocument();
+    expect(screen.getByText("Recovery key")).toBeInTheDocument();
+    expect(screen.getByText(/keep this key private/i)).toBeInTheDocument();
   });
 
   it("calls onDismiss when dismiss button is clicked", async () => {

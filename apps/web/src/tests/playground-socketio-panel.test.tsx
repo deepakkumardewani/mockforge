@@ -46,7 +46,10 @@ describe("Playground Socket.IO — SocketIoPanel", () => {
 
     await user.click(screen.getByRole("button", { name: "Chat" }));
 
-    expect(screen.getByTitle("localhost:4001 · /chat · message")).toBeInTheDocument();
+    expect(screen.getByTitle("http://localhost:4001/chat")).toBeInTheDocument();
+    expect(screen.getByText("Server origin")).toBeInTheDocument();
+    expect(screen.getByText("Namespace")).toBeInTheDocument();
+    expect(screen.getByText("Engine.IO path")).toBeInTheDocument();
     expect(screen.getByLabelText("Emit event name")).toBeInTheDocument();
   });
 

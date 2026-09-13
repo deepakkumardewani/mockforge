@@ -39,23 +39,28 @@ describe("Hero", () => {
   it("renders headline and CTAs", async () => {
     const { Hero } = await import("@/components/landing/Hero");
     render(<Hero />);
-    expect(screen.getByLabelText("Fake Data. Real Power.")).toBeInTheDocument();
-    expect(screen.getByText("Fake")).toBeInTheDocument();
-    expect(screen.getByText("Power.")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Open Playground" })).toHaveAttribute(
+    expect(
+      screen.getByLabelText("Build your app before the backend is ready."),
+    ).toBeInTheDocument();
+    expect(screen.getByText("Build")).toBeInTheDocument();
+    expect(screen.getByText("ready.")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Explore in Playground" })).toHaveAttribute(
       "href",
       "/playground",
     );
-    expect(screen.getByRole("link", { name: "Read the Docs" })).toHaveAttribute("href", "/docs");
+    expect(screen.getByRole("link", { name: "Use the API" })).toHaveAttribute(
+      "href",
+      "#integration",
+    );
   });
 
   it("renders truthful social proof line and proof strip", async () => {
     const { Hero } = await import("@/components/landing/Hero");
     render(<Hero />);
     expect(screen.getByText(/15 typed resources/i)).toBeInTheDocument();
-    expect(screen.getByText(/4 protocols, one schema/i)).toBeInTheDocument();
+    expect(screen.getByText(/one typed schema/i)).toBeInTheDocument();
     expect(screen.queryByText(/open source/i)).not.toBeInTheDocument();
-    expect(screen.getByText("4 wire formats")).toBeInTheDocument();
+    expect(screen.getByText(/no signup/i)).toBeInTheDocument();
   });
 
   it("has exactly two CTAs with no builder link", async () => {
@@ -71,18 +76,18 @@ describe("ProtocolShowcase", () => {
     const { ProtocolShowcase } = await import("@/components/landing/ProtocolShowcase");
     render(<ProtocolShowcase />);
     expect(
-      screen.getByRole("heading", { name: "Pick your wire format", level: 2 }),
+      screen.getByRole("heading", { name: "One Product resource, four wire formats", level: 2 }),
     ).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "REST", level: 3 })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "GraphQL", level: 3 })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "WebSocket", level: 3 })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Socket.io", level: 3 })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: /REST/ })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: /GraphQL/ })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: /WebSocket/ })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: /Socket\.io/ })).toBeInTheDocument();
   });
 
   it("uses truthful REST query wording", async () => {
     const { ProtocolShowcase } = await import("@/components/landing/ProtocolShowcase");
     render(<ProtocolShowcase />);
-    expect(screen.getByText(/pagination \(limit\/skip\), search, and sort/i)).toBeInTheDocument();
+    expect(screen.getByText(/limit\/skip pagination, search, and sort/i)).toBeInTheDocument();
     expect(screen.queryByText(/filtering/i)).not.toBeInTheDocument();
   });
 });
@@ -92,25 +97,26 @@ describe("EntityBrowser", () => {
     const { EntityBrowser } = await import("@/components/landing/EntityBrowser");
     render(<EntityBrowser />);
     expect(
-      screen.getByRole("heading", { name: "15 typed resources", level: 2 }),
+      screen.getByRole("heading", { name: "14 built-in resources, plus custom schemas", level: 2 }),
     ).toBeInTheDocument();
     expect(screen.getByText(/pagination and search/i)).toBeInTheDocument();
     expect(screen.queryByText(/filters/i)).not.toBeInTheDocument();
     expect(screen.getByText("User")).toBeInTheDocument();
     expect(screen.getByText("Product")).toBeInTheDocument();
     expect(screen.getByText("Post")).toBeInTheDocument();
-    expect(screen.getByText("Comment")).toBeInTheDocument();
     expect(screen.getByText("Todo")).toBeInTheDocument();
+    expect(screen.getByText("Notification")).toBeInTheDocument();
+    expect(screen.getByText("Event")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: /show 8 more resources/i }));
+    expect(screen.getByText("Comment")).toBeInTheDocument();
     expect(screen.getByText("Cart")).toBeInTheDocument();
     expect(screen.getByText("Message")).toBeInTheDocument();
-    expect(screen.getByText("Notification")).toBeInTheDocument();
     expect(screen.getByText("Quote")).toBeInTheDocument();
     expect(screen.getByText("Recipe")).toBeInTheDocument();
     expect(screen.getByText("Country")).toBeInTheDocument();
     expect(screen.getByText("Company")).toBeInTheDocument();
     expect(screen.getByText("Stock")).toBeInTheDocument();
-    expect(screen.getByText("Event")).toBeInTheDocument();
-    expect(screen.getByText("Custom")).toBeInTheDocument();
+    expect(screen.getByText("Custom schema")).toBeInTheDocument();
   });
 });
 
@@ -120,7 +126,7 @@ describe("LiveCounter", () => {
     render(<LiveCounter initialTotal={12345} />);
     expect(screen.getByText("Requests served")).toBeInTheDocument();
     expect(
-      screen.getByText(/running total of every request the mock server has handled so far/i),
+      screen.getByText(/running total of every request the hosted API has handled so far/i),
     ).toBeInTheDocument();
     expect(screen.getByText("12,345")).toBeInTheDocument();
   });
@@ -141,11 +147,10 @@ describe("Capabilities", () => {
     const { Capabilities } = await import("@/components/landing/Capabilities");
     render(<Capabilities />);
     expect(
-      screen.getByRole("heading", { name: "Built for real dev workflows", level: 2 }),
+      screen.getByRole("heading", { name: "Replace fixtures with a typed hosted API", level: 2 }),
     ).toBeInTheDocument();
-    expect(screen.getByText(/not on a roadmap/i)).toBeInTheDocument();
-    expect(screen.getByText(/one schema, four protocols/i)).toBeInTheDocument();
-    expect(screen.getByText(/pagination, search, sort/i)).toBeInTheDocument();
+    expect(screen.getByText(/one typed schema/i)).toBeInTheDocument();
+    expect(screen.getByText(/pagination, search, and sort/i)).toBeInTheDocument();
     expect(screen.queryByText(/latency/i)).not.toBeInTheDocument();
     expect(screen.queryByText(/error injection/i)).not.toBeInTheDocument();
     expect(screen.queryByText(/filtering/i)).not.toBeInTheDocument();
@@ -158,7 +163,7 @@ describe("WhyMockForge", () => {
     const { WhyMockForge } = await import("@/components/landing/WhyMockForge");
     render(<WhyMockForge />);
     expect(
-      screen.getByRole("heading", { name: /one mock server, every protocol/i, level: 2 }),
+      screen.getByRole("heading", { name: /replace fixtures with a typed hosted api/i, level: 2 }),
     ).toBeInTheDocument();
     expect(screen.queryByText(/MSW/i)).not.toBeInTheDocument();
     expect(screen.queryByText(/Mockoon/i)).not.toBeInTheDocument();
@@ -170,9 +175,9 @@ describe("UseCasesTrust", () => {
     const { UseCasesTrust } = await import("@/components/landing/UseCasesTrust");
     render(<UseCasesTrust />);
     expect(screen.getByText("Frontend development")).toBeInTheDocument();
-    expect(screen.getByText("Integration & CI testing")).toBeInTheDocument();
-    expect(screen.getByText(/without setup overhead/i)).toBeInTheDocument();
-    expect(screen.getByText("Signup-free access")).toBeInTheDocument();
+    expect(screen.getByText("Integration tests")).toBeInTheDocument();
+    expect(screen.getByText(/same origin and resource/i)).toBeInTheDocument();
+    expect(screen.getByText("Product demos")).toBeInTheDocument();
     expect(screen.queryByText(/open source/i)).not.toBeInTheDocument();
   });
 });
@@ -182,10 +187,10 @@ describe("Quickstart", () => {
     const { Quickstart } = await import("@/components/landing/Quickstart");
     render(<Quickstart />);
     expect(
-      screen.getByRole("heading", { name: /start in the playground in seconds/i, level: 2 }),
+      screen.getByRole("heading", { name: /connect your app to the mockforge api/i, level: 2 }),
     ).toBeInTheDocument();
     expect(screen.queryByText(/bunx/i)).not.toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /open playground/i })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: /explore in playground/i })).toHaveAttribute(
       "href",
       "/playground",
     );
@@ -200,14 +205,14 @@ describe("DXHighlights", () => {
     expect(screen.getByText("Python")).toBeInTheDocument();
     expect(screen.getByText("cURL")).toBeInTheDocument();
     expect(
-      screen.getByRole("heading", { name: "Wire it in minutes", level: 2 }),
+      screen.getByRole("heading", { name: "Connect your app to the MockForge API", level: 2 }),
     ).toBeInTheDocument();
   });
 
   it("switches tabs and shows distinct code sample", async () => {
     const { DXHighlights } = await import("@/components/landing/DXHighlights");
     render(<DXHighlights />);
-    expect(screen.getByText(/Create a user via REST/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/\/api\/users/i).length).toBeGreaterThan(0);
     fireEvent.click(screen.getByRole("tab", { name: "Python" }));
     expect(screen.getByText(/import requests/i)).toBeInTheDocument();
   });
@@ -217,9 +222,11 @@ describe("FinalCTA", () => {
   it("renders closing CTA with playground link", async () => {
     const { FinalCTA } = await import("@/components/landing/FinalCTA");
     render(<FinalCTA />);
-    expect(screen.getByRole("heading", { name: /stop stubbing/i })).toBeInTheDocument();
-    expect(screen.getByText(/fixtures drift/i)).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /open the playground/i })).toHaveAttribute(
+    expect(
+      screen.getByRole("heading", { name: /point your app at the hosted api/i }),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/no account and no api key/i)).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /explore in playground/i })).toHaveAttribute(
       "href",
       "/playground",
     );
@@ -227,12 +234,14 @@ describe("FinalCTA", () => {
 });
 
 describe("Footer", () => {
-  it("renders links without dead GitHub href", async () => {
+  it("renders product links and the public GitHub repo", async () => {
     const { Footer } = await import("@/components/landing/Footer");
     render(<Footer />);
     expect(screen.getByRole("link", { name: "Documentation" })).toBeInTheDocument();
-    expect(screen.getByText("GitHub — coming soon")).toBeInTheDocument();
-    expect(screen.queryByRole("link", { name: "GitHub" })).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "GitHub" })).toHaveAttribute(
+      "href",
+      "https://github.com/deepakkumardewani/mockforge",
+    );
     expect(screen.getByRole("link", { name: "Schema Builder" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Playground" })).toHaveAttribute("href", "/playground");
   });
@@ -323,9 +332,9 @@ describe("landing copy deduplication", () => {
 describe("page metadata", () => {
   it("has updated title, description, and OG tags", async () => {
     const { siteMetadata } = await import("@/lib/site-metadata");
-    expect(siteMetadata.title).toBe("MockForge — Fake Data API for Local Dev");
+    expect(siteMetadata.title).toBe("MockForge — Hosted Mock API for Apps");
     expect(siteMetadata.description).toMatch(/15 typed resources/i);
-    expect(siteMetadata.openGraph?.title).toBe("MockForge — Fake Data API for Local Dev");
-    expect(siteMetadata.twitter?.title).toBe("MockForge — Fake Data API for Local Dev");
+    expect(siteMetadata.openGraph?.title).toBe("MockForge — Hosted Mock API for Apps");
+    expect(siteMetadata.twitter?.title).toBe("MockForge — Hosted Mock API for Apps");
   });
 });
