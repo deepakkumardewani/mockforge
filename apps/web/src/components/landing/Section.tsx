@@ -15,7 +15,7 @@ export function Section({ children, backdrop, className, innerClassName, id, ref
     <section
       ref={ref}
       id={id}
-      className={`px-6 py-28 sm:px-10 lg:px-16${className ? ` ${className}` : ""}`}
+      className={`landing-section scroll-mt-[4.75rem] px-6 py-24 sm:px-10 sm:py-28 lg:px-16 lg:py-32${className ? ` ${className}` : ""}`}
     >
       {backdrop}
       <div

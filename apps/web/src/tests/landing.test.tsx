@@ -27,6 +27,10 @@ vi.mock("next/link", () => ({
   ),
 }));
 
+vi.mock("next/navigation", () => ({
+  usePathname: () => "/",
+}));
+
 beforeEach(() => {
   vi.clearAllMocks();
 });

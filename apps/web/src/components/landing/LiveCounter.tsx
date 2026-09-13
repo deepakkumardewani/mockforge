@@ -124,7 +124,7 @@ export function LiveCounter({ initialTotal = null }: LiveCounterProps) {
 
           <div className="max-w-md lg:pb-4">
             <p className="text-lg leading-relaxed text-[var(--color-text-muted)] sm:text-xl">
-              A running total of every request the mock server has handled so far.
+              A running total of every request the hosted API has handled so far.
             </p>
           </div>
         </div>

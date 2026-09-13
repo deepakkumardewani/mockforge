@@ -1,57 +1,63 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import gsap from "gsap";
 import Link from "next/link";
 import { DepthTexture, SECTION_IDENTITY } from "./depth";
+import { API_BASE } from "@/lib/api-client";
 
-const CODE_SNIPPETS = [
-  {
-    label: "REST",
-    code: `GET /api/products?limit=5&sort=price
+function toWsOrigin(httpBase: string): string {
+  try {
+    const url = new URL(httpBase);
+    url.protocol = url.protocol === "https:" ? "wss:" : "ws:";
+    return url.origin;
+  } catch {
+    return httpBase.replace(/^https:/, "wss:").replace(/^http:/, "ws:");
+  }
+}
 
-// Response
+function buildSnippets(apiBase: string) {
+  const wsOrigin = toWsOrigin(apiBase);
+  return [
+    {
+      label: "REST",
+      code: `GET ${apiBase}/api/products?limit=3
+
+HTTP/1.1 200 OK
 {
   "data": [
-    { "title": "Wireless Mouse", ... },
-    { "title": "USB-C Hub", ... },
-    ...
+    { "id": 1, "title": "Wireless Mouse", "price": 29.99 }
   ],
-  "total": 142,
-  "limit": 5,
+  "total": 50,
+  "limit": 3,
   "skip": 0
 }`,
-  },
-  {
-    label: "GraphQL",
-    code: `query {
+    },
+    {
+      label: "GraphQL",
+      code: `POST ${apiBase}/graphql
+
+query {
   products(limit: 3) {
     title
     price
-    rating
     category
   }
 }`,
-  },
-  {
-    label: "WebSocket",
-    code: `const ws = new WebSocket(
-  "ws://api.mockforge.dev/ws/stats"
+    },
+    {
+      label: "WebSocket",
+      code: `const ws = new WebSocket(
+  "${wsOrigin}/ws/stats"
 );
 
 ws.onmessage = (event) => {
-  const { total } = JSON.parse(event.data);
-  console.log(\`Requests served: \${total}\`);
+  const payload = JSON.parse(event.data);
+  console.log(payload.total);
 };`,
-  },
-];
-
-const PROOF_ITEMS = [
-  { label: "Protocols", value: "4 wire formats" },
-  { label: "Resources", value: "15 typed" },
-  { label: "Auth", value: "Keyless access" },
-  { label: "Real-time", value: "WS + Socket.io" },
-] as const;
+    },
+  ] as const;
+}
 
 /** Fits the longest CODE_SNIPPETS entry so typing never resizes the card. */
 const TERMINAL_HEIGHT_CLASS = "h-[21.5rem] sm:h-[22.5rem]";
@@ -67,7 +73,7 @@ export function Hero() {
   const subRef = useRef<HTMLParagraphElement>(null);
   const ctasRef = useRef<HTMLDivElement>(null);
   const socialProofRef = useRef<HTMLParagraphElement>(null);
-  const proofStripRef = useRef<HTMLDivElement>(null);
+  const snippets = useMemo(() => buildSnippets(API_BASE), []);
 
   const [snippetIndex, setSnippetIndex] = useState(0);
   const [displayedCode, setDisplayedCode] = useState("");
@@ -86,13 +92,11 @@ export function Hero() {
         !subRef.current ||
         !ctasRef.current ||
         !socialProofRef.current ||
-        !terminalRef.current ||
-        !proofStripRef.current
+        !terminalRef.current
       )
         return;
 
       const words = headlineRef.current.querySelectorAll(".word");
-
       const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
 
       tl.fromTo(
@@ -118,12 +122,6 @@ export function Hero() {
           { x: 60, opacity: 0, rotate: 2 },
           { x: 0, opacity: 1, rotate: 0, duration: 0.9, ease: "power3.out" },
           "-=0.6",
-        )
-        .fromTo(
-          proofStripRef.current,
-          { y: 20, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.55, ease: "power2.out" },
-          "-=0.4",
         );
     }, sectionRef);
 
@@ -131,13 +129,12 @@ export function Hero() {
       clearTimeout(startTyping);
       ctx.revert();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     if (!typingStarted) return;
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const snippet = CODE_SNIPPETS[snippetIndex];
+    const snippet = snippets[snippetIndex];
     const fullText = snippet.code;
 
     if (prefersReducedMotion) {
@@ -161,27 +158,25 @@ export function Hero() {
       } else {
         timeout = setTimeout(() => setIsDeleting(true), 2500);
       }
+    } else if (charIndex > 0) {
+      timeout = setTimeout(() => {
+        setDisplayedCode(fullText.slice(0, charIndex - 1));
+        setCharIndex(charIndex - 1);
+      }, 8);
     } else {
-      if (charIndex > 0) {
-        timeout = setTimeout(() => {
-          setDisplayedCode(fullText.slice(0, charIndex - 1));
-          setCharIndex(charIndex - 1);
-        }, 8);
-      } else {
-        setIsDeleting(false);
-        setSnippetIndex((snippetIndex + 1) % CODE_SNIPPETS.length);
-      }
+      setIsDeleting(false);
+      setSnippetIndex((snippetIndex + 1) % snippets.length);
     }
 
     return () => clearTimeout(timeout);
-  }, [charIndex, isDeleting, snippetIndex, typingStarted]);
+  }, [charIndex, isDeleting, snippetIndex, snippets, typingStarted]);
 
-  const activeSnippet = CODE_SNIPPETS[snippetIndex];
+  const activeSnippet = snippets[snippetIndex];
 
   return (
     <section
       ref={sectionRef}
-      className={`${SECTION_IDENTITY.hero} flex min-h-screen flex-col px-6 pt-24 pb-12 sm:px-10 lg:px-16`}
+      className={`${SECTION_IDENTITY.hero} flex min-h-screen flex-col px-6 pt-24 pb-16 sm:px-10 lg:px-16`}
     >
       <DepthTexture variant="dot" />
 
@@ -203,15 +198,19 @@ export function Hero() {
       <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center">
         <div className="grid min-w-0 items-center gap-12 lg:grid-cols-2 lg:gap-16">
           <div>
-            <div ref={headlineRef} className="overflow-hidden" aria-label="Fake Data. Real Power.">
-              <p className="font-display text-[clamp(2.75rem,6vw,4.5rem)] font-extrabold leading-[1.05] tracking-tight text-[var(--color-text-primary)]">
-                {["Fake", "Data."].map((word) => (
+            <div
+              ref={headlineRef}
+              className="overflow-hidden"
+              aria-label="Build your app before the backend is ready."
+            >
+              <p className="font-display text-[clamp(2.5rem,5.5vw,4.25rem)] font-extrabold leading-[1.08] tracking-tight text-[var(--color-text-primary)]">
+                {["Build", "your", "app"].map((word) => (
                   <span key={word} className="word mr-[0.25em] inline-block last:mr-0">
                     {word}
                   </span>
                 ))}
                 <br />
-                {["Real", "Power."].map((word) => (
+                {["before", "the", "backend", "is", "ready."].map((word) => (
                   <span key={word} className="word mr-[0.25em] inline-block last:mr-0">
                     {word}
                   </span>
@@ -221,43 +220,42 @@ export function Hero() {
 
             <p
               ref={subRef}
-              className="mt-6 max-w-[42ch] text-lg leading-relaxed text-[var(--color-text-muted)]"
+              className="mt-6 max-w-[44ch] text-lg leading-relaxed text-[var(--color-text-muted)]"
             >
-              One server — REST, GraphQL, WebSocket, and Socket.io on a single schema. Point your
-              client and build.
+              MockForge gives your app ready-to-use REST, GraphQL, WebSocket, and Socket.io
+              endpoints from one typed schema. No backend setup required.
             </p>
 
             <div ref={ctasRef} className="mt-8 flex flex-wrap items-center gap-3">
               <Link
-                href="/playground"
+                href="#integration"
                 className="landing-btn-primary rounded-lg px-6 py-3 font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
                 style={{
                   background: "var(--color-accent)",
                   color: "var(--color-on-accent)",
                 }}
               >
-                Open Playground
+                Use the API
               </Link>
               <Link
-                href="/docs"
+                href="/playground"
                 className="landing-btn-secondary rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-raised)] px-6 py-3 font-medium text-[var(--color-text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
               >
-                Read the Docs
+                Explore in Playground
               </Link>
             </div>
 
             <p ref={socialProofRef} className="mt-8 text-sm text-[var(--color-text-muted)]">
-              No signup · No API keys ·{" "}
+              No signup. No API keys.{" "}
               <span style={{ color: "var(--color-accent)" }} className="font-medium">
                 15 typed resources
-              </span>{" "}
-              · 4 protocols, one schema
+              </span>
+              , including custom schemas in the Builder.
             </p>
           </div>
 
           <div ref={terminalRef} className="relative w-full min-w-0 pt-2">
             <div className={`relative w-full ${TERMINAL_STACK_SHELL_CLASS}`}>
-              {/* Layered terminal stack — offset cards peek from behind primary */}
               <div
                 className="pointer-events-none absolute left-0 top-8 right-[2.75rem] bottom-0 rounded-xl border-2 shadow-lg"
                 style={{
@@ -294,11 +292,11 @@ export function Hero() {
                     </span>
                   </div>
                   <div className="flex min-w-0 flex-1 items-center justify-end gap-1 overflow-x-auto">
-                    {CODE_SNIPPETS.map((s, i) => (
+                    {snippets.map((snippet, i) => (
                       <button
-                        key={s.label}
+                        key={snippet.label}
                         type="button"
-                        aria-label={`Show ${s.label} code sample`}
+                        aria-label={`Show ${snippet.label} request sample`}
                         aria-pressed={snippetIndex === i}
                         onClick={() => {
                           setSnippetIndex(i);
@@ -316,7 +314,7 @@ export function Hero() {
                             : { color: "var(--color-text-muted)" }
                         }
                       >
-                        {s.label}
+                        {snippet.label}
                       </button>
                     ))}
                   </div>
@@ -334,29 +332,6 @@ export function Hero() {
               </div>
             </div>
           </div>
-        </div>
-      </div>
-
-      {/* Honest proof strip — fills lower viewport */}
-      <div ref={proofStripRef} className="relative z-10 mx-auto mt-auto w-full max-w-7xl pt-10">
-        <div
-          className="grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-[var(--color-border)] sm:grid-cols-4"
-          style={{ background: "var(--color-border)" }}
-        >
-          {PROOF_ITEMS.map((item) => (
-            <div
-              key={item.label}
-              className="flex flex-col gap-1 px-5 py-4"
-              style={{ background: "var(--color-surface-raised)" }}
-            >
-              <span className="font-mono text-[10px] font-medium uppercase tracking-widest text-[var(--color-text-muted)]">
-                {item.label}
-              </span>
-              <span className="font-display text-sm font-semibold text-[var(--color-text-primary)]">
-                {item.value}
-              </span>
-            </div>
-          ))}
         </div>
       </div>
     </section>

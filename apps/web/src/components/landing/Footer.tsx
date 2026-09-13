@@ -1,5 +1,11 @@
 import Link from "next/link";
 
+const FOOTER_LINKS = [
+  { label: "Playground", href: "/playground" },
+  { label: "Documentation", href: "/docs" },
+  { label: "Schema Builder", href: "/builder" },
+] as const;
+
 export function Footer() {
   return (
     <footer>
@@ -17,46 +23,32 @@ export function Footer() {
             >
               MockForge
             </span>
-            <p className="mt-3 max-w-xs text-sm leading-relaxed text-[var(--color-text-muted)]">
-              Local mock server for frontend teams, integration tests, and rapid prototypes.
+            <p className="mt-3 max-w-xs text-sm leading-relaxed text-[var(--color-text-primary)]">
+              A hosted mock API you call from your app. REST, GraphQL, WebSocket, and Socket.io from
+              one schema.
             </p>
           </div>
 
           <div>
             <p className="mb-4 font-mono text-xs font-medium uppercase tracking-[0.15em] text-[var(--color-text-muted)]">
-              Links
+              Product
             </p>
             <nav className="flex flex-col gap-2.5" aria-label="Footer">
-              <Link
-                href="/docs"
-                className="text-sm text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
-              >
-                Documentation
-              </Link>
-              <span
-                className="text-sm italic text-[var(--color-text-muted)]"
-                title="GitHub — coming soon"
-              >
-                GitHub — coming soon
-              </span>
-              <Link
-                href="/builder"
-                className="text-sm text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
-              >
-                Schema Builder
-              </Link>
-              <Link
-                href="/playground"
-                className="text-sm text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
-              >
-                Playground
-              </Link>
+              {FOOTER_LINKS.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="text-sm text-[var(--color-text-primary)] underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
+                >
+                  {link.label}
+                </Link>
+              ))}
             </nav>
           </div>
 
           <div className="flex flex-col justify-between sm:items-end sm:text-right">
             <p className="text-xs leading-relaxed text-[var(--color-text-muted)]">
-              No tracking. No ads. No nonsense.
+              Point your client at the public API. Playground is only for testing and exploration.
             </p>
             <p className="mt-8 font-mono text-xs text-[var(--color-text-muted)]">
               &copy; {new Date().getFullYear()} MockForge

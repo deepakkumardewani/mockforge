@@ -1,19 +1,20 @@
 import type { Metadata } from "next";
 
+const siteTitle = "MockForge — Hosted Mock API for Apps";
 const siteDescription =
-  "REST, GraphQL, WebSocket, and Socket.io mock server with 15 typed resources. Spin up locally and point your client — no signup required.";
+  "A hosted mock API with REST, GraphQL, WebSocket, and Socket.io over one schema and 15 typed resources. Call it directly from your app. No signup or API key required.";
 
 export const siteMetadata: Metadata = {
-  title: "MockForge — Fake Data API for Local Dev",
+  title: siteTitle,
   description: siteDescription,
   openGraph: {
-    title: "MockForge — Fake Data API for Local Dev",
+    title: siteTitle,
     description: siteDescription,
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "MockForge — Fake Data API for Local Dev",
+    title: siteTitle,
     description: siteDescription,
   },
 };

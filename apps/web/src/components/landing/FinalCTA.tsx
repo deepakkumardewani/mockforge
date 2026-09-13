@@ -5,12 +5,6 @@ import { useRevealOnScroll } from "./useRevealOnScroll";
 import { Section } from "./Section";
 import { SECTION_IDENTITY } from "./depth";
 
-const PROOF_POINTS = [
-  "Hosted Playground + Builder",
-  "Real-time WebSocket feeds",
-  "One schema, four protocols",
-] as const;
-
 export function FinalCTA() {
   const containerRef = useRevealOnScroll({
     selector: ".finalcta-animate",
@@ -22,58 +16,35 @@ export function FinalCTA() {
   return (
     <Section ref={containerRef} className={`${SECTION_IDENTITY.finalCta} py-20 sm:py-24`}>
       <div
-        className="finalcta-animate grid gap-8 overflow-hidden rounded-xl border border-[var(--color-border)] lg:grid-cols-[1.2fr_1fr] lg:gap-0"
+        className="finalcta-animate flex flex-col items-start justify-between gap-8 overflow-hidden rounded-xl border border-[var(--color-border)] px-8 py-10 sm:px-10 sm:py-12 lg:flex-row lg:items-center"
         style={{ background: "var(--color-surface-raised)" }}
       >
-        <div className="flex flex-col justify-center px-8 py-10 sm:px-10 sm:py-12">
+        <div className="max-w-xl">
           <h2 className="font-display text-[clamp(1.75rem,4vw,2.75rem)] font-bold leading-tight tracking-tight text-[var(--color-text-primary)]">
-            Stop stubbing. Start shipping.
+            Point your app at the hosted API
           </h2>
-          <p className="mt-4 max-w-md text-base leading-relaxed text-[var(--color-text-muted)]">
-            Fixtures drift. Typed endpoints stay in sync with your schema — no install step, no
-            hand-maintained stubs.
+          <p className="mt-4 text-base leading-relaxed text-[var(--color-text-muted)]">
+            No account and no API key. Docs cover the contract for each resource and protocol.
           </p>
-          <div className="mt-8">
-            <Link
-              href="/playground"
-              className="landing-btn-primary inline-flex rounded-lg px-8 py-3.5 text-base font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
-              style={{
-                background: "var(--color-accent)",
-                color: "var(--color-on-accent)",
-              }}
-            >
-              Open the Playground
-            </Link>
-          </div>
         </div>
-
-        <div
-          className="flex flex-col justify-center border-t border-[var(--color-border)] px-8 py-8 lg:border-t-0 lg:border-l lg:px-10"
-          style={{ background: "var(--color-surface)" }}
-        >
-          <p className="mb-4 font-mono text-[10px] font-semibold uppercase tracking-widest text-[var(--color-text-muted)]">
-            What you get
-          </p>
-          <ul className="space-y-3">
-            {PROOF_POINTS.map((point) => (
-              <li
-                key={point}
-                className="flex items-center gap-3 text-sm text-[var(--color-text-primary)]"
-              >
-                <span
-                  className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full font-mono text-[10px] font-bold"
-                  style={{
-                    background: "var(--color-accent-glow)",
-                    color: "var(--color-accent)",
-                  }}
-                  aria-hidden
-                >
-                  ✓
-                </span>
-                {point}
-              </li>
-            ))}
-          </ul>
+        <div className="flex flex-wrap gap-3">
+          <Link
+            href="/docs"
+            className="landing-btn-primary inline-flex rounded-lg px-8 py-3.5 text-base font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
+            style={{
+              background: "var(--color-accent)",
+              color: "var(--color-on-accent)",
+            }}
+          >
+            Read the Docs
+          </Link>
+          <Link
+            href="/playground"
+            className="landing-btn-secondary inline-flex rounded-lg border border-[var(--color-border)] px-8 py-3.5 text-base font-medium text-[var(--color-text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
+            style={{ background: "var(--color-surface)" }}
+          >
+            Explore in Playground
+          </Link>
         </div>
       </div>
     </Section>

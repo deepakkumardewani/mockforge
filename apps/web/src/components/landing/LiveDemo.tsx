@@ -63,10 +63,14 @@ type DemoEndpoint = (typeof DEMO_ENDPOINTS)[number];
 type DemoState =
   | { phase: "idle" }
   | { phase: "loading" }
-  | { phase: "success"; status: number; body: unknown }
+  | { phase: "success"; status: number; body: unknown; durationMs: number }
   | { phase: "error"; message: string };
 
-export function LiveDemo() {
+type LiveDemoProps = {
+  requestsServed?: number | null;
+};
+
+export function LiveDemo({ requestsServed = null }: LiveDemoProps) {
   const containerRef = useRevealOnScroll([
     { selector: ".livedemo-eyebrow", stagger: 0 },
     { selector: ".livedemo-heading" },
@@ -78,6 +82,7 @@ export function LiveDemo() {
   const [state, setState] = useState<DemoState>({ phase: "idle" });
   const [contentKey, setContentKey] = useState(0);
   const [successFlash, setSuccessFlash] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     if (state.phase !== "success") return;
@@ -88,13 +93,22 @@ export function LiveDemo() {
 
   async function runRequest() {
     setState({ phase: "loading" });
+    const startedAt = performance.now();
     try {
       const res = await fetch(`${API_BASE}${activeEndpoint.path}`);
       const body = await res.json();
-      setState({ phase: "success", status: res.status, body });
+      setState({
+        phase: "success",
+        status: res.status,
+        body,
+        durationMs: Math.round(performance.now() - startedAt),
+      });
       setContentKey((k) => k + 1);
     } catch {
-      setState({ phase: "error", message: "Failed to connect — is the mock server running?" });
+      setState({
+        phase: "error",
+        message: "Could not reach the mock API. Check the network connection and try again.",
+      });
     }
   }
 
@@ -102,7 +116,14 @@ export function LiveDemo() {
     if (endpoint.id === activeEndpoint.id) return;
     setActiveEndpoint(endpoint);
     setState({ phase: "idle" });
+    setCopied(false);
     setContentKey((k) => k + 1);
+  }
+
+  async function copyResponse(body: unknown) {
+    await navigator.clipboard.writeText(JSON.stringify(body, null, 2));
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   }
 
   const isLoading = state.phase === "loading";
@@ -118,13 +139,14 @@ export function LiveDemo() {
             className="livedemo-eyebrow mb-3 font-mono text-xs font-semibold uppercase tracking-widest"
             style={{ color: "var(--color-accent)" }}
           >
-            Live demo
+            Hosted endpoint
           </p>
           <h2 className="livedemo-heading font-display text-3xl font-extrabold tracking-tight text-[var(--color-text-primary)] sm:text-4xl">
-            Hit a live endpoint. See real JSON.
+            Run a live GET against the public mock API.
           </h2>
           <p className="livedemo-sub mt-4 text-base leading-relaxed text-[var(--color-text-muted)]">
-            Pick a resource, run a GET — the response is what your production client would receive.
+            Same public origin your client would call:{" "}
+            <code className="font-mono text-[var(--color-text-primary)]">{API_BASE}</code>
           </p>
         </div>
 
@@ -160,13 +182,18 @@ export function LiveDemo() {
                 {endpoint.label}
               </button>
             ))}
+            {requestsServed !== null && (
+              <p className="ml-auto font-mono text-[11px] text-[var(--color-text-muted)]">
+                Requests served: {new Intl.NumberFormat("en-US").format(requestsServed)}
+              </p>
+            )}
           </div>
 
           <div
             className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--color-border)] px-5 py-4"
             style={{ background: "var(--color-surface)" }}
           >
-            <div className="flex items-center gap-3 font-mono text-sm">
+            <div className="flex min-w-0 items-center gap-3 font-mono text-sm">
               <span
                 className="rounded px-2 py-0.5 text-xs font-bold"
                 style={{
@@ -176,7 +203,10 @@ export function LiveDemo() {
               >
                 {activeEndpoint.method}
               </span>
-              <span className="text-[var(--color-text-muted)]">{activeEndpoint.path}</span>
+              <span className="truncate text-[var(--color-text-primary)]">
+                {API_BASE}
+                {activeEndpoint.path}
+              </span>
             </div>
 
             <button
@@ -213,7 +243,7 @@ export function LiveDemo() {
                     Sample shape
                   </span>
                   <span className="text-xs text-[var(--color-text-muted)]">
-                    Illustrative — run the request for live data
+                    Typed records from the public API
                   </span>
                 </div>
                 <JsonView value={activeEndpoint.sample} maxHeightClassName="max-h-64" />
@@ -234,28 +264,47 @@ export function LiveDemo() {
 
             {state.phase === "success" && (
               <div key={`success-${contentKey}`} className="landing-content-enter space-y-3">
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                   <StatusPill httpStatus={state.status} />
                   <span className="text-xs text-[var(--color-text-muted)]">
-                    Real response from server
+                    Live response · {state.durationMs} ms
                   </span>
+                  <span className="sr-only" aria-live="polite">
+                    {copied ? "Response JSON copied to clipboard" : ""}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => copyResponse(state.body)}
+                    className="landing-btn-ghost ml-auto rounded px-2 py-1 text-xs font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
+                    style={{ color: copied ? "var(--color-accent)" : "var(--color-text-muted)" }}
+                  >
+                    {copied ? "Copied" : "Copy JSON"}
+                  </button>
                 </div>
                 <JsonView value={state.body} maxHeightClassName="max-h-72" />
               </div>
             )}
 
             {state.phase === "error" && (
-              <p
-                className="rounded-lg border px-4 py-3 text-sm"
-                style={{
-                  borderColor: "oklch(0.58 0.18 25 / 0.35)",
-                  background: "oklch(0.58 0.18 25 / 0.08)",
-                  color: "oklch(0.55 0.18 25)",
-                }}
-                role="alert"
-              >
-                {state.message}
-              </p>
+              <div className="space-y-3" role="alert">
+                <p
+                  className="rounded-lg border px-4 py-3 text-sm"
+                  style={{
+                    borderColor: "oklch(0.58 0.18 25 / 0.35)",
+                    background: "oklch(0.58 0.18 25 / 0.08)",
+                    color: "oklch(0.55 0.18 25)",
+                  }}
+                >
+                  {state.message}
+                </p>
+                <button
+                  type="button"
+                  onClick={runRequest}
+                  className="rounded-lg border border-[var(--color-border)] px-4 py-2 text-sm font-medium text-[var(--color-text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
+                >
+                  Retry request
+                </button>
+              </div>
             )}
           </div>
         </div>
