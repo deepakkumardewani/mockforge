@@ -3,13 +3,25 @@ title: GraphQL
 description: GraphQL API for querying and mutating MockForge data with a typed schema.
 ---
 
-MockForge provides a GraphQL API with the same 14 entities as the REST API. Send `POST` requests with a JSON body `{ "query": "...", "variables": { ... } }`. Mutations use the same generator + shallow-merge semantics as REST `POST` / `PUT` and do not persist.
+MockForge provides a GraphQL API with the same 14 entities as the REST API. Mutations use the same generator + shallow-merge semantics as REST `POST` / `PUT` and do not persist.
+
+## Endpoint
+
+```
+https://api.mockforge.dev/graphql
+```
+
+Send `POST` requests with a JSON body `{ "query": "...", "variables": { ... } }`.
+
+```bash
+curl -X POST https://api.mockforge.dev/graphql \
+  -H "Content-Type: application/json" \
+  -d '{"query":"{ users(limit: 2) { id firstName email } }"}'
+```
 
 ## Playground
 
-Try queries and mutations in the browser with no setup:
-
-**[/playground](/playground)** — open the GraphQL tab for an editor, variables panel, and live responses.
+The [Playground](/playground) GraphQL tab is optional: use it to try queries and mutations in the browser (editor, variables, live responses).
 
 ## Query structure
 
@@ -78,7 +90,7 @@ Naming: `create*`, `update*`, `delete*` in camelCase (e.g. `createUser`, `update
 - **Create / update** — optional scalar args are shallow-merged onto one generated row (same as REST body merge). Nested objects (e.g. cart `products`, recipe `ingredients`) are not overridable via separate GraphQL input types in this version; only top-level scalar fields on the mutation args apply.
 - **Delete** — returns `DeleteResult { deleted, id }`, matching REST `{ "deleted": true, "id": "..." }`.
 
-Existing demo mutations remain available: `createPost`, `updateTodo`.
+Existing mutations remain available: `createPost`, `updateTodo`.
 
 ### Examples
 

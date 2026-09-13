@@ -1,9 +1,21 @@
 ---
 title: MockForge Documentation
-description: Unified fake data API platform — REST, GraphQL, WebSockets, and Socket.io.
+description: Hosted fake data API — REST, GraphQL, WebSockets, and Socket.io. Call it from your app.
 ---
 
-MockForge is a unified fake data API platform. No signup required. Just send requests.
+MockForge is a **hosted API**. Point your app at the origin and send requests. No signup required.
+
+## Base URL
+
+```
+https://api.mockforge.dev
+```
+
+```bash
+curl https://api.mockforge.dev/api/products?limit=5
+```
+
+Call REST, GraphQL, WebSockets, and Socket.io directly from your application. The [Playground](/playground) is optional if you want to explore the same API in the browser.
 
 ## What's available
 
@@ -11,8 +23,8 @@ MockForge is a unified fake data API platform. No signup required. Just send req
 - **GraphQL** — same 14 entities via a typed GraphQL schema
 - **WebSockets** — live streams for stats, notifications, chat, stock ticker
 - **Socket.io** — same real-time data with automatic reconnection
-- **Custom Schemas** — define your own schema, get a dedicated endpoint
+- **Custom Schemas** — define your own schema, get a dedicated hosted endpoint
 
 ## Getting started
 
-Browse the sidebar to explore each protocol. Every section includes copy-paste examples.
+Send a request to the origin above, then browse the sidebar for protocol details and copy-paste examples.
