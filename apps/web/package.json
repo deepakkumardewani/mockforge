@@ -10,7 +10,8 @@
     "start": "next start",
     "lint": "oxlint --type-aware --ignore-pattern='next-env.d.ts'",
     "format": "oxfmt",
-    "typecheck": "tsc --noEmit",
+    "postinstall": "fumadocs-mdx",
+    "typecheck": "fumadocs-mdx && tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest --watch",
     "test:coverage": "vitest run --coverage"
