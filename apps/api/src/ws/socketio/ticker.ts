@@ -7,8 +7,6 @@ const TICK_INTERVAL_MS = 1000;
 const SYMBOL_COUNT = 10;
 
 export function registerTickerNamespace(ns: Namespace): void {
-  let connectedClients = 0;
-  let tickInterval: ReturnType<typeof setInterval> | null = null;
   let basePrices: Record<string, number> = {};
   let baseStocks: Stock[] = [];
 
@@ -23,33 +21,32 @@ export function registerTickerNamespace(ns: Namespace): void {
     });
   }
 
-  function startTicker(): void {
-    if (tickInterval) return;
-    baseStocks = generateStocks({ ...DEFAULT_WS_PARAMS, limit: SYMBOL_COUNT });
-    for (const s of baseStocks) basePrices[s.symbol] = s.price;
-
-    tickInterval = setInterval(() => {
-      const ticked = applyFluctuation(baseStocks);
-      ns.emit("tick", ticked);
-    }, TICK_INTERVAL_MS);
+  function emitTick(): void {
+    ns.emit("tick", applyFluctuation(baseStocks));
   }
 
-  function stopTicker(): void {
-    if (tickInterval) {
-      clearInterval(tickInterval);
-      tickInterval = null;
-      basePrices = {};
+  baseStocks = generateStocks({ ...DEFAULT_WS_PARAMS, limit: SYMBOL_COUNT });
+  for (const s of baseStocks) basePrices[s.symbol] = s.price;
+
+  setInterval(() => {
+    try {
+      if (ns.sockets.size === 0) return;
+      emitTick();
+    } catch (error) {
+      console.error("[sio/ticker] emit failed", error);
     }
-  }
+  }, TICK_INTERVAL_MS);
 
   ns.on("connection", (socket) => {
     console.log("Ticker Client connected");
-    connectedClients++;
-    if (connectedClients === 1) startTicker();
+    try {
+      socket.emit("tick", applyFluctuation(baseStocks));
+    } catch (error) {
+      console.error("[sio/ticker] start failed", error);
+    }
 
     socket.on("disconnect", () => {
-      connectedClients--;
-      if (connectedClients === 0) stopTicker();
+      // interval stays alive at namespace scope
     });
   });
 }

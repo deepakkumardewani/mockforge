@@ -34,6 +34,12 @@ export function handleWsUpgrade(req: Request, server: BunServer): Response | nul
       : new Response("WebSocket upgrade failed", { status: 500 });
   }
 
+  if (path === "/ws/chat" || path === "/ws/chat/") {
+    return server.upgrade(req, { data: { route: "chat", roomId: "default" } })
+      ? undefined
+      : new Response("WebSocket upgrade failed", { status: 500 });
+  }
+
   const chatMatch = path.match(/^\/ws\/chat\/(.+)$/);
   if (chatMatch) {
     const roomId = chatMatch[1];

@@ -38,6 +38,9 @@ function startBroadcast(): void {
   }, BROADCAST_INTERVAL_MS);
 }
 
+// Start outside websocket `open` so Bun cannot GC the interval with the handler.
+startBroadcast();
+
 export function stopBroadcast(): void {
   if (broadcastInterval) {
     clearInterval(broadcastInterval);
