@@ -26,20 +26,29 @@ function appendEvent(
   appendBoundedEvent(setEvents, direction, message, WS_CONSOLE_MAX_EVENTS);
 }
 
+export const DEFAULT_ENGINE_IO_PATH = "/socket.io";
+
 export type UseSocketIoConsoleOptions = {
   readonly url: string;
   readonly namespace: string;
   readonly listenEvent: string;
+  /** Engine.IO handshake path. Defaults to `/socket.io`. */
+  readonly path?: string;
 };
 
 function buildSocketUrl(baseUrl: string, namespace: string): string {
   const trimmedBase = baseUrl.trim().replace(/\/+$/, "");
   const ns = namespace.trim();
-  const path = ns.startsWith("/") ? ns : `/${ns}`;
-  return `${trimmedBase}${path}`;
+  const nsp = ns.startsWith("/") ? ns : `/${ns}`;
+  return `${trimmedBase}${nsp}`;
 }
 
-export function useSocketIoConsole({ url, namespace, listenEvent }: UseSocketIoConsoleOptions) {
+export function useSocketIoConsole({
+  url,
+  namespace,
+  listenEvent,
+  path = DEFAULT_ENGINE_IO_PATH,
+}: UseSocketIoConsoleOptions) {
   const [status, setStatus] = useState<WsConnectionStatus>("idle");
   const [events, setEvents] = useState<WsConsoleEvent[]>([]);
   const socketRef = useRef<Socket | null>(null);
@@ -67,7 +76,8 @@ export function useSocketIoConsole({ url, namespace, listenEvent }: UseSocketIoC
     setStatus("connecting");
     let socket: Socket;
     try {
-      socket = io(target, { reconnection: false, path: "/socket.io" });
+      const enginePath = path.trim() || DEFAULT_ENGINE_IO_PATH;
+      socket = io(target, { reconnection: false, path: enginePath });
     } catch {
       setStatus("error");
       return;
@@ -105,7 +115,7 @@ export function useSocketIoConsole({ url, namespace, listenEvent }: UseSocketIoC
           : `${listen}(${typeof payload === "string" ? payload : JSON.stringify(payload)})`;
       appendEvent(setEvents, "in", formatted);
     });
-  }, [url, namespace, listenEvent, disconnect]);
+  }, [url, namespace, listenEvent, path, disconnect]);
 
   const emit = useCallback((eventName: string, payloadJson: string) => {
     const name = eventName.trim();

@@ -17,14 +17,42 @@ export type SchemaFieldType = (typeof SCHEMA_FIELD_TYPES)[number];
 
 export const schemaFieldTypeSchema = z.enum(SCHEMA_FIELD_TYPES);
 
-export const builderFieldSchema = z.object({
-  name: z.string().min(1, "Field name is required"),
-  type: schemaFieldTypeSchema,
-  values: z.string().optional(),
-  items: schemaFieldTypeSchema.optional(),
-  min: z.number().optional(),
-  max: z.number().optional(),
-});
+const optionalNumber = z.preprocess(
+  (value) => (typeof value === "number" && Number.isNaN(value) ? undefined : value),
+  z.number().optional(),
+);
+
+export const builderFieldSchema = z
+  .object({
+    name: z.string().min(1, "Field name is required"),
+    type: schemaFieldTypeSchema,
+    values: z.string().optional(),
+    items: schemaFieldTypeSchema.optional(),
+    min: optionalNumber,
+    max: optionalNumber,
+  })
+  .superRefine((field, ctx) => {
+    if (
+      field.type === "enum" &&
+      !(field.values ?? "")
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean).length
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Field type "enum" requires a non-empty "values" array',
+        path: ["values"],
+      });
+    }
+    if (field.type === "array" && (!field.items || field.items === "array")) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Field type "array" requires an "items" type (cannot be "array")',
+        path: ["items"],
+      });
+    }
+  });
 
 export const builderFormValuesSchema = z.object({
   name: z.string().min(1, "Schema name is required"),

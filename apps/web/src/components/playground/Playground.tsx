@@ -48,9 +48,9 @@ export function Playground() {
   );
 
   return (
-    <main className="playground-scope flex h-screen max-w-[100vw] flex-col overflow-hidden lg:flex-row">
+    <main className="playground-scope flex h-full min-h-0 max-w-[100vw] flex-col overflow-hidden lg:flex-row">
       <ProtocolRail active={protocol} onChange={setProtocol} />
-      <div className="flex min-w-0 flex-1 flex-col overflow-hidden px-4 pt-4 lg:px-5">
+      <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden px-4 pt-4 lg:px-5">
         <div className="flex w-full min-w-0 flex-1 flex-col overflow-hidden">
           <div
             hidden={!panelVisibility.rest}

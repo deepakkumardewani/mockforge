@@ -10,6 +10,8 @@ export interface RequestCardTab {
 }
 
 export interface RequestCardProps {
+  /** Realtime panels use a flat workbench instead of a nested card. */
+  readonly variant?: "card" | "workbench";
   /** Muted subtitle shown under the (optional) title — typically endpoint/protocol info */
   readonly subtitle?: ReactNode;
   /** "Examples" preset row (a PresetPicker), rendered above the request bar */
@@ -39,11 +41,16 @@ export function RequestCard({
   requestBar,
   tabs,
   examplesLabel = "Examples",
+  variant = "card",
 }: RequestCardProps) {
   const defaultTabId = tabs[0]?.id;
+  const containerClassName =
+    variant === "workbench"
+      ? "flex min-h-0 flex-1 flex-col gap-4"
+      : "flex min-h-0 flex-1 flex-col gap-6 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-raised)] p-4";
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col gap-6 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-raised)] p-4">
+    <div className={containerClassName}>
       <div className="flex flex-col gap-2">
         <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--color-text-muted)]">
           {examplesLabel}

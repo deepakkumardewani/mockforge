@@ -1,3 +1,4 @@
+import { Geist, Geist_Mono } from "next/font/google";
 import { DocsLayout } from "fumadocs-ui/layouts/docs";
 import type { ReactNode } from "react";
 import { AppHeader } from "@/components/navigation/AppHeader";
@@ -7,9 +8,19 @@ import { DOCS_HREF } from "@/lib/nav-links";
 import "fumadocs-ui/style.css";
 import "./docs-theme.css";
 
+const docsSans = Geist({
+  subsets: ["latin"],
+  variable: "--font-docs-sans",
+});
+
+const docsMono = Geist_Mono({
+  subsets: ["latin"],
+  variable: "--font-docs-mono",
+});
+
 export default function Layout({ children }: { children: ReactNode }) {
   return (
-    <div className="flex min-h-dvh flex-col">
+    <div className={`docs-shell flex min-h-dvh flex-col ${docsSans.variable} ${docsMono.variable}`}>
       <AppHeader />
       <div className="min-h-0 flex-1">
         <RootProvider

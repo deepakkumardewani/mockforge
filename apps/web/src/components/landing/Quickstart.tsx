@@ -180,7 +180,7 @@ export function Quickstart() {
           </p>
           <div className="mt-4 flex flex-wrap items-center gap-3">
             <Link
-              href="/docs/getting-started/quickstart"
+              href="/docs/getting-started"
               className="landing-btn-primary inline-flex rounded-lg px-6 py-2.5 text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
               style={{
                 background: "var(--color-accent)",

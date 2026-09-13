@@ -2,6 +2,7 @@ export const HOME_HREF = "/" as const;
 export const DOCS_HREF = "/docs" as const;
 export const PLAYGROUND_HREF = "/playground" as const;
 export const BUILDER_HREF = "/builder" as const;
+export const GITHUB_HREF = "https://github.com/deepakkumardewani/mockforge" as const;
 
 export type AppNavMatch = "exact" | "prefix";
 

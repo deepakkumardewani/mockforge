@@ -6,6 +6,20 @@ const withMDX = createMDX();
 const nextConfig = {
   transpilePackages: ["@mockforge/types"],
   reactStrictMode: true,
+  async redirects() {
+    return [
+      {
+        source: "/docs/rate-limits",
+        destination: "/docs/identity",
+        permanent: true,
+      },
+      {
+        source: "/docs/getting-started/quickstart",
+        destination: "/docs/getting-started",
+        permanent: true,
+      },
+    ];
+  },
   // Tree-shake barrel imports so only used modules ship to the client.
   experimental: {
     optimizePackageImports: [

@@ -1,67 +1,13 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { coerceToFormValues, formValuesToJsonPayload } from "./schema-convert";
 import { builderFormValuesSchema } from "./types";
-import type { BuilderFormValues, SchemaFieldForApi } from "./types";
+import type { BuilderFormValues } from "./types";
 
 interface Props {
   formValues: BuilderFormValues;
   onApply: (values: BuilderFormValues) => void;
-}
-
-function formValuesToApiJson(values: BuilderFormValues): object {
-  return {
-    name: values.name,
-    fields: values.fields.map((f) => {
-      const field: SchemaFieldForApi = { name: f.name, type: f.type };
-      if (f.type === "enum" && f.values) {
-        field.values = f.values
-          .split(",")
-          .map((s) => s.trim())
-          .filter(Boolean);
-      }
-      if (f.type === "array" && f.items) {
-        field.items = f.items;
-      }
-      if (f.type === "number") {
-        if (f.min !== undefined && !isNaN(f.min)) field.min = f.min;
-        if (f.max !== undefined && !isNaN(f.max)) field.max = f.max;
-      }
-      return field;
-    }),
-  };
-}
-
-function coerceToFormValues(raw: unknown): BuilderFormValues | null {
-  if (typeof raw !== "object" || raw === null) return null;
-
-  const obj = raw as Record<string, unknown>;
-  if (typeof obj.name !== "string" || !Array.isArray(obj.fields)) return null;
-
-  const fields = obj.fields.map((f: unknown) => {
-    if (typeof f !== "object" || f === null) return null;
-    const field = f as Record<string, unknown>;
-    return {
-      name: typeof field.name === "string" ? field.name : "",
-      type: (typeof field.type === "string"
-        ? field.type
-        : "string") as BuilderFormValues["fields"][0]["type"],
-      values: Array.isArray(field.values)
-        ? field.values.join(", ")
-        : typeof field.values === "string"
-          ? field.values
-          : undefined,
-      items: (typeof field.items === "string"
-        ? field.items
-        : undefined) as BuilderFormValues["fields"][0]["items"],
-      min: typeof field.min === "number" ? field.min : undefined,
-      max: typeof field.max === "number" ? field.max : undefined,
-    };
-  });
-
-  if (fields.some((f) => f === null)) return null;
-
-  return { name: obj.name, fields: fields as BuilderFormValues["fields"] };
 }
 
 function jsonToFormValues(json: string): BuilderFormValues | null {
@@ -86,7 +32,7 @@ export function JsonEditor({ formValues, onApply }: Props) {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    setText(JSON.stringify(formValuesToApiJson(formValues), null, 2));
+    setText(JSON.stringify(formValuesToJsonPayload(formValues), null, 2));
     setError(null);
   }, [formValues]);
 
@@ -120,22 +66,32 @@ export function JsonEditor({ formValues, onApply }: Props) {
 
   return (
     <div className="space-y-3">
+      <label htmlFor="builder-json-editor" className="sr-only">
+        Schema JSON
+      </label>
       <textarea
+        id="builder-json-editor"
         value={text}
         onChange={(e) => {
           setText(e.target.value);
           setError(null);
         }}
-        className="w-full h-64 rounded-lg border border-[var(--color-border)] bg-[var(--color-code-bg)] px-4 py-3 font-mono text-sm text-[var(--color-code-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)] resize-y"
+        aria-invalid={Boolean(error)}
+        aria-describedby={error ? "builder-json-editor-error" : undefined}
+        className="h-80 w-full resize-y rounded-lg border border-[var(--color-border)] bg-[var(--color-code-bg)] px-4 py-3 font-mono text-sm leading-relaxed text-[var(--color-code-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]"
         spellCheck={false}
       />
-      {error && <p className="text-sm text-red-500">{error}</p>}
+      {error && (
+        <p id="builder-json-editor-error" role="alert" className="text-sm text-red-500">
+          {error}
+        </p>
+      )}
       <button
         type="button"
         onClick={handleApply}
-        className="rounded-lg bg-[var(--color-accent)] px-4 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90"
+        className="rounded-lg bg-[var(--color-accent)] px-4 py-2 text-sm font-medium text-[var(--color-on-accent)] transition-opacity hover:opacity-90"
       >
-        Apply JSON
+        Apply and return to form
       </button>
     </div>
   );

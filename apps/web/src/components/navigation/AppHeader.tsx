@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { BrandLogo } from "@/components/navigation/BrandLogo";
-import { APP_NAV_LINKS, HOME_HREF, isAppNavActive } from "@/lib/nav-links";
+import { APP_NAV_LINKS, GITHUB_HREF, HOME_HREF, isAppNavActive } from "@/lib/nav-links";
 
 const FOCUS_RING =
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]";
@@ -47,7 +47,7 @@ export function AppHeader() {
           <DesktopNav pathname={pathname} />
         </div>
         <div className="app-header-actions">
-          <GitHubComingSoon />
+          <GitHubLink />
           <ThemeToggle className={GHOST_ICON_CLASS} />
           <button
             type="button"
@@ -123,9 +123,15 @@ function MobileMenu({ pathname, onNavigate }: { pathname: string; onNavigate: ()
   );
 }
 
-function GitHubComingSoon() {
+function GitHubLink() {
   return (
-    <span className={`${GHOST_ICON_CLASS} cursor-default`} title="GitHub — coming soon">
+    <a
+      href={GITHUB_HREF}
+      className={GHOST_ICON_CLASS}
+      target="_blank"
+      rel="noopener noreferrer"
+      title="GitHub"
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="18"
@@ -140,8 +146,8 @@ function GitHubComingSoon() {
       >
         <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
       </svg>
-      <span className="sr-only">GitHub — coming soon</span>
-    </span>
+      <span className="sr-only">GitHub</span>
+    </a>
   );
 }
 

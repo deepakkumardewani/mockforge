@@ -6,9 +6,9 @@ import { RequestCard } from "@/components/playground/shared/RequestCard";
 import { SOCKETIO_EMIT_PRESETS, SOCKETIO_PRESETS } from "@/components/playground/shared/presets";
 import { EventLog } from "@/components/playground/shared/EventLog";
 import {
-  PLAYGROUND_PANEL_GRID,
-  PLAYGROUND_PANEL_LEFT,
-  PLAYGROUND_PANEL_RIGHT,
+  PLAYGROUND_PANEL_STACK,
+  PLAYGROUND_PANEL_STACK_CONTROLS,
+  PLAYGROUND_PANEL_STACK_LOG,
 } from "@/components/playground/shared/panel-layout";
 import { useSocketIoConsole } from "@/hooks/use-socketio-console";
 import { getSocketIoBaseUrl } from "@/lib/playground-env";
@@ -98,6 +98,7 @@ export function SocketIoPanel() {
                     presets={emitPresets}
                     onSelect={onEmitPresetSelect}
                     ariaLabel="Socket.IO emit presets"
+                    density="inline"
                   />
                 </div>
               ) : null}
@@ -118,9 +119,10 @@ export function SocketIoPanel() {
 
   return (
     <div ref={panelRef} className="flex h-full min-h-0 flex-col">
-      <div className={PLAYGROUND_PANEL_GRID}>
-        <div className={PLAYGROUND_PANEL_LEFT}>
+      <div className={PLAYGROUND_PANEL_STACK}>
+        <div className={PLAYGROUND_PANEL_STACK_CONTROLS}>
           <RequestCard
+            variant="workbench"
             examplesLabel="Scenario"
             subtitle={selectedPreset?.description}
             presets={
@@ -129,6 +131,7 @@ export function SocketIoPanel() {
                 onSelect={onPresetSelect}
                 selectedId={selectedPresetId}
                 ariaLabel="Socket.IO example presets"
+                density="inline"
               />
             }
             requestBar={
@@ -145,7 +148,7 @@ export function SocketIoPanel() {
           />
         </div>
 
-        <div className={PLAYGROUND_PANEL_RIGHT}>
+        <div className={PLAYGROUND_PANEL_STACK_LOG}>
           <EventLog events={events} onClear={clear} emptyHint={sioEmptyHint(selectedPresetId)} />
         </div>
       </div>

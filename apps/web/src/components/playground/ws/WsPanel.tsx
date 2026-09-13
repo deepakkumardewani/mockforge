@@ -8,9 +8,9 @@ import { ConnectionBar } from "@/components/playground/ws/ConnectionBar";
 import { MessageComposer } from "@/components/playground/ws/MessageComposer";
 import { EventLog } from "@/components/playground/shared/EventLog";
 import {
-  PLAYGROUND_PANEL_GRID,
-  PLAYGROUND_PANEL_LEFT,
-  PLAYGROUND_PANEL_RIGHT,
+  PLAYGROUND_PANEL_STACK,
+  PLAYGROUND_PANEL_STACK_CONTROLS,
+  PLAYGROUND_PANEL_STACK_LOG,
 } from "@/components/playground/shared/panel-layout";
 import { PLAYGROUND_WS_URL } from "@/components/playground/ws/playground-ws-url";
 import { useWsConsole } from "@/hooks/use-ws-console";
@@ -78,6 +78,7 @@ export function WsPanel() {
                     presets={messagePresets}
                     onSelect={onMessagePresetSelect}
                     ariaLabel="WebSocket message presets"
+                    density="inline"
                   />
                 </div>
               ) : null}
@@ -94,10 +95,11 @@ export function WsPanel() {
     : [];
 
   return (
-    <div ref={panelRef} className="flex h-full min-h-0 flex-col gap-4">
-      <div className={PLAYGROUND_PANEL_GRID}>
-        <div className={PLAYGROUND_PANEL_LEFT}>
+    <div ref={panelRef} className="flex h-full min-h-0 flex-col">
+      <div className={PLAYGROUND_PANEL_STACK}>
+        <div className={PLAYGROUND_PANEL_STACK_CONTROLS}>
           <RequestCard
+            variant="workbench"
             examplesLabel="Scenario"
             subtitle={selectedPreset?.description}
             presets={
@@ -106,6 +108,7 @@ export function WsPanel() {
                 onSelect={onEndpointPresetSelect}
                 selectedId={selectedPresetId}
                 ariaLabel="WebSocket endpoint presets"
+                density="inline"
               />
             }
             requestBar={
@@ -120,7 +123,7 @@ export function WsPanel() {
           />
         </div>
 
-        <div className={PLAYGROUND_PANEL_RIGHT}>
+        <div className={PLAYGROUND_PANEL_STACK_LOG}>
           <EventLog events={events} onClear={clear} emptyHint={wsEmptyHint(selectedPresetId)} />
         </div>
       </div>

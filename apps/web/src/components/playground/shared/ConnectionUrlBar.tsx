@@ -26,23 +26,23 @@ export function ConnectionUrlBar({
   meta,
 }: ConnectionUrlBarProps) {
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-1.5">
       <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--color-text-muted)]">
         Connect to
       </span>
-      <div className="flex items-stretch gap-2">
-        <div
-          data-url-field
-          className="flex min-w-0 flex-1 flex-col justify-center rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2 focus-within:border-[var(--color-accent)]"
-        >
-          <p className="break-all font-mono text-sm leading-snug text-[var(--color-text-primary)]">
+      <div className="flex flex-col gap-3 border-y border-[var(--color-border)] py-3 sm:flex-row sm:items-center">
+        <div data-url-field className="flex min-w-0 flex-1 flex-col justify-center">
+          <p
+            title={url}
+            className="break-all font-mono text-sm leading-snug text-[var(--color-text-primary)]"
+          >
             {url}
           </p>
           {meta ? (
             <p className="mt-1 text-[11px] leading-snug text-[var(--color-text-muted)]">{meta}</p>
           ) : null}
         </div>
-        <div className="flex shrink-0 items-center gap-2">
+        <div className="flex shrink-0 items-center justify-end gap-2">
           <ConnectionLiveDot state={status} />
           <ConnectionControls status={status} onConnect={onConnect} onDisconnect={onDisconnect} />
         </div>

@@ -1,9 +1,11 @@
 import Link from "next/link";
+import { GITHUB_HREF } from "@/lib/nav-links";
 
 const FOOTER_LINKS = [
   { label: "Playground", href: "/playground" },
   { label: "Documentation", href: "/docs" },
   { label: "Schema Builder", href: "/builder" },
+  { label: "GitHub", href: GITHUB_HREF, external: true },
 ] as const;
 
 export function Footer() {
@@ -34,15 +36,28 @@ export function Footer() {
               Product
             </p>
             <nav className="flex flex-col gap-2.5" aria-label="Footer">
-              {FOOTER_LINKS.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="text-sm text-[var(--color-text-primary)] underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
-                >
-                  {link.label}
-                </Link>
-              ))}
+              {FOOTER_LINKS.map((link) => {
+                const className =
+                  "text-sm text-[var(--color-text-primary)] underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2";
+                if ("external" in link && link.external) {
+                  return (
+                    <a
+                      key={link.href}
+                      href={link.href}
+                      className={className}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {link.label}
+                    </a>
+                  );
+                }
+                return (
+                  <Link key={link.href} href={link.href} className={className}>
+                    {link.label}
+                  </Link>
+                );
+              })}
             </nav>
           </div>
 
