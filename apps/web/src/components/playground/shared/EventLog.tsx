@@ -1,9 +1,13 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { WsConsoleEvent } from "@/hooks/use-ws-console";
+import { formatJson } from "@/components/playground/shared/json";
 
 const BOTTOM_EPS_PX = 48;
+
+/** Socket.IO entries are logged as `name(payload)` / `name()`; WS entries never match this shape. */
+const SOCKET_EVENT_PATTERN = /^([\w.:-]+)\(([\s\S]*)\)$/;
 
 function formatLogTimestamp(at: number): string {
   const d = new Date(at);
@@ -14,38 +18,116 @@ function formatLogTimestamp(at: number): string {
   return `${hh}:${mm}:${ss}.${ms}`;
 }
 
+interface ParsedEntry {
+  readonly eventName: string | null;
+  readonly body: string;
+}
+
+function parseEntryMessage(message: string): ParsedEntry {
+  const match = message.match(SOCKET_EVENT_PATTERN);
+  // Plain WS frames carry the payload directly; pretty-print them too so JSON
+  // frames are readable rather than one long line.
+  if (!match) return { eventName: null, body: formatJson(message) };
+  const [, eventName, payload] = match;
+  return { eventName, body: payload.length > 0 ? formatJson(payload) : "" };
+}
+
 export interface EventLogProps {
   readonly events: readonly WsConsoleEvent[];
   readonly emptyHint?: string;
+  /** Clears the log; the toolbar's Clear button hides itself when this isn't wired. */
+  readonly onClear?: () => void;
 }
 
-export function EventLog({ events, emptyHint = "Connect to see messages." }: EventLogProps) {
+function EventLogToolbar({
+  count,
+  isPaused,
+  onClear,
+}: {
+  count: number;
+  isPaused: boolean;
+  onClear?: () => void;
+}) {
+  return (
+    <div className="flex shrink-0 items-center justify-between gap-2 border-b border-[var(--color-border)] px-3 py-2">
+      <div className="flex items-center gap-2">
+        <p className="text-xs font-medium text-[var(--color-text-muted)]">Event log</p>
+        <span className="rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] px-1.5 py-0.5 text-[10px] font-semibold tabular-nums text-[var(--color-text-muted)]">
+          {count}
+        </span>
+        {isPaused ? (
+          <span className="text-[10px] font-medium text-[var(--color-accent)]">
+            Autoscroll paused
+          </span>
+        ) : null}
+      </div>
+      {onClear ? (
+        <button
+          type="button"
+          onClick={onClear}
+          className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-2 py-1 text-xs font-medium text-[var(--color-text-primary)] outline-none transition-colors hover:bg-[var(--color-surface-hover)]"
+        >
+          Clear
+        </button>
+      ) : null}
+    </div>
+  );
+}
+
+function EventEntryBody({ message }: { message: string }) {
+  const { eventName, body } = parseEntryMessage(message);
+
+  if (eventName === null) {
+    return (
+      <pre className="m-0 max-h-48 overflow-auto whitespace-pre-wrap break-words px-3 py-2.5 font-mono text-xs leading-relaxed text-[var(--color-text-primary)]">
+        {body}
+      </pre>
+    );
+  }
+
+  return (
+    <div className="px-3 py-2.5">
+      <span className="mb-1.5 inline-flex items-center rounded-full border border-[var(--color-accent)]/40 bg-[var(--color-accent-glow)] px-2 py-0.5 font-mono text-[10px] font-semibold text-[var(--color-accent)]">
+        {eventName}
+      </span>
+      {body ? (
+        <pre className="m-0 max-h-48 overflow-auto whitespace-pre-wrap break-words font-mono text-xs leading-relaxed text-[var(--color-text-primary)]">
+          {body}
+        </pre>
+      ) : null}
+    </div>
+  );
+}
+
+export function EventLog({
+  events,
+  emptyHint = "Connect to see messages.",
+  onClear,
+}: EventLogProps) {
   const scrollerRef = useRef<HTMLDivElement | null>(null);
-  const pinnedToBottomRef = useRef(true);
   const lastLengthRef = useRef(0);
+  const [isPaused, setIsPaused] = useState(false);
 
   useEffect(() => {
     const el = scrollerRef.current;
     if (!el) return;
 
-    if (events.length > lastLengthRef.current && pinnedToBottomRef.current) {
+    if (events.length > lastLengthRef.current && !isPaused) {
       el.scrollTop = el.scrollHeight;
     }
     lastLengthRef.current = events.length;
-  }, [events]);
+  }, [events, isPaused]);
 
   function onScroll() {
     const el = scrollerRef.current;
     if (!el) return;
     const distanceFromBottom = el.scrollHeight - el.scrollTop - el.clientHeight;
-    pinnedToBottomRef.current = distanceFromBottom <= BOTTOM_EPS_PX;
+    setIsPaused(distanceFromBottom > BOTTOM_EPS_PX);
   }
 
   return (
     <div className="flex h-full min-h-[12rem] min-w-0 flex-col overflow-hidden rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-raised)]">
-      <div className="shrink-0 border-b border-[var(--color-border)] px-3 py-2">
-        <p className="text-xs font-medium text-[var(--color-text-muted)]">Event log</p>
-      </div>
+      <EventLogToolbar count={events.length} isPaused={isPaused} onClear={onClear} />
       <div
         ref={scrollerRef}
         onScroll={onScroll}
@@ -86,9 +168,7 @@ export function EventLog({ events, emptyHint = "Connect to see messages." }: Eve
                         {isIn ? "← In" : "→ Out"}
                       </span>
                     </div>
-                    <pre className="m-0 max-h-48 overflow-auto whitespace-pre-wrap break-words px-3 py-2.5 font-mono text-xs leading-relaxed text-[var(--color-text-primary)]">
-                      {e.message}
-                    </pre>
+                    <EventEntryBody message={e.message} />
                   </article>
                 </li>
               );

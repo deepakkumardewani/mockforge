@@ -1,3 +1,6 @@
+import { playgroundWsUrl } from "@/components/playground/ws/playground-ws-url";
+import { getSocketIoBaseUrl } from "@/lib/playground-env";
+
 /** Static demo catalogue — must match playground spec § Pre-seeded Demo Presets. */
 
 export type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
@@ -21,26 +24,34 @@ export type GraphqlPreset = {
 export type WsPreset = {
   readonly id: string;
   readonly label: string;
+  readonly description: string;
   readonly url: string;
+  readonly acceptsOutbound: boolean;
 };
 
 export type WsMessagePreset = {
   readonly id: string;
   readonly label: string;
+  readonly description: string;
+  readonly forEndpointIds: readonly string[];
   readonly message: string;
 };
 
 export type SocketIoPreset = {
   readonly id: string;
   readonly label: string;
+  readonly description: string;
   readonly baseUrl: string;
   readonly namespace: string;
   readonly event: string;
+  readonly acceptsOutbound: boolean;
 };
 
 export type SocketIoEmitPreset = {
   readonly id: string;
   readonly label: string;
+  readonly description: string;
+  readonly forEndpointIds: readonly string[];
   readonly event: string;
   /** JSON payload string; empty string means no payload */
   readonly payload: string;
@@ -154,51 +165,82 @@ export const GRAPHQL_PRESETS: readonly GraphqlPreset[] = [
 ];
 
 export const WS_PRESETS: readonly WsPreset[] = [
-  { id: "ws-stats", label: "Stats feed", url: "ws://localhost:4000/ws/stats" },
-  { id: "ws-chat", label: "Chat", url: "ws://localhost:4000/ws/chat" },
+  {
+    id: "ws-stats",
+    label: "Stats feed",
+    description: "Live counters. After ~30s the server pings; send pong or it disconnects.",
+    url: playgroundWsUrl("/ws/stats"),
+    acceptsOutbound: true,
+  },
+  {
+    id: "ws-chat",
+    label: "Chat",
+    description:
+      "Connect, then send a chat payload from Message. Server also posts random room messages.",
+    url: playgroundWsUrl("/ws/chat/playground"),
+    acceptsOutbound: true,
+  },
   {
     id: "ws-notifications",
     label: "Notifications",
-    url: "ws://localhost:4000/ws/notifications",
+    description: "Server pushes a new alert about every 2s. Outbound messages are ignored.",
+    url: playgroundWsUrl("/ws/notifications"),
+    acceptsOutbound: false,
   },
-  { id: "ws-ticker", label: "Ticker", url: "ws://localhost:4000/ws/ticker" },
+  {
+    id: "ws-ticker",
+    label: "Ticker",
+    description: "Stock ticks every second. Outbound messages are ignored.",
+    url: playgroundWsUrl("/ws/ticker"),
+    acceptsOutbound: false,
+  },
 ];
 
-/** Sample outbound payloads for the playground WS composer (fixed ticker endpoint). */
+/** Sample outbound payloads for the playground WS composer. */
 export const WS_MESSAGE_PRESETS: readonly WsMessagePreset[] = [
-  { id: "ws-msg-ping", label: "Pong reply", message: "pong" },
+  {
+    id: "ws-msg-ping",
+    label: "Pong reply",
+    description: "Sends the text pong (keeps the stats socket alive).",
+    forEndpointIds: ["ws-stats"],
+    message: "pong",
+  },
   {
     id: "ws-msg-chat",
     label: "Chat JSON",
+    description: "Posts a chat message to the room.",
+    forEndpointIds: ["ws-chat"],
     message: JSON.stringify({ text: "Hello from playground", userId: 1 }),
   },
-  { id: "ws-msg-type", label: "Typed ping", message: JSON.stringify({ type: "ping" }) },
 ];
-
-export const WS_TICKER_ENDPOINT_INFO =
-  "Streams live stock price updates every second (server-push; sent messages are ignored on this endpoint).";
 
 export const SOCKETIO_PRESETS: readonly SocketIoPreset[] = [
   {
     id: "sio-chat",
     label: "Chat",
-    baseUrl: "http://localhost:4001",
+    description: "Connect, then emit a chat message. Server also posts room messages.",
+    baseUrl: getSocketIoBaseUrl(),
     namespace: "/chat",
     event: "message",
+    acceptsOutbound: true,
   },
   {
     id: "sio-notifications",
     label: "Notifications",
-    baseUrl: "http://localhost:4001",
+    description: "Server pushes a new alert about every 2s. Outbound emits are ignored.",
+    baseUrl: getSocketIoBaseUrl(),
     namespace: "/notifications",
-    event: "notify",
+    event: "notification",
+    acceptsOutbound: false,
   },
   {
     id: "sio-ticker",
     label: "Ticker",
-    baseUrl: "http://localhost:4001",
+    description: "Stock ticks every second. Outbound emits are ignored.",
+    baseUrl: getSocketIoBaseUrl(),
     namespace: "/ticker",
     event: "tick",
+    acceptsOutbound: false,
   },
 ];
 
@@ -207,21 +249,9 @@ export const SOCKETIO_EMIT_PRESETS: readonly SocketIoEmitPreset[] = [
   {
     id: "sio-emit-chat",
     label: "Chat message",
+    description: "Emits message with text + userId.",
+    forEndpointIds: ["sio-chat"],
     event: "message",
     payload: JSON.stringify({ text: "Hello from playground", userId: 1 }),
   },
-  { id: "sio-emit-ping", label: "Ping", event: "ping", payload: "" },
-  {
-    id: "sio-emit-subscribe",
-    label: "Subscribe",
-    event: "subscribe",
-    payload: JSON.stringify({ symbols: ["AAPL", "GOOG"] }),
-  },
 ];
-
-export const SOCKETIO_NAMESPACE_INFO: Readonly<Record<string, string>> = {
-  "/ticker": "Emits tick events every second with live stock price updates (listen on tick).",
-  "/chat": "Broadcasts chat messages in a room; emit message to post and receive auto-replies.",
-  "/notifications":
-    "Pushes notification events every few seconds after connect (listen on notification).",
-};

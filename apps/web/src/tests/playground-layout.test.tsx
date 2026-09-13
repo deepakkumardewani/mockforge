@@ -1,3 +1,4 @@
+import { useSyncExternalStore } from "react";
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -14,6 +15,33 @@ import {
 vi.mock("@/hooks/use-mf-id", () => ({
   useMfId: () => null,
 }));
+
+// Minimal stateful router mock: `replace` updates a shared search-params store
+// so components using `useSearchParams` re-render, mirroring real app-router behavior.
+vi.mock("next/navigation", () => {
+  let search = new URLSearchParams();
+  const listeners = new Set<() => void>();
+  const notify = () => listeners.forEach((listener) => listener());
+
+  return {
+    useRouter: () => ({
+      replace: (url: string) => {
+        const queryIndex = url.indexOf("?");
+        search = new URLSearchParams(queryIndex >= 0 ? url.slice(queryIndex + 1) : "");
+        notify();
+      },
+    }),
+    usePathname: () => "/playground",
+    useSearchParams: () =>
+      useSyncExternalStore(
+        (onStoreChange) => {
+          listeners.add(onStoreChange);
+          return () => listeners.delete(onStoreChange);
+        },
+        () => search,
+      ),
+  };
+});
 
 function renderPlayground() {
   return render(

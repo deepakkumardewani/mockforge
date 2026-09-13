@@ -1,25 +1,17 @@
 "use client";
 
 import { useEffect } from "react";
+import { CodeEditor } from "@/components/playground/shared/CodeEditor";
+import { isJsonValid } from "../shared/json";
 
 export interface BodyEditorProps {
   value: string;
   onChange: (value: string) => void;
   onValidityChange: (valid: boolean) => void;
+  onSubmit?: () => void;
 }
 
-function isJsonValid(body: string): boolean {
-  const trimmed = body.trim();
-  if (trimmed.length === 0) return true;
-  try {
-    JSON.parse(trimmed);
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-export function BodyEditor({ value, onChange, onValidityChange }: BodyEditorProps) {
+export function BodyEditor({ value, onChange, onValidityChange, onSubmit }: BodyEditorProps) {
   const valid = isJsonValid(value);
 
   useEffect(() => {
@@ -41,12 +33,8 @@ export function BodyEditor({ value, onChange, onValidityChange }: BodyEditorProp
   };
 
   return (
-    <section
-      className="flex min-h-0 flex-1 flex-col rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-raised)] p-4"
-      aria-label="Request body"
-    >
-      <div className="mb-3 flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-[var(--color-text-primary)]">Body</h3>
+    <section className="flex min-h-0 flex-1 flex-col gap-2" aria-label="Request body">
+      <div className="flex justify-end">
         <button
           onClick={handleFormat}
           className="rounded-lg bg-[var(--color-accent)] px-3 py-1 text-xs font-medium text-[var(--color-text-primary)] hover:opacity-80 active:opacity-70"
@@ -56,17 +44,16 @@ export function BodyEditor({ value, onChange, onValidityChange }: BodyEditorProp
           Format
         </button>
       </div>
-      <textarea
+      <CodeEditor
         value={value}
-        onChange={(e) => onChange(e.target.value)}
-        rows={12}
-        spellCheck={false}
-        aria-label="JSON request body"
+        onChange={onChange}
+        language="json"
+        ariaLabel="JSON request body"
         placeholder="{ }"
-        className="min-h-0 flex-1 w-full resize-none rounded-lg bg-[var(--color-surface)] p-3 font-mono text-sm text-[var(--color-text-primary)] outline-none ring-[var(--color-accent)] placeholder:text-[var(--color-text-muted)] focus-visible:ring-2"
+        onSubmit={onSubmit}
       />
       {!valid ? (
-        <p className="mt-2 text-xs font-medium text-[var(--color-accent)]" role="alert">
+        <p className="text-xs font-medium text-[var(--color-accent)]" role="alert">
           Invalid JSON — fix syntax or clear the body before sending.
         </p>
       ) : null}

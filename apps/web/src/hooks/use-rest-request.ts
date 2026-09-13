@@ -2,16 +2,10 @@
 
 import { useMutation } from "@tanstack/react-query";
 import { API_BASE } from "@/lib/api-client";
+import { MF_ID_HEADER } from "@/lib/playground-constants";
+import { timedFetch, type HttpResponseData } from "@/components/playground/hooks/timed-fetch";
 
 export type RestHttpMethod = "GET" | "POST" | "PUT" | "DELETE";
-
-export interface RestResponseData {
-  status: number;
-  statusText: string;
-  timeMs: number;
-  body: unknown;
-  headers: Record<string, string>;
-}
 
 export interface RestRequestInput {
   method: RestHttpMethod;
@@ -34,7 +28,7 @@ function buildHeaders(init: Record<string, string>, mfId: string | null): Header
     if (k.trim()) h.set(k.trim(), v);
   });
   if (mfId) {
-    h.set("X-MF-ID", mfId);
+    h.set(MF_ID_HEADER, mfId);
   }
   return h;
 }
@@ -42,8 +36,7 @@ function buildHeaders(init: Record<string, string>, mfId: string | null): Header
 export async function sendRestFetch(
   input: RestRequestInput,
   mfId: string | null,
-): Promise<RestResponseData> {
-  const start = performance.now();
+): Promise<HttpResponseData> {
   const resolved = resolveRestUrl(input.url);
   const trimmed = input.body?.trim() ?? "";
   const bodyPayload = input.method === "GET" || trimmed.length === 0 ? undefined : trimmed;
@@ -54,33 +47,11 @@ export async function sendRestFetch(
     if (!hasCt) headerMap["Content-Type"] = "application/json";
   }
   const hdrs = buildHeaders(headerMap, mfId);
-  const res = await fetch(resolved, {
+  return timedFetch(resolved, {
     method: input.method,
     headers: hdrs,
     body: bodyPayload,
   });
-
-  const timeMs = Math.round(performance.now() - start);
-  const text = await res.text();
-  let body: unknown = text.length ? text : null;
-  if (text.trim().length) {
-    try {
-      body = JSON.parse(text);
-    } catch {
-      body = text;
-    }
-  }
-  const headers: Record<string, string> = {};
-  res.headers.forEach((value, key) => {
-    headers[key] = value;
-  });
-  return {
-    status: res.status,
-    statusText: res.statusText,
-    timeMs,
-    body,
-    headers,
-  };
 }
 
 export function useRestRequest(mfId: string | null) {

@@ -1,23 +1,35 @@
 "use client";
 
 import { nanoid } from "nanoid";
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type Dispatch,
+  type SetStateAction,
+} from "react";
+import { pushBounded, type BoundedEvent } from "@/components/playground/hooks/bounded-events";
 
 export const WS_CONSOLE_MAX_EVENTS = 500;
 
 export type WsConnectionStatus = "idle" | "connecting" | "connected" | "error";
 
-export type WsConsoleEvent = {
-  readonly id: string;
-  readonly direction: "in" | "out";
-  readonly message: string;
-  readonly at: number;
-};
+export type WsConsoleEvent = BoundedEvent;
 
-function pushBounded(prev: WsConsoleEvent[], next: WsConsoleEvent, cap: number): WsConsoleEvent[] {
-  const merged = [...prev, next];
-  if (merged.length <= cap) return merged;
-  return merged.slice(merged.length - cap);
+function appendInEvent(setEvents: Dispatch<SetStateAction<WsConsoleEvent[]>>, message: string) {
+  setEvents((prev) =>
+    pushBounded(
+      prev,
+      {
+        id: nanoid(),
+        direction: "in",
+        message,
+        at: Date.now(),
+      },
+      WS_CONSOLE_MAX_EVENTS,
+    ),
+  );
 }
 
 export function useWsConsole(url: string) {
@@ -49,37 +61,34 @@ export function useWsConsole(url: string) {
       const ws = new WebSocket(target);
       wsRef.current = ws;
 
+      let loggedError = false;
+
       ws.onopen = () => {
         if (wsRef.current !== ws) return;
         setStatus("connected");
+        appendInEvent(setEvents, "[connected]");
       };
 
       ws.onmessage = (event) => {
         if (wsRef.current !== ws) return;
         const text = typeof event.data === "string" ? event.data : "[binary]";
-        setEvents((prev) =>
-          pushBounded(
-            prev,
-            {
-              id: nanoid(),
-              direction: "in",
-              message: text,
-              at: Date.now(),
-            },
-            WS_CONSOLE_MAX_EVENTS,
-          ),
-        );
+        appendInEvent(setEvents, text);
       };
 
       ws.onerror = () => {
         if (wsRef.current !== ws) return;
+        loggedError = true;
         setStatus("error");
+        appendInEvent(setEvents, "[error]");
         ws.close();
       };
 
       ws.onclose = () => {
         if (wsRef.current !== ws) return;
         wsRef.current = null;
+        if (!loggedError) {
+          appendInEvent(setEvents, "[disconnected]");
+        }
         setStatus((prev) => (prev === "error" ? "error" : "idle"));
       };
     } catch {
@@ -115,5 +124,9 @@ export function useWsConsole(url: string) {
     };
   }, []);
 
-  return { status, events, connect, disconnect, send };
+  const clear = useCallback(() => {
+    setEvents([]);
+  }, []);
+
+  return { status, events, connect, disconnect, send, clear };
 }

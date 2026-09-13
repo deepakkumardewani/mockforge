@@ -1,13 +1,9 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
-import { EndpointInfo } from "@/components/playground/shared/EndpointInfo";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { PresetPicker } from "@/components/playground/shared/PresetPicker";
-import {
-  SOCKETIO_EMIT_PRESETS,
-  SOCKETIO_NAMESPACE_INFO,
-  SOCKETIO_PRESETS,
-} from "@/components/playground/shared/presets";
+import { RequestCard } from "@/components/playground/shared/RequestCard";
+import { SOCKETIO_EMIT_PRESETS, SOCKETIO_PRESETS } from "@/components/playground/shared/presets";
 import { EventLog } from "@/components/playground/shared/EventLog";
 import {
   PLAYGROUND_PANEL_GRID,
@@ -18,8 +14,19 @@ import { useSocketIoConsole } from "@/hooks/use-socketio-console";
 import { getSocketIoBaseUrl } from "@/lib/playground-env";
 import { EmitComposer } from "@/components/playground/socketio/EmitComposer";
 import { NamespaceBar } from "@/components/playground/socketio/NamespaceBar";
+import { useSendShortcut } from "@/components/playground/hooks/use-send-shortcut";
 
 const tickerPreset = SOCKETIO_PRESETS.find((p) => p.id === "sio-ticker") ?? SOCKETIO_PRESETS[0];
+
+function sioEmptyHint(presetId: string | undefined): string {
+  if (presetId === "sio-notifications") {
+    return "Waiting for the first alert — usually a few seconds.";
+  }
+  if (presetId === "sio-ticker") {
+    return "Waiting for the first tick…";
+  }
+  return "Connect, then emit or wait for server events.";
+}
 
 export function SocketIoPanel() {
   const [baseUrl, setBaseUrl] = useState(() =>
@@ -30,22 +37,29 @@ export function SocketIoPanel() {
   const [emitEvent, setEmitEvent] = useState("");
   const [emitPayload, setEmitPayload] = useState("");
   const [emitError, setEmitError] = useState<string | null>(null);
+  const [selectedPresetId, setSelectedPresetId] = useState(() => tickerPreset?.id ?? "sio-ticker");
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  const selectedPreset = SOCKETIO_PRESETS.find((preset) => preset.id === selectedPresetId);
+
+  const emitPresets = useMemo(
+    () =>
+      SOCKETIO_EMIT_PRESETS.filter((preset) => preset.forEndpointIds.includes(selectedPresetId)),
+    [selectedPresetId],
+  );
 
   const consoleOpts = useMemo(
     () => ({ url: baseUrl, namespace, listenEvent }),
     [baseUrl, namespace, listenEvent],
   );
 
-  const { status, events, connect, disconnect, emit } = useSocketIoConsole(consoleOpts);
-
-  const namespaceInfo =
-    SOCKETIO_NAMESPACE_INFO[namespace] ??
-    "Connect and listen on the configured event to see incoming payloads.";
+  const { status, events, connect, disconnect, emit, clear } = useSocketIoConsole(consoleOpts);
 
   const onPresetSelect = useCallback((preset: (typeof SOCKETIO_PRESETS)[number]) => {
     setBaseUrl(preset.baseUrl);
     setNamespace(preset.namespace);
     setListenEvent(preset.event);
+    setSelectedPresetId(preset.id);
     setEmitError(null);
   }, []);
 
@@ -57,53 +71,82 @@ export function SocketIoPanel() {
 
   const canEmit = status === "connected";
 
-  function handleEmit() {
+  const handleEmit = useCallback(() => {
     setEmitError(null);
     const ok = emit(emitEvent, emitPayload);
     if (!ok) {
       setEmitError("Payload must be valid JSON or empty.");
     }
-  }
+  }, [emit, emitEvent, emitPayload]);
+
+  const acceptsOutbound = selectedPreset?.acceptsOutbound === true;
+  useSendShortcut(handleEmit, acceptsOutbound && canEmit && emitEvent.trim().length > 0, panelRef);
+
+  const outboundTabs = acceptsOutbound
+    ? [
+        {
+          id: "message",
+          label: "Message",
+          content: (
+            <div className="flex min-h-0 flex-1 flex-col gap-3">
+              {emitPresets.length > 0 ? (
+                <div className="flex flex-col gap-2">
+                  <span className="text-xs font-medium text-[var(--color-text-muted)]">
+                    Sample messages
+                  </span>
+                  <PresetPicker
+                    presets={emitPresets}
+                    onSelect={onEmitPresetSelect}
+                    ariaLabel="Socket.IO emit presets"
+                  />
+                </div>
+              ) : null}
+              <EmitComposer
+                eventName={emitEvent}
+                payloadJson={emitPayload}
+                canEmit={canEmit}
+                emitError={emitError}
+                onEventNameChange={setEmitEvent}
+                onPayloadChange={setEmitPayload}
+                onEmit={handleEmit}
+              />
+            </div>
+          ),
+        },
+      ]
+    : [];
 
   return (
-    <div className="flex h-full min-h-0 flex-col">
+    <div ref={panelRef} className="flex h-full min-h-0 flex-col">
       <div className={PLAYGROUND_PANEL_GRID}>
         <div className={PLAYGROUND_PANEL_LEFT}>
-          <PresetPicker
-            presets={SOCKETIO_PRESETS}
-            onSelect={onPresetSelect}
-            ariaLabel="Socket.IO example presets"
-          />
-          <NamespaceBar
-            baseUrl={baseUrl}
-            namespace={namespace}
-            listenEvent={listenEvent}
-            status={status}
-            onBaseUrlChange={setBaseUrl}
-            onNamespaceChange={setNamespace}
-            onListenEventChange={setListenEvent}
-            onConnect={connect}
-            onDisconnect={disconnect}
-          />
-          <EndpointInfo description={namespaceInfo} />
-          <PresetPicker
-            presets={SOCKETIO_EMIT_PRESETS}
-            onSelect={onEmitPresetSelect}
-            ariaLabel="Socket.IO emit presets"
-          />
-          <EmitComposer
-            eventName={emitEvent}
-            payloadJson={emitPayload}
-            canEmit={canEmit}
-            emitError={emitError}
-            onEventNameChange={setEmitEvent}
-            onPayloadChange={setEmitPayload}
-            onEmit={handleEmit}
+          <RequestCard
+            examplesLabel="Scenario"
+            subtitle={selectedPreset?.description}
+            presets={
+              <PresetPicker
+                presets={SOCKETIO_PRESETS}
+                onSelect={onPresetSelect}
+                selectedId={selectedPresetId}
+                ariaLabel="Socket.IO example presets"
+              />
+            }
+            requestBar={
+              <NamespaceBar
+                baseUrl={baseUrl}
+                namespace={namespace}
+                listenEvent={listenEvent}
+                status={status}
+                onConnect={connect}
+                onDisconnect={disconnect}
+              />
+            }
+            tabs={outboundTabs}
           />
         </div>
 
         <div className={PLAYGROUND_PANEL_RIGHT}>
-          <EventLog events={events} emptyHint="Connect and subscribe to see events in this log." />
+          <EventLog events={events} onClear={clear} emptyHint={sioEmptyHint(selectedPresetId)} />
         </div>
       </div>
     </div>

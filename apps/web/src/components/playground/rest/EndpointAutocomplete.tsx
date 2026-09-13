@@ -1,6 +1,8 @@
 "use client";
 
-import { useCallback, useId, useRef, useState } from "react";
+import { useCallback, useId, useLayoutEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+import type { CSSProperties } from "react";
 import type { HttpMethod } from "@/components/playground/shared/presets";
 import { filterEndpoints } from "@/components/playground/shared/playground-catalogue";
 
@@ -16,6 +18,21 @@ const UNAMBIGUOUS_METHODS: Record<string, HttpMethod> = {
   DELETE: "DELETE",
 };
 
+const LISTBOX_GAP_PX = 4;
+const LISTBOX_Z_INDEX = 60;
+
+function positionFromInput(input: HTMLInputElement): CSSProperties {
+  const field = input.closest("[data-url-field]");
+  const rect = (field instanceof HTMLElement ? field : input).getBoundingClientRect();
+  return {
+    position: "fixed",
+    top: rect.bottom + LISTBOX_GAP_PX,
+    left: rect.left,
+    width: rect.width,
+    zIndex: LISTBOX_Z_INDEX,
+  };
+}
+
 export function EndpointAutocomplete({
   value,
   onChange,
@@ -25,6 +42,8 @@ export function EndpointAutocomplete({
   const inputRef = useRef<HTMLInputElement>(null);
   const [open, setOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
+  const [menuStyle, setMenuStyle] = useState<CSSProperties>({});
+  const [mounted, setMounted] = useState(false);
 
   const suggestions = filterEndpoints(value);
 
@@ -32,6 +51,27 @@ export function EndpointAutocomplete({
     setOpen(false);
     setActiveIndex(-1);
   }, []);
+
+  const updateMenuPosition = useCallback(() => {
+    const input = inputRef.current;
+    if (!input) return;
+    setMenuStyle(positionFromInput(input));
+  }, []);
+
+  useLayoutEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useLayoutEffect(() => {
+    if (!open) return;
+    updateMenuPosition();
+    window.addEventListener("resize", updateMenuPosition);
+    window.addEventListener("scroll", updateMenuPosition, true);
+    return () => {
+      window.removeEventListener("resize", updateMenuPosition);
+      window.removeEventListener("scroll", updateMenuPosition, true);
+    };
+  }, [open, updateMenuPosition, value, suggestions.length]);
 
   function handleSelect(index: number) {
     const endpoint = suggestions[index];
@@ -77,12 +117,50 @@ export function EndpointAutocomplete({
     }
   }
 
+  const listbox =
+    open && suggestions.length > 0 ? (
+      <ul
+        id={listboxId}
+        role="listbox"
+        aria-label="Endpoint suggestions"
+        style={menuStyle}
+        className="max-h-64 overflow-y-auto rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-raised)] py-1"
+      >
+        {suggestions.map((endpoint, i) => (
+          <li
+            key={`${endpoint.method}-${endpoint.path}`}
+            id={`${listboxId}-opt-${i}`}
+            role="option"
+            aria-selected={i === activeIndex}
+            onMouseDown={(e) => {
+              // Prevent blur before click registers
+              e.preventDefault();
+              handleSelect(i);
+            }}
+            className={`flex cursor-pointer items-center gap-3 px-3 py-2 font-mono text-sm ${
+              i === activeIndex
+                ? "bg-[var(--color-accent)] text-[var(--color-bg)]"
+                : "text-[var(--color-text-primary)] hover:bg-[var(--color-surface)]"
+            }`}
+          >
+            <span
+              className={`w-16 shrink-0 text-xs font-semibold ${
+                i === activeIndex ? "text-[var(--color-bg)]" : "text-[var(--color-accent)]"
+              }`}
+            >
+              {endpoint.method}
+            </span>
+            <span>/api{endpoint.path}</span>
+          </li>
+        ))}
+      </ul>
+    ) : null;
+
   return (
     <div className="relative flex min-w-0 flex-1 items-stretch">
-      {/* Fixed /api/ prefix adornment */}
       <span
         aria-hidden="true"
-        className="flex items-center rounded-l-lg bg-[var(--color-surface)] px-3 py-2 font-mono text-sm text-[var(--color-text-muted)] select-none border-r border-[var(--color-border)]"
+        className="flex items-center border-r border-[var(--color-border)] px-2 py-2 font-mono text-sm text-[var(--color-text-muted)] select-none"
       >
         /api/
       </span>
@@ -109,45 +187,10 @@ export function EndpointAutocomplete({
         onKeyDown={handleKeyDown}
         placeholder="users"
         aria-label="Request URL suffix"
-        className="min-w-0 flex-1 rounded-r-lg bg-[var(--color-surface)] px-3 py-2 font-mono text-sm text-[var(--color-text-primary)] outline-none ring-[var(--color-accent)] placeholder:text-[var(--color-text-muted)] focus-visible:ring-2"
+        className="min-w-0 flex-1 bg-transparent px-3 py-2 font-mono text-sm text-[var(--color-text-primary)] caret-[var(--color-accent)] outline-none placeholder:text-[var(--color-text-muted)]"
       />
 
-      {open && suggestions.length > 0 && (
-        <ul
-          id={listboxId}
-          role="listbox"
-          aria-label="Endpoint suggestions"
-          className="absolute top-full left-0 z-50 mt-1 max-h-64 w-full overflow-y-auto rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-raised)] py-1 shadow-lg"
-        >
-          {suggestions.map((endpoint, i) => (
-            <li
-              key={`${endpoint.method}-${endpoint.path}`}
-              id={`${listboxId}-opt-${i}`}
-              role="option"
-              aria-selected={i === activeIndex}
-              onMouseDown={(e) => {
-                // Prevent blur before click registers
-                e.preventDefault();
-                handleSelect(i);
-              }}
-              className={`flex cursor-pointer items-center gap-3 px-3 py-2 font-mono text-sm ${
-                i === activeIndex
-                  ? "bg-[var(--color-accent)] text-[var(--color-bg)]"
-                  : "text-[var(--color-text-primary)] hover:bg-[var(--color-surface)]"
-              }`}
-            >
-              <span
-                className={`w-16 shrink-0 text-xs font-semibold ${
-                  i === activeIndex ? "text-[var(--color-bg)]" : "text-[var(--color-accent)]"
-                }`}
-              >
-                {endpoint.method}
-              </span>
-              <span>/api{endpoint.path}</span>
-            </li>
-          ))}
-        </ul>
-      )}
+      {mounted && listbox ? createPortal(listbox, document.body) : null}
     </div>
   );
 }

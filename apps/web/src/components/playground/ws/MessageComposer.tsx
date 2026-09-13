@@ -1,5 +1,9 @@
 "use client";
 
+import { CodeEditor } from "@/components/playground/shared/CodeEditor";
+
+const SEND_SHORTCUT_HINT = "⌘↵";
+
 export interface MessageComposerProps {
   readonly value: string;
   readonly onChange: (value: string) => void;
@@ -8,31 +12,29 @@ export interface MessageComposerProps {
 }
 
 export function MessageComposer({ value, onChange, onSend, canSend }: MessageComposerProps) {
+  const canSubmit = canSend && value.trim().length > 0;
+
   return (
-    <div className="flex min-h-0 flex-1 flex-col gap-2 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-raised)] p-3">
-      <label
-        className="text-xs font-medium text-[var(--color-text-muted)]"
-        htmlFor="ws-message-body"
-      >
-        Message
-      </label>
-      <textarea
-        id="ws-message-body"
+    <div className="flex min-h-0 flex-1 flex-col gap-2">
+      <CodeEditor
         value={value}
-        onChange={(e) => onChange(e.target.value)}
-        rows={1}
+        onChange={onChange}
+        language="json"
+        ariaLabel="Message"
         placeholder='e.g. {"type":"ping"}'
-        className="min-h-0 flex-1 resize-none rounded-lg bg-[var(--color-surface)] px-3 py-2 font-mono text-sm text-[var(--color-text-primary)] outline-none ring-[var(--color-accent)] placeholder:text-[var(--color-text-muted)] focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-60"
-        disabled={!canSend}
+        onSubmit={canSubmit ? onSend : undefined}
       />
       <div className="flex justify-end">
         <button
           type="button"
           onClick={onSend}
-          disabled={!canSend || value.trim().length === 0}
-          className="rounded-lg bg-[var(--color-accent)] px-3 py-2 text-sm font-medium text-[var(--color-on-accent)] outline-none transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
+          disabled={!canSubmit}
+          className="flex items-center gap-2 rounded-lg bg-[var(--color-accent)] px-3 py-2 text-sm font-medium text-[var(--color-on-accent)] outline-none transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
         >
           Send
+          <span className="text-xs opacity-70" aria-hidden>
+            {SEND_SHORTCUT_HINT}
+          </span>
         </button>
       </div>
     </div>

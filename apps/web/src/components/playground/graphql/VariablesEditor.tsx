@@ -1,25 +1,22 @@
 "use client";
 
 import { useEffect } from "react";
+import { CodeEditor } from "@/components/playground/shared/CodeEditor";
+import { isJsonValid } from "../shared/json";
 
 export interface VariablesEditorProps {
   value: string;
   onChange: (value: string) => void;
   onValidityChange: (valid: boolean) => void;
+  onSubmit?: () => void;
 }
 
-function isJsonValid(raw: string): boolean {
-  const trimmed = raw.trim();
-  if (trimmed.length === 0) return true;
-  try {
-    JSON.parse(trimmed);
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-export function VariablesEditor({ value, onChange, onValidityChange }: VariablesEditorProps) {
+export function VariablesEditor({
+  value,
+  onChange,
+  onValidityChange,
+  onSubmit,
+}: VariablesEditorProps) {
   const valid = isJsonValid(value);
 
   useEffect(() => {
@@ -27,25 +24,17 @@ export function VariablesEditor({ value, onChange, onValidityChange }: Variables
   }, [valid, value, onValidityChange]);
 
   return (
-    <section
-      className="shrink-0 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-raised)] p-4"
-      aria-label="GraphQL variables"
-    >
-      <h3 className="mb-3 text-sm font-semibold text-[var(--color-text-primary)]">Variables</h3>
-      <textarea
+    <section className="flex min-h-0 flex-1 flex-col gap-2" aria-label="GraphQL variables">
+      <CodeEditor
         value={value}
-        onChange={(e) => onChange(e.target.value)}
-        rows={8}
-        spellCheck={false}
-        aria-label="GraphQL variables JSON"
+        onChange={onChange}
+        language="json"
+        ariaLabel="GraphQL variables JSON"
         placeholder="{ }"
-        className="min-h-32 w-full resize-y rounded-lg bg-[var(--color-surface)] p-3
-          font-mono text-sm text-[var(--color-text-primary)] outline-none
-          ring-[var(--color-accent)] placeholder:text-[var(--color-text-muted)]
-          focus-visible:ring-2"
+        onSubmit={onSubmit}
       />
       {!valid ? (
-        <p className="mt-2 text-xs font-medium text-[var(--color-accent)]" role="alert">
+        <p className="text-xs font-medium text-[var(--color-accent)]" role="alert">
           Invalid JSON — fix syntax or clear variables before sending.
         </p>
       ) : null}

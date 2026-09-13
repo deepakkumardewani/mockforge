@@ -1,8 +1,9 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { GRAPHQL_PRESETS } from "@/components/playground/shared/presets";
 import { PresetPicker } from "@/components/playground/shared/PresetPicker";
+import { RequestCard } from "@/components/playground/shared/RequestCard";
 import { ResponseViewer } from "@/components/playground/shared/ResponseViewer";
 import {
   GRAPHQL_PANEL_GRID,
@@ -18,12 +19,12 @@ import { PLAYGROUND_GRAPHQL_URL, useGraphqlRequest } from "@/hooks/use-graphql-r
 import { GraphqlRequestBar } from "@/components/playground/graphql/GraphqlRequestBar";
 import { mergeOperation } from "@/components/playground/graphql/build-operation";
 import { SchemaPanel } from "@/components/playground/graphql/SchemaPanel";
-
-const SCHEMA_SIDEBAR_KEY = "mf_schema_sidebar_open";
+import { SCHEMA_SIDEBAR_STORAGE_KEY } from "@/lib/playground-constants";
+import { useSendShortcut } from "@/components/playground/hooks/use-send-shortcut";
 
 function readSidebarState(): boolean {
   if (typeof window === "undefined") return false;
-  return localStorage.getItem(SCHEMA_SIDEBAR_KEY) === "true";
+  return localStorage.getItem(SCHEMA_SIDEBAR_STORAGE_KEY) === "true";
 }
 
 export function GraphqlPanel() {
@@ -33,11 +34,12 @@ export function GraphqlPanel() {
   const [variables, setVariables] = useState("");
   const [variablesValid, setVariablesValid] = useState(true);
   const [schemaOpen, setSchemaOpen] = useState(readSidebarState);
+  const panelRef = useRef<HTMLDivElement>(null);
 
   const toggleSchema = useCallback(() => {
     setSchemaOpen((prev) => {
       const next = !prev;
-      localStorage.setItem(SCHEMA_SIDEBAR_KEY, String(next));
+      localStorage.setItem(SCHEMA_SIDEBAR_STORAGE_KEY, String(next));
       return next;
     });
   }, []);
@@ -57,7 +59,7 @@ export function GraphqlPanel() {
     [],
   );
 
-  async function handleSend() {
+  const handleSend = useCallback(async () => {
     if (!canSend) return;
     try {
       const input: GraphqlRequestInput = {
@@ -68,34 +70,14 @@ export function GraphqlPanel() {
     } catch {
       /* useGraphqlRequest surfaces error via mutation */
     }
-  }
+  }, [canSend, query, variables, send]);
+
+  useSendShortcut(handleSend, canSend && !isLoading, panelRef);
 
   const gridClass = schemaOpen ? GRAPHQL_PANEL_GRID : PLAYGROUND_PANEL_GRID;
 
   return (
-    <div className="flex h-full min-h-0 flex-col gap-4">
-      <div className="flex shrink-0 items-center gap-2">
-        <PresetPicker
-          presets={GRAPHQL_PRESETS}
-          onSelect={onPresetSelect}
-          ariaLabel="GraphQL example presets"
-        />
-        <button
-          type="button"
-          onClick={toggleSchema}
-          aria-pressed={schemaOpen}
-          aria-label="Toggle schema sidebar"
-          title={schemaOpen ? "Hide schema" : "Show schema"}
-          className={`shrink-0 rounded-lg border px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${
-            schemaOpen
-              ? "border-[var(--color-accent)] bg-[var(--color-surface-raised)] text-[var(--color-accent)]"
-              : "border-[var(--color-border)] bg-[var(--color-surface-raised)] text-[var(--color-text-muted)] hover:border-[var(--color-accent)]"
-          }`}
-        >
-          {schemaOpen ? "«" : "»"}
-        </button>
-      </div>
-
+    <div ref={panelRef} className="flex h-full min-h-0 flex-col gap-4">
       <div className={gridClass}>
         {schemaOpen && (
           <div className={PLAYGROUND_PANEL_LEFT}>
@@ -103,17 +85,49 @@ export function GraphqlPanel() {
           </div>
         )}
         <div className={PLAYGROUND_PANEL_LEFT}>
-          <GraphqlRequestBar
-            endpointUrl={PLAYGROUND_GRAPHQL_URL}
-            onSend={handleSend}
-            isLoading={isLoading}
-            canSend={canSend}
-          />
-          <QueryEditor value={query} onChange={setQuery} />
-          <VariablesEditor
-            value={variables}
-            onChange={setVariables}
-            onValidityChange={setVariablesValid}
+          <RequestCard
+            presets={
+              <PresetPicker
+                presets={GRAPHQL_PRESETS}
+                onSelect={onPresetSelect}
+                ariaLabel="GraphQL example presets"
+              />
+            }
+            requestBar={
+              <GraphqlRequestBar
+                endpointUrl={PLAYGROUND_GRAPHQL_URL}
+                onSend={handleSend}
+                isLoading={isLoading}
+                canSend={canSend}
+                schemaOpen={schemaOpen}
+                onToggleSchema={toggleSchema}
+              />
+            }
+            tabs={[
+              {
+                id: "query",
+                label: "Query",
+                content: (
+                  <QueryEditor
+                    value={query}
+                    onChange={setQuery}
+                    onSubmit={canSend ? handleSend : undefined}
+                  />
+                ),
+              },
+              {
+                id: "variables",
+                label: "Variables",
+                content: (
+                  <VariablesEditor
+                    value={variables}
+                    onChange={setVariables}
+                    onValidityChange={setVariablesValid}
+                    onSubmit={canSend ? handleSend : undefined}
+                  />
+                ),
+              },
+            ]}
           />
         </div>
 

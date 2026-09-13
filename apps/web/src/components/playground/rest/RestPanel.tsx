@@ -1,9 +1,10 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { HttpMethod } from "@/components/playground/shared/presets";
 import { REST_PRESETS } from "@/components/playground/shared/presets";
 import { PresetPicker } from "@/components/playground/shared/PresetPicker";
+import { RequestCard } from "@/components/playground/shared/RequestCard";
 import type { HeaderRow } from "@/components/playground/rest/HeadersEditor";
 import { createEmptyHeaderRow, HeadersEditor } from "@/components/playground/rest/HeadersEditor";
 import { BodyEditor } from "@/components/playground/rest/BodyEditor";
@@ -17,7 +18,14 @@ import {
 } from "@/components/playground/shared/panel-layout";
 import { useMfId } from "@/hooks/use-mf-id";
 import type { RestRequestInput } from "@/hooks/use-rest-request";
-import { useRestRequest } from "@/hooks/use-rest-request";
+import { resolveRestUrl, useRestRequest } from "@/hooks/use-rest-request";
+import { useSendShortcut } from "@/components/playground/hooks/use-send-shortcut";
+import { MF_ID_HEADER, REST_API_PREFIX } from "@/lib/playground-constants";
+
+function withApiPrefix(presetUrl: string): string {
+  if (presetUrl.startsWith(REST_API_PREFIX)) return presetUrl;
+  return `${REST_API_PREFIX}${presetUrl.replace(/^\//, "")}`;
+}
 
 function headersFromRows(rows: HeaderRow[]): Record<string, string> {
   const map: Record<string, string> = {};
@@ -37,11 +45,12 @@ export function RestPanel() {
   const [headerRows, setHeaderRows] = useState<HeaderRow[]>(() => [createEmptyHeaderRow()]);
   const [body, setBody] = useState("");
   const [bodyValid, setBodyValid] = useState(true);
+  const panelRef = useRef<HTMLDivElement>(null);
 
   const onPresetSelect = useCallback((preset: (typeof REST_PRESETS)[number]) => {
     setMethod(preset.method);
     // Ensure URL always stored with /api/ prefix for consistency with autocomplete
-    setUrl(preset.url.startsWith("/api/") ? preset.url : `/api/${preset.url.replace(/^\//, "")}`);
+    setUrl(withApiPrefix(preset.url));
     setBody(preset.body ?? "");
     setBodyValid(true);
     setHeaderRows([createEmptyHeaderRow()]);
@@ -54,7 +63,7 @@ export function RestPanel() {
     }
   }, [url, method]);
 
-  async function handleSend() {
+  const handleSend = useCallback(async () => {
     if (!bodyValid) return;
 
     try {
@@ -68,7 +77,10 @@ export function RestPanel() {
     } catch {
       /* useRestRequest surfaces error via mutation */
     }
-  }
+  }, [bodyValid, method, url, headerRows, body, send]);
+
+  const canSend = bodyValid && url.trim().length > 0;
+  useSendShortcut(handleSend, canSend && !isLoading, panelRef);
 
   const isSearchUrl = url.includes("/search");
 
@@ -83,30 +95,69 @@ export function RestPanel() {
   }, []);
 
   return (
-    <div className="flex h-full min-h-0 flex-col">
+    <div ref={panelRef} className="flex h-full min-h-0 flex-col">
       <div className={PLAYGROUND_PANEL_GRID}>
         <div className={PLAYGROUND_PANEL_LEFT}>
-          <PresetPicker
-            presets={REST_PRESETS}
-            onSelect={onPresetSelect}
-            ariaLabel="REST example presets"
+          <RequestCard
+            presets={
+              <PresetPicker
+                presets={REST_PRESETS}
+                onSelect={onPresetSelect}
+                ariaLabel="REST example presets"
+              />
+            }
+            requestBar={
+              <>
+                <MethodUrlBar
+                  method={method}
+                  url={url}
+                  onMethodChange={setMethod}
+                  onUrlChange={setUrl}
+                  onSend={handleSend}
+                  isLoading={isLoading}
+                  canSend={canSend}
+                />
+                {isSearchUrl && <SearchHints url={url} onAppendParam={appendParam} />}
+              </>
+            }
+            tabs={[
+              {
+                id: "headers",
+                label: "Headers",
+                content: <HeadersEditor rows={headerRows} onChange={setHeaderRows} />,
+              },
+              {
+                id: "body",
+                label: "Body",
+                content: (
+                  <BodyEditor
+                    value={body}
+                    onChange={setBody}
+                    onValidityChange={setBodyValid}
+                    onSubmit={canSend ? handleSend : undefined}
+                  />
+                ),
+              },
+            ]}
           />
-          <MethodUrlBar
-            method={method}
-            url={url}
-            onMethodChange={setMethod}
-            onUrlChange={setUrl}
-            onSend={handleSend}
-            isLoading={isLoading}
-            canSend={bodyValid && url.trim().length > 0}
-          />
-          {isSearchUrl && <SearchHints url={url} onAppendParam={appendParam} />}
-          <HeadersEditor rows={headerRows} onChange={setHeaderRows} />
-          <BodyEditor value={body} onChange={setBody} onValidityChange={setBodyValid} />
         </div>
 
         <div className={PLAYGROUND_PANEL_RIGHT}>
-          <ResponseViewer response={response} transportError={error} />
+          <ResponseViewer
+            response={response}
+            transportError={error}
+            restRequest={{
+              method,
+              // Absolute URL + the identity header the hook injects, so the copied
+              // command reproduces the exact request the playground just sent.
+              url: resolveRestUrl(url),
+              headers: {
+                ...headersFromRows(headerRows),
+                ...(mfId ? { [MF_ID_HEADER]: mfId } : {}),
+              },
+              body,
+            }}
+          />
         </div>
       </div>
     </div>

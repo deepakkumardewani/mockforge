@@ -44,13 +44,14 @@ describe("Playground REST — ResponseViewer", () => {
 });
 
 describe("Playground REST — BodyEditor", () => {
-  it("renders Body heading and Format button", () => {
+  // The "Body" heading was removed: RequestCard's tab strip now labels this
+  // editor as "Body", so an inner heading would duplicate that label.
+  it("renders Format button", () => {
     const mockOnChange = vi.fn();
     const mockOnValidityChange = vi.fn();
 
     render(<BodyEditor value="" onChange={mockOnChange} onValidityChange={mockOnValidityChange} />);
 
-    expect(screen.getByText("Body")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Format JSON" })).toBeInTheDocument();
   });
 

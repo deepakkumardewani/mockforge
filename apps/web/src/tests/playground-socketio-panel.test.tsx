@@ -35,27 +35,28 @@ describe("Playground Socket.IO — SocketIoPanel", () => {
     vi.clearAllMocks();
   });
 
-  it("preset chips populate base URL, namespace, and listen event", async () => {
+  it("preset Chat shows compact readout and emit path", async () => {
     const user = userEvent.setup();
     mockIo();
 
     render(<SocketIoPanel />);
 
+    expect(screen.queryByPlaceholderText("http://localhost:4001")).not.toBeInTheDocument();
+    expect(screen.queryByRole("textbox", { name: /emit event/i })).not.toBeInTheDocument();
+
     await user.click(screen.getByRole("button", { name: "Chat" }));
 
-    expect(screen.getByPlaceholderText("http://localhost:4001")).toHaveValue(
-      "http://localhost:4001",
-    );
-    expect(screen.getByPlaceholderText("/ticker")).toHaveValue("/chat");
-    expect(screen.getByPlaceholderText("tick")).toHaveValue("message");
+    expect(screen.getByTitle("localhost:4001 · /chat · message")).toBeInTheDocument();
+    expect(screen.getByLabelText("Emit event name")).toBeInTheDocument();
   });
 
-  it("Connect reaches connected; Emit calls socket.emit with parsed payload; unmount disconnects", async () => {
+  it("Chat Connect shows Live; Emit calls socket.emit with parsed payload; unmount disconnects", async () => {
     const user = userEvent.setup();
     const socket = mockIo();
 
     const { unmount } = render(<SocketIoPanel />);
 
+    await user.click(screen.getByRole("button", { name: "Chat" }));
     await user.click(screen.getByRole("button", { name: "Connect" }));
 
     await waitFor(() => expect(ioMock).toHaveBeenCalledTimes(1));
@@ -64,7 +65,7 @@ describe("Playground Socket.IO — SocketIoPanel", () => {
       socket.simulateConnect();
     });
 
-    await waitFor(() => expect(screen.getByText("Connected")).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText("Live")).toBeInTheDocument());
 
     await user.type(screen.getByLabelText("Emit event name"), "ping");
     fireEvent.change(screen.getByLabelText(/Payload \(JSON/), {
@@ -87,8 +88,11 @@ describe("Playground Socket.IO — SocketIoPanel", () => {
 
     render(<SocketIoPanel />);
 
-    expect(screen.getByText(/Emits tick events every second/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Stock ticks every second. Outbound emits are ignored./i),
+    ).toBeInTheDocument();
 
+    await user.click(screen.getByRole("button", { name: "Chat" }));
     await user.click(screen.getByRole("button", { name: "Chat message" }));
 
     expect(screen.getByLabelText("Emit event name")).toHaveValue("message");

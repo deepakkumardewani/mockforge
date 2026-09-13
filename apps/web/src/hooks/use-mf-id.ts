@@ -2,15 +2,14 @@
 
 import { useEffect } from "react";
 import { useMfIdStore } from "@/store/mf-id";
-
-const STORAGE_KEY = "mf_id";
+import { MF_ID_STORAGE_KEY } from "@/lib/playground-constants";
 
 function getOrCreateMfId(): string {
   if (typeof window === "undefined") return "";
-  let id = localStorage.getItem(STORAGE_KEY);
+  let id = localStorage.getItem(MF_ID_STORAGE_KEY);
   if (!id) {
     id = crypto.randomUUID();
-    localStorage.setItem(STORAGE_KEY, id);
+    localStorage.setItem(MF_ID_STORAGE_KEY, id);
   }
   return id;
 }

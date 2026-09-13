@@ -1,6 +1,5 @@
 "use client";
 
-import { nanoid } from "nanoid";
 import {
   useCallback,
   useEffect,
@@ -17,21 +16,14 @@ import {
   type WsConnectionStatus,
   type WsConsoleEvent,
 } from "@/hooks/use-ws-console";
-
-function pushBounded(prev: WsConsoleEvent[], next: WsConsoleEvent, cap: number): WsConsoleEvent[] {
-  const merged = [...prev, next];
-  if (merged.length <= cap) return merged;
-  return merged.slice(merged.length - cap);
-}
+import { appendEvent as appendBoundedEvent } from "@/components/playground/hooks/bounded-events";
 
 function appendEvent(
   setEvents: Dispatch<SetStateAction<WsConsoleEvent[]>>,
   direction: "in" | "out",
   message: string,
 ) {
-  setEvents((prev) =>
-    pushBounded(prev, { id: nanoid(), direction, message, at: Date.now() }, WS_CONSOLE_MAX_EVENTS),
-  );
+  appendBoundedEvent(setEvents, direction, message, WS_CONSOLE_MAX_EVENTS);
 }
 
 export type UseSocketIoConsoleOptions = {
@@ -150,5 +142,9 @@ export function useSocketIoConsole({ url, namespace, listenEvent }: UseSocketIoC
     };
   }, []);
 
-  return { status, events, connect, disconnect, emit };
+  const clear = useCallback(() => {
+    setEvents([]);
+  }, []);
+
+  return { status, events, connect, disconnect, emit, clear };
 }

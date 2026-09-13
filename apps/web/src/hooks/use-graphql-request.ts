@@ -2,7 +2,8 @@
 
 import { useMutation } from "@tanstack/react-query";
 import { API_BASE } from "@/lib/api-client";
-import type { RestResponseData } from "@/hooks/use-rest-request";
+import { MF_ID_HEADER } from "@/lib/playground-constants";
+import { timedFetch, type HttpResponseData } from "@/components/playground/hooks/timed-fetch";
 
 export const PLAYGROUND_GRAPHQL_URL = `${API_BASE}/graphql`;
 
@@ -14,7 +15,7 @@ export interface GraphqlRequestInput {
 function buildHeaders(mfId: string | null): Headers {
   const h = new Headers({ "Content-Type": "application/json" });
   if (mfId) {
-    h.set("X-MF-ID", mfId);
+    h.set(MF_ID_HEADER, mfId);
   }
   return h;
 }
@@ -22,41 +23,18 @@ function buildHeaders(mfId: string | null): Headers {
 export async function sendGraphqlFetch(
   input: GraphqlRequestInput,
   mfId: string | null,
-): Promise<RestResponseData> {
-  const start = performance.now();
+): Promise<HttpResponseData> {
   const body: { query: string; variables?: unknown } = { query: input.query };
   const varsTrimmed = input.variablesJson.trim();
   if (varsTrimmed.length > 0) {
     body.variables = JSON.parse(varsTrimmed) as unknown;
   }
 
-  const res = await fetch(PLAYGROUND_GRAPHQL_URL, {
+  return timedFetch(PLAYGROUND_GRAPHQL_URL, {
     method: "POST",
     headers: buildHeaders(mfId),
     body: JSON.stringify(body),
   });
-
-  const timeMs = Math.round(performance.now() - start);
-  const text = await res.text();
-  let parsedBody: unknown = text.length ? text : null;
-  if (text.trim().length) {
-    try {
-      parsedBody = JSON.parse(text);
-    } catch {
-      parsedBody = text;
-    }
-  }
-  const headers: Record<string, string> = {};
-  res.headers.forEach((value, key) => {
-    headers[key] = value;
-  });
-  return {
-    status: res.status,
-    statusText: res.statusText,
-    timeMs,
-    body: parsedBody,
-    headers,
-  };
 }
 
 export function useGraphqlRequest(mfId: string | null) {

@@ -79,9 +79,11 @@ describe("useWsConsole", () => {
       ws.simulateMessage("hello-in");
     });
 
-    expect(result.current.events).toHaveLength(1);
+    expect(result.current.events).toHaveLength(2);
     expect(result.current.events[0]?.direction).toBe("in");
-    expect(result.current.events[0]?.message).toBe("hello-in");
+    expect(result.current.events[0]?.message).toBe("[connected]");
+    expect(result.current.events[1]?.direction).toBe("in");
+    expect(result.current.events[1]?.message).toBe("hello-in");
 
     act(() => {
       result.current.disconnect();
@@ -185,7 +187,9 @@ describe("useWsConsole", () => {
       instances[0]?.simulateMessage("stale-in");
     });
 
-    expect(result.current.events).toHaveLength(1);
+    expect(result.current.events).toHaveLength(2);
+    expect(result.current.events[0]?.message).toBe("[connected]");
+    expect(result.current.events[1]?.message).toBe("stale-in");
 
     act(() => {
       result.current.disconnect();
@@ -203,7 +207,8 @@ describe("useWsConsole", () => {
       instances[1]?.simulateMessage("fresh-in");
     });
 
-    expect(result.current.events).toHaveLength(1);
-    expect(result.current.events[0]?.message).toBe("fresh-in");
+    expect(result.current.events).toHaveLength(2);
+    expect(result.current.events[0]?.message).toBe("[connected]");
+    expect(result.current.events[1]?.message).toBe("fresh-in");
   });
 });

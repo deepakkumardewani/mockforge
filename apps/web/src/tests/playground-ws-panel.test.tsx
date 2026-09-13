@@ -2,7 +2,7 @@ import { describe, it, expect, vi, afterEach } from "vitest";
 import { render, screen, waitFor, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { WsPanel } from "@/components/playground/ws/WsPanel";
-import { PLAYGROUND_WS_URL } from "@/components/playground/ws/playground-ws-url";
+import { PLAYGROUND_WS_URL, playgroundWsUrl } from "@/components/playground/ws/playground-ws-url";
 
 function mockWebSocket() {
   const instances: MockWebSocket[] = [];
@@ -50,7 +50,7 @@ describe("Playground WebSocket — WsPanel", () => {
     vi.restoreAllMocks();
   });
 
-  it("Connect shows connected; Send appends outgoing line; unmount closes socket", async () => {
+  it("ticker is listen-only; Chat Connect shows Live; Send appends outgoing line; unmount closes socket", async () => {
     const user = userEvent.setup();
     const { MockWebSocket, instances } = mockWebSocket();
     vi.stubGlobal("WebSocket", MockWebSocket as unknown as typeof WebSocket);
@@ -58,19 +58,26 @@ describe("Playground WebSocket — WsPanel", () => {
     const { unmount } = render(<WsPanel />);
 
     expect(screen.getByTitle(PLAYGROUND_WS_URL)).toHaveTextContent(PLAYGROUND_WS_URL);
+    expect(screen.queryByRole("textbox", { name: "Message" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Send" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Disconnect" })).not.toBeInTheDocument();
+    expect(screen.queryByText("Idle")).not.toBeInTheDocument();
+
+    const chatUrl = playgroundWsUrl("/ws/chat/playground");
+    await user.click(screen.getByRole("button", { name: "Chat" }));
 
     await user.click(screen.getByRole("button", { name: "Connect" }));
 
     await waitFor(() => expect(instances.length).toBeGreaterThan(0));
     const ws = instances[0];
     expect(ws).toBeDefined();
-    expect(ws?.url).toBe(PLAYGROUND_WS_URL);
+    expect(ws?.url).toBe(chatUrl);
 
     act(() => {
       ws?.simulateOpen();
     });
 
-    await waitFor(() => expect(screen.getByText("Connected")).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText("Live")).toBeInTheDocument());
 
     const messageBox = screen.getByRole("textbox", { name: "Message" });
     await waitFor(() => expect(messageBox).not.toBeDisabled());
@@ -95,8 +102,11 @@ describe("Playground WebSocket — WsPanel", () => {
 
     render(<WsPanel />);
 
-    expect(screen.getByText(/Streams live stock price updates/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Stock ticks every second. Outbound messages are ignored./i),
+    ).toBeInTheDocument();
 
+    await user.click(screen.getByRole("button", { name: "Stats feed" }));
     await user.click(screen.getByRole("button", { name: "Pong reply" }));
 
     const messageBox = screen.getByRole("textbox", { name: "Message" });

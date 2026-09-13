@@ -1,4 +1,6 @@
-export const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
+import { DEFAULT_API_BASE_URL, MF_ID_HEADER } from "@/lib/playground-constants";
+
+export const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? DEFAULT_API_BASE_URL;
 
 class ApiError extends Error {
   constructor(
@@ -21,7 +23,7 @@ export async function apiClient<T>(
   };
 
   if (mfId) {
-    headers["X-MF-ID"] = mfId;
+    headers[MF_ID_HEADER] = mfId;
   }
 
   const res = await fetch(`${API_BASE}${path}`, {
