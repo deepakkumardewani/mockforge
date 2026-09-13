@@ -94,6 +94,14 @@ describe("Tier 1 Generators", () => {
       expect(typeof product.price).toBe("number");
       expect(typeof product.rating).toBe("number");
     });
+
+    it("should match products by brand or category", () => {
+      const byBrand = generateProducts({ limit: 20, skip: 0, search: "Hintz Group", order: "asc" });
+      expect(byBrand.some((p) => p.brand === "Hintz Group")).toBe(true);
+
+      const byCategory = generateProducts({ limit: 20, skip: 0, search: "Outdoors", order: "asc" });
+      expect(byCategory.some((p) => p.category === "Outdoors")).toBe(true);
+    });
   });
 
   describe("generatePosts", () => {
@@ -153,6 +161,24 @@ describe("Tier 1 Generators", () => {
       expect(comment).toHaveProperty("body");
       expect(comment).toHaveProperty("author");
       expect(comment).toHaveProperty("email");
+    });
+
+    it("should match comments by author or email when body does not", () => {
+      const byAuthor = generateComments({
+        limit: 10,
+        skip: 0,
+        search: "Marc Durgan",
+        order: "asc",
+      });
+      expect(byAuthor.some((c) => c.author === "Marc Durgan")).toBe(true);
+
+      const byEmail = generateComments({
+        limit: 10,
+        skip: 0,
+        search: "Brittany.Franey",
+        order: "asc",
+      });
+      expect(byEmail.some((c) => c.email.includes("Brittany.Franey"))).toBe(true);
     });
   });
 
@@ -262,6 +288,19 @@ describe("Tier 1 Generators", () => {
         expect(quote).toHaveProperty("category");
         expect(quote).toHaveProperty("likes");
       });
+
+      it("should match quotes by author or category", () => {
+        const byAuthor = generateQuotes({
+          limit: 20,
+          skip: 0,
+          search: "Shannon Jenkins",
+          order: "asc",
+        });
+        expect(byAuthor.some((q) => q.author.includes("Shannon Jenkins"))).toBe(true);
+
+        const byCategory = generateQuotes({ limit: 20, skip: 0, search: "cibo", order: "asc" });
+        expect(byCategory.some((q) => q.category === "cibo")).toBe(true);
+      });
     });
 
     describe("generateRecipes", () => {
@@ -281,6 +320,16 @@ describe("Tier 1 Generators", () => {
         expect(["easy", "medium", "hard"]).toContain(recipe.difficulty);
         expect(Array.isArray(recipe.ingredients)).toBe(true);
         expect(Array.isArray(recipe.instructions)).toBe(true);
+      });
+
+      it("should match recipes by cuisine or tag", () => {
+        const byCuisine = generateRecipes({ limit: 20, skip: 0, search: "demergo", order: "asc" });
+        expect(byCuisine.some((r) => r.cuisine === "demergo")).toBe(true);
+
+        const byTag = generateRecipes({ limit: 20, skip: 0, search: "excepturi", order: "asc" });
+        expect(byTag.some((r) => r.tags.some((t) => t.toLowerCase().includes("excepturi")))).toBe(
+          true,
+        );
       });
     });
 
@@ -361,6 +410,24 @@ describe("Tier 1 Generators", () => {
         expect(event).toHaveProperty("organizer");
         expect(event).toHaveProperty("price");
         expect(event).toHaveProperty("isFree");
+      });
+
+      it("should match events by location or organizer", () => {
+        const byLocation = generateEvents({
+          limit: 20,
+          skip: 0,
+          search: "Lake Marco",
+          order: "asc",
+        });
+        expect(byLocation.some((e) => e.location === "Lake Marco")).toBe(true);
+
+        const byOrganizer = generateEvents({
+          limit: 20,
+          skip: 0,
+          search: "Jonathan Anderson",
+          order: "asc",
+        });
+        expect(byOrganizer.some((e) => e.organizer.includes("Jonathan Anderson"))).toBe(true);
       });
     });
   });

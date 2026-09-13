@@ -8,7 +8,20 @@ export default defineConfig({
     coverage: {
       provider: "v8",
       reportsDirectory: "coverage",
-      // threshold enforced once coverage is meaningful (Task 4+)
+      include: ["src/**/*.ts"],
+      exclude: [
+        "src/**/*.test.ts",
+        "src/tests/**",
+        "src/**/*.d.ts",
+        "src/types/**",
+        "src/**/types.ts",
+      ],
+      thresholds: {
+        lines: 90,
+        statements: 90,
+        functions: 90,
+        branches: 90,
+      },
     },
   },
 });

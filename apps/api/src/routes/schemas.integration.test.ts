@@ -133,8 +133,59 @@ describe("Schema REST Routes", () => {
     expect(res.status).toBe(200);
     const json = await res.json();
     expect(json).toHaveProperty("data");
-    expect(json.data).toHaveProperty("id");
     expect(json.data).toHaveProperty("origin");
+    expect(json.data.id).toBe("any-id");
+  });
+
+  it("should stamp the requested id on custom GET /:slug/:id", async () => {
+    const app = createApp();
+    const createRes = await app.request("/api/schemas", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "x-mf-id": testMfId,
+      },
+      body: JSON.stringify(flightSchemaBody),
+    });
+    const { slug } = await createRes.json();
+    const requestedId = "flight-requested-77";
+
+    const res = await app.request(`/api/custom/${slug}/${requestedId}`, {
+      method: "GET",
+      headers: { "x-mf-id": testMfId },
+    });
+
+    expect(res.status).toBe(200);
+    const json = await res.json();
+    expect(json.data.id).toBe(requestedId);
+  });
+
+  it("should filter custom records by search query", async () => {
+    const app = createApp();
+    const createRes = await app.request("/api/schemas", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "x-mf-id": testMfId,
+      },
+      body: JSON.stringify(flightSchemaBody),
+    });
+    const { slug } = await createRes.json();
+
+    const res = await app.request(`/api/custom/${slug}?search=JFK&limit=100`, {
+      method: "GET",
+      headers: { "x-mf-id": testMfId },
+    });
+
+    expect(res.status).toBe(200);
+    const json = await res.json();
+    expect(Array.isArray(json.data)).toBe(true);
+    expect(json.data.length).toBeGreaterThan(0);
+    expect(
+      json.data.every((row: Record<string, unknown>) =>
+        Object.values(row).some((value) => String(value).toLowerCase().includes("jfk")),
+      ),
+    ).toBe(true);
   });
 
   it("should return 404 for non-existent custom schema", async () => {
@@ -145,6 +196,78 @@ describe("Schema REST Routes", () => {
     });
 
     expect(res.status).toBe(404);
+  });
+
+  it("should return 404 for custom GET /:slug/:id when schema is missing", async () => {
+    const app = createApp();
+    const res = await app.request("/api/custom/nonexistent/rec-1", {
+      method: "GET",
+      headers: { "x-mf-id": testMfId },
+    });
+
+    expect(res.status).toBe(404);
+  });
+
+  it("should update a schema via PUT /api/schemas/:slug", async () => {
+    const app = createApp();
+    const createRes = await app.request("/api/schemas", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "x-mf-id": testMfId,
+      },
+      body: JSON.stringify(flightSchemaBody),
+    });
+    const { slug } = await createRes.json();
+
+    const res = await app.request(`/api/schemas/${slug}`, {
+      method: "PUT",
+      headers: {
+        "content-type": "application/json",
+        "x-mf-id": testMfId,
+      },
+      body: JSON.stringify({
+        name: "UpdatedFlight",
+        fields: [
+          { name: "origin", type: "enum", values: ["SFO", "SEA"] },
+          { name: "gate", type: "string" },
+        ],
+        persistent: true,
+      }),
+    });
+
+    expect(res.status).toBe(200);
+    const json = await res.json();
+    expect(json.slug).toBe(slug);
+    expect(json.endpoint).toBe(`/api/custom/${slug}`);
+  });
+
+  it("should return 404 when updating an unknown slug", async () => {
+    const app = createApp();
+    const res = await app.request("/api/schemas/unknownslug", {
+      method: "PUT",
+      headers: {
+        "content-type": "application/json",
+        "x-mf-id": testMfId,
+      },
+      body: JSON.stringify(flightSchemaBody),
+    });
+
+    expect(res.status).toBe(404);
+    const json = await res.json();
+    expect(json.error.code).toBe("NOT_FOUND");
+  });
+
+  it("should return 404 when deleting an unknown slug", async () => {
+    const app = createApp();
+    const res = await app.request("/api/schemas/unknownslug", {
+      method: "DELETE",
+      headers: { "x-mf-id": testMfId },
+    });
+
+    expect(res.status).toBe(404);
+    const json = await res.json();
+    expect(json.error.code).toBe("NOT_FOUND");
   });
 
   it("should delete a schema owned by the same mfId", async () => {

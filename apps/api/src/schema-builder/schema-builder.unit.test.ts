@@ -154,4 +154,39 @@ describe("generateFromSchema", () => {
     const second = JSON.stringify(records[1]);
     expect(first).not.toBe(second);
   });
+
+  it("should generate leftover primitive field types", () => {
+    const schema: SchemaDefinition = {
+      name: "KitchenSink",
+      fields: [
+        { name: "flag", type: "boolean" },
+        { name: "when", type: "date" },
+        { name: "idField", type: "uuid" },
+        { name: "mail", type: "email" },
+        { name: "link", type: "url" },
+        { name: "photo", type: "image" },
+        { name: "qty", type: "number" },
+        { name: "emptyEnum", type: "enum" },
+        { name: "nums", type: "array", items: "number" },
+      ],
+    };
+
+    const [record] = generateFromSchema(schema, 1);
+    expect(typeof record.flag).toBe("boolean");
+    expect(typeof record.when).toBe("string");
+    expect(Number.isNaN(Date.parse(record.when as string))).toBe(false);
+    expect(typeof record.idField).toBe("string");
+    expect(typeof record.mail).toBe("string");
+    expect(String(record.mail)).toContain("@");
+    expect(typeof record.link).toBe("string");
+    expect(String(record.link)).toMatch(/^https?:\/\//);
+    expect(typeof record.photo).toBe("string");
+    expect(typeof record.qty).toBe("number");
+    expect(record.qty as number).toBeGreaterThanOrEqual(0);
+    expect(record.qty as number).toBeLessThanOrEqual(1000);
+    expect(record.emptyEnum).toBeUndefined();
+    expect(Array.isArray(record.nums)).toBe(true);
+    expect((record.nums as number[]).length).toBeGreaterThanOrEqual(2);
+    expect((record.nums as number[]).every((n) => typeof n === "number")).toBe(true);
+  });
 });

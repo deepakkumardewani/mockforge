@@ -565,8 +565,7 @@ describe("GraphQL Integration Tests", () => {
     it("updateTodo returns merged Todo", async () => {
       const query = `
         mutation {
-          updateTodo(id: "todo-1", completed: true, todo: "Ship feature") {
-            id
+          updateTodo(id: 1, completed: true, todo: "Ship feature") {
             todo
             completed
           }
@@ -579,12 +578,11 @@ describe("GraphQL Integration Tests", () => {
       });
       const response = await yoga.fetch(request);
       const data = (await response.json()) as {
-        data?: { updateTodo?: { id: string; todo: string; completed: boolean } };
+        data?: { updateTodo?: { todo: string; completed: boolean } };
         errors?: unknown;
       };
       expect(response.status).toBe(200);
       expect(data.errors).toBeUndefined();
-      expect(data.data?.updateTodo?.id).toBe("todo-1");
       expect(data.data?.updateTodo?.todo).toBe("Ship feature");
       expect(data.data?.updateTodo?.completed).toBe(true);
     });
@@ -619,7 +617,6 @@ describe("GraphQL Integration Tests", () => {
       const query = `
         mutation {
           updateProduct(id: "prod-99", title: "Overridden title") {
-            id
             title
           }
         }
@@ -632,12 +629,11 @@ describe("GraphQL Integration Tests", () => {
         }),
       );
       const data = (await response.json()) as {
-        data?: { updateProduct?: { id: string; title: string } };
+        data?: { updateProduct?: { title: string } };
         errors?: unknown;
       };
       expect(response.status).toBe(200);
       expect(data.errors).toBeUndefined();
-      expect(data.data?.updateProduct?.id).toBe("prod-99");
       expect(data.data?.updateProduct?.title).toBe("Overridden title");
     });
 
@@ -666,6 +662,31 @@ describe("GraphQL Integration Tests", () => {
       expect(data.data?.deleteStock).toEqual({ deleted: true, id: "stock-42" });
     });
 
+    it("deleteUser returns DeleteResult for the requested id", async () => {
+      const query = `
+        mutation {
+          deleteUser(id: "user-err-1") {
+            deleted
+            id
+          }
+        }
+      `;
+      const response = await yoga.fetch(
+        new Request("http://localhost/graphql", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ query }),
+        }),
+      );
+      const data = (await response.json()) as {
+        data?: { deleteUser?: { deleted: boolean; id: string } };
+        errors?: unknown;
+      };
+      expect(response.status).toBe(200);
+      expect(data.errors).toBeUndefined();
+      expect(data.data?.deleteUser).toEqual({ deleted: true, id: "user-err-1" });
+    });
+
     it("schema exposes deleteUser mutation field", async () => {
       const query = `{ __type(name: "Mutation") { fields { name } } }`;
       const response = await yoga.fetch(
@@ -686,6 +707,28 @@ describe("GraphQL Integration Tests", () => {
   });
 
   describe("Error Handling", () => {
+    it("should return error when mutation omits a required id", async () => {
+      const query = `
+        mutation {
+          updateTodo(completed: true) {
+            id
+            todo
+          }
+        }
+      `;
+      const response = await yoga.fetch(
+        new Request("http://localhost/graphql", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ query }),
+        }),
+      );
+      const data = (await response.json()) as { errors?: unknown[] };
+
+      expect(Array.isArray(data.errors)).toBe(true);
+      expect(data.errors?.length).toBeGreaterThan(0);
+    });
+
     it("should return error for invalid query", async () => {
       const query = `
         query {

@@ -34,21 +34,28 @@ class MockContext {
   private vars: Record<string, any> = {};
   private headers: Record<string, string> = {};
 
-  constructor(headerValue?: string) {
-    if (headerValue) {
+  constructor(
+    headerValue?: string,
+    extra?: { headers?: Record<string, string>; remoteAddress?: string | null; noSocket?: boolean },
+  ) {
+    if (headerValue !== undefined) {
       this.headers["x-mf-id"] = headerValue;
     }
+    if (extra?.headers) {
+      for (const [key, value] of Object.entries(extra.headers)) {
+        this.headers[key.toLowerCase()] = value;
+      }
+    }
+    this.req.raw = extra?.noSocket
+      ? {}
+      : { socket: { remoteAddress: extra?.remoteAddress ?? "192.168.1.1" } };
   }
 
   req = {
     header: (name: string) => {
       return this.headers[name.toLowerCase()];
     },
-    raw: {
-      socket: {
-        remoteAddress: "192.168.1.1",
-      },
-    },
+    raw: {} as { socket?: { remoteAddress?: string } },
   };
 
   set(key: string, value: any) {
@@ -107,5 +114,51 @@ describe("MF-ID Middleware", () => {
     expect(mfId.length).toBe(16);
     expect(ctx.get("isIpFallback")).toBe(true);
     expect(nextCalled).toBe(true);
+  });
+
+  it("should treat whitespace-only X-MF-ID as missing", async () => {
+    const ctx = new MockContext("   ") as any;
+    await mfIdMiddleware(ctx, async () => {});
+    expect(ctx.get("isIpFallback")).toBe(true);
+    expect(ctx.get("mfId")).toHaveLength(16);
+  });
+
+  it("should use the first x-forwarded-for hop", async () => {
+    const withForward = new MockContext(undefined, {
+      headers: { "x-forwarded-for": " 10.0.0.8, 10.0.0.9 " },
+    }) as any;
+    const withOther = new MockContext(undefined, {
+      headers: { "x-forwarded-for": "10.1.1.1" },
+    }) as any;
+
+    await mfIdMiddleware(withForward, async () => {});
+    await mfIdMiddleware(withOther, async () => {});
+
+    expect(withForward.get("isIpFallback")).toBe(true);
+    expect(withForward.get("mfId")).not.toBe(withOther.get("mfId"));
+  });
+
+  it("should use x-real-ip when forwarded-for is absent", async () => {
+    const realIp = new MockContext(undefined, {
+      headers: { "x-real-ip": "203.0.113.10" },
+    }) as any;
+    const socketIp = new MockContext() as any;
+
+    await mfIdMiddleware(realIp, async () => {});
+    await mfIdMiddleware(socketIp, async () => {});
+
+    expect(realIp.get("isIpFallback")).toBe(true);
+    expect(realIp.get("mfId")).not.toBe(socketIp.get("mfId"));
+  });
+
+  it("should fall back to unknown when no socket address exists", async () => {
+    const unknown = new MockContext(undefined, { noSocket: true }) as any;
+    const known = new MockContext() as any;
+
+    await mfIdMiddleware(unknown, async () => {});
+    await mfIdMiddleware(known, async () => {});
+
+    expect(unknown.get("mfId")).toHaveLength(16);
+    expect(unknown.get("mfId")).not.toBe(known.get("mfId"));
   });
 });

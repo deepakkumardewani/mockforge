@@ -3,15 +3,16 @@ import { describe, it, expect, beforeEach, vi } from "vitest";
 // Track request counts per test
 let requestCounts: Record<string, number> = {};
 
-// Mock Redis
+const mockGetRedis = vi.fn(() => ({
+  incr: async (key: string) => {
+    requestCounts[key] = (requestCounts[key] || 0) + 1;
+    return requestCounts[key];
+  },
+  expire: async (_key: string, _seconds: number) => 1,
+}));
+
 vi.mock("../db/redis", () => ({
-  getRedis: () => ({
-    incr: async (key: string) => {
-      requestCounts[key] = (requestCounts[key] || 0) + 1;
-      return requestCounts[key];
-    },
-    expire: async (_key: string, _seconds: number) => 1,
-  }),
+  getRedis: () => mockGetRedis(),
 }));
 
 // Import after mocks
@@ -66,12 +67,23 @@ class MockContext {
   getResponseHeaders() {
     return this.responseHeaders;
   }
+
+  getResponseBody() {
+    return this.responseBody;
+  }
 }
 
 describe("Rate Limit Middleware", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    requestCounts = {}; // Reset request counts before each test
+    requestCounts = {};
+    mockGetRedis.mockImplementation(() => ({
+      incr: async (key: string) => {
+        requestCounts[key] = (requestCounts[key] || 0) + 1;
+        return requestCounts[key];
+      },
+      expire: async (_key: string, _seconds: number) => 1,
+    }));
   });
 
   it("should increment counter on each request", async () => {
@@ -144,5 +156,33 @@ describe("Rate Limit Middleware", () => {
 
     // Verify next was called 300 times
     expect(callCount).toBe(300);
+  });
+
+  it("should return 400 when mfId is missing", async () => {
+    const ctx = new MockContext("unused") as any;
+    ctx.get = (key: string) => (key === "mfId" ? undefined : false);
+    let nextCalled = false;
+
+    await rateLimitMiddleware(ctx, async () => {
+      nextCalled = true;
+    });
+
+    expect(nextCalled).toBe(false);
+    expect(ctx.getResponseStatus()).toBe(400);
+    expect(ctx.getResponseBody()).toEqual({ error: "Missing mfId" });
+  });
+
+  it("should call next when Redis throws", async () => {
+    mockGetRedis.mockImplementationOnce(() => {
+      throw new Error("redis down");
+    });
+
+    const ctx = new MockContext("redis-error-user") as any;
+    let nextCalled = false;
+    await rateLimitMiddleware(ctx, async () => {
+      nextCalled = true;
+    });
+
+    expect(nextCalled).toBe(true);
   });
 });
