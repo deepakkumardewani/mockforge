@@ -12,6 +12,7 @@ import { Preview } from "@/components/builder/Preview";
 import { SavedSchemas } from "@/components/builder/SavedSchemas";
 import { EndpointDisplay } from "@/components/builder/EndpointDisplay";
 import { MfIdPrompt } from "@/components/builder/MfIdPrompt";
+import { AppHeader } from "@/components/navigation/AppHeader";
 import { builderFormValuesSchema } from "@/components/builder/types";
 import type { BuilderFormValues } from "@/components/builder/types";
 import type { SavedSchema } from "@/components/builder/types";
@@ -156,93 +157,104 @@ export default function BuilderPage() {
   );
 
   return (
-    <main className="min-h-screen px-4 py-8">
-      <div className="mx-auto max-w-7xl">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-[var(--color-text-primary)]">Schema Builder</h1>
-          <p className="mt-2 text-[var(--color-text-muted)]">
-            Define custom data schemas and generate fake records.
-          </p>
-        </div>
+    <div className="min-h-screen">
+      <AppHeader />
+      <main className="px-4 py-6 sm:px-6">
+        <div className="mx-auto max-w-7xl">
+          <div className="mb-6">
+            <h1 className="text-2xl font-bold text-[var(--color-text-primary)] sm:text-3xl">
+              Schema Builder
+            </h1>
+            <p className="mt-2 text-[var(--color-text-muted)]">
+              Define a custom schema and get a hosted REST endpoint you can call from your app.
+            </p>
+          </div>
 
-        <div className="flex gap-6">
-          {/* Left sidebar — saved schemas */}
-          <aside className="w-64 shrink-0">
-            <SavedSchemas onLoad={handleLoad} activeSlug={activeSlug} />
-          </aside>
+          <div className="flex flex-col gap-6 lg:flex-row">
+            <aside className="w-full shrink-0 lg:w-64">
+              <SavedSchemas onLoad={handleLoad} activeSlug={activeSlug} />
+            </aside>
 
-          {/* Main content area */}
-          <div className="flex-1 min-w-0 space-y-6">
-            {/* Mode toggle */}
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() => setMode("visual")}
-                className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
-                  mode === "visual"
-                    ? "bg-[var(--color-accent)] text-white"
-                    : "text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)]"
-                }`}
-              >
-                Visual
-              </button>
-              <button
-                type="button"
-                onClick={() => setMode("json")}
-                className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
-                  mode === "json"
-                    ? "bg-[var(--color-accent)] text-white"
-                    : "text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)]"
-                }`}
-              >
-                JSON
-              </button>
-            </div>
+            <div className="min-w-0 flex-1 space-y-6">
+              <div className="flex items-center gap-2" role="group" aria-label="Editor mode">
+                <button
+                  type="button"
+                  onClick={() => setMode("visual")}
+                  aria-pressed={mode === "visual"}
+                  className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+                    mode === "visual"
+                      ? "bg-[var(--color-accent)] text-white"
+                      : "text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)]"
+                  }`}
+                >
+                  Visual
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setMode("json")}
+                  aria-pressed={mode === "json"}
+                  className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+                    mode === "json"
+                      ? "bg-[var(--color-accent)] text-white"
+                      : "text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)]"
+                  }`}
+                >
+                  JSON
+                </button>
+              </div>
 
-            {/* Editor */}
-            {mode === "visual" ? (
-              <FieldEditor
-                control={control}
-                register={register}
-                fields={fields}
-                onAddField={handleAddField}
-                onRemoveField={handleRemoveField}
-                errors={errors as unknown as Record<string, { message?: string }>}
-              />
-            ) : (
-              <JsonEditor formValues={formValues} onApply={handleJsonApply} />
-            )}
-
-            {/* Save button */}
-            <div className="flex items-center gap-3">
-              <button
-                type="button"
-                onClick={handleSave}
-                disabled={saveMutation.isPending}
-                className="rounded-lg bg-[var(--color-accent)] px-6 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50"
-              >
-                {saveMutation.isPending ? "Saving..." : "Save Schema"}
-              </button>
-              {saveMutation.isError && (
-                <p className="text-sm text-red-500">{(saveMutation.error as Error).message}</p>
+              {/* Editor */}
+              {mode === "visual" ? (
+                <FieldEditor
+                  control={control}
+                  register={register}
+                  fields={fields}
+                  onAddField={handleAddField}
+                  onRemoveField={handleRemoveField}
+                  errors={errors as unknown as Record<string, { message?: string }>}
+                />
+              ) : (
+                <JsonEditor formValues={formValues} onApply={handleJsonApply} />
               )}
-            </div>
 
-            {/* Endpoint display */}
-            {savedEndpoint && <EndpointDisplay endpoint={savedEndpoint} />}
+              {/* Save button */}
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={handleSave}
+                  disabled={saveMutation.isPending}
+                  className="rounded-lg bg-[var(--color-accent)] px-6 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+                >
+                  {saveMutation.isPending ? "Saving..." : "Save Schema"}
+                </button>
+                {saveMutation.isError && (
+                  <p className="text-sm text-red-500" role="alert" aria-live="assertive">
+                    {(saveMutation.error as Error).message}
+                  </p>
+                )}
+                {saveMutation.isSuccess && savedEndpoint && (
+                  <p className="sr-only" aria-live="polite">
+                    Schema saved.
+                  </p>
+                )}
+              </div>
 
-            {/* MfId prompt */}
-            {showMfIdPrompt && mfId && (
-              <MfIdPrompt mfId={mfId} onDismiss={() => setShowMfIdPrompt(false)} />
-            )}
+              {/* Endpoint display */}
+              {savedEndpoint && <EndpointDisplay endpoint={savedEndpoint} />}
 
-            {/* Live preview */}
-            <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-raised)] p-6">
-              <Preview formValues={formValues} />
+              {/* MfId prompt */}
+              {showMfIdPrompt && mfId && (
+                <MfIdPrompt mfId={mfId} onDismiss={() => setShowMfIdPrompt(false)} />
+              )}
+
+              {/* Live preview */}
+              <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-raised)] p-6">
+                <Preview formValues={formValues} />
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </main>
+      </main>
+    </div>
   );
 }
