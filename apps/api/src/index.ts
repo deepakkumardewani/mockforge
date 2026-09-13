@@ -20,7 +20,7 @@ import type { WsData } from "./ws/types";
 // Initialize Redis on startup
 initializeRedis();
 
-const app = new Hono();
+export const app = new Hono();
 
 // Global middleware
 app.use("*", cors());

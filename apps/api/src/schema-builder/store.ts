@@ -48,6 +48,35 @@ export async function getSchema(slug: string): Promise<SavedSchema | null> {
   return JSON.parse(raw) as SavedSchema;
 }
 
+export async function updateSchema(
+  slug: string,
+  definition: SchemaDefinition,
+  mfId: string,
+  persistent?: boolean,
+): Promise<SavedSchema | null> {
+  const existing = await getSchema(slug);
+  if (!existing || existing.mfId !== mfId) return null;
+
+  const nextPersistent = persistent ?? existing.persistent;
+  const saved: SavedSchema = {
+    ...existing,
+    slug: existing.slug,
+    definition,
+    persistent: nextPersistent,
+    endpoint: `/api/custom/${existing.slug}`,
+  };
+
+  const redis = getRedis();
+  await redis.set(schemaKey(existing.slug), JSON.stringify(saved));
+
+  if (!nextPersistent) {
+    await redis.expire(schemaKey(existing.slug), EPHEMERAL_TTL);
+  }
+
+  await redis.sadd(mfIndexKey(mfId), existing.slug);
+  return saved;
+}
+
 export async function listSchemas(mfId: string): Promise<SavedSchema[]> {
   const redis = getRedis();
   const slugs = await redis.smembers(mfIndexKey(mfId));

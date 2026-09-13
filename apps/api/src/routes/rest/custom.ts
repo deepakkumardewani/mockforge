@@ -34,13 +34,16 @@ router.get("/:slug", zValidator("query", paginationSchema), async (c) => {
 
 router.get("/:slug/:id", async (c) => {
   const slug = c.req.param("slug");
+  const requestedId = c.req.param("id");
   const schema = await getSchema(slug);
   if (!schema) {
     return c.json({ error: { code: "NOT_FOUND", message: "Schema not found" } }, 404);
   }
 
+  // Records are generated on the fly (not stored). Stamp the path id so the
+  // detail contract matches the request; other fields remain a fresh sample.
   const records = generateFromSchema(schema.definition, 1);
-  return c.json({ data: records[0] });
+  return c.json({ data: { ...records[0], id: requestedId } });
 });
 
 export default router;
