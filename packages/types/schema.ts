@@ -1,14 +1,17 @@
-export type SchemaFieldType =
-  | "string"
-  | "number"
-  | "boolean"
-  | "date"
-  | "enum"
-  | "uuid"
-  | "email"
-  | "url"
-  | "image"
-  | "array";
+export const SCHEMA_FIELD_TYPES = [
+  "string",
+  "number",
+  "boolean",
+  "date",
+  "enum",
+  "uuid",
+  "email",
+  "url",
+  "image",
+  "array",
+] as const;
+
+export type SchemaFieldType = (typeof SCHEMA_FIELD_TYPES)[number];
 
 export interface SchemaField {
   name: string;

@@ -1,19 +1,14 @@
 import { z } from "zod";
+import {
+  SCHEMA_FIELD_TYPES,
+  type SavedSchema,
+  type SchemaDefinition,
+  type SchemaField,
+  type SchemaFieldType,
+} from "@mockforge/types";
 
-export const SCHEMA_FIELD_TYPES = [
-  "string",
-  "number",
-  "boolean",
-  "date",
-  "enum",
-  "uuid",
-  "email",
-  "url",
-  "image",
-  "array",
-] as const;
-
-export type SchemaFieldType = (typeof SCHEMA_FIELD_TYPES)[number];
+export { SCHEMA_FIELD_TYPES };
+export type { SavedSchema, SchemaDefinition, SchemaField, SchemaFieldType };
 
 export const schemaFieldTypeSchema = z.enum(SCHEMA_FIELD_TYPES);
 
@@ -30,6 +25,7 @@ export const builderFieldSchema = z
     items: schemaFieldTypeSchema.optional(),
     min: optionalNumber,
     max: optionalNumber,
+    required: z.boolean().optional(),
   })
   .superRefine((field, ctx) => {
     if (
@@ -59,6 +55,7 @@ export const builderFormValuesSchema = z.object({
   fields: z.array(builderFieldSchema).min(1, "At least one field is required"),
 });
 
+/** UI form field: enum values stay comma-separated until API conversion. */
 export interface BuilderField {
   name: string;
   type: SchemaFieldType;
@@ -66,32 +63,10 @@ export interface BuilderField {
   items?: SchemaFieldType;
   min?: number;
   max?: number;
+  required?: boolean;
 }
 
 export interface BuilderFormValues {
   name: string;
   fields: BuilderField[];
-}
-
-export interface SchemaFieldForApi {
-  name: string;
-  type: SchemaFieldType;
-  values?: string[];
-  items?: SchemaFieldType;
-  min?: number;
-  max?: number;
-}
-
-export interface SchemaDefinition {
-  name: string;
-  fields: SchemaFieldForApi[];
-}
-
-export interface SavedSchema {
-  slug: string;
-  mfId: string;
-  definition: SchemaDefinition;
-  persistent: boolean;
-  endpoint: string;
-  createdAt: string;
 }

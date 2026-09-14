@@ -15,13 +15,14 @@ export type {
   Company,
   Stock,
   Event,
-} from "./entities/index.js";
+} from "./entities";
 
-export type { ApiResponse, ApiMeta, ApiError } from "./api.js";
+export type { ApiResponse, ApiMeta, ApiError } from "./api";
 
+export { SCHEMA_FIELD_TYPES } from "./schema";
 export type {
   SchemaFieldType,
   SchemaField,
   SchemaDefinition,
   SavedSchema,
-} from "./schema.js";
+} from "./schema";

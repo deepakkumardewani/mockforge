@@ -4,7 +4,7 @@ import type {
   BuilderFormValues,
   SavedSchema,
   SchemaDefinition,
-  SchemaFieldForApi,
+  SchemaField,
   SchemaFieldType,
 } from "./types";
 
@@ -22,8 +22,8 @@ function isSchemaFieldType(value: unknown): value is SchemaFieldType {
   return typeof value === "string" && (SCHEMA_FIELD_TYPES as readonly string[]).includes(value);
 }
 
-export function fieldToApi(field: BuilderField): SchemaFieldForApi {
-  const next: SchemaFieldForApi = {
+export function fieldToApi(field: BuilderField): SchemaField {
+  const next: SchemaField = {
     name: field.name.trim(),
     type: field.type,
   };
@@ -37,15 +37,17 @@ export function fieldToApi(field: BuilderField): SchemaFieldForApi {
     next.items = field.items;
   }
 
-  if (field.type === "number") {
+  if (field.type === "number" || (field.type === "array" && field.items === "number")) {
     if (field.min !== undefined && !Number.isNaN(field.min)) next.min = field.min;
     if (field.max !== undefined && !Number.isNaN(field.max)) next.max = field.max;
   }
 
+  if (field.required !== undefined) next.required = field.required;
+
   return next;
 }
 
-export function isPreviewableField(field: SchemaFieldForApi): boolean {
+export function isPreviewableField(field: SchemaField): boolean {
   if (!field.name) return false;
   if (field.type === "enum") return Boolean(field.values && field.values.length > 0);
   if (field.type === "array") return Boolean(field.items && field.items !== "array");
@@ -90,6 +92,7 @@ export function definitionToFormValues(definition: SchemaDefinition): BuilderFor
       items: field.items,
       min: field.min,
       max: field.max,
+      required: field.required,
     })),
   };
 }
@@ -121,6 +124,7 @@ export function coerceToFormValues(raw: unknown): BuilderFormValues | null {
       items,
       min: typeof field.min === "number" && !Number.isNaN(field.min) ? field.min : undefined,
       max: typeof field.max === "number" && !Number.isNaN(field.max) ? field.max : undefined,
+      required: typeof field.required === "boolean" ? field.required : undefined,
     };
   });
 
@@ -129,7 +133,7 @@ export function coerceToFormValues(raw: unknown): BuilderFormValues | null {
   return { name: obj.name, fields: fields as BuilderField[] };
 }
 
-function sampleScalar(field: SchemaFieldForApi, row: number): unknown {
+function sampleScalar(field: SchemaField, row: number): unknown {
   switch (field.type) {
     case "string":
       return `${field.name}-${row + 1}`;
@@ -160,10 +164,19 @@ function sampleScalar(field: SchemaFieldForApi, row: number): unknown {
   }
 }
 
-function sampleValue(field: SchemaFieldForApi, row: number): unknown {
+function sampleValue(field: SchemaField, row: number): unknown {
   if (field.type === "array" && field.items && field.items !== "array") {
     return [0, 1].map((offset) =>
-      sampleScalar({ name: field.name, type: field.items as SchemaFieldType }, row * 2 + offset),
+      sampleScalar(
+        {
+          name: field.name,
+          type: field.items as SchemaFieldType,
+          values: field.values,
+          min: field.min,
+          max: field.max,
+        },
+        row * 2 + offset,
+      ),
     );
   }
   return sampleScalar(field, row);
