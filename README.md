@@ -5,18 +5,8 @@
 <h1 align="center">MockForge</h1>
 
 <p align="center">
-  A hosted fake-data API for REST, GraphQL, WebSockets, and Socket.IO.<br />
-  No signup. No API key. Point your client at the public origin and go.
-</p>
-
-<p align="center">
-  <a href="https://github.com/deepakkumardewani/mockforge/actions/workflows/ci.yml"><img src="https://github.com/deepakkumardewani/mockforge/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
-  <img src="https://img.shields.io/badge/typescript-%23007ACC.svg?style=flat&logo=typescript&logoColor=white" alt="TypeScript" />
-  <img src="https://img.shields.io/badge/Bun-%23000000.svg?style=flat&logo=bun&logoColor=white" alt="Bun" />
-  <img src="https://img.shields.io/badge/Next-black?style=flat&logo=next.js&logoColor=white" alt="Next.js" />
-  <img src="https://img.shields.io/badge/hono-E36002?style=flat&logo=hono&logoColor=white" alt="Hono" />
-  <img src="https://img.shields.io/badge/-GraphQL-E10098?style=flat&logo=graphql&logoColor=white" alt="GraphQL" />
-  <img src="https://img.shields.io/badge/github%20actions-%232671E5.svg?style=flat&logo=githubactions&logoColor=white" alt="GitHub Actions" />
+  <strong>A hosted fake-data API for REST, GraphQL, WebSockets, and Socket.IO.</strong><br />
+  No signup. No API key. Point your client at the origin and go.
 </p>
 
 <p align="center">
@@ -27,69 +17,139 @@
   <a href="https://mockforge.dev/builder">Schema builder</a>
 </p>
 
-## What it does
+## Why MockForge
 
-MockForge generates realistic mock data so you can build and test clients without standing up a backend.
+Most frontend work stalls on a backend that is not ready, or on fixture files that drift from the real contract. MockForge is a **typed mock API you call from the app** — the same paths, envelopes, and live channels you would use against a production server.
 
-- **REST** — 14 entities under `/api/{entity}` with list, get, search, and non-persistent writes
-- **GraphQL** — same entities at `POST /graphql`
-- **WebSockets** — live streams at `/ws/stats`, `/ws/notifications`, `/ws/chat/{roomId}`, `/ws/ticker`
-- **Socket.IO** — `/notifications`, `/chat`, `/ticker` on a separate Socket.IO origin
-- **Custom schemas** — design a shape in the builder, then read it at `/api/custom/{slug}`
-- **Identity** — optional `X-MF-ID` owns your schemas and raises the rate limit (300/min vs 60/min by IP)
+- **Open and go.** Public origin, no installer, no account wall.
+- **One model, four transports.** The same 14 resources over REST and GraphQL, plus live WebSocket and Socket.IO streams.
+- **Your own shapes.** Design a schema in the builder and read generated rows at a public `GET`.
+- **Honest mocks.** Writes return a sample row and never persist. `id` is a generator offset, not a stored primary key.
+
+## Features
+
+- **REST** — paginated lists (`limit` / `skip`), search, and non-persistent writes on every built-in resource
+- **GraphQL** — `POST /graphql` with the same 14 entities; list fields return arrays
+- **WebSockets** — stats, notifications, chat rooms, and a stock ticker on the API host
+- **Socket.IO** — notifications, chat, and ticker with automatic reconnect (try it in the playground)
+- **Custom schemas** — ten field types, preview as you edit, public `GET /api/custom/{slug}`
+- **Optional identity** — send `X-MF-ID` to own schemas and raise the HTTP quota (300/min vs 60/min by IP)
 
 > [!NOTE]
-> Writes never persist. Record `id` values are generator offsets, not stored primary keys.
+> List responses use `{ data, total, limit, skip, meta }`. GraphQL lists are plain arrays. Mutations and REST writes do not persist.
 
 ## Quick start
 
+Base URL: `https://api.mockforge.dev`
+
 ```bash
-# REST
-curl "https://api.mockforge.dev/api/users?limit=5"
+# REST — paginated products
+curl "https://api.mockforge.dev/api/products?limit=5"
+
+# REST — one user (id is a 1-based offset)
+curl "https://api.mockforge.dev/api/users/1"
 
 # GraphQL
 curl -X POST https://api.mockforge.dev/graphql \
   -H "Content-Type: application/json" \
-  -d '{"query":"{ users { id firstName email } }"}'
+  -d '{"query":"{ users(limit: 3) { id firstName email } }"}'
 ```
 
-Use the [playground](https://mockforge.dev/playground) to try REST, GraphQL, WebSocket, and Socket.IO from the browser.
-
-## Local development
-
-This is a Bun + Turbo monorepo (`apps/web`, `apps/api`, `packages/types`).
-
-```bash
-bun install
-docker compose up -d   # Redis for rate limits and integration tests
-bun run dev            # web :3000, API :4000 (Socket.IO :4001)
+```javascript
+const ws = new WebSocket("wss://api.mockforge.dev/ws/ticker");
+ws.onmessage = (event) => console.log(JSON.parse(event.data));
 ```
 
-| Script | Purpose |
+Explore REST, GraphQL, WebSocket, and Socket.IO from the [playground](https://mockforge.dev/playground) without writing a client.
+
+## Resources
+
+Fourteen generated entities, plus **Custom** from the builder (15 typed resources).
+
+| Resource | Path |
 | --- | --- |
-| `bun run lint` | oxlint across workspaces |
-| `bun run typecheck` | `tsc --noEmit` |
-| `bun run test` | Vitest unit tests |
-| `bun run ci` | lint + typecheck + test (CI gate) |
-| `bun run test:integration` | API tests that need Redis |
-| `bun run test:e2e` | Playwright (install browsers first) |
+| Users | `/api/users` |
+| Products | `/api/products` |
+| Posts | `/api/posts` |
+| Comments | `/api/comments` |
+| Todos | `/api/todos` |
+| Carts | `/api/carts` |
+| Messages | `/api/messages` |
+| Notifications | `/api/notifications` |
+| Quotes | `/api/quotes` |
+| Recipes | `/api/recipes` |
+| Countries | `/api/countries` |
+| Companies | `/api/companies` |
+| Stocks | `/api/stocks` |
+| Events | `/api/events` |
+| Custom (builder) | `/api/custom/{slug}` |
 
-Copy `apps/api/.env.example` for local Redis (`REDIS_LOCAL=true`, `REDIS_URL=redis://localhost:6379`).
+Field catalogs live in the [REST docs](https://mockforge.dev/docs/rest).
 
-## Repository layout
+### REST
 
-```
-apps/web     Next.js site, docs, playground, schema builder
-apps/api     Hono API, GraphQL Yoga, WebSockets, Socket.IO
-packages/types   Shared TypeScript types
-```
+| Verb | Path | Result |
+| --- | --- | --- |
+| `GET` | `/api/{entity}?limit&skip&search` | List envelope |
+| `GET` | `/api/{entity}/:id` | `{ data }` |
+| `GET` | `/api/{entity}/search?q=` | Same envelope |
+| `POST` / `PUT` / `DELETE` | `/api/{entity}` … | Mock row only |
+
+`limit` defaults to 30 (max 100). Dedicated search uses `q`; list endpoints also accept `search`.
+
+### GraphQL
+
+Same entity names as REST (`users`, `user(id)`, `createUser`, …). Args: `limit` (default 10, max 100), `skip`, `search` where supported. Custom schemas are REST-only.
+
+### Realtime
+
+| Protocol | Where | Streams |
+| --- | --- | --- |
+| WebSocket | `wss://api.mockforge.dev` | `/ws/stats`, `/ws/notifications`, `/ws/chat/{roomId}`, `/ws/ticker` |
+| Socket.IO | Hosted Socket.IO origin (playground) | `/notifications`, `/chat` (`query.roomId`), `/ticker` |
+
+Stats WebSockets expect a `pong` reply to `ping`. There is no Socket.IO `/stats` namespace.
+
+## Custom schemas
+
+1. Open the [schema builder](https://mockforge.dev/builder).
+2. Add fields (`string`, `number`, `boolean`, `date`, `enum`, `uuid`, `email`, `url`, `image`, `array`).
+3. Save — the API mints `GET /api/custom/{slug}` (list + search). Records are generated on each request.
+
+Schema **definitions** (`POST` / `GET` / `PUT` / `DELETE` `/api/schemas`) require `X-MF-ID`. Public sample `GET`s do not.
 
 ## Identity and limits
 
-No account is required. Send `X-MF-ID` (a client-generated UUID) to own custom schemas and use the higher quota. Schema mutations require that header; public `GET`s do not. Rate-limit headers are `X-RateLimit-*`; a 429 returns `TOO_MANY_REQUESTS` and `Retry-After: 60`. Limits fail open if Redis is down.
+No account. A client-generated UUID does two jobs when sent as `X-MF-ID`:
 
-Socket.IO does not use `X-MF-ID`. CORS is open (`*`).
+1. Owns builder schemas (the site stores it as `mf_id` in `localStorage`)
+2. Raises the HTTP quota
 
-## CI
+| You send | Quota |
+| --- | --- |
+| `X-MF-ID` | 300 req/min |
+| Nothing (IP) | 60 req/min |
 
-Pull requests and pushes to `main` run [`.github/workflows/ci.yml`](.github/workflows/ci.yml): install with a frozen lockfile, then `lint`, `typecheck`, and `test`.
+Responses include `X-RateLimit-*` when the limiter is active. Over the cap: `429` with `TOO_MANY_REQUESTS` and `Retry-After: 60`. CORS is open (`*`). Socket.IO does not use `X-MF-ID`.
+
+Copy the builder recovery key if you switch devices. Details: [Identity & rate limits](https://mockforge.dev/docs/identity).
+
+## Who it's for
+
+| Scenario | How you use it |
+| --- | --- |
+| **Frontend development** | Point the app at the origin and render against typed REST or GraphQL. |
+| **Integration tests** | Hit the same paths the client uses; do not treat mutations as durable state. |
+| **Protocol comparison** | Read a resource over HTTP, then subscribe to the matching live stream. |
+| **Product demos** | Issue live `GET`s so the audience sees real JSON, not screenshots of fixtures. |
+
+## Learn more
+
+- [Getting started](https://mockforge.dev/docs/getting-started) — first requests in under a minute
+- [REST reference](https://mockforge.dev/docs/rest) — envelopes, verbs, entity fields
+- [GraphQL](https://mockforge.dev/docs/graphql) · [WebSockets](https://mockforge.dev/docs/websockets) · [Socket.IO](https://mockforge.dev/docs/socketio)
+- [Custom schemas](https://mockforge.dev/docs/custom-schemas)
+
+<div align="center">
+  <sub>No tracking. No ads. No nonsense.</sub>
+</div>
