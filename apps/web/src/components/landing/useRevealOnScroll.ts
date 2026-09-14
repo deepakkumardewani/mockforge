@@ -46,7 +46,16 @@ export function useRevealOnScroll(
       }
     }, containerRef);
 
-    return () => ctx.revert();
+    const refreshId = window.setTimeout(() => {
+      if (typeof ScrollTrigger.refresh === "function") {
+        ScrollTrigger.refresh();
+      }
+    }, 50);
+
+    return () => {
+      window.clearTimeout(refreshId);
+      ctx.revert();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

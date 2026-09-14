@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import gsap from "gsap";
 import Link from "next/link";
 import { DepthTexture, SECTION_IDENTITY } from "./depth";
 import { API_BASE } from "@/lib/api-client";
+import { useHeroTyping, type HeroSnippet } from "./useHeroTyping";
 
 function toWsOrigin(httpBase: string): string {
   try {
@@ -66,6 +67,86 @@ const TERMINAL_BORDER_CLASS = "border-[var(--color-border)] dark:border-[oklch(0
 const TERMINAL_BORDER_STRONG_CLASS =
   "border-[var(--color-border)] dark:border-[oklch(0.44_0.016_65)]";
 
+function HeroTerminal({ snippets }: { snippets: readonly HeroSnippet[] }) {
+  const terminalRootRef = useRef<HTMLDivElement>(null);
+  const { snippetIndex, displayedCode, selectSnippet } = useHeroTyping(snippets, terminalRootRef);
+  const activeSnippet = snippets[snippetIndex];
+
+  return (
+    <div ref={terminalRootRef} className={`relative w-full ${TERMINAL_STACK_SHELL_CLASS}`}>
+      <div
+        className="pointer-events-none absolute left-0 top-8 right-[2.75rem] bottom-0 rounded-xl border-2 shadow-lg"
+        style={{
+          background: "var(--color-surface-raised)",
+          borderColor: "color-mix(in oklch, var(--color-accent) 50%, var(--color-border))",
+          transform: "rotate(-5deg) translate(6px, 12px)",
+        }}
+        aria-hidden
+      />
+      <div
+        className={`pointer-events-none absolute left-10 top-3 right-0 bottom-7 rounded-xl border shadow-md sm:left-12 sm:bottom-8 ${TERMINAL_BORDER_STRONG_CLASS}`}
+        style={{
+          background: "var(--color-code-bg)",
+          transform: "rotate(3deg) translate(-4px, 8px)",
+        }}
+        aria-hidden
+      />
+
+      <div
+        className={`absolute inset-x-0 top-0 z-10 flex ${TERMINAL_HEIGHT_CLASS} w-full flex-col overflow-hidden rounded-xl border shadow-2xl ${TERMINAL_BORDER_STRONG_CLASS}`}
+        style={{ background: "var(--color-code-bg)" }}
+      >
+        <div
+          className={`flex shrink-0 items-center justify-between gap-2 border-b px-3 py-3 sm:px-4 ${TERMINAL_BORDER_CLASS}`}
+          style={{ background: "var(--color-surface-raised)" }}
+        >
+          <div className="hidden shrink-0 items-center gap-3 sm:flex">
+            <span
+              className="h-0.5 w-8 rounded-full"
+              style={{ background: "var(--color-accent)" }}
+            />
+            <span className="font-mono text-xs font-medium text-[var(--color-text-muted)]">
+              {activeSnippet.label}
+            </span>
+          </div>
+          <div className="flex min-w-0 flex-1 items-center justify-end gap-1 overflow-x-auto">
+            {snippets.map((snippet, i) => (
+              <button
+                key={snippet.label}
+                type="button"
+                aria-label={`Show ${snippet.label} request sample`}
+                aria-pressed={snippetIndex === i}
+                onClick={() => selectSnippet(i)}
+                className="landing-tab shrink-0 rounded px-2 py-0.5 font-mono text-xs outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface-raised)]"
+                style={
+                  snippetIndex === i
+                    ? {
+                        color: "var(--color-accent)",
+                        background: "var(--color-surface-hover)",
+                      }
+                    : { color: "var(--color-text-muted)" }
+                }
+              >
+                {snippet.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <pre className="min-h-0 flex-1 overflow-hidden p-4 font-mono text-xs leading-relaxed whitespace-pre-wrap break-words text-[var(--color-code-text)] sm:p-5 sm:text-sm">
+          <code className="block">
+            {displayedCode}
+            <span
+              className="inline-block h-3.5 w-1.5 animate-pulse align-middle motion-reduce:animate-none sm:h-4"
+              style={{ background: "var(--color-accent)" }}
+            />
+          </code>
+        </pre>
+      </div>
+    </div>
+  );
+}
+
 export function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const terminalRef = useRef<HTMLDivElement>(null);
@@ -75,16 +156,9 @@ export function Hero() {
   const socialProofRef = useRef<HTMLParagraphElement>(null);
   const snippets = useMemo(() => buildSnippets(API_BASE), []);
 
-  const [snippetIndex, setSnippetIndex] = useState(0);
-  const [displayedCode, setDisplayedCode] = useState("");
-  const [charIndex, setCharIndex] = useState(0);
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [typingStarted, setTypingStarted] = useState(false);
-
   useEffect(() => {
-    const startTyping = setTimeout(() => setTypingStarted(true), 700);
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      return () => clearTimeout(startTyping);
+      return;
     }
     const ctx = gsap.context(() => {
       if (
@@ -125,53 +199,8 @@ export function Hero() {
         );
     }, sectionRef);
 
-    return () => {
-      clearTimeout(startTyping);
-      ctx.revert();
-    };
+    return () => ctx.revert();
   }, []);
-
-  useEffect(() => {
-    if (!typingStarted) return;
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const snippet = snippets[snippetIndex];
-    const fullText = snippet.code;
-
-    if (prefersReducedMotion) {
-      setDisplayedCode(fullText);
-      setCharIndex(fullText.length);
-      setIsDeleting(false);
-      return;
-    }
-
-    let timeout: ReturnType<typeof setTimeout>;
-
-    if (!isDeleting) {
-      if (charIndex < fullText.length) {
-        timeout = setTimeout(
-          () => {
-            setDisplayedCode(fullText.slice(0, charIndex + 1));
-            setCharIndex(charIndex + 1);
-          },
-          20 + Math.random() * 15,
-        );
-      } else {
-        timeout = setTimeout(() => setIsDeleting(true), 2500);
-      }
-    } else if (charIndex > 0) {
-      timeout = setTimeout(() => {
-        setDisplayedCode(fullText.slice(0, charIndex - 1));
-        setCharIndex(charIndex - 1);
-      }, 8);
-    } else {
-      setIsDeleting(false);
-      setSnippetIndex((snippetIndex + 1) % snippets.length);
-    }
-
-    return () => clearTimeout(timeout);
-  }, [charIndex, isDeleting, snippetIndex, snippets, typingStarted]);
-
-  const activeSnippet = snippets[snippetIndex];
 
   return (
     <section
@@ -255,82 +284,7 @@ export function Hero() {
           </div>
 
           <div ref={terminalRef} className="relative w-full min-w-0 pt-2">
-            <div className={`relative w-full ${TERMINAL_STACK_SHELL_CLASS}`}>
-              <div
-                className="pointer-events-none absolute left-0 top-8 right-[2.75rem] bottom-0 rounded-xl border-2 shadow-lg"
-                style={{
-                  background: "var(--color-surface-raised)",
-                  borderColor: "color-mix(in oklch, var(--color-accent) 50%, var(--color-border))",
-                  transform: "rotate(-5deg) translate(6px, 12px)",
-                }}
-                aria-hidden
-              />
-              <div
-                className={`pointer-events-none absolute left-10 top-3 right-0 bottom-7 rounded-xl border shadow-md sm:left-12 sm:bottom-8 ${TERMINAL_BORDER_STRONG_CLASS}`}
-                style={{
-                  background: "var(--color-code-bg)",
-                  transform: "rotate(3deg) translate(-4px, 8px)",
-                }}
-                aria-hidden
-              />
-
-              <div
-                className={`absolute inset-x-0 top-0 z-10 flex ${TERMINAL_HEIGHT_CLASS} w-full flex-col overflow-hidden rounded-xl border shadow-2xl ${TERMINAL_BORDER_STRONG_CLASS}`}
-                style={{ background: "var(--color-code-bg)" }}
-              >
-                <div
-                  className={`flex shrink-0 items-center justify-between gap-2 border-b px-3 py-3 sm:px-4 ${TERMINAL_BORDER_CLASS}`}
-                  style={{ background: "var(--color-surface-raised)" }}
-                >
-                  <div className="hidden shrink-0 items-center gap-3 sm:flex">
-                    <span
-                      className="h-0.5 w-8 rounded-full"
-                      style={{ background: "var(--color-accent)" }}
-                    />
-                    <span className="font-mono text-xs font-medium text-[var(--color-text-muted)]">
-                      {activeSnippet.label}
-                    </span>
-                  </div>
-                  <div className="flex min-w-0 flex-1 items-center justify-end gap-1 overflow-x-auto">
-                    {snippets.map((snippet, i) => (
-                      <button
-                        key={snippet.label}
-                        type="button"
-                        aria-label={`Show ${snippet.label} request sample`}
-                        aria-pressed={snippetIndex === i}
-                        onClick={() => {
-                          setSnippetIndex(i);
-                          setCharIndex(0);
-                          setIsDeleting(false);
-                          setDisplayedCode("");
-                        }}
-                        className="landing-tab shrink-0 rounded px-2 py-0.5 font-mono text-xs outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface-raised)]"
-                        style={
-                          snippetIndex === i
-                            ? {
-                                color: "var(--color-accent)",
-                                background: "var(--color-surface-hover)",
-                              }
-                            : { color: "var(--color-text-muted)" }
-                        }
-                      >
-                        {snippet.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <pre className="min-h-0 flex-1 overflow-hidden p-4 font-mono text-xs leading-relaxed whitespace-pre-wrap break-words text-[var(--color-code-text)] sm:p-5 sm:text-sm">
-                  <code className="block">
-                    {displayedCode}
-                    <span
-                      className="inline-block h-3.5 w-1.5 animate-pulse align-middle motion-reduce:animate-none sm:h-4"
-                      style={{ background: "var(--color-accent)" }}
-                    />
-                  </code>
-                </pre>
-              </div>
-            </div>
+            <HeroTerminal snippets={snippets} />
           </div>
         </div>
       </div>

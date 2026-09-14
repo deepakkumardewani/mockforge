@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { DocsLayout } from "fumadocs-ui/layouts/docs";
 import type { ReactNode } from "react";
 import { AppHeader } from "@/components/navigation/AppHeader";
+import { DocsStyleGate } from "@/components/docs/DocsStyleGate";
 import { source } from "@/lib/source";
 import { RootProvider } from "fumadocs-ui/provider";
 import { DOCS_HREF } from "@/lib/nav-links";
@@ -21,6 +22,7 @@ const docsMono = Geist_Mono({
 export default function Layout({ children }: { children: ReactNode }) {
   return (
     <div className={`docs-shell flex min-h-dvh flex-col ${docsSans.variable} ${docsMono.variable}`}>
+      <DocsStyleGate />
       <AppHeader />
       <div className="min-h-0 flex-1">
         <RootProvider
