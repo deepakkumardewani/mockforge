@@ -1,9 +1,8 @@
 "use client";
 
-import { Component, useMemo, useState, type ReactNode } from "react";
+import { Component, useEffect, useMemo, useState, type ReactNode } from "react";
 import CodeMirror, { EditorView, keymap, Prec, type Extension } from "@uiw/react-codemirror";
 import { json } from "@codemirror/lang-json";
-import { graphql } from "cm6-graphql";
 
 export type CodeEditorLanguage = "json" | "graphql";
 
@@ -28,8 +27,22 @@ const SUBMIT_SHORTCUT_KEY = "Mod-Enter";
 // keeping unit tests fast, deterministic, and free of jsdom/CodeMirror friction.
 const IS_TEST_ENV = typeof process !== "undefined" && process.env.VITEST === "true";
 
-function languageExtension(language: CodeEditorLanguage): Extension {
-  return language === "graphql" ? graphql() : json();
+function useLanguageExtension(language: CodeEditorLanguage): Extension {
+  const [graphqlExtension, setGraphqlExtension] = useState<Extension | null>(null);
+
+  useEffect(() => {
+    if (language !== "graphql") return;
+    let cancelled = false;
+    void import("cm6-graphql").then((mod) => {
+      if (!cancelled) setGraphqlExtension(mod.graphql());
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [language]);
+
+  if (language === "json") return json();
+  return graphqlExtension ?? [];
 }
 
 // Theme is expressed entirely through the app's CSS custom properties so it
@@ -172,10 +185,11 @@ export function CodeEditor(props: CodeEditorProps) {
 
   const [failedToMount, setFailedToMount] = useState(false);
   const submitKeymap = useSubmitKeymap(onSubmit);
+  const languageExt = useLanguageExtension(language);
 
   const extensions = useMemo(
-    () => [languageExtension(language), buildEditorTheme(minHeight, maxHeight), submitKeymap],
-    [language, minHeight, maxHeight, submitKeymap],
+    () => [languageExt, buildEditorTheme(minHeight, maxHeight), submitKeymap],
+    [languageExt, minHeight, maxHeight, submitKeymap],
   );
 
   if (IS_TEST_ENV || failedToMount) {

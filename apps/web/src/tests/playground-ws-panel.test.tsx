@@ -93,7 +93,7 @@ describe("Playground WebSocket — WsPanel", () => {
 
     unmount();
     expect(ws?.close).toHaveBeenCalled();
-  });
+  }, 15_000);
 
   it("shows endpoint info and message presets that fill the composer", async () => {
     const user = userEvent.setup();

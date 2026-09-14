@@ -11,6 +11,9 @@ export type BoundedEvent = {
   readonly at: number;
 };
 
+/** Max EventLog rows rendered at once. Stored console history may be larger. */
+export const EVENT_LOG_RENDER_CAP = 120;
+
 const LIFECYCLE_TAG = /^\[([^\]]+)\]/;
 
 export function inferEventKind(direction: BoundedEvent["direction"], message: string): EventKind {

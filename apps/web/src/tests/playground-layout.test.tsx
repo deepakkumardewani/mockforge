@@ -145,9 +145,11 @@ describe("Playground layout — Playground shell", () => {
     expect(screen.getByRole("button", { name: "Send" })).toBeInTheDocument();
 
     await user.click(screen.getByRole("button", { name: "GraphQL" }));
-    // GraphQL panel also has a Send button
-    expect(screen.getByRole("button", { name: "Send" })).toBeInTheDocument();
+    // GraphQL panel also has a Send button (lazy-loaded)
+    expect(await screen.findByRole("button", { name: "Send" })).toBeInTheDocument();
     // GraphQL endpoint URL is present
-    expect(screen.getByRole("textbox", { name: "GraphQL endpoint URL" })).toBeInTheDocument();
+    expect(
+      await screen.findByRole("textbox", { name: "GraphQL endpoint URL" }),
+    ).toBeInTheDocument();
   });
 });

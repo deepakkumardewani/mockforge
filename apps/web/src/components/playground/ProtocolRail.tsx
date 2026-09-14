@@ -21,9 +21,10 @@ const PROTOCOLS: ProtocolOption[] = [
 export type ProtocolRailProps = {
   active: Protocol;
   onChange: (p: Protocol) => void;
+  onIntent?: (p: Protocol) => void;
 };
 
-export function ProtocolRail({ active, onChange }: ProtocolRailProps) {
+export function ProtocolRail({ active, onChange, onIntent }: ProtocolRailProps) {
   return (
     <nav
       aria-label="Protocol selector"
@@ -37,6 +38,9 @@ export function ProtocolRail({ active, onChange }: ProtocolRailProps) {
             <button
               type="button"
               onClick={() => onChange(value)}
+              onMouseEnter={() => onIntent?.(value)}
+              onFocus={() => onIntent?.(value)}
+              onPointerEnter={() => onIntent?.(value)}
               aria-label={label}
               aria-pressed={isActive}
               aria-current={isActive ? "page" : undefined}

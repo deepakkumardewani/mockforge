@@ -33,10 +33,13 @@ describe("buildOperation", () => {
     );
   });
 
-  it("builds a delete mutation without a selection set", () => {
-    expect(buildOperation("deleteUser", [])).toBe(
+  it("builds a delete mutation with the DeleteResult selection set", () => {
+    expect(buildOperation("deleteUser", ["deleted", "id"])).toBe(
       `mutation {
-  deleteUser(id: "1")
+  deleteUser(id: "1") {
+    deleted
+    id
+  }
 }`,
     );
   });
@@ -191,14 +194,14 @@ describe("SchemaPanel", () => {
     expect(onSelect).toHaveBeenCalledWith("users", ["id", "firstName", "lastName", "email"]);
   });
 
-  it("calls onSelect with empty scalars for delete mutations", async () => {
+  it("calls onSelect with DeleteResult scalars for delete mutations", async () => {
     const user = userEvent.setup();
     const onSelect = vi.fn();
     render(<SchemaPanel onSelect={onSelect} />);
 
     await user.click(screen.getByRole("button", { name: /^deleteUser/ }));
 
-    expect(onSelect).toHaveBeenCalledWith("deleteUser", []);
+    expect(onSelect).toHaveBeenCalledWith("deleteUser", ["deleted", "id"]);
   });
 
   it("does not render an Apply to query button", () => {

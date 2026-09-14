@@ -28,130 +28,30 @@ export interface RestEndpoint {
   description: string;
 }
 
+function singularEntity(entity: Entity): string {
+  if (entity.endsWith("ies")) return `${entity.slice(0, -3)}y`;
+  if (entity.endsWith("s")) return entity.slice(0, -1);
+  return entity;
+}
+
+function crudEndpointsFor(entity: Entity): RestEndpoint[] {
+  const singular = singularEntity(entity);
+  return [
+    { method: "GET", path: `/${entity}`, description: `List all ${entity}` },
+    { method: "GET", path: `/${entity}/search`, description: `Search ${entity}` },
+    { method: "GET", path: `/${entity}/:id`, description: `Get ${singular} by ID` },
+    { method: "POST", path: `/${entity}`, description: `Create new ${singular}` },
+    { method: "PUT", path: `/${entity}/:id`, description: `Update ${singular}` },
+    { method: "DELETE", path: `/${entity}/:id`, description: `Delete ${singular}` },
+  ];
+}
+
 /**
- * REST endpoints covering all 14 entities × 6 patterns:
- * - GET list
- * - GET search
- * - GET by-id
- * - POST create
- * - PUT by-id update
- * - DELETE by-id
- * Plus GET /stats
+ * REST endpoints covering all catalogue entities × 6 CRUD patterns,
+ * plus the explicit GET /stats probe.
  */
 export const REST_ENDPOINTS: readonly RestEndpoint[] = [
-  // Users
-  { method: "GET", path: "/users", description: "List all users" },
-  { method: "GET", path: "/users/search", description: "Search users" },
-  { method: "GET", path: "/users/:id", description: "Get user by ID" },
-  { method: "POST", path: "/users", description: "Create new user" },
-  { method: "PUT", path: "/users/:id", description: "Update user" },
-  { method: "DELETE", path: "/users/:id", description: "Delete user" },
-
-  // Products
-  { method: "GET", path: "/products", description: "List all products" },
-  { method: "GET", path: "/products/search", description: "Search products" },
-  { method: "GET", path: "/products/:id", description: "Get product by ID" },
-  { method: "POST", path: "/products", description: "Create new product" },
-  { method: "PUT", path: "/products/:id", description: "Update product" },
-  { method: "DELETE", path: "/products/:id", description: "Delete product" },
-
-  // Posts
-  { method: "GET", path: "/posts", description: "List all posts" },
-  { method: "GET", path: "/posts/search", description: "Search posts" },
-  { method: "GET", path: "/posts/:id", description: "Get post by ID" },
-  { method: "POST", path: "/posts", description: "Create new post" },
-  { method: "PUT", path: "/posts/:id", description: "Update post" },
-  { method: "DELETE", path: "/posts/:id", description: "Delete post" },
-
-  // Comments
-  { method: "GET", path: "/comments", description: "List all comments" },
-  { method: "GET", path: "/comments/search", description: "Search comments" },
-  { method: "GET", path: "/comments/:id", description: "Get comment by ID" },
-  { method: "POST", path: "/comments", description: "Create new comment" },
-  { method: "PUT", path: "/comments/:id", description: "Update comment" },
-  { method: "DELETE", path: "/comments/:id", description: "Delete comment" },
-
-  // Todos
-  { method: "GET", path: "/todos", description: "List all todos" },
-  { method: "GET", path: "/todos/search", description: "Search todos" },
-  { method: "GET", path: "/todos/:id", description: "Get todo by ID" },
-  { method: "POST", path: "/todos", description: "Create new todo" },
-  { method: "PUT", path: "/todos/:id", description: "Update todo" },
-  { method: "DELETE", path: "/todos/:id", description: "Delete todo" },
-
-  // Carts
-  { method: "GET", path: "/carts", description: "List all carts" },
-  { method: "GET", path: "/carts/search", description: "Search carts" },
-  { method: "GET", path: "/carts/:id", description: "Get cart by ID" },
-  { method: "POST", path: "/carts", description: "Create new cart" },
-  { method: "PUT", path: "/carts/:id", description: "Update cart" },
-  { method: "DELETE", path: "/carts/:id", description: "Delete cart" },
-
-  // Messages
-  { method: "GET", path: "/messages", description: "List all messages" },
-  { method: "GET", path: "/messages/search", description: "Search messages" },
-  { method: "GET", path: "/messages/:id", description: "Get message by ID" },
-  { method: "POST", path: "/messages", description: "Create new message" },
-  { method: "PUT", path: "/messages/:id", description: "Update message" },
-  { method: "DELETE", path: "/messages/:id", description: "Delete message" },
-
-  // Notifications
-  { method: "GET", path: "/notifications", description: "List all notifications" },
-  { method: "GET", path: "/notifications/search", description: "Search notifications" },
-  { method: "GET", path: "/notifications/:id", description: "Get notification by ID" },
-  { method: "POST", path: "/notifications", description: "Create new notification" },
-  { method: "PUT", path: "/notifications/:id", description: "Update notification" },
-  { method: "DELETE", path: "/notifications/:id", description: "Delete notification" },
-
-  // Quotes
-  { method: "GET", path: "/quotes", description: "List all quotes" },
-  { method: "GET", path: "/quotes/search", description: "Search quotes" },
-  { method: "GET", path: "/quotes/:id", description: "Get quote by ID" },
-  { method: "POST", path: "/quotes", description: "Create new quote" },
-  { method: "PUT", path: "/quotes/:id", description: "Update quote" },
-  { method: "DELETE", path: "/quotes/:id", description: "Delete quote" },
-
-  // Recipes
-  { method: "GET", path: "/recipes", description: "List all recipes" },
-  { method: "GET", path: "/recipes/search", description: "Search recipes" },
-  { method: "GET", path: "/recipes/:id", description: "Get recipe by ID" },
-  { method: "POST", path: "/recipes", description: "Create new recipe" },
-  { method: "PUT", path: "/recipes/:id", description: "Update recipe" },
-  { method: "DELETE", path: "/recipes/:id", description: "Delete recipe" },
-
-  // Countries
-  { method: "GET", path: "/countries", description: "List all countries" },
-  { method: "GET", path: "/countries/search", description: "Search countries" },
-  { method: "GET", path: "/countries/:id", description: "Get country by ID" },
-  { method: "POST", path: "/countries", description: "Create new country" },
-  { method: "PUT", path: "/countries/:id", description: "Update country" },
-  { method: "DELETE", path: "/countries/:id", description: "Delete country" },
-
-  // Companies
-  { method: "GET", path: "/companies", description: "List all companies" },
-  { method: "GET", path: "/companies/search", description: "Search companies" },
-  { method: "GET", path: "/companies/:id", description: "Get company by ID" },
-  { method: "POST", path: "/companies", description: "Create new company" },
-  { method: "PUT", path: "/companies/:id", description: "Update company" },
-  { method: "DELETE", path: "/companies/:id", description: "Delete company" },
-
-  // Stocks
-  { method: "GET", path: "/stocks", description: "List all stocks" },
-  { method: "GET", path: "/stocks/search", description: "Search stocks" },
-  { method: "GET", path: "/stocks/:id", description: "Get stock by ID" },
-  { method: "POST", path: "/stocks", description: "Create new stock" },
-  { method: "PUT", path: "/stocks/:id", description: "Update stock" },
-  { method: "DELETE", path: "/stocks/:id", description: "Delete stock" },
-
-  // Events
-  { method: "GET", path: "/events", description: "List all events" },
-  { method: "GET", path: "/events/search", description: "Search events" },
-  { method: "GET", path: "/events/:id", description: "Get event by ID" },
-  { method: "POST", path: "/events", description: "Create new event" },
-  { method: "PUT", path: "/events/:id", description: "Update event" },
-  { method: "DELETE", path: "/events/:id", description: "Delete event" },
-
-  // Stats
+  ...ENTITIES.flatMap(crudEndpointsFor),
   { method: "GET", path: "/stats", description: "Get system statistics" },
 ];
 
@@ -159,6 +59,11 @@ export interface GraphQLField {
   type: string;
   selectableScalars?: string[];
 }
+
+const DELETE_RESULT_FIELD = {
+  type: "DeleteResult!",
+  selectableScalars: ["deleted", "id"],
+} satisfies GraphQLField;
 
 /**
  * GraphQL root fields per entity with selectable scalar sub-fields.
@@ -176,7 +81,7 @@ export const GRAPHQL_FIELDS: Record<Entity, Record<string, GraphQLField>> = {
       type: "User!",
       selectableScalars: ["id", "firstName", "lastName", "email"],
     },
-    deleteUser: { type: "Boolean!", selectableScalars: [] },
+    deleteUser: DELETE_RESULT_FIELD,
   },
   products: {
     products: { type: "[Product!]!", selectableScalars: ["id", "title", "price", "stock"] },
@@ -189,7 +94,7 @@ export const GRAPHQL_FIELDS: Record<Entity, Record<string, GraphQLField>> = {
       type: "Product!",
       selectableScalars: ["id", "title", "price", "stock"],
     },
-    deleteProduct: { type: "Boolean!", selectableScalars: [] },
+    deleteProduct: DELETE_RESULT_FIELD,
   },
   posts: {
     posts: { type: "[Post!]!", selectableScalars: ["id", "title", "body", "userId"] },
@@ -202,7 +107,7 @@ export const GRAPHQL_FIELDS: Record<Entity, Record<string, GraphQLField>> = {
       type: "Post!",
       selectableScalars: ["id", "title", "body", "userId"],
     },
-    deletePost: { type: "Boolean!", selectableScalars: [] },
+    deletePost: DELETE_RESULT_FIELD,
   },
   comments: {
     comments: { type: "[Comment!]!", selectableScalars: ["id", "postId", "userId", "body"] },
@@ -215,7 +120,7 @@ export const GRAPHQL_FIELDS: Record<Entity, Record<string, GraphQLField>> = {
       type: "Comment!",
       selectableScalars: ["id", "postId", "userId", "body"],
     },
-    deleteComment: { type: "Boolean!", selectableScalars: [] },
+    deleteComment: DELETE_RESULT_FIELD,
   },
   todos: {
     todos: { type: "[Todo!]!", selectableScalars: ["id", "userId", "todo", "completed"] },
@@ -228,14 +133,14 @@ export const GRAPHQL_FIELDS: Record<Entity, Record<string, GraphQLField>> = {
       type: "Todo!",
       selectableScalars: ["id", "userId", "todo", "completed"],
     },
-    deleteTodo: { type: "Boolean!", selectableScalars: [] },
+    deleteTodo: DELETE_RESULT_FIELD,
   },
   carts: {
     carts: { type: "[Cart!]!", selectableScalars: ["id", "userId", "total"] },
     cart: { type: "Cart", selectableScalars: ["id", "userId", "total"] },
     createCart: { type: "Cart!", selectableScalars: ["id", "userId", "total"] },
     updateCart: { type: "Cart!", selectableScalars: ["id", "userId", "total"] },
-    deleteCart: { type: "Boolean!", selectableScalars: [] },
+    deleteCart: DELETE_RESULT_FIELD,
   },
   messages: {
     messages: {
@@ -251,7 +156,7 @@ export const GRAPHQL_FIELDS: Record<Entity, Record<string, GraphQLField>> = {
       type: "Message!",
       selectableScalars: ["id", "senderId", "receiverId", "body"],
     },
-    deleteMessage: { type: "Boolean!", selectableScalars: [] },
+    deleteMessage: DELETE_RESULT_FIELD,
   },
   notifications: {
     notifications: {
@@ -270,49 +175,49 @@ export const GRAPHQL_FIELDS: Record<Entity, Record<string, GraphQLField>> = {
       type: "Notification!",
       selectableScalars: ["id", "userId", "message", "read"],
     },
-    deleteNotification: { type: "Boolean!", selectableScalars: [] },
+    deleteNotification: DELETE_RESULT_FIELD,
   },
   quotes: {
     quotes: { type: "[Quote!]!", selectableScalars: ["id", "author", "text"] },
     quote: { type: "Quote", selectableScalars: ["id", "author", "text"] },
     createQuote: { type: "Quote!", selectableScalars: ["id", "author", "text"] },
     updateQuote: { type: "Quote!", selectableScalars: ["id", "author", "text"] },
-    deleteQuote: { type: "Boolean!", selectableScalars: [] },
+    deleteQuote: DELETE_RESULT_FIELD,
   },
   recipes: {
     recipes: { type: "[Recipe!]!", selectableScalars: ["id", "name", "ingredients"] },
     recipe: { type: "Recipe", selectableScalars: ["id", "name", "ingredients"] },
     createRecipe: { type: "Recipe!", selectableScalars: ["id", "name", "ingredients"] },
     updateRecipe: { type: "Recipe!", selectableScalars: ["id", "name", "ingredients"] },
-    deleteRecipe: { type: "Boolean!", selectableScalars: [] },
+    deleteRecipe: DELETE_RESULT_FIELD,
   },
   countries: {
     countries: { type: "[Country!]!", selectableScalars: ["id", "name", "code"] },
     country: { type: "Country", selectableScalars: ["id", "name", "code"] },
     createCountry: { type: "Country!", selectableScalars: ["id", "name", "code"] },
     updateCountry: { type: "Country!", selectableScalars: ["id", "name", "code"] },
-    deleteCountry: { type: "Boolean!", selectableScalars: [] },
+    deleteCountry: DELETE_RESULT_FIELD,
   },
   companies: {
     companies: { type: "[Company!]!", selectableScalars: ["id", "name", "industry"] },
     company: { type: "Company", selectableScalars: ["id", "name", "industry"] },
     createCompany: { type: "Company!", selectableScalars: ["id", "name", "industry"] },
     updateCompany: { type: "Company!", selectableScalars: ["id", "name", "industry"] },
-    deleteCompany: { type: "Boolean!", selectableScalars: [] },
+    deleteCompany: DELETE_RESULT_FIELD,
   },
   stocks: {
     stocks: { type: "[Stock!]!", selectableScalars: ["id", "symbol", "price"] },
     stock: { type: "Stock", selectableScalars: ["id", "symbol", "price"] },
     createStock: { type: "Stock!", selectableScalars: ["id", "symbol", "price"] },
     updateStock: { type: "Stock!", selectableScalars: ["id", "symbol", "price"] },
-    deleteStock: { type: "Boolean!", selectableScalars: [] },
+    deleteStock: DELETE_RESULT_FIELD,
   },
   events: {
     events: { type: "[Event!]!", selectableScalars: ["id", "name", "date"] },
     event: { type: "Event", selectableScalars: ["id", "name", "date"] },
     createEvent: { type: "Event!", selectableScalars: ["id", "name", "date"] },
     updateEvent: { type: "Event!", selectableScalars: ["id", "name", "date"] },
-    deleteEvent: { type: "Boolean!", selectableScalars: [] },
+    deleteEvent: DELETE_RESULT_FIELD,
   },
 };
 

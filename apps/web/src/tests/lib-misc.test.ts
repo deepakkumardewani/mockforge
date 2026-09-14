@@ -15,8 +15,18 @@ describe("fetchStatsTotal", () => {
     });
     vi.stubGlobal("fetch", fetchMock);
 
-    await expect(fetchStatsTotal()).resolves.toBe(42);
-    expect(fetchMock).toHaveBeenCalledWith(`${API_BASE}/api/stats`, { next: { revalidate: 60 } });
+    const timeoutSpy = vi.spyOn(AbortSignal, "timeout");
+
+    try {
+      await expect(fetchStatsTotal()).resolves.toBe(42);
+      expect(timeoutSpy).toHaveBeenCalledWith(2_500);
+      expect(fetchMock).toHaveBeenCalledWith(`${API_BASE}/api/stats`, {
+        next: { revalidate: 60 },
+        signal: timeoutSpy.mock.results[0]?.value,
+      });
+    } finally {
+      timeoutSpy.mockRestore();
+    }
   });
 
   it("returns null when the response is not ok", async () => {

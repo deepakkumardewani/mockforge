@@ -1,8 +1,12 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { WsConsoleEvent } from "@/hooks/use-ws-console";
-import { resolveEventKind, type EventKind } from "@/components/playground/hooks/bounded-events";
+import {
+  EVENT_LOG_RENDER_CAP,
+  resolveEventKind,
+  type EventKind,
+} from "@/components/playground/hooks/bounded-events";
 import { JsonView } from "@/components/playground/shared/JsonView";
 
 const BOTTOM_EPS_PX = 48;
@@ -13,6 +17,8 @@ const TOOLBAR_BTN = `rounded-md px-2 py-1 text-xs font-medium text-[var(--color-
 
 /** Socket.IO entries are logged as `name(payload)` / `name()`; WS entries never match this shape. */
 const SOCKET_EVENT_PATTERN = /^([\w.:-]+)\(([\s\S]*)\)$/;
+const PREVIEW_CACHE_MAX = 200;
+const previewCache = new Map<string, string>();
 
 const KIND_MARKER: Record<EventKind, { label: string; className: string }> = {
   system: { label: "Sys", className: "text-[var(--color-text-muted)]" },
@@ -56,6 +62,18 @@ function compactPreview(body: string): string {
   } catch {
     return truncatePreview(body);
   }
+}
+
+function cachedCompactPreview(body: string): string {
+  const hit = previewCache.get(body);
+  if (hit !== undefined) return hit;
+  const preview = compactPreview(body);
+  previewCache.set(body, preview);
+  if (previewCache.size > PREVIEW_CACHE_MAX) {
+    const oldest = previewCache.keys().next().value;
+    if (oldest !== undefined) previewCache.delete(oldest);
+  }
+  return preview;
 }
 
 function tryParseJson(text: string): unknown {
@@ -134,29 +152,33 @@ function EventPayload({ body }: { body: string }) {
   );
 }
 
-function EventRow({
+const EventRow = memo(function EventRow({
   event,
   expanded,
   onToggle,
 }: {
   event: WsConsoleEvent;
   expanded: boolean;
-  onToggle: () => void;
+  onToggle: (id: string) => void;
 }) {
-  const panelId = useId();
+  const panelId = `event-payload-${event.id}`;
   const kind = resolveEventKind(event);
   const marker = KIND_MARKER[kind];
-  const { eventName, body } = parseEntryMessage(event.message);
+  const { eventName, body } = useMemo(() => parseEntryMessage(event.message), [event.message]);
   const title = eventName ?? (kind === "system" || kind === "error" ? event.message : null);
-  const preview = eventName ? compactPreview(body) : title ? "" : compactPreview(event.message);
+  const preview = eventName
+    ? cachedCompactPreview(body)
+    : title
+      ? ""
+      : cachedCompactPreview(event.message);
 
   return (
-    <li className="border-b border-[var(--color-border)]/70 last:border-b-0">
+    <li className="[content-visibility:auto] [contain-intrinsic-size:0_40px] border-b border-[var(--color-border)]/70 last:border-b-0">
       <button
         type="button"
         aria-expanded={expanded}
         aria-controls={panelId}
-        onClick={onToggle}
+        onClick={() => onToggle(event.id)}
         className={`flex w-full items-center gap-2 px-2 py-1.5 text-left hover:bg-[var(--color-surface-hover)] ${FOCUS_RING} rounded-md`}
       >
         <span className={`w-10 shrink-0 font-mono text-[10px] font-semibold ${marker.className}`}>
@@ -188,7 +210,7 @@ function EventRow({
       ) : null}
     </li>
   );
-}
+});
 
 export function EventLog({
   events,
@@ -199,6 +221,10 @@ export function EventLog({
   const lastLengthRef = useRef(0);
   const [isPaused, setIsPaused] = useState(false);
   const [expandedIds, setExpandedIds] = useState<ReadonlySet<string>>(() => new Set());
+  const visibleEvents = useMemo(
+    () => (events.length > EVENT_LOG_RENDER_CAP ? events.slice(-EVENT_LOG_RENDER_CAP) : events),
+    [events],
+  );
 
   useEffect(() => {
     const el = scrollerRef.current;
@@ -217,8 +243,8 @@ export function EventLog({
   function onScroll() {
     const el = scrollerRef.current;
     if (!el) return;
-    const distanceFromBottom = el.scrollHeight - el.scrollTop - el.clientHeight;
-    setIsPaused(distanceFromBottom > BOTTOM_EPS_PX);
+    const nextPaused = el.scrollHeight - el.scrollTop - el.clientHeight > BOTTOM_EPS_PX;
+    setIsPaused((prev) => (prev === nextPaused ? prev : nextPaused));
   }
 
   function jumpToLatest() {
@@ -228,14 +254,14 @@ export function EventLog({
     setIsPaused(false);
   }
 
-  function toggleExpanded(id: string) {
+  const toggleExpanded = useCallback((id: string) => {
     setExpandedIds((prev) => {
       const next = new Set(prev);
       if (next.has(id)) next.delete(id);
       else next.add(id);
       return next;
     });
-  }
+  }, []);
 
   return (
     <div className="flex h-full min-h-[10rem] min-w-0 flex-col overflow-hidden border-t border-[var(--color-border)]">
@@ -254,16 +280,16 @@ export function EventLog({
         aria-label="Event log"
         className="min-h-0 flex-1 overflow-y-auto [scrollbar-gutter:stable] px-1.5 py-1"
       >
-        {events.length === 0 ? (
+        {visibleEvents.length === 0 ? (
           <p className="px-2 py-2 text-sm text-[var(--color-text-muted)]">{emptyHint}</p>
         ) : (
           <ul className="flex flex-col">
-            {events.map((event) => (
+            {visibleEvents.map((event) => (
               <EventRow
                 key={event.id}
                 event={event}
                 expanded={expandedIds.has(event.id)}
-                onToggle={() => toggleExpanded(event.id)}
+                onToggle={toggleExpanded}
               />
             ))}
           </ul>
