@@ -34,6 +34,7 @@ function startBroadcast(): void {
   if (broadcastInterval) return;
 
   broadcastInterval = setInterval(() => {
+    if (clients.size === 0) return;
     void pushTotalToClients();
   }, BROADCAST_INTERVAL_MS);
 }
@@ -48,23 +49,31 @@ export function stopBroadcast(): void {
   }
 }
 
+function clearHeartbeat(ws: BunWs): void {
+  if (ws.data?.pingTimeout) {
+    clearTimeout(ws.data.pingTimeout);
+    ws.data.pingTimeout = undefined;
+  }
+  if (ws.data?.emitTimer) {
+    clearTimeout(ws.data.emitTimer);
+    ws.data.emitTimer = undefined;
+  }
+}
+
 function scheduleHeartbeat(ws: BunWs): void {
-  const pongTimeout = setTimeout(() => {
+  clearHeartbeat(ws);
+
+  ws.data.pingTimeout = setTimeout(() => {
     ws.close(1001, "ping timeout");
   }, HEARTBEAT_INTERVAL_MS + PONG_TIMEOUT_MS);
-  ws.data.pingTimeout = pongTimeout;
 
-  setTimeout(() => {
+  ws.data.emitTimer = setTimeout(() => {
     try {
       ws.send("ping");
     } catch {
       /* client gone */
     }
   }, HEARTBEAT_INTERVAL_MS);
-}
-
-function clearHeartbeat(ws: BunWs): void {
-  if (ws.data?.pingTimeout) clearTimeout(ws.data.pingTimeout);
 }
 
 export const statsWsHandler = {

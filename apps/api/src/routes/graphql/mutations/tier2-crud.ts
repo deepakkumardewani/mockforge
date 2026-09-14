@@ -14,9 +14,9 @@ builder.mutationFields((t) => ({
   createMessage: t.field({
     type: "Message",
     args: {
-      senderId: t.arg.string(),
-      receiverId: t.arg.string(),
-      roomId: t.arg.string(),
+      senderId: t.arg.int(),
+      receiverId: t.arg.int(),
+      roomId: t.arg.int(),
       body: t.arg.string(),
       read: t.arg.boolean(),
     },
@@ -26,9 +26,9 @@ builder.mutationFields((t) => ({
     type: "Message",
     args: {
       id: t.arg.string({ required: true }),
-      senderId: t.arg.string(),
-      receiverId: t.arg.string(),
-      roomId: t.arg.string(),
+      senderId: t.arg.int(),
+      receiverId: t.arg.int(),
+      roomId: t.arg.int(),
       body: t.arg.string(),
       read: t.arg.boolean(),
     },
@@ -43,7 +43,7 @@ builder.mutationFields((t) => ({
   createNotification: t.field({
     type: "Notification",
     args: {
-      userId: t.arg.string(),
+      userId: t.arg.int(),
       type: t.arg.string(),
       title: t.arg.string(),
       message: t.arg.string(),
@@ -55,7 +55,7 @@ builder.mutationFields((t) => ({
     type: "Notification",
     args: {
       id: t.arg.string({ required: true }),
-      userId: t.arg.string(),
+      userId: t.arg.int(),
       type: t.arg.string(),
       title: t.arg.string(),
       message: t.arg.string(),

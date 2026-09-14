@@ -1,4 +1,6 @@
 import builder from "../builder";
+import { clampGraphQLListArgs } from "../../../lib/pagination";
+import { findSeededById } from "../../../lib/seeded-lookup";
 import { generateMessages } from "../../../data/generators/messages";
 import { generateNotifications } from "../../../data/generators/notifications";
 import { generateQuotes } from "../../../data/generators/quotes";
@@ -18,24 +20,15 @@ builder.queryFields((t) => ({
       skip: t.arg.int({ defaultValue: 0 }),
       search: t.arg.string(),
     },
-    resolve: (_, args) => {
-      return generateMessages({
-        limit: Math.max(1, Math.min(100, args.limit ?? 10)),
-        skip: Math.max(0, args.skip ?? 0),
-        search: args.search ?? undefined,
-        order: "asc",
-      });
-    },
+    resolve: (_, args) => generateMessages(clampGraphQLListArgs(args)),
   }),
   message: t.field({
     type: "Message",
+    nullable: true,
     args: {
       id: t.arg.string({ required: true }),
     },
-    resolve: () => {
-      const message = generateMessages({ limit: 1, skip: 0, order: "asc" })[0];
-      return message!;
-    },
+    resolve: (_, args) => findSeededById(generateMessages, args.id),
   }),
 
   // Notifications
@@ -46,24 +39,15 @@ builder.queryFields((t) => ({
       skip: t.arg.int({ defaultValue: 0 }),
       search: t.arg.string(),
     },
-    resolve: (_, args) => {
-      return generateNotifications({
-        limit: Math.max(1, Math.min(100, args.limit ?? 10)),
-        skip: Math.max(0, args.skip ?? 0),
-        search: args.search ?? undefined,
-        order: "asc",
-      });
-    },
+    resolve: (_, args) => generateNotifications(clampGraphQLListArgs(args)),
   }),
   notification: t.field({
     type: "Notification",
+    nullable: true,
     args: {
       id: t.arg.string({ required: true }),
     },
-    resolve: () => {
-      const notification = generateNotifications({ limit: 1, skip: 0, order: "asc" })[0];
-      return notification!;
-    },
+    resolve: (_, args) => findSeededById(generateNotifications, args.id),
   }),
 
   // Quotes
@@ -74,24 +58,15 @@ builder.queryFields((t) => ({
       skip: t.arg.int({ defaultValue: 0 }),
       search: t.arg.string(),
     },
-    resolve: (_, args) => {
-      return generateQuotes({
-        limit: Math.max(1, Math.min(100, args.limit ?? 10)),
-        skip: Math.max(0, args.skip ?? 0),
-        search: args.search ?? undefined,
-        order: "asc",
-      });
-    },
+    resolve: (_, args) => generateQuotes(clampGraphQLListArgs(args)),
   }),
   quote: t.field({
     type: "Quote",
+    nullable: true,
     args: {
       id: t.arg.string({ required: true }),
     },
-    resolve: () => {
-      const quote = generateQuotes({ limit: 1, skip: 0, order: "asc" })[0];
-      return quote!;
-    },
+    resolve: (_, args) => findSeededById(generateQuotes, args.id),
   }),
 
   // Recipes
@@ -102,24 +77,15 @@ builder.queryFields((t) => ({
       skip: t.arg.int({ defaultValue: 0 }),
       search: t.arg.string(),
     },
-    resolve: (_, args) => {
-      return generateRecipes({
-        limit: Math.max(1, Math.min(100, args.limit ?? 10)),
-        skip: Math.max(0, args.skip ?? 0),
-        search: args.search ?? undefined,
-        order: "asc",
-      });
-    },
+    resolve: (_, args) => generateRecipes(clampGraphQLListArgs(args)),
   }),
   recipe: t.field({
     type: "Recipe",
+    nullable: true,
     args: {
       id: t.arg.string({ required: true }),
     },
-    resolve: () => {
-      const recipe = generateRecipes({ limit: 1, skip: 0, order: "asc" })[0];
-      return recipe!;
-    },
+    resolve: (_, args) => findSeededById(generateRecipes, args.id),
   }),
 
   // Countries
@@ -130,24 +96,15 @@ builder.queryFields((t) => ({
       skip: t.arg.int({ defaultValue: 0 }),
       search: t.arg.string(),
     },
-    resolve: (_, args) => {
-      return generateCountries({
-        limit: Math.max(1, Math.min(100, args.limit ?? 10)),
-        skip: Math.max(0, args.skip ?? 0),
-        search: args.search ?? undefined,
-        order: "asc",
-      });
-    },
+    resolve: (_, args) => generateCountries(clampGraphQLListArgs(args)),
   }),
   country: t.field({
     type: "Country",
+    nullable: true,
     args: {
       id: t.arg.string({ required: true }),
     },
-    resolve: () => {
-      const country = generateCountries({ limit: 1, skip: 0, order: "asc" })[0];
-      return country!;
-    },
+    resolve: (_, args) => findSeededById(generateCountries, args.id),
   }),
 
   // Companies
@@ -158,24 +115,15 @@ builder.queryFields((t) => ({
       skip: t.arg.int({ defaultValue: 0 }),
       search: t.arg.string(),
     },
-    resolve: (_, args) => {
-      return generateCompanies({
-        limit: Math.max(1, Math.min(100, args.limit ?? 10)),
-        skip: Math.max(0, args.skip ?? 0),
-        search: args.search ?? undefined,
-        order: "asc",
-      });
-    },
+    resolve: (_, args) => generateCompanies(clampGraphQLListArgs(args)),
   }),
   company: t.field({
     type: "Company",
+    nullable: true,
     args: {
       id: t.arg.string({ required: true }),
     },
-    resolve: () => {
-      const company = generateCompanies({ limit: 1, skip: 0, order: "asc" })[0];
-      return company!;
-    },
+    resolve: (_, args) => findSeededById(generateCompanies, args.id),
   }),
 
   // Stocks
@@ -186,24 +134,15 @@ builder.queryFields((t) => ({
       skip: t.arg.int({ defaultValue: 0 }),
       search: t.arg.string(),
     },
-    resolve: (_, args) => {
-      return generateStocks({
-        limit: Math.max(1, Math.min(100, args.limit ?? 10)),
-        skip: Math.max(0, args.skip ?? 0),
-        search: args.search ?? undefined,
-        order: "asc",
-      });
-    },
+    resolve: (_, args) => generateStocks(clampGraphQLListArgs(args)),
   }),
   stock: t.field({
     type: "Stock",
+    nullable: true,
     args: {
       id: t.arg.string({ required: true }),
     },
-    resolve: () => {
-      const stock = generateStocks({ limit: 1, skip: 0, order: "asc" })[0];
-      return stock!;
-    },
+    resolve: (_, args) => findSeededById(generateStocks, args.id),
   }),
 
   // Events
@@ -214,23 +153,14 @@ builder.queryFields((t) => ({
       skip: t.arg.int({ defaultValue: 0 }),
       search: t.arg.string(),
     },
-    resolve: (_, args) => {
-      return generateEvents({
-        limit: Math.max(1, Math.min(100, args.limit ?? 10)),
-        skip: Math.max(0, args.skip ?? 0),
-        search: args.search ?? undefined,
-        order: "asc",
-      });
-    },
+    resolve: (_, args) => generateEvents(clampGraphQLListArgs(args)),
   }),
   event: t.field({
     type: "Event",
+    nullable: true,
     args: {
       id: t.arg.string({ required: true }),
     },
-    resolve: () => {
-      const event = generateEvents({ limit: 1, skip: 0, order: "asc" })[0];
-      return event!;
-    },
+    resolve: (_, args) => findSeededById(generateEvents, args.id),
   }),
 }));

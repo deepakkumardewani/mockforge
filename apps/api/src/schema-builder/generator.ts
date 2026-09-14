@@ -1,5 +1,6 @@
 import { faker } from "@faker-js/faker";
 import type { SchemaDefinition, SchemaField, SchemaFieldType } from "@mockforge/types";
+import { MAX_GENERATION_COUNT } from "../lib/pagination";
 
 type GeneratedRecord = Record<string, unknown>;
 
@@ -32,15 +33,22 @@ function generateFieldValue(field: SchemaField): unknown {
       const itemCount = faker.number.int({ min: 2, max: 5 });
       const itemType = field.items as SchemaFieldType;
       return Array.from({ length: itemCount }, () =>
-        generateFieldValue({ name: field.name, type: itemType }),
+        generateFieldValue({
+          name: field.name,
+          type: itemType,
+          values: field.values,
+          min: field.min,
+          max: field.max,
+        }),
       );
     }
   }
 }
 
 export function generateFromSchema(schema: SchemaDefinition, count: number): GeneratedRecord[] {
+  const safeCount = Math.min(Math.max(0, count), MAX_GENERATION_COUNT);
   const records: GeneratedRecord[] = [];
-  for (let i = 0; i < count; i++) {
+  for (let i = 0; i < safeCount; i++) {
     const record: GeneratedRecord = { id: faker.string.uuid() };
     for (const field of schema.fields) {
       record[field.name] = generateFieldValue(field);

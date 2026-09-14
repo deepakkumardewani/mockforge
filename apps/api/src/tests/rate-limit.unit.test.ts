@@ -4,11 +4,10 @@ import { describe, it, expect, beforeEach, vi } from "vitest";
 let requestCounts: Record<string, number> = {};
 
 const mockGetRedis = vi.fn(() => ({
-  incr: async (key: string) => {
+  incrFixedWindow: async (key: string, windowSeconds: number) => {
     requestCounts[key] = (requestCounts[key] || 0) + 1;
-    return requestCounts[key];
+    return { count: requestCounts[key], ttl: windowSeconds };
   },
-  expire: async (_key: string, _seconds: number) => 1,
 }));
 
 vi.mock("../db/redis", () => ({
@@ -78,11 +77,10 @@ describe("Rate Limit Middleware", () => {
     vi.clearAllMocks();
     requestCounts = {};
     mockGetRedis.mockImplementation(() => ({
-      incr: async (key: string) => {
+      incrFixedWindow: async (key: string, windowSeconds: number) => {
         requestCounts[key] = (requestCounts[key] || 0) + 1;
-        return requestCounts[key];
+        return { count: requestCounts[key], ttl: windowSeconds };
       },
-      expire: async (_key: string, _seconds: number) => 1,
     }));
   });
 

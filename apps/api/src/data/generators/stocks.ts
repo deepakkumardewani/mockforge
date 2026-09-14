@@ -1,5 +1,5 @@
 import type { Stock } from "@mockforge/types";
-import type { PaginationParams } from "../../lib/pagination";
+import { pageRecords, type PaginationParams } from "../../lib/pagination";
 import seedData from "../seed/stocks.json";
 
 const seed = seedData as Stock[];
@@ -14,5 +14,5 @@ export function generateStocks(params: PaginationParams): Stock[] {
     );
   }
 
-  return items.slice(params.skip, params.skip + params.limit);
+  return pageRecords(items, params);
 }

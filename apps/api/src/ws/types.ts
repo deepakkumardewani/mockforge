@@ -4,6 +4,7 @@ export interface WsData {
   route: string;
   roomId?: string;
   topic?: string;
+  clientKey?: string;
   pingTimeout?: ReturnType<typeof setTimeout>;
   emitTimer?: ReturnType<typeof setTimeout>;
 }

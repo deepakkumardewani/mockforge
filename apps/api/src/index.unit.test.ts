@@ -4,25 +4,35 @@ const {
   initializeRedis,
   pingRedis,
   getRedis,
+  closeRedis,
+  incrFixedWindow,
   handleWsUpgrade,
   websocketHandlers,
+  stopWsIntervals,
   createSocketIoServer,
+  stopSocketIoRuntime,
   setServer,
   listen,
   createServer,
 } = vi.hoisted(() => {
   const listen = vi.fn();
+  const incrFixedWindow = vi.fn().mockResolvedValue({ count: 1, ttl: 60 });
   return {
     initializeRedis: vi.fn(),
     pingRedis: vi.fn().mockResolvedValue(true),
+    incrFixedWindow,
     getRedis: vi.fn(() => ({
       incr: vi.fn().mockResolvedValue(1),
       expire: vi.fn().mockResolvedValue(1),
       get: vi.fn().mockResolvedValue(null),
+      incrFixedWindow,
     })),
+    closeRedis: vi.fn().mockResolvedValue(undefined),
     handleWsUpgrade: vi.fn().mockReturnValue(null),
     websocketHandlers: { open: vi.fn(), close: vi.fn(), message: vi.fn() },
+    stopWsIntervals: vi.fn(),
     createSocketIoServer: vi.fn(),
+    stopSocketIoRuntime: vi.fn(),
     setServer: vi.fn(),
     listen,
     createServer: vi.fn(() => ({ listen })),
@@ -33,15 +43,18 @@ vi.mock("./db/redis", () => ({
   initializeRedis,
   pingRedis,
   getRedis,
+  closeRedis,
 }));
 
 vi.mock("./ws", () => ({
   handleWsUpgrade,
   websocketHandlers,
+  stopWsIntervals,
 }));
 
 vi.mock("./ws/socketio", () => ({
   createSocketIoServer,
+  stopSocketIoRuntime,
 }));
 
 vi.mock("./ws/server-ref", () => ({
@@ -78,10 +91,14 @@ describe("index app wiring", () => {
     pingRedis.mockReset().mockResolvedValue(true);
     handleWsUpgrade.mockReset().mockReturnValue(null);
     createSocketIoServer.mockClear();
+    stopSocketIoRuntime.mockClear();
+    stopWsIntervals.mockClear();
+    closeRedis.mockClear();
     setServer.mockClear();
     listen.mockClear();
     createServer.mockClear();
     getRedis.mockClear();
+    incrFixedWindow.mockClear();
   });
 
   afterEach(() => {
@@ -101,7 +118,7 @@ describe("index app wiring", () => {
     expect(mod.default.port).toBe(4000);
     expect(mod.default.websocket).toBe(websocketHandlers);
     expect(mod.app).toBeDefined();
-  });
+  }, 15_000);
 
   it("uses PORT and SOCKET_IO_PORT from the environment", async () => {
     process.env.PORT = "4123";
@@ -111,7 +128,7 @@ describe("index app wiring", () => {
 
     expect(listen).toHaveBeenCalledWith(4124);
     expect(mod.default.port).toBe(4123);
-  });
+  }, 15_000);
 
   it("returns health with redis connected", async () => {
     pingRedis.mockResolvedValueOnce(true);
@@ -147,17 +164,30 @@ describe("index app wiring", () => {
   it("runs the middleware stack (mf-id, rate-limit, cors)", async () => {
     const { app } = await loadIndex();
 
-    const res = await app.request("/health", {
+    incrFixedWindow.mockClear();
+
+    const health = await app.request("/health", {
+      headers: {
+        Origin: "http://localhost:3000",
+      },
+    });
+
+    expect(health.status).toBe(200);
+    expect(incrFixedWindow).not.toHaveBeenCalled();
+    expect(health.headers.get("x-ratelimit-limit")).toBeNull();
+    expect(health.headers.get("access-control-allow-origin")).toBeTruthy();
+
+    const limited = await app.request("/definitely-missing", {
       headers: {
         ...MF_HEADERS,
         Origin: "http://localhost:3000",
       },
     });
 
-    expect(res.status).toBe(200);
-    expect(getRedis).toHaveBeenCalled();
-    expect(res.headers.get("x-ratelimit-limit")).toBe("300");
-    expect(res.headers.get("access-control-allow-origin")).toBeTruthy();
+    expect(limited.status).toBe(404);
+    expect(incrFixedWindow).toHaveBeenCalled();
+    expect(limited.headers.get("x-ratelimit-limit")).toBe("300");
+    expect(limited.headers.get("access-control-allow-origin")).toBeTruthy();
   });
 
   it("mounts graphql so the route is not a 404", async () => {

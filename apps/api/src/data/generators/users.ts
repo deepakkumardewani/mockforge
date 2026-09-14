@@ -1,5 +1,5 @@
 import type { User } from "@mockforge/types";
-import type { PaginationParams } from "../../lib/pagination";
+import { pageRecords, type PaginationParams } from "../../lib/pagination";
 import seedData from "../seed/users.json";
 
 const seed = seedData as User[];
@@ -18,5 +18,5 @@ export function generateUsers(params: PaginationParams): User[] {
     );
   }
 
-  return items.slice(params.skip, params.skip + params.limit);
+  return pageRecords(items, params);
 }

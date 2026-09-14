@@ -1,30 +1,35 @@
 import { Server as SocketIoServer } from "socket.io";
 import type { Server as HttpServer } from "node:http";
-import { incrementRequestCounter } from "../../stats/increment-counter";
-import { registerNotificationsNamespace } from "./notifications";
-import { registerChatNamespace } from "./chat";
-import { registerTickerNamespace } from "./ticker";
+import { registerNotificationsNamespace, stopNotificationsNamespace } from "./notifications";
+import { registerChatNamespace, stopChatNamespace } from "./chat";
+import { registerTickerNamespace, stopTickerNamespace } from "./ticker";
+import { WS_MAX_PAYLOAD_BYTES } from "../limits";
 
-const WEB_ORIGIN = process.env.WEB_ORIGIN ?? "http://localhost:3000";
+export function stopSocketIoRuntime(): void {
+  stopChatNamespace();
+  stopNotificationsNamespace();
+  stopTickerNamespace();
+}
 
-const isDev = process.env.NODE_ENV !== "production";
+function socketIoCorsOrigin(): boolean | string[] {
+  const isProd = process.env.NODE_ENV === "production";
+  const configuredOrigins = (process.env.WEB_ORIGIN ?? "")
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter((origin) => origin.length > 0);
+  if (isProd && configuredOrigins.length > 0) return configuredOrigins;
+  return true;
+}
 
 export function createSocketIoServer(httpServer: HttpServer): SocketIoServer {
   const io = new SocketIoServer(httpServer, {
     cors: {
-      // Allow all origins in dev so browser console / Postman work without restriction
-      origin: isDev ? true : [WEB_ORIGIN],
+      origin: socketIoCorsOrigin(),
       methods: ["GET", "POST"],
     },
     path: "/socket.io",
+    maxHttpBufferSize: WS_MAX_PAYLOAD_BYTES,
   });
-
-  for (const namespace of ["/notifications", "/chat", "/ticker"]) {
-    const ns = io.of(namespace);
-    ns.on("connection", () => {
-      incrementRequestCounter();
-    });
-  }
 
   registerNotificationsNamespace(io.of("/notifications"));
   registerChatNamespace(io.of("/chat"));

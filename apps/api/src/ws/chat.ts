@@ -47,6 +47,13 @@ function startRoomPump(): void {
 
 startRoomPump();
 
+export function stopChat(): void {
+  if (roomInterval) {
+    clearInterval(roomInterval);
+    roomInterval = null;
+  }
+}
+
 export const chatWsHandler = {
   open(ws: BunWs, roomId: string): void {
     ws.data.roomId = roomId;
@@ -73,7 +80,9 @@ export const chatWsHandler = {
       const parsed = typeof msg === "string" ? JSON.parse(msg) : JSON.parse(msg.toString());
       publishToRoom(ws, JSON.stringify(parsed));
 
-      setTimeout(() => {
+      if (ws.data.emitTimer) clearTimeout(ws.data.emitTimer);
+      ws.data.emitTimer = setTimeout(() => {
+        ws.data.emitTimer = undefined;
         try {
           const [reply] = generateMessages(DEFAULT_WS_PARAMS);
           const replyPayload = { ...reply, roomId: ws.data.roomId, replyTo: parsed.id ?? null };

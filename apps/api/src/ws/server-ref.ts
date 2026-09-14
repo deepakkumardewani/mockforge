@@ -10,3 +10,7 @@ export function getServer(): BunServer {
   if (!_server) throw new Error("Bun server not yet initialised");
   return _server;
 }
+
+export function peekServer(): BunServer | null {
+  return _server;
+}

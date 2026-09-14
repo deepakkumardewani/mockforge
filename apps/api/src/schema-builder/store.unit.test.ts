@@ -4,6 +4,7 @@ import type { SchemaDefinition } from "@mockforge/types";
 const mockGet = vi.fn();
 const mockSet = vi.fn();
 const mockExpire = vi.fn();
+const mockTtl = vi.fn();
 const mockSadd = vi.fn();
 const mockSmembers = vi.fn();
 const mockDel = vi.fn();
@@ -14,6 +15,7 @@ vi.mock("../db/redis", () => ({
     get: mockGet,
     set: mockSet,
     expire: mockExpire,
+    ttl: mockTtl,
     sadd: mockSadd,
     smembers: mockSmembers,
     del: mockDel,
@@ -49,6 +51,7 @@ describe("schema store", () => {
     it("persists without expire when persistent is true", async () => {
       mockSet.mockResolvedValueOnce("OK");
       mockSadd.mockResolvedValueOnce(1);
+      mockSrem.mockResolvedValueOnce(1);
 
       const slug = await saveSchema(definition, "owner-1", true);
 
@@ -59,16 +62,29 @@ describe("schema store", () => {
       );
       expect(mockExpire).not.toHaveBeenCalled();
       expect(mockSadd).toHaveBeenCalledWith("mf:owner-1:schemas", slug);
+      expect(mockSrem).toHaveBeenCalledWith("mf:owner-1:ephemeral", slug);
     });
 
     it("sets a 1-hour TTL when persistent is false", async () => {
       mockSet.mockResolvedValueOnce("OK");
-      mockExpire.mockResolvedValueOnce(1);
       mockSadd.mockResolvedValueOnce(1);
+      mockSrem.mockResolvedValueOnce(1);
+      mockTtl.mockResolvedValueOnce(-1);
+      mockExpire.mockResolvedValueOnce(1);
 
       const slug = await saveSchema(definition, "owner-1", false);
 
-      expect(mockExpire).toHaveBeenCalledWith(`schema:${slug}`, 3600);
+      expect(mockSet).toHaveBeenCalledWith(
+        `schema:${slug}`,
+        expect.stringContaining('"persistent":false'),
+        "EX",
+        3600,
+      );
+      expect(mockExpire).not.toHaveBeenCalledWith(`schema:${slug}`, 3600);
+      expect(mockSadd).toHaveBeenCalledWith("mf:owner-1:ephemeral", slug);
+      expect(mockSrem).toHaveBeenCalledWith("mf:owner-1:schemas", slug);
+      expect(mockTtl).toHaveBeenCalledWith("mf:owner-1:ephemeral");
+      expect(mockExpire).toHaveBeenCalledWith("mf:owner-1:ephemeral", 3600);
     });
 
     it("rejects when Redis set fails", async () => {
@@ -123,6 +139,7 @@ describe("schema store", () => {
       mockGet.mockResolvedValueOnce(JSON.stringify(savedSchema()));
       mockSet.mockResolvedValueOnce("OK");
       mockSadd.mockResolvedValueOnce(1);
+      mockSrem.mockResolvedValueOnce(1);
 
       const updated = await updateSchema("abc123defg", nextDefinition, "owner-1", true);
 
@@ -130,47 +147,74 @@ describe("schema store", () => {
       expect(updated?.persistent).toBe(true);
       expect(mockExpire).not.toHaveBeenCalled();
       expect(mockSadd).toHaveBeenCalledWith("mf:owner-1:schemas", "abc123defg");
+      expect(mockSrem).toHaveBeenCalledWith("mf:owner-1:ephemeral", "abc123defg");
     });
 
     it("applies expire when next persistent flag is false", async () => {
       mockGet.mockResolvedValueOnce(JSON.stringify(savedSchema({ persistent: true })));
       mockSet.mockResolvedValueOnce("OK");
-      mockExpire.mockResolvedValueOnce(1);
       mockSadd.mockResolvedValueOnce(1);
+      mockSrem.mockResolvedValueOnce(1);
+      mockTtl.mockResolvedValueOnce(-1);
+      mockExpire.mockResolvedValueOnce(1);
 
       const updated = await updateSchema("abc123defg", nextDefinition, "owner-1", false);
 
       expect(updated?.persistent).toBe(false);
-      expect(mockExpire).toHaveBeenCalledWith("schema:abc123defg", 3600);
+      expect(mockSet).toHaveBeenCalledWith(
+        "schema:abc123defg",
+        expect.stringContaining('"persistent":false'),
+        "EX",
+        3600,
+      );
+      expect(mockExpire).not.toHaveBeenCalledWith("schema:abc123defg", 3600);
+      expect(mockSadd).toHaveBeenCalledWith("mf:owner-1:ephemeral", "abc123defg");
+      expect(mockSrem).toHaveBeenCalledWith("mf:owner-1:schemas", "abc123defg");
+      expect(mockExpire).toHaveBeenCalledWith("mf:owner-1:ephemeral", 3600);
     });
 
     it("keeps existing persistent when the flag is omitted", async () => {
       mockGet.mockResolvedValueOnce(JSON.stringify(savedSchema({ persistent: false })));
       mockSet.mockResolvedValueOnce("OK");
-      mockExpire.mockResolvedValueOnce(1);
       mockSadd.mockResolvedValueOnce(1);
+      mockSrem.mockResolvedValueOnce(1);
+      mockTtl.mockResolvedValueOnce(-1);
+      mockExpire.mockResolvedValueOnce(1);
 
       const updated = await updateSchema("abc123defg", nextDefinition, "owner-1");
 
       expect(updated?.persistent).toBe(false);
-      expect(mockExpire).toHaveBeenCalledWith("schema:abc123defg", 3600);
+      expect(mockSet).toHaveBeenCalledWith(
+        "schema:abc123defg",
+        expect.stringContaining('"persistent":false'),
+        "EX",
+        3600,
+      );
+      expect(mockExpire).toHaveBeenCalledWith("mf:owner-1:ephemeral", 3600);
     });
   });
 
   describe("listSchemas", () => {
     it("returns an empty array when the index is empty", async () => {
       mockSmembers.mockResolvedValueOnce([]);
+      mockSmembers.mockResolvedValueOnce([]);
 
       await expect(listSchemas("owner-1")).resolves.toEqual([]);
+      expect(mockSmembers).toHaveBeenCalledWith("mf:owner-1:schemas");
+      expect(mockSmembers).toHaveBeenCalledWith("mf:owner-1:ephemeral");
     });
 
     it("skips stale slugs that no longer resolve", async () => {
       const live = savedSchema();
-      mockSmembers.mockResolvedValueOnce(["gone", live.slug]);
+      mockSmembers.mockResolvedValueOnce(["gone"]);
+      mockSmembers.mockResolvedValueOnce([live.slug]);
       mockGet.mockResolvedValueOnce(null);
       mockGet.mockResolvedValueOnce(JSON.stringify(live));
+      mockSrem.mockResolvedValueOnce(1);
 
       await expect(listSchemas("owner-1")).resolves.toEqual([live]);
+      expect(mockSrem).toHaveBeenCalledWith("mf:owner-1:schemas", "gone");
+      expect(mockSrem).not.toHaveBeenCalledWith("mf:owner-1:ephemeral", live.slug);
     });
 
     it("rejects when Redis smembers fails", async () => {
@@ -198,11 +242,12 @@ describe("schema store", () => {
     it("deletes the key and removes the index member", async () => {
       mockGet.mockResolvedValueOnce(JSON.stringify(savedSchema()));
       mockDel.mockResolvedValueOnce(1);
-      mockSrem.mockResolvedValueOnce(1);
+      mockSrem.mockResolvedValue(1);
 
       await expect(deleteSchema("abc123defg", "owner-1")).resolves.toBe(true);
       expect(mockDel).toHaveBeenCalledWith("schema:abc123defg");
       expect(mockSrem).toHaveBeenCalledWith("mf:owner-1:schemas", "abc123defg");
+      expect(mockSrem).toHaveBeenCalledWith("mf:owner-1:ephemeral", "abc123defg");
     });
 
     it("rejects when Redis del fails", async () => {

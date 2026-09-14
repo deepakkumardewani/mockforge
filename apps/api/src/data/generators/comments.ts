@@ -1,5 +1,5 @@
 import type { Comment } from "@mockforge/types";
-import type { PaginationParams } from "../../lib/pagination";
+import { pageRecords, type PaginationParams } from "../../lib/pagination";
 import seedData from "../seed/comments.json";
 
 const seed = seedData as Comment[];
@@ -17,5 +17,5 @@ export function generateComments(params: PaginationParams): Comment[] {
     );
   }
 
-  return items.slice(params.skip, params.skip + params.limit);
+  return pageRecords(items, params);
 }

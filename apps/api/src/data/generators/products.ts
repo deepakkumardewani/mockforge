@@ -1,5 +1,5 @@
 import type { Product } from "@mockforge/types";
-import type { PaginationParams } from "../../lib/pagination";
+import { pageRecords, type PaginationParams } from "../../lib/pagination";
 import seedData from "../seed/products.json";
 
 const seed = seedData as Product[];
@@ -18,5 +18,5 @@ export function generateProducts(params: PaginationParams): Product[] {
     );
   }
 
-  return items.slice(params.skip, params.skip + params.limit);
+  return pageRecords(items, params);
 }

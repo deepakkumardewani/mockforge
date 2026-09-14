@@ -1,5 +1,5 @@
 import type { Country } from "@mockforge/types";
-import type { PaginationParams } from "../../lib/pagination";
+import { pageRecords, type PaginationParams } from "../../lib/pagination";
 import seedData from "../seed/countries.json";
 
 const seed = seedData as Country[];
@@ -18,5 +18,5 @@ export function generateCountries(params: PaginationParams): Country[] {
     );
   }
 
-  return items.slice(params.skip, params.skip + params.limit);
+  return pageRecords(items, params);
 }

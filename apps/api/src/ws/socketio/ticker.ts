@@ -1,7 +1,15 @@
 import type { Namespace, Socket } from "socket.io";
 import { createTickerBook, nextStockTick, TICKER_EVENT } from "../ticker-book";
+import { admitRealtimeSocket } from "./admit";
 
 const TICK_INTERVAL_MS = 1000;
+
+const tickIntervals: ReturnType<typeof setInterval>[] = [];
+
+export function stopTickerNamespace(): void {
+  for (const interval of tickIntervals) clearInterval(interval);
+  tickIntervals.length = 0;
+}
 
 export function registerTickerNamespace(ns: Namespace): void {
   const book = createTickerBook();
@@ -10,7 +18,7 @@ export function registerTickerNamespace(ns: Namespace): void {
     target.emit(TICKER_EVENT, nextStockTick(book));
   }
 
-  setInterval(() => {
+  const interval = setInterval(() => {
     try {
       if (ns.sockets.size === 0) return;
       emitTick(ns);
@@ -18,8 +26,10 @@ export function registerTickerNamespace(ns: Namespace): void {
       console.error("[sio/ticker] emit failed", error);
     }
   }, TICK_INTERVAL_MS);
+  tickIntervals.push(interval);
 
   ns.on("connection", (socket) => {
+    if (!admitRealtimeSocket(socket)) return;
     console.log("Ticker Client connected");
     try {
       emitTick(socket);

@@ -1,5 +1,5 @@
 import type { Recipe } from "@mockforge/types";
-import type { PaginationParams } from "../../lib/pagination";
+import { pageRecords, type PaginationParams } from "../../lib/pagination";
 import seedData from "../seed/recipes.json";
 
 const seed = seedData as Recipe[];
@@ -18,5 +18,5 @@ export function generateRecipes(params: PaginationParams): Recipe[] {
     );
   }
 
-  return items.slice(params.skip, params.skip + params.limit);
+  return pageRecords(items, params);
 }

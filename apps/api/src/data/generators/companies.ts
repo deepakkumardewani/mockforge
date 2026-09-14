@@ -1,5 +1,5 @@
 import type { Company } from "@mockforge/types";
-import type { PaginationParams } from "../../lib/pagination";
+import { pageRecords, type PaginationParams } from "../../lib/pagination";
 import seedData from "../seed/companies.json";
 
 const seed = seedData as Company[];
@@ -17,5 +17,5 @@ export function generateCompanies(params: PaginationParams): Company[] {
     );
   }
 
-  return items.slice(params.skip, params.skip + params.limit);
+  return pageRecords(items, params);
 }

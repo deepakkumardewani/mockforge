@@ -49,7 +49,7 @@ function makeSocket(query: Record<string, string> = {}) {
 
   return {
     id: "sock-1",
-    handshake: { query },
+    handshake: { query, address: "127.0.0.1" },
     join: vi.fn().mockResolvedValue(undefined),
     emit: vi.fn(),
     on: vi.fn((event: string, fn: (...args: unknown[]) => void) => {
@@ -95,9 +95,10 @@ describe("createSocketIoServer", () => {
         cors: expect.objectContaining({ methods: ["GET", "POST"] }),
       }),
     );
-    expect(io.of).toHaveBeenCalledWith("/notifications");
-    expect(io.of).toHaveBeenCalledWith("/chat");
-    expect(io.of).toHaveBeenCalledWith("/ticker");
+    const namespaceFactory = vi.mocked(io.of);
+    expect(namespaceFactory).toHaveBeenCalledWith("/notifications");
+    expect(namespaceFactory).toHaveBeenCalledWith("/chat");
+    expect(namespaceFactory).toHaveBeenCalledWith("/ticker");
   });
 
   it("increments the request counter on namespace connection", () => {
@@ -404,14 +405,17 @@ describe("registerChatNamespace", () => {
 
     vi.advanceTimersByTime(3000);
     expect(ns.clientEmit).not.toHaveBeenCalled();
+    expect(ns.roomEmit).not.toHaveBeenCalled();
 
     ns.sockets.set("sock-1", {});
     vi.advanceTimersByTime(3000);
 
-    expect(ns.clientEmit).toHaveBeenCalledWith(
+    expect(ns.to).toHaveBeenCalledWith("default");
+    expect(ns.roomEmit).toHaveBeenCalledWith(
       "message",
       expect.objectContaining({ roomId: "default" }),
     );
+    expect(ns.clientEmit).not.toHaveBeenCalled();
   });
 
   it("registers a disconnect listener without throwing", () => {
@@ -443,7 +447,7 @@ describe("registerChatNamespace", () => {
     createSocketIoServer({} as HttpServer);
     const ns = getNamespace("/chat");
     ns.sockets.set("sock-1", {});
-    ns.clientEmit.mockImplementation(() => {
+    ns.roomEmit.mockImplementation(() => {
       throw new Error("scheduled failed");
     });
 

@@ -1,6 +1,9 @@
 import { Hono } from "hono";
+import { bodyLimit } from "hono/body-limit";
 import { createYoga } from "graphql-yoga";
 import builder from "./builder";
+import { queryBudgetPlugin } from "./query-budget";
+import { MAX_GRAPHQL_BODY_BYTES } from "../../lib/limits";
 
 // Import type definitions to register them with builder
 import "./types/tier1";
@@ -15,20 +18,34 @@ import "./mutations/tier1";
 import "./mutations/tier1-crud";
 import "./mutations/tier2-crud";
 
-// Build the schema
 const schema = builder.toSchema();
 
-// Create the yoga instance with the schema
 const yoga = createYoga({
   schema,
-  graphiql: true,
+  graphiql: process.env.NODE_ENV !== "production",
   graphqlEndpoint: "/graphql",
+  plugins: [queryBudgetPlugin()],
 });
 
-// Create a Hono router for GraphQL
 const graphqlRouter = new Hono();
 
-// Mount the GraphQL yoga handler — pass the raw request directly
+graphqlRouter.use(
+  "*",
+  bodyLimit({
+    maxSize: MAX_GRAPHQL_BODY_BYTES,
+    onError: (c) =>
+      c.json(
+        {
+          error: {
+            code: "PAYLOAD_TOO_LARGE",
+            message: "GraphQL body exceeds the maximum allowed size",
+          },
+        },
+        413,
+      ),
+  }),
+);
+
 graphqlRouter.all("*", (c) => yoga.fetch(c.req.raw));
 
 export default graphqlRouter;

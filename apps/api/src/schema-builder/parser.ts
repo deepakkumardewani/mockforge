@@ -39,6 +39,20 @@ const schemaFieldSchema = z
         path: ["items"],
       });
     }
+    const checksNumericBounds =
+      field.type === "number" || (field.type === "array" && field.items === "number");
+    if (
+      checksNumericBounds &&
+      field.min !== undefined &&
+      field.max !== undefined &&
+      field.min > field.max
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Field min must be less than or equal to max",
+        path: ["min"],
+      });
+    }
   });
 
 const schemaDefinitionSchema = z.object({

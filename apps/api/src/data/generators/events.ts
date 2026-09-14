@@ -1,5 +1,5 @@
 import type { Event } from "@mockforge/types";
-import type { PaginationParams } from "../../lib/pagination";
+import { pageRecords, type PaginationParams } from "../../lib/pagination";
 import seedData from "../seed/events.json";
 
 const seed = seedData as Event[];
@@ -18,5 +18,5 @@ export function generateEvents(params: PaginationParams): Event[] {
     );
   }
 
-  return items.slice(params.skip, params.skip + params.limit);
+  return pageRecords(items, params);
 }

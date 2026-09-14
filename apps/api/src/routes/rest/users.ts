@@ -1,47 +1,7 @@
-import { Hono } from "hono";
-import { zValidator } from "@hono/zod-validator";
-import { z } from "zod";
-import { paginationSchema } from "../../lib/pagination";
-import { respond } from "../../lib/respond";
 import { generateUsers } from "../../data/generators/users";
+import { createEntityRouter } from "./entity-router";
 
-const router = new Hono();
-
-router.get("/", zValidator("query", paginationSchema), (c) => {
-  const params = c.req.valid("query");
-  const data = generateUsers(params);
-  return c.json(respond(data, 100, params, "users"));
+export default createEntityRouter({
+  entity: "users",
+  generate: generateUsers,
 });
-
-router.get("/search", zValidator("query", z.object({ q: z.string().default("") })), (c) => {
-  const { q } = c.req.valid("query");
-  const params = paginationSchema.parse({ search: q });
-  const data = generateUsers(params);
-  return c.json(respond(data, data.length, params, "users"));
-});
-
-router.get("/:id", (c) => {
-  const id = Number(c.req.param("id"));
-  const skip = Number.isFinite(id) && id > 0 ? id - 1 : 0;
-  const item = generateUsers({ limit: 1, skip, order: "asc" })[0];
-  return c.json({ data: item ?? null });
-});
-
-router.post("/", async (c) => {
-  const body = await c.req.json().catch(() => ({}));
-  const item = generateUsers({ limit: 1, skip: 0, order: "asc" })[0];
-  return c.json({ data: { ...item, ...body } }, 201);
-});
-
-router.put("/:id", async (c) => {
-  const body = await c.req.json().catch(() => ({}));
-  const item = generateUsers({ limit: 1, skip: 0, order: "asc" })[0];
-  return c.json({ data: { ...item, ...body } });
-});
-
-router.delete("/:id", (c) => {
-  const id = c.req.param("id");
-  return c.json({ deleted: true, id }, 200);
-});
-
-export default router;
