@@ -1,5 +1,10 @@
 import { describe, it, expect } from "vitest";
-import { paginationSchema, type PaginationParams } from "./pagination";
+import {
+  clampGraphQLListArgs,
+  pageRecords,
+  paginationSchema,
+  type PaginationParams,
+} from "./pagination";
 import { respond } from "./respond";
 
 describe("pagination", () => {
@@ -38,6 +43,55 @@ describe("pagination", () => {
         sort: "name",
         order: "desc",
       });
+    });
+  });
+
+  describe("clampGraphQLListArgs", () => {
+    it("clamps limit and skip into allowed bounds", () => {
+      expect(clampGraphQLListArgs({ limit: 500, skip: -5 })).toEqual({
+        limit: 100,
+        skip: 0,
+        search: undefined,
+        order: "asc",
+      });
+    });
+
+    it("uses defaults when limit and skip are nullish", () => {
+      expect(clampGraphQLListArgs({ limit: null, skip: null, search: "q" })).toEqual({
+        limit: 10,
+        skip: 0,
+        search: "q",
+        order: "asc",
+      });
+    });
+  });
+
+  describe("pageRecords", () => {
+    const rows = [
+      { name: "b", score: 2 },
+      { name: "a", score: 10 },
+      { name: "c", score: null as unknown as number },
+    ];
+
+    it("sorts ascending by a string field then paginates", () => {
+      const result = pageRecords(rows, { limit: 2, skip: 0, order: "asc", sort: "name" });
+      expect(result.map((r) => r.name)).toEqual(["a", "b"]);
+    });
+
+    it("sorts descending by numeric field", () => {
+      const result = pageRecords(rows, { limit: 2, skip: 0, order: "desc", sort: "score" });
+      expect(result.map((r) => r.score)).toEqual([10, 2]);
+    });
+
+    it("reverses the list when order is desc without sort", () => {
+      const result = pageRecords(rows, { limit: 3, skip: 0, order: "desc" });
+      expect(result.map((r) => r.name)).toEqual(["c", "a", "b"]);
+    });
+
+    it("applies skip and limit after sorting", () => {
+      const result = pageRecords(rows, { limit: 1, skip: 1, order: "asc", sort: "name" });
+      expect(result).toHaveLength(1);
+      expect(result[0]?.name).toBe("b");
     });
   });
 

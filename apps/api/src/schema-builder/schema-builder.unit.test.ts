@@ -81,6 +81,24 @@ describe("parseSchema", () => {
     ).toThrow();
   });
 
+  it("should throw when numeric min exceeds max", () => {
+    expect(() =>
+      parseSchema({
+        name: "BadBounds",
+        fields: [{ name: "amount", type: "number", min: 10, max: 1 }],
+      }),
+    ).toThrow(/min must be less than or equal to max/);
+  });
+
+  it("should throw when numeric array min exceeds max", () => {
+    expect(() =>
+      parseSchema({
+        name: "BadArrayBounds",
+        fields: [{ name: "scores", type: "array", items: "number", min: 5, max: 1 }],
+      }),
+    ).toThrow(/min must be less than or equal to max/);
+  });
+
   it("should accept non-string input (JSON parsed object)", () => {
     const input = JSON.parse(JSON.stringify(flightSchema));
     const result = parseSchema(input);

@@ -14,6 +14,7 @@ type MockRedis = {
   smembers: ReturnType<typeof vi.fn>;
   exists: ReturnType<typeof vi.fn>;
   keys: ReturnType<typeof vi.fn>;
+  eval: ReturnType<typeof vi.fn>;
 };
 
 const last = {
@@ -36,6 +37,7 @@ function createMockRedis(): MockRedis {
     smembers: vi.fn().mockResolvedValue(["a", "b"]),
     exists: vi.fn().mockResolvedValue(1),
     keys: vi.fn().mockResolvedValue(["k1"]),
+    eval: vi.fn().mockResolvedValue([1, 60]),
   };
 }
 
@@ -95,6 +97,7 @@ async function exerciseClient(client: ReturnType<RedisModule["initializeRedis"]>
   await client.smembers("set");
   await client.exists("a", "b");
   await client.keys("prefix:*");
+  await expect(client.incrFixedWindow("rate", 60)).resolves.toEqual({ count: 1, ttl: 60 });
 }
 
 describe("Redis adapters via initializeRedis", () => {
@@ -187,6 +190,30 @@ describe("Redis adapters via initializeRedis", () => {
     const { initializeRedis } = await loadRedis();
     initializeRedis();
     expect(IORedis).toHaveBeenCalledWith("redis://custom:6379", { lazyConnect: false });
+  });
+
+  it("closes a local ioredis client via quit", async () => {
+    setLocalRedisEnv();
+    const quit = vi.fn().mockResolvedValue("OK");
+    const { initializeRedis, closeRedis } = await loadRedis();
+    initializeRedis();
+    last.ioredis!.quit = quit;
+    await closeRedis();
+    expect(quit).toHaveBeenCalled();
+  });
+
+  it("disconnects when quit throws during closeRedis", async () => {
+    setLocalRedisEnv();
+    const quit = vi.fn().mockRejectedValue(new Error("quit failed"));
+    const disconnect = vi.fn();
+    const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    const { initializeRedis, closeRedis } = await loadRedis();
+    initializeRedis();
+    last.ioredis!.quit = quit;
+    last.ioredis!.disconnect = disconnect;
+    await closeRedis();
+    expect(disconnect).toHaveBeenCalled();
+    errorSpy.mockRestore();
   });
 
   it("uses the local adapter when NODE_ENV is development", async () => {

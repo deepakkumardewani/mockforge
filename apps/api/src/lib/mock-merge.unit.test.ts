@@ -17,4 +17,14 @@ describe("mergeGeneratedRow", () => {
     expect(row).toEqual({ id: "99", title: "Caller" });
     expect(MOCK_GENERATE_PARAMS).toEqual({ limit: 1, skip: 0, order: "asc" });
   });
+
+  it("coerces numeric string overlays when the base field is a number", () => {
+    const row = mergeGeneratedRow(() => [{ count: 5, label: "x" }], { count: "12" });
+    expect(row.count).toBe(12);
+  });
+
+  it("drops overlays that cannot be coerced to integers", () => {
+    const row = mergeGeneratedRow(() => [{ count: 5, label: "x" }], { count: "12.5" });
+    expect(row.count).toBe(5);
+  });
 });

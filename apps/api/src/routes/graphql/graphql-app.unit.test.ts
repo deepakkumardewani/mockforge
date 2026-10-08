@@ -38,6 +38,19 @@ describe("GraphQL Hono router", () => {
     expect(body.data?.products?.[0]).toHaveProperty("title");
   });
 
+  it("returns 413 when the GraphQL body exceeds the limit", async () => {
+    const app = createApp();
+    const res = await app.request("/graphql", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: "x".repeat(32 * 1024),
+    });
+
+    expect(res.status).toBe(413);
+    const body = (await res.json()) as { error?: { code: string } };
+    expect(body.error?.code).toBe("PAYLOAD_TOO_LARGE");
+  });
+
   it("returns GraphQL errors for an invalid query", async () => {
     const res = await postQuery(`
       query {

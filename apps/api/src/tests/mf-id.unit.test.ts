@@ -65,9 +65,21 @@ class MockContext {
   get(key: string) {
     return this.vars[key];
   }
+
+  json(body: unknown, status: number) {
+    return { body, status };
+  }
 }
 
 describe("MF-ID Middleware", () => {
+  it("returns 400 when x-mf-id is invalid", async () => {
+    const ctx = new MockContext("!!!invalid!!!") as any;
+    const response = await mfIdMiddleware(ctx, async () => {});
+
+    expect(response.status).toBe(400);
+    expect(response.body.error.code).toBe("INVALID_MF_ID");
+  });
+
   it("should use X-MF-ID header when present", async () => {
     const ctx = new MockContext("user-123") as any;
     let nextCalled = false;
